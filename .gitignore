@@ -1,14 +1,16 @@
 # Compiled class file
 *.class
-
-# Log file
-*.log
-
-# BlueJ files
-*.ctxt
-
+.classpath
+.springBeans
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
+
+*.class
+*.classpath
+*.project
+*.springBeans
+log/
+test-output/
 
 # Package Files #
 *.jar
@@ -17,6 +19,14 @@
 *.zip
 *.tar.gz
 *.rar
-
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+*.swp
+*.log
+*.ctxt
+# nodejs local modules
+.tags*
+.idea/
+*.iml
+.gradle/
+.settings/
+target/
 hs_err_pid*
