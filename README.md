@@ -7,7 +7,7 @@
 ### 介绍
     1. 锁注解既可以加在接口上，也可以加在实现类上，也可以加在没有接口只有类的情形下
     2. 锁既支持Redisson机制，也支持Curator机制
-    3. 采用SPI方式，可以通过改变pom对lock-redisson或者lock-curator的引用，快速切换分布式锁采用的中间件类型
+    3. 采用SPI方式，可以通过改变pom对aquarius-lock-redis或者aquarius-lock-zookeeper的引用，快速切换分布式锁采用的中间件类型
     4. 支持SPEL语义实现分布式锁Key的拼装
        参照Nepxion Marix文档里的说明，需要在IDE和Maven里设置"-parameters"的Compiler Argument。具体参考如下：
        https://www.concretepage.com/java/jdk-8/java-8-reflection-access-to-parameter-names-of-method-and-constructor-with-maven-gradle-and-eclipse-using-parameters-compiler-argument
@@ -37,20 +37,100 @@
            读/写可重入锁原理和规则跟Redission一样
 
 ### 快速切换分布式锁组件
-lock-test下的pom.xml为例子，lock-redisson和lock-curator二选一
+lock-test下的pom.xml为例子，redis和zookeeper二选一
 ```java
-        <dependency>
-            <groupId>nepxion</groupId>
-            <artifactId>aquarius-lock-redis</artifactId>
-        </dependency>
+<dependency>
+    <groupId>${project.groupId}</groupId>
+    <artifactId>aquarius-lock-redis</artifactId>
+</dependency>
 
-        <!-- <dependency>
-            <groupId>nepxion</groupId>
-            <artifactId>aquarius-lock-zookeeper</artifactId>
-        </dependency> -->
+<!-- <dependency>
+    <groupId>${project.groupId}</groupId>
+    <artifactId>aquarius-lock-zookeeper</artifactId>
+</dependency> -->
 ```
 
 ### 使用分布式锁示例，见aquarius-test工程下com.nepxion.aquarius.lock.test	   
-普通分布式锁的使用，参照com.nepxion.aquarius.lock.test.MyApplication1
+普通分布式锁的使用
+```java
+package com.nepxion.aquarius.lock.test.service;
 
-读/写分布式锁的使用，参照com.nepxion.aquarius.lock.test.MyApplication2
+/**
+ * <p>Title: Nepxion Aquarius</p>
+ * <p>Description: Nepxion Aquarius</p>
+ * <p>Copyright: Copyright (c) 2017</p>
+ * <p>Company: Nepxion</p>
+ * @author Haojun Ren
+ * @email 1394997@qq.com
+ * @version 1.0
+ */
+
+import com.nepxion.aquarius.lock.annotation.Lock;
+
+public interface MyService1 {
+    @Lock(key = "#id1 + \"-\" + #id2", leaseTime = 5000, waitTime = 60000, async=false, fair=false)
+    void doA(String id1, String id2);
+
+    void doB(String id1, String id2);
+}
+```
+
+读/写分布式锁的使用
+```java
+package com.nepxion.aquarius.lock.test.service;
+
+/**
+ * <p>Title: Nepxion Aquarius</p>
+ * <p>Description: Nepxion Aquarius</p>
+ * <p>Copyright: Copyright (c) 2017</p>
+ * <p>Company: Nepxion</p>
+ * @author Haojun Ren
+ * @email 1394997@qq.com
+ * @version 1.0
+ */
+
+import com.nepxion.aquarius.lock.annotation.ReadLock;
+
+public interface MyService3 {
+    @ReadLock(key = "#id1 + \"-\" + #id2", leaseTime = 5000, waitTime = 60000, async=false)
+    void doR(String id1, String id2);
+}
+```
+
+```java
+package com.nepxion.aquarius.lock.test.service;
+
+/**
+ * <p>Title: Nepxion Aquarius</p>
+ * <p>Description: Nepxion Aquarius</p>
+ * <p>Copyright: Copyright (c) 2017</p>
+ * <p>Company: Nepxion</p>
+ * @author Haojun Ren
+ * @email 1394997@qq.com
+ * @version 1.0
+ */
+
+import java.util.concurrent.TimeUnit;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
+import com.nepxion.aquarius.lock.annotation.WriteLock;
+
+@Service("myService4Impl")
+public class MyService4Impl {
+    private static final Logger LOG = LoggerFactory.getLogger(MyService4Impl.class);
+
+    @WriteLock(key = "#id1 + \"-\" + #id2", leaseTime = 15000, waitTime = 60000, async = false)
+    public void doW(String id1, String id2) {
+        try {
+            TimeUnit.MILLISECONDS.sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        LOG.info("doW");
+    }
+}
+```
