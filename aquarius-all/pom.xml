@@ -55,7 +55,7 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
-                            <finalName>nepxion-coroutine-assembly-${project.version}</finalName>
+                            <finalName>nepxion-aquarius-all${project.version}</finalName>
                             <createSourcesJar>false</createSourcesJar>
                             <promoteTransitiveDependencies>true</promoteTransitiveDependencies>
                             <artifactSet>
