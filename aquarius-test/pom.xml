@@ -17,12 +17,12 @@
 
     <dependencies>
         <dependency>
-            <groupId>nepxion</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>aquarius-lock-redis</artifactId>
         </dependency>
 
         <!-- <dependency>
-            <groupId>nepxion</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>aquarius-lock-zookeeper</artifactId>
         </dependency> -->
 

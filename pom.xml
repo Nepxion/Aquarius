@@ -10,6 +10,7 @@
     <url>https://github.com/Nepxion/</url>
 
     <modules>
+        <module>aquarius-all</module>
         <module>aquarius-common</module>
         <module>aquarius-common-redis</module>
         <module>aquarius-common-zookeeper</module>
@@ -34,6 +35,12 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>aquarius-all</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>aquarius-common</artifactId>
@@ -77,7 +84,7 @@
             </dependency>
 
             <dependency>
-                <groupId>nepxion</groupId>
+                <groupId>${project.groupId}</groupId>
                 <artifactId>matrix-aop</artifactId>
                 <version>${matrix.version}</version>
             </dependency>

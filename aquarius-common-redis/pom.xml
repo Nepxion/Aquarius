@@ -13,7 +13,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>nepxion</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>aquarius-common</artifactId>
         </dependency>
 

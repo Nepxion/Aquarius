@@ -13,12 +13,12 @@
 
     <dependencies>
         <dependency>
-            <groupId>nepxion</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>aquarius-common-zookeeper</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>nepxion</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>aquarius-lock-aop</artifactId>
         </dependency>
     </dependencies>
