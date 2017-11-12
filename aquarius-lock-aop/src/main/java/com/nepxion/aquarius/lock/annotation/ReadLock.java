@@ -41,4 +41,9 @@ public @interface ReadLock {
      * 是否采用锁的异步执行方式
      */
     boolean async() default false;
+
+    /**
+     * 是否采用公平锁
+     */
+    boolean fair() default false;
 }

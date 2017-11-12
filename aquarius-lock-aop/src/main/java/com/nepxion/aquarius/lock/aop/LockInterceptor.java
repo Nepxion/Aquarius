@@ -50,8 +50,9 @@ public class LockInterceptor extends AbstractInterceptor {
             long leaseTime = readLockAnnotation.leaseTime();
             long waitTime = readLockAnnotation.waitTime();
             boolean async = readLockAnnotation.async();
+            boolean fair = readLockAnnotation.fair();
 
-            return invoke(invocation, readLockAnnotation, key, leaseTime, waitTime, async, false);
+            return invoke(invocation, readLockAnnotation, key, leaseTime, waitTime, async, fair);
         }
 
         WriteLock writeLockAnnotation = getWriteLockAnnotation(invocation);
@@ -60,8 +61,9 @@ public class LockInterceptor extends AbstractInterceptor {
             long leaseTime = writeLockAnnotation.leaseTime();
             long waitTime = writeLockAnnotation.waitTime();
             boolean async = writeLockAnnotation.async();
+            boolean fair = writeLockAnnotation.fair();
 
-            return invoke(invocation, writeLockAnnotation, key, leaseTime, waitTime, async, false);
+            return invoke(invocation, writeLockAnnotation, key, leaseTime, waitTime, async, fair);
         }
 
         return invocation.proceed();
