@@ -13,6 +13,6 @@ package com.nepxion.aquarius.lock.test.service;
 import com.nepxion.aquarius.lock.annotation.ReadLock;
 
 public interface MyService3 {
-    @ReadLock(key = "#id1 + \"-\" + #id2", leaseTime = 5000, waitTime = 60000, async = false)
+    @ReadLock(key = "#id1 + \"-\" + #id2", leaseTime = 5000, waitTime = 60000, async = false, fair = false)
     void doR(String id1, String id2);
 }

@@ -84,7 +84,7 @@ package com.nepxion.aquarius.lock.test.service;
 import com.nepxion.aquarius.lock.annotation.ReadLock;
 
 public interface MyService3 {
-    @ReadLock(key = "#id1 + \"-\" + #id2", leaseTime = 5000, waitTime = 60000, async=false)
+    @ReadLock(key = "#id1 + \"-\" + #id2", leaseTime = 5000, waitTime = 60000, async=false, fair = false)
     void doR(String id1, String id2);
 }
 ```
@@ -114,7 +114,7 @@ import com.nepxion.aquarius.lock.annotation.WriteLock;
 public class MyService4Impl {
     private static final Logger LOG = LoggerFactory.getLogger(MyService4Impl.class);
 
-    @WriteLock(key = "#id1 + \"-\" + #id2", leaseTime = 15000, waitTime = 60000, async = false)
+    @WriteLock(key = "#id1 + \"-\" + #id2", leaseTime = 15000, waitTime = 60000, async = false, fair = false)
     public void doW(String id1, String id2) {
         try {
             TimeUnit.MILLISECONDS.sleep(10000);
