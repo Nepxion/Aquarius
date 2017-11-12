@@ -10,6 +10,8 @@ package com.nepxion.aquarius.lock.zookeeper.spi;
  * @version 1.0
  */
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 import org.aopalliance.intercept.MethodInvocation;
@@ -31,6 +33,10 @@ public class ZookeeperLockSpi implements LockSpi {
 
     private AquariusProperties properties;
     private CuratorFramework curator;
+
+    // 可重入锁可重复使用
+    private volatile Map<String, InterProcessMutex> lockMap = new ConcurrentHashMap<String, InterProcessMutex>();
+    private boolean lockCached = true;
 
     @Override
     public void initialize() {
@@ -67,28 +73,25 @@ public class ZookeeperLockSpi implements LockSpi {
 
         switch (lockType) {
             case LOCK:
-                return invokeLock(invocation, key, leaseTime, waitTime);
+                return invokeLock(invocation, lockType, key, leaseTime, waitTime);
             case READ_LOCK:
-                return invokeReadLock(invocation, key, leaseTime, waitTime);
+                return invokeReadLock(invocation, lockType, key, leaseTime, waitTime);
             case WRITE_LOCK:
-                return invokeWriteLock(invocation, key, leaseTime, waitTime);
+                return invokeWriteLock(invocation, lockType, key, leaseTime, waitTime);
         }
 
         throw new AopException("Invalid Zookeeper lock type for " + lockType);
     }
 
-    private Object invokeLock(MethodInvocation invocation, String key, long leaseTime, long waitTime) throws Throwable {
+    private Object invokeLock(MethodInvocation invocation, LockType lockType, String key, long leaseTime, long waitTime) throws Throwable {
         LOG.debug("Execute invokeLock for key={}, leaseTime={}, waitTime={}", key, leaseTime, waitTime);
 
         InterProcessMutex interProcessMutex = null;
         try {
-            String path = getPath(key);
-            interProcessMutex = new InterProcessMutex(curator, path);
-            if (interProcessMutex != null) {
-                boolean status = interProcessMutex.acquire(waitTime, TimeUnit.MILLISECONDS);
-                if (status) {
-                    return invocation.proceed();
-                }
+            interProcessMutex = getLock(lockType, key);
+            boolean status = interProcessMutex.acquire(waitTime, TimeUnit.MILLISECONDS);
+            if (status) {
+                return invocation.proceed();
             }
         } finally {
             unlock(interProcessMutex);
@@ -97,19 +100,15 @@ public class ZookeeperLockSpi implements LockSpi {
         return null;
     }
 
-    private Object invokeReadLock(MethodInvocation invocation, String key, long leaseTime, long waitTime) throws Throwable {
+    private Object invokeReadLock(MethodInvocation invocation, LockType lockType, String key, long leaseTime, long waitTime) throws Throwable {
         LOG.debug("Execute invokeReadLock for key={}, leaseTime={}, waitTime={}", key, leaseTime, waitTime);
 
         InterProcessMutex interProcessMutex = null;
         try {
-            String path = getPath(key);
-            InterProcessReadWriteLock interProcessReadWriteLock = new InterProcessReadWriteLock(curator, path);
-            interProcessMutex = interProcessReadWriteLock.readLock();
-            if (interProcessMutex != null) {
-                boolean status = interProcessMutex.acquire(waitTime, TimeUnit.MILLISECONDS);
-                if (status) {
-                    return invocation.proceed();
-                }
+            interProcessMutex = getLock(lockType, key);
+            boolean status = interProcessMutex.acquire(waitTime, TimeUnit.MILLISECONDS);
+            if (status) {
+                return invocation.proceed();
             }
         } finally {
             unlock(interProcessMutex);
@@ -118,19 +117,15 @@ public class ZookeeperLockSpi implements LockSpi {
         return null;
     }
 
-    private Object invokeWriteLock(MethodInvocation invocation, String key, long leaseTime, long waitTime) throws Throwable {
+    private Object invokeWriteLock(MethodInvocation invocation, LockType lockType, String key, long leaseTime, long waitTime) throws Throwable {
         LOG.debug("Execute invokeWriteLock for key={}, leaseTime={}, waitTime={}", key, leaseTime, waitTime);
 
         InterProcessMutex interProcessMutex = null;
         try {
-            String path = getPath(key);
-            InterProcessReadWriteLock interProcessReadWriteLock = new InterProcessReadWriteLock(curator, path);
-            interProcessMutex = interProcessReadWriteLock.writeLock();
-            if (interProcessMutex != null) {
-                boolean status = interProcessMutex.acquire(waitTime, TimeUnit.MILLISECONDS);
-                if (status) {
-                    return invocation.proceed();
-                }
+            interProcessMutex = getLock(lockType, key);
+            boolean status = interProcessMutex.acquire(waitTime, TimeUnit.MILLISECONDS);
+            if (status) {
+                return invocation.proceed();
             }
         } finally {
             unlock(interProcessMutex);
@@ -139,14 +134,51 @@ public class ZookeeperLockSpi implements LockSpi {
         return null;
     }
 
+    // 锁节点路径，对应ZooKeeper一个永久节点，下挂一系列临时节点
     private String getPath(String key) {
-        // 锁节点路径，对应ZooKeeper一个永久节点，下挂一系列临时节点
         return properties.getString(ZookeeperConstant.ROOT_PATH) + "/" + key;
+    }
+
+    private InterProcessMutex getLock(LockType lockType, String key) {
+        if (lockCached) {
+            return getCachedLock(lockType, key);
+        } else {
+            return getNewLock(lockType, key);
+        }
+    }
+
+    private InterProcessMutex getNewLock(LockType lockType, String key) {
+        String path = getPath(key);
+        switch (lockType) {
+            case LOCK:
+                return new InterProcessMutex(curator, path);
+            case READ_LOCK:
+                return new InterProcessReadWriteLock(curator, path).readLock();
+            case WRITE_LOCK:
+                return new InterProcessReadWriteLock(curator, path).writeLock();
+        }
+
+        throw new AopException("Invalid Zookeeper lock type for " + lockType);
+    }
+
+    private InterProcessMutex getCachedLock(LockType lockType, String key) {
+        String newKey = lockType + "-" + key;
+
+        InterProcessMutex lock = lockMap.get(newKey);
+        if (lock == null) {
+            InterProcessMutex newLock = getNewLock(lockType, key);
+            lock = lockMap.putIfAbsent(newKey, newLock);
+            if (lock == null) {
+                lock = newLock;
+            }
+        }
+
+        return lock;
     }
 
     private void unlock(InterProcessMutex interProcessMutex) throws Throwable {
         if (ZookeeperHandler.isStarted(curator)) {
-            if (interProcessMutex != null && interProcessMutex.isAcquiredInThisProcess()) {
+            if (interProcessMutex.isAcquiredInThisProcess()) {
                 interProcessMutex.release();
             }
         }

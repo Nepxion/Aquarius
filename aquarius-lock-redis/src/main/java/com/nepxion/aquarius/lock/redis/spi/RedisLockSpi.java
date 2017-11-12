@@ -11,6 +11,8 @@ package com.nepxion.aquarius.lock.redis.spi;
  */
 
 import java.io.IOException;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
@@ -31,6 +33,10 @@ public class RedisLockSpi implements LockSpi {
     private static final Logger LOG = LoggerFactory.getLogger(RedisLockSpi.class);
 
     private RedissonClient redisson;
+
+    // 可重入锁可重复使用
+    private volatile Map<String, RLock> lockMap = new ConcurrentHashMap<String, RLock>();
+    private boolean lockCached = true;
 
     @Override
     public void initialize() {
@@ -62,15 +68,15 @@ public class RedisLockSpi implements LockSpi {
             case LOCK: {
                 if (async) {
                     if (fair) {
-                        return invokeFairLockAsync(invocation, key, leaseTime, waitTime);
+                        return invokeFairLockAsync(invocation, lockType, key, leaseTime, waitTime, fair);
                     } else {
-                        return invokeLockAsync(invocation, key, leaseTime, waitTime);
+                        return invokeLockAsync(invocation, lockType, key, leaseTime, waitTime, fair);
                     }
                 } else {
                     if (fair) {
-                        return invokeFairLock(invocation, key, leaseTime, waitTime);
+                        return invokeFairLock(invocation, lockType, key, leaseTime, waitTime, fair);
                     } else {
-                        return invokeLock(invocation, key, leaseTime, waitTime);
+                        return invokeLock(invocation, lockType, key, leaseTime, waitTime, fair);
                     }
                 }
             }
@@ -79,9 +85,9 @@ public class RedisLockSpi implements LockSpi {
                     throw new AopException("Fair lock of Redis isn't support for " + lockType);
                 }
                 if (async) {
-                    return invokeReadLockAsync(invocation, key, leaseTime, waitTime);
+                    return invokeReadLockAsync(invocation, lockType, key, leaseTime, waitTime, fair);
                 } else {
-                    return invokeReadLock(invocation, key, leaseTime, waitTime);
+                    return invokeReadLock(invocation, lockType, key, leaseTime, waitTime, fair);
                 }
             }
             case WRITE_LOCK: {
@@ -89,9 +95,9 @@ public class RedisLockSpi implements LockSpi {
                     throw new AopException("Fair lock of Redis isn't support for " + lockType);
                 }
                 if (async) {
-                    return invokeWriteLockAsync(invocation, key, leaseTime, waitTime);
+                    return invokeWriteLockAsync(invocation, lockType, key, leaseTime, waitTime, fair);
                 } else {
-                    return invokeWriteLock(invocation, key, leaseTime, waitTime);
+                    return invokeWriteLock(invocation, lockType, key, leaseTime, waitTime, fair);
                 }
             }
         }
@@ -99,17 +105,15 @@ public class RedisLockSpi implements LockSpi {
         throw new AopException("Invalid Redis lock type for " + lockType);
     }
 
-    private Object invokeLock(MethodInvocation invocation, String key, long leaseTime, long waitTime) throws Throwable {
+    private Object invokeLock(MethodInvocation invocation, LockType lockType, String key, long leaseTime, long waitTime, boolean fair) throws Throwable {
         LOG.debug("Execute invokeLock for key={}, leaseTime={}, waitTime={}", key, leaseTime, waitTime);
 
         RLock lock = null;
         try {
-            lock = redisson.getLock(key);
-            if (lock != null) {
-                boolean status = lock.tryLock(waitTime, leaseTime, TimeUnit.MILLISECONDS);
-                if (status) {
-                    return invocation.proceed();
-                }
+            lock = getLock(lockType, key, fair);
+            boolean status = lock.tryLock(waitTime, leaseTime, TimeUnit.MILLISECONDS);
+            if (status) {
+                return invocation.proceed();
             }
         } finally {
             unlock(lock);
@@ -118,17 +122,15 @@ public class RedisLockSpi implements LockSpi {
         return null;
     }
 
-    private Object invokeLockAsync(MethodInvocation invocation, String key, long leaseTime, long waitTime) throws Throwable {
+    private Object invokeLockAsync(MethodInvocation invocation, LockType lockType, String key, long leaseTime, long waitTime, boolean fair) throws Throwable {
         LOG.debug("Execute invokeLockAsync for key={}, leaseTime={}, waitTime={}", key, leaseTime, waitTime);
 
         RLock lock = null;
         try {
-            lock = redisson.getLock(key);
-            if (lock != null) {
-                Future<Boolean> future = lock.tryLockAsync(waitTime, leaseTime, TimeUnit.MILLISECONDS);
-                if (future.get()) {
-                    return invocation.proceed();
-                }
+            lock = getLock(lockType, key, fair);
+            Future<Boolean> future = lock.tryLockAsync(waitTime, leaseTime, TimeUnit.MILLISECONDS);
+            if (future.get()) {
+                return invocation.proceed();
             }
         } finally {
             unlock(lock);
@@ -137,17 +139,15 @@ public class RedisLockSpi implements LockSpi {
         return null;
     }
 
-    private Object invokeFairLock(MethodInvocation invocation, String key, long leaseTime, long waitTime) throws Throwable {
+    private Object invokeFairLock(MethodInvocation invocation, LockType lockType, String key, long leaseTime, long waitTime, boolean fair) throws Throwable {
         LOG.debug("Execute invokeFairLock for key={}, leaseTime={}, waitTime={}", key, leaseTime, waitTime);
 
         RLock lock = null;
         try {
-            lock = redisson.getFairLock(key);
-            if (lock != null) {
-                boolean status = lock.tryLock(waitTime, leaseTime, TimeUnit.MILLISECONDS);
-                if (status) {
-                    return invocation.proceed();
-                }
+            lock = getLock(lockType, key, fair);
+            boolean status = lock.tryLock(waitTime, leaseTime, TimeUnit.MILLISECONDS);
+            if (status) {
+                return invocation.proceed();
             }
         } finally {
             unlock(lock);
@@ -156,17 +156,15 @@ public class RedisLockSpi implements LockSpi {
         return null;
     }
 
-    private Object invokeFairLockAsync(MethodInvocation invocation, String key, long leaseTime, long waitTime) throws Throwable {
+    private Object invokeFairLockAsync(MethodInvocation invocation, LockType lockType, String key, long leaseTime, long waitTime, boolean fair) throws Throwable {
         LOG.debug("Execute invokeFairLockAsync for key={}, leaseTime={}, waitTime={}", key, leaseTime, waitTime);
 
         RLock lock = null;
         try {
-            lock = redisson.getFairLock(key);
-            if (lock != null) {
-                Future<Boolean> future = lock.tryLockAsync(waitTime, leaseTime, TimeUnit.MILLISECONDS);
-                if (future.get()) {
-                    return invocation.proceed();
-                }
+            lock = getLock(lockType, key, fair);
+            Future<Boolean> future = lock.tryLockAsync(waitTime, leaseTime, TimeUnit.MILLISECONDS);
+            if (future.get()) {
+                return invocation.proceed();
             }
         } finally {
             unlock(lock);
@@ -175,17 +173,15 @@ public class RedisLockSpi implements LockSpi {
         return null;
     }
 
-    private Object invokeReadLock(MethodInvocation invocation, String key, long leaseTime, long waitTime) throws Throwable {
+    private Object invokeReadLock(MethodInvocation invocation, LockType lockType, String key, long leaseTime, long waitTime, boolean fair) throws Throwable {
         LOG.debug("Execute invokeReadLock for key={}, leaseTime={}, waitTime={}", key, leaseTime, waitTime);
 
         RLock lock = null;
         try {
-            lock = redisson.getReadWriteLock(key).readLock();
-            if (lock != null) {
-                boolean status = lock.tryLock(waitTime, leaseTime, TimeUnit.MILLISECONDS);
-                if (status) {
-                    return invocation.proceed();
-                }
+            lock = getLock(lockType, key, fair);
+            boolean status = lock.tryLock(waitTime, leaseTime, TimeUnit.MILLISECONDS);
+            if (status) {
+                return invocation.proceed();
             }
         } finally {
             unlock(lock);
@@ -194,18 +190,17 @@ public class RedisLockSpi implements LockSpi {
         return null;
     }
 
-    private Object invokeReadLockAsync(MethodInvocation invocation, String key, long leaseTime, long waitTime) throws Throwable {
+    private Object invokeReadLockAsync(MethodInvocation invocation, LockType lockType, String key, long leaseTime, long waitTime, boolean fair) throws Throwable {
         LOG.debug("Execute invokeReadLockAsync for key={}, leaseTime={}, waitTime={}", key, leaseTime, waitTime);
 
         RLock lock = null;
         try {
-            lock = redisson.getReadWriteLock(key).readLock();
-            if (lock != null) {
-                Future<Boolean> future = lock.tryLockAsync(waitTime, leaseTime, TimeUnit.MILLISECONDS);
-                if (future.get()) {
-                    return invocation.proceed();
-                }
+            lock = getLock(lockType, key, fair);
+            Future<Boolean> future = lock.tryLockAsync(waitTime, leaseTime, TimeUnit.MILLISECONDS);
+            if (future.get()) {
+                return invocation.proceed();
             }
+
         } finally {
             unlock(lock);
         }
@@ -213,17 +208,15 @@ public class RedisLockSpi implements LockSpi {
         return null;
     }
 
-    private Object invokeWriteLock(MethodInvocation invocation, String key, long leaseTime, long waitTime) throws Throwable {
+    private Object invokeWriteLock(MethodInvocation invocation, LockType lockType, String key, long leaseTime, long waitTime, boolean fair) throws Throwable {
         LOG.debug("Execute invokeWriteLock for key={}, leaseTime={}, waitTime={}", key, leaseTime, waitTime);
 
         RLock lock = null;
         try {
-            lock = redisson.getReadWriteLock(key).writeLock();
-            if (lock != null) {
-                boolean status = lock.tryLock(waitTime, leaseTime, TimeUnit.MILLISECONDS);
-                if (status) {
-                    return invocation.proceed();
-                }
+            lock = getLock(lockType, key, fair);
+            boolean status = lock.tryLock(waitTime, leaseTime, TimeUnit.MILLISECONDS);
+            if (status) {
+                return invocation.proceed();
             }
         } finally {
             unlock(lock);
@@ -232,17 +225,15 @@ public class RedisLockSpi implements LockSpi {
         return null;
     }
 
-    private Object invokeWriteLockAsync(MethodInvocation invocation, String key, long leaseTime, long waitTime) throws Throwable {
+    private Object invokeWriteLockAsync(MethodInvocation invocation, LockType lockType, String key, long leaseTime, long waitTime, boolean fair) throws Throwable {
         LOG.debug("Execute invokeWriteLockAsync for key={}, leaseTime={}, waitTime={}", key, leaseTime, waitTime);
 
         RLock lock = null;
         try {
-            lock = redisson.getReadWriteLock(key).writeLock();
-            if (lock != null) {
-                Future<Boolean> future = lock.tryLockAsync(waitTime, leaseTime, TimeUnit.MILLISECONDS);
-                if (future.get()) {
-                    return invocation.proceed();
-                }
+            lock = getLock(lockType, key, fair);
+            Future<Boolean> future = lock.tryLockAsync(waitTime, leaseTime, TimeUnit.MILLISECONDS);
+            if (future.get()) {
+                return invocation.proceed();
             }
         } finally {
             unlock(lock);
@@ -251,9 +242,49 @@ public class RedisLockSpi implements LockSpi {
         return null;
     }
 
+    private RLock getLock(LockType lockType, String key, boolean fair) {
+        if (lockCached) {
+            return getCachedLock(lockType, key, fair);
+        } else {
+            return getNewLock(lockType, key, fair);
+        }
+    }
+
+    private RLock getNewLock(LockType lockType, String key, boolean fair) {
+        switch (lockType) {
+            case LOCK:
+                if (fair) {
+                    return redisson.getFairLock(key);
+                } else {
+                    return redisson.getLock(key);
+                }
+            case READ_LOCK:
+                return redisson.getReadWriteLock(key).readLock();
+            case WRITE_LOCK:
+                return redisson.getReadWriteLock(key).writeLock();
+        }
+
+        throw new AopException("Invalid Redis lock type for " + lockType);
+    }
+
+    private RLock getCachedLock(LockType lockType, String key, boolean fair) {
+        String newKey = lockType + "-" + key + "-" + "fair[" + fair + "]";
+
+        RLock lock = lockMap.get(newKey);
+        if (lock == null) {
+            RLock newLock = getNewLock(lockType, key, fair);
+            lock = lockMap.putIfAbsent(newKey, newLock);
+            if (lock == null) {
+                lock = newLock;
+            }
+        }
+
+        return lock;
+    }
+
     private void unlock(RLock lock) {
         if (RedisHandler.isStarted(redisson)) {
-            if (lock != null && lock.isLocked()) {
+            if (lock.isLocked()) {
                 lock.unlock();
             }
         }
