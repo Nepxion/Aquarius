@@ -18,6 +18,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.aopalliance.intercept.MethodInvocation;
 import org.redisson.api.RLock;
+import org.redisson.api.RReadWriteLock;
 import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
 import org.slf4j.Logger;
@@ -36,6 +37,7 @@ public class RedisLockSpi implements LockSpi {
 
     // 可重入锁可重复使用
     private volatile Map<String, RLock> lockMap = new ConcurrentHashMap<String, RLock>();
+    private volatile Map<String, RReadWriteLock> readWriteLockMap = new ConcurrentHashMap<String, RReadWriteLock>();
     private boolean lockCached = true;
 
     @Override
@@ -122,9 +124,11 @@ public class RedisLockSpi implements LockSpi {
                     return redisson.getLock(key);
                 }
             case READ_LOCK:
-                return redisson.getReadWriteLock(key).readLock();
+                return getCachedReadWriteLock(lockType, key, fair).readLock();
+                // return redisson.getReadWriteLock(key).readLock();
             case WRITE_LOCK:
-                return redisson.getReadWriteLock(key).writeLock();
+                return getCachedReadWriteLock(lockType, key, fair).writeLock();
+                // return redisson.getReadWriteLock(key).writeLock();
         }
 
         throw new AopException("Invalid Redis lock type for " + lockType);
@@ -143,6 +147,21 @@ public class RedisLockSpi implements LockSpi {
         }
 
         return lock;
+    }
+
+    private RReadWriteLock getCachedReadWriteLock(LockType lockType, String key, boolean fair) {
+        String newKey = key + "-" + "fair[" + fair + "]";
+
+        RReadWriteLock readWriteLock = readWriteLockMap.get(newKey);
+        if (readWriteLock == null) {
+            RReadWriteLock newReadWriteLock = redisson.getReadWriteLock(key);
+            readWriteLock = readWriteLockMap.putIfAbsent(newKey, newReadWriteLock);
+            if (readWriteLock == null) {
+                readWriteLock = newReadWriteLock;
+            }
+        }
+
+        return readWriteLock;
     }
 
     private void unlock(RLock lock) {

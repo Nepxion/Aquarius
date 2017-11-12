@@ -16,14 +16,19 @@
     </properties>
 
     <dependencies>
-        <dependency>
+        <!-- <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>aquarius-lock-redis</artifactId>
+        </dependency> -->
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>aquarius-lock-zookeeper</artifactId>
         </dependency>
 
         <!-- <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>aquarius-lock-zookeeper</artifactId>
+            <artifactId>aquarius-lock-local</artifactId>
         </dependency> -->
 
         <dependency>

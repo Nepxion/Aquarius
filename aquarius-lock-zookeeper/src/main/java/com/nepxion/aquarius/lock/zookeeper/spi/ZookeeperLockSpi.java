@@ -36,6 +36,7 @@ public class ZookeeperLockSpi implements LockSpi {
 
     // 可重入锁可重复使用
     private volatile Map<String, InterProcessMutex> lockMap = new ConcurrentHashMap<String, InterProcessMutex>();
+    private volatile Map<String, InterProcessReadWriteLock> readWriteLockMap = new ConcurrentHashMap<String, InterProcessReadWriteLock>();
     private boolean lockCached = true;
 
     @Override
@@ -108,16 +109,19 @@ public class ZookeeperLockSpi implements LockSpi {
             case LOCK:
                 return new InterProcessMutex(curator, path);
             case READ_LOCK:
-                return new InterProcessReadWriteLock(curator, path).readLock();
+                return getCachedReadWriteLock(lockType, key).readLock();
+                // return new InterProcessReadWriteLock(curator, path).readLock();
             case WRITE_LOCK:
-                return new InterProcessReadWriteLock(curator, path).writeLock();
+                return getCachedReadWriteLock(lockType, key).writeLock();
+                // return new InterProcessReadWriteLock(curator, path).writeLock();
         }
 
         throw new AopException("Invalid Zookeeper lock type for " + lockType);
     }
 
     private InterProcessMutex getCachedLock(LockType lockType, String key) {
-        String newKey = lockType + "-" + key;
+        String path = getPath(key);
+        String newKey = path + "-" + lockType;
 
         InterProcessMutex lock = lockMap.get(newKey);
         if (lock == null) {
@@ -129,6 +133,22 @@ public class ZookeeperLockSpi implements LockSpi {
         }
 
         return lock;
+    }
+
+    private InterProcessReadWriteLock getCachedReadWriteLock(LockType lockType, String key) {
+        String path = getPath(key);
+        String newKey = path;
+
+        InterProcessReadWriteLock readWriteLock = readWriteLockMap.get(newKey);
+        if (readWriteLock == null) {
+            InterProcessReadWriteLock newReadWriteLock = new InterProcessReadWriteLock(curator, path);
+            readWriteLock = readWriteLockMap.putIfAbsent(newKey, newReadWriteLock);
+            if (readWriteLock == null) {
+                readWriteLock = newReadWriteLock;
+            }
+        }
+
+        return readWriteLock;
     }
 
     private void unlock(InterProcessMutex interProcessMutex) throws Throwable {

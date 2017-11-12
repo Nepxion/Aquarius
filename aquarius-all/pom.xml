@@ -41,6 +41,11 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>aquarius-lock-zookeeper</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>aquarius-lock-local</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -66,6 +71,7 @@
                                     <include>nepxion:aquarius-lock-aop</include>
                                     <include>nepxion:aquarius-lock-redis</include>
                                     <include>nepxion:aquarius-lock-zookeeper</include>
+                                    <include>nepxion:aquarius-lock-local</include>
                                 </includes>
                             </artifactSet>
                             <transformers>
