@@ -1,4 +1,4 @@
-package com.nepxion.aquarius.common.zookeeper.util;
+package com.nepxion.aquarius.common.zookeeper.handler;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
@@ -29,14 +29,20 @@ import org.apache.curator.retry.RetryUntilElapsed;
 import org.apache.curator.utils.PathUtils;
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.data.Stat;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.nepxion.aquarius.common.property.AquariusContent;
 import com.nepxion.aquarius.common.property.AquariusProperties;
 import com.nepxion.aquarius.common.zookeeper.constant.ZookeeperConstant;
 
-public class ZookeeperUtil {
+public class ZookeeperHandler {
+    private static final Logger LOG = LoggerFactory.getLogger(ZookeeperHandler.class);
+
     // 创建Property格式的配置文件
     public static AquariusProperties createPropertyConfig(String propertyConfigPath) throws IOException {
+        LOG.info("Start to read {}...", propertyConfigPath);
+
         AquariusContent content = new AquariusContent(propertyConfigPath);
 
         return new AquariusProperties(content.getContent());
@@ -45,7 +51,7 @@ public class ZookeeperUtil {
     // 创建单例Curator
     /*public static CuratorFramework getCurator() throws Exception {
         if (curator == null) {
-            synchronized (ZookeeperUtil.class) {
+            synchronized (ZookeeperHandler.class) {
                 if (curator == null) {
                     AquariusProperties properties = createPropertyConfig(ZookeeperConstant.CONFIG_FILE);
                     curator = createCurator(properties);
@@ -88,7 +94,7 @@ public class ZookeeperUtil {
         int sessionTimeoutMs = properties.getInteger(ZookeeperConstant.SESSION_TIMEOUT_MS);
         int connectionTimeoutMs = properties.getInteger(ZookeeperConstant.CONNECTION_TIMEOUT_MS);
 
-        CuratorFramework curator = ZookeeperUtil.createCurator(connectString, sessionTimeoutMs, connectionTimeoutMs, retryPolicy);
+        CuratorFramework curator = createCurator(connectString, sessionTimeoutMs, connectionTimeoutMs, retryPolicy);
 
         startCurator(curator);
 
@@ -136,6 +142,8 @@ public class ZookeeperUtil {
 
     // 创建ZooKeeper客户端实例
     public static CuratorFramework createCurator(String connectString, int sessionTimeoutMs, int connectionTimeoutMs, RetryPolicy retryPolicy) {
+        LOG.info("Start to initialize Curator..");
+
         CuratorFramework curator = CuratorFrameworkFactory.newClient(connectString, sessionTimeoutMs, connectionTimeoutMs, retryPolicy);
 
         return curator;
@@ -143,23 +151,31 @@ public class ZookeeperUtil {
 
     // 启动ZooKeeper客户端
     public static void startCurator(CuratorFramework curator) {
+        LOG.info("Start Curator...");
+
         curator.start();
     }
 
     // 启动ZooKeeper客户端，直到第一次连接成功
     public static void startAndBlockCurator(CuratorFramework curator) throws InterruptedException {
+        LOG.info("start and block Curator...");
+
         curator.start();
         curator.blockUntilConnected();
     }
 
     // 启动ZooKeeper客户端，直到第一次连接成功，为每一次连接配置超时
     public static void startAndBlockCurator(CuratorFramework curator, int maxWaitTime, TimeUnit units) throws InterruptedException {
+        LOG.info("start and block Curator...");
+
         curator.start();
         curator.blockUntilConnected(maxWaitTime, units);
     }
 
     // 关闭ZooKeeper客户端连接
     public static void closeCurator(CuratorFramework curator) {
+        LOG.info("Start to close Curator...");
+
         curator.close();
     }
 

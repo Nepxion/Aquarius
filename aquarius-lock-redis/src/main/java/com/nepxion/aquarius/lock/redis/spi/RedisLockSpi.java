@@ -22,7 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.nepxion.aquarius.common.redis.constant.RedisConstant;
-import com.nepxion.aquarius.common.redis.util.RedisUtil;
+import com.nepxion.aquarius.common.redis.handler.RedisHandler;
 import com.nepxion.aquarius.lock.entity.LockType;
 import com.nepxion.aquarius.lock.exception.AopException;
 import com.nepxion.aquarius.lock.spi.LockSpi;
@@ -35,11 +35,9 @@ public class RedisLockSpi implements LockSpi {
     @Override
     public void initialize() {
         try {
-            LOG.info("Start to read " + RedisConstant.CONFIG_FILE);
-            Config config = RedisUtil.createYamlConfig(RedisConstant.CONFIG_FILE);
+            Config config = RedisHandler.createYamlConfig(RedisConstant.CONFIG_FILE);
 
-            LOG.info("Start to initialize Redisson");
-            redisson = RedisUtil.createRedisson(config);
+            redisson = RedisHandler.createRedisson(config);
         } catch (IOException e) {
             LOG.error("Initialize Redisson failed", e);
         }
@@ -47,13 +45,17 @@ public class RedisLockSpi implements LockSpi {
 
     @Override
     public void destroy() {
-        RedisUtil.closeRedisson(redisson);
+        RedisHandler.closeRedisson(redisson);
     }
 
     @Override
     public Object invoke(MethodInvocation invocation, LockType lockType, String key, long leaseTime, long waitTime, boolean async, boolean fair) throws Throwable {
-        if (redisson == null || !RedisUtil.isStarted(redisson)) {
-            throw new AopException("Redisson isn't initialized or started");
+        if (redisson == null) {
+            throw new AopException("Redisson isn't initialized");
+        }
+
+        if (!RedisHandler.isStarted(redisson)) {
+            throw new AopException("Redisson isn't started");
         }
 
         switch (lockType) {
@@ -250,7 +252,7 @@ public class RedisLockSpi implements LockSpi {
     }
 
     private void unlock(RLock lock) {
-        if (RedisUtil.isStarted(redisson)) {
+        if (RedisHandler.isStarted(redisson)) {
             if (lock != null && lock.isLocked()) {
                 lock.unlock();
             }

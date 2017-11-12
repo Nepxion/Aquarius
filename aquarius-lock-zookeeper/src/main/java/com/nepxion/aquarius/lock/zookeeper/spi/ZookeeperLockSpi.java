@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import com.nepxion.aquarius.common.property.AquariusProperties;
 import com.nepxion.aquarius.common.zookeeper.constant.ZookeeperConstant;
-import com.nepxion.aquarius.common.zookeeper.util.ZookeeperUtil;
+import com.nepxion.aquarius.common.zookeeper.handler.ZookeeperHandler;
 import com.nepxion.aquarius.lock.entity.LockType;
 import com.nepxion.aquarius.lock.exception.AopException;
 import com.nepxion.aquarius.lock.spi.LockSpi;
@@ -35,11 +35,8 @@ public class ZookeeperLockSpi implements LockSpi {
     @Override
     public void initialize() {
         try {
-            LOG.info("Start to read " + ZookeeperConstant.CONFIG_FILE);
-            properties = ZookeeperUtil.createPropertyConfig(ZookeeperConstant.CONFIG_FILE);
-
-            LOG.info("Start to initialize Curator");
-            curator = ZookeeperUtil.createCurator(properties);
+            properties = ZookeeperHandler.createPropertyConfig(ZookeeperConstant.CONFIG_FILE);
+            curator = ZookeeperHandler.createCurator(properties);
         } catch (Exception e) {
             LOG.error("Initialize Curator failed", e);
         }
@@ -47,13 +44,17 @@ public class ZookeeperLockSpi implements LockSpi {
 
     @Override
     public void destroy() {
-        ZookeeperUtil.closeCurator(curator);
+        ZookeeperHandler.closeCurator(curator);
     }
 
     @Override
     public Object invoke(MethodInvocation invocation, LockType lockType, String key, long leaseTime, long waitTime, boolean async, boolean fair) throws Throwable {
-        if (curator == null || !ZookeeperUtil.isStarted(curator)) {
-            throw new AopException("Curator isn't initialized or started");
+        if (curator == null) {
+            throw new AopException("Curator isn't initialized");
+        }
+
+        if (!ZookeeperHandler.isStarted(curator)) {
+            throw new AopException("Curator isn't started");
         }
 
         if (fair) {
@@ -144,7 +145,7 @@ public class ZookeeperLockSpi implements LockSpi {
     }
 
     private void unlock(InterProcessMutex interProcessMutex) throws Throwable {
-        if (ZookeeperUtil.isStarted(curator)) {
+        if (ZookeeperHandler.isStarted(curator)) {
             if (interProcessMutex != null && interProcessMutex.isAcquiredInThisProcess()) {
                 interProcessMutex.release();
             }

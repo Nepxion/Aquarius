@@ -1,4 +1,4 @@
-package com.nepxion.aquarius.common.redis.util;
+package com.nepxion.aquarius.common.redis.handler;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
@@ -15,12 +15,18 @@ import java.io.IOException;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.nepxion.aquarius.common.property.AquariusContent;
 
-public class RedisUtil {
+public class RedisHandler {
+    private static final Logger LOG = LoggerFactory.getLogger(RedisHandler.class);
+
     // 创建Yaml格式的配置文件
     public static Config createYamlConfig(String yamlConfigPath) throws IOException {
+        LOG.info("Start to read {}...", yamlConfigPath);
+
         AquariusContent content = new AquariusContent(yamlConfigPath);
 
         return Config.fromYAML(content.getContent());
@@ -28,6 +34,8 @@ public class RedisUtil {
 
     // 创建Json格式的配置文件
     public static Config createJsonConfig(String jsonConfigPath) throws IOException {
+        LOG.info("Start to read {}...", jsonConfigPath);
+
         AquariusContent content = new AquariusContent(jsonConfigPath);
 
         return Config.fromJSON(content.getContent());
@@ -36,10 +44,9 @@ public class RedisUtil {
     // 创建单例Redisson
     /*public static RedissonClient getRedisson() throws IOException {
         if (redisson == null) {
-            synchronized (RedisUtil.class) {
+            synchronized (RedisHandler.class) {
                 if (redisson == null) {
-                    Config config = createYamlConfig(RedisConstant.CONFIG_FILE);
-                    redisson = createRedisson(config);
+                    redisson = createRedisson();
                 }
             }
         }
@@ -49,6 +56,8 @@ public class RedisUtil {
 
     // 使用config创建Redisson
     public static RedissonClient createRedisson(Config config) {
+        LOG.info("Start to initialize Redisson...");
+
         RedissonClient redisson = Redisson.create(config);
 
         return redisson;
@@ -56,6 +65,8 @@ public class RedisUtil {
 
     // 关闭Redisson客户端连接
     public static void closeRedisson(RedissonClient redisson) {
+        LOG.info("Start to close Redisson...");
+
         redisson.shutdown();
     }
 
