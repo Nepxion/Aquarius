@@ -13,7 +13,7 @@ package com.nepxion.aquarius.lock.test.service;
 import com.nepxion.aquarius.lock.annotation.Lock;
 
 public interface MyService1 {
-    @Lock(key = "#id1 + \"-\" + #id2", leaseTime = 5000, waitTime = 60000, async=false, fair=false)
+    @Lock(key = "#id1 + \"-\" + #id2", leaseTime = 5000, waitTime = 60000, async = false, fair = false)
     void doA(String id1, String id2);
 
     void doB(String id1, String id2);
