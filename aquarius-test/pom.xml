@@ -16,20 +16,20 @@
     </properties>
 
     <dependencies>
-        <!-- <dependency>
+        <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>aquarius-lock-redis</artifactId>
-        </dependency> -->
+        </dependency>
 
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>aquarius-lock-zookeeper</artifactId>
         </dependency>
 
-        <!-- <dependency>
+        <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>aquarius-lock-local</artifactId>
-        </dependency> -->
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>

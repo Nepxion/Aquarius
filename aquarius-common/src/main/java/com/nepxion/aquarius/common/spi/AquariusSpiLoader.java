@@ -16,8 +16,12 @@ import java.util.List;
 import java.util.ServiceLoader;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.nepxion.aquarius.common.property.AquariusProperties;
+import com.nepxion.aquarius.common.property.AquariusPropertiesManager;
 
 public final class AquariusSpiLoader {
     private static final Logger LOG = LoggerFactory.getLogger(AquariusSpiLoader.class);
@@ -35,7 +39,7 @@ public final class AquariusSpiLoader {
         }
 
         if (CollectionUtils.isEmpty(services)) {
-            String error = "It can't be retrieved any SPI implementations for " + serviceClass.getName();
+            String error = "It can't be retrieved any SPI implementations=" + serviceClass.getName();
             LOG.error(error);
             throw new IllegalArgumentException(error);
         }
@@ -53,7 +57,7 @@ public final class AquariusSpiLoader {
             return service;
         }
 
-        String error = "It can't be retrieved SPI implementation for " + serviceClass.getName();
+        String error = "It can't be retrieved SPI implementation=" + serviceClass.getName();
         LOG.error(error);
         throw new IllegalArgumentException(error);
     }
@@ -62,15 +66,22 @@ public final class AquariusSpiLoader {
         Iterator<S> iterator = ServiceLoader.load(serviceClass).iterator();
         while (iterator.hasNext()) {
             S service = iterator.next();
-            if (service.getClass().getName().endsWith(serviceImplClassName.trim())) {
+            if (StringUtils.equalsIgnoreCase(service.getClass().getName(), serviceImplClassName.trim())) {
                 LOG.info("SPI loaded - interface={}, implementation={}", serviceClass.getName(), service.getClass().getName());
 
                 return service;
             }
         }
 
-        String error = "It can't be retrieved SPI implementation for " + serviceClass.getName();
+        String error = "It can't be retrieved SPI implementation=" + serviceImplClassName.trim() + " with interface=" + serviceClass.getName();
         LOG.error(error);
         throw new IllegalArgumentException(error);
+    }
+
+    public static <S> S loadFromProperties(Class<S> serviceClass, String serviceKey) {
+        AquariusProperties properties = AquariusPropertiesManager.getProperties();
+        String serviceImplClassName = properties.getString(serviceKey);
+
+        return load(serviceClass, serviceImplClassName);
     }
 }

@@ -31,20 +31,6 @@ import com.nepxion.matrix.mode.ScanMode;
 public class LockAutoScanProxy extends DefaultAutoScanProxy {
     private static final long serialVersionUID = -6456216398492047529L;
 
-    static {
-        System.out.println("");
-        System.out.println("╔═══╗");
-        System.out.println("║╔═╗║");
-        System.out.println("║║ ║╠══╦╗╔╦══╦═╦╦╗╔╦══╗");
-        System.out.println("║╚═╝║╔╗║║║║╔╗║╔╬╣║║║══╣");
-        System.out.println("║╔═╗║╚╝║╚╝║╔╗║║║║╚╝╠══║");
-        System.out.println("╚╝─╚╩═╗╠══╩╝╚╩╝╚╩══╩══╝");
-        System.out.println("      ║║");
-        System.out.println("      ╚╝");
-        System.out.println("Nepxion Aquarius  v1.0.0.RELEASE");
-        System.out.println("");
-    }
-
     private static final String[] SCAN_PACKAGES = { "com.nepxion.aquarius.lock" };
 
     @SuppressWarnings("rawtypes")

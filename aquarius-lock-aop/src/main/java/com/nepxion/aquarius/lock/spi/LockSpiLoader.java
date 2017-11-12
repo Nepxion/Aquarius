@@ -11,9 +11,11 @@ package com.nepxion.aquarius.lock.spi;
  */
 
 import com.nepxion.aquarius.common.spi.AquariusSpiLoader;
+import com.nepxion.aquarius.lock.constant.LockConstant;
 
 public final class LockSpiLoader {
-    private static final LockSpi LOCK_SPI = AquariusSpiLoader.load(LockSpi.class);
+    private static final LockSpi LOCK_SPI = AquariusSpiLoader.loadFromProperties(LockSpi.class, LockConstant.SPI_NAME);
+    // private static final LockSpi LOCK_SPI = AquariusSpiLoader.load(LockSpi.class);
 
     public static LockSpi load() {
         return LOCK_SPI;
