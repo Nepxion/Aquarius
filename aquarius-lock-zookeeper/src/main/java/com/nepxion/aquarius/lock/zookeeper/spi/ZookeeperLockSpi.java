@@ -71,55 +71,10 @@ public class ZookeeperLockSpi implements LockSpi {
             throw new AopException("Async lock of Zookeeper isn't support for " + lockType);
         }
 
-        switch (lockType) {
-            case LOCK:
-                return invokeLock(invocation, lockType, key, leaseTime, waitTime);
-            case READ_LOCK:
-                return invokeReadLock(invocation, lockType, key, leaseTime, waitTime);
-            case WRITE_LOCK:
-                return invokeWriteLock(invocation, lockType, key, leaseTime, waitTime);
-        }
-
-        throw new AopException("Invalid Zookeeper lock type for " + lockType);
+        return invokeLock(invocation, lockType, key, leaseTime, waitTime);
     }
 
     private Object invokeLock(MethodInvocation invocation, LockType lockType, String key, long leaseTime, long waitTime) throws Throwable {
-        LOG.debug("Execute invokeLock for key={}, leaseTime={}, waitTime={}", key, leaseTime, waitTime);
-
-        InterProcessMutex interProcessMutex = null;
-        try {
-            interProcessMutex = getLock(lockType, key);
-            boolean status = interProcessMutex.acquire(waitTime, TimeUnit.MILLISECONDS);
-            if (status) {
-                return invocation.proceed();
-            }
-        } finally {
-            unlock(interProcessMutex);
-        }
-
-        return null;
-    }
-
-    private Object invokeReadLock(MethodInvocation invocation, LockType lockType, String key, long leaseTime, long waitTime) throws Throwable {
-        LOG.debug("Execute invokeReadLock for key={}, leaseTime={}, waitTime={}", key, leaseTime, waitTime);
-
-        InterProcessMutex interProcessMutex = null;
-        try {
-            interProcessMutex = getLock(lockType, key);
-            boolean status = interProcessMutex.acquire(waitTime, TimeUnit.MILLISECONDS);
-            if (status) {
-                return invocation.proceed();
-            }
-        } finally {
-            unlock(interProcessMutex);
-        }
-
-        return null;
-    }
-
-    private Object invokeWriteLock(MethodInvocation invocation, LockType lockType, String key, long leaseTime, long waitTime) throws Throwable {
-        LOG.debug("Execute invokeWriteLock for key={}, leaseTime={}, waitTime={}", key, leaseTime, waitTime);
-
         InterProcessMutex interProcessMutex = null;
         try {
             interProcessMutex = getLock(lockType, key);
