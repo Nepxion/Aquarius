@@ -11,5 +11,5 @@ package com.nepxion.aquarius.common.redis.constant;
  */
 
 public class RedisConstant {
-    public static final String CONFIG_FILE = "config-redis.yaml";
+    public static final String CONFIG_FILE_REDISSON = "config-redisson.yaml";
 }

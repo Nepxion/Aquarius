@@ -43,7 +43,7 @@ public class RedisLockSpi implements LockSpi {
     @Override
     public void initialize() {
         try {
-            Config config = RedisHandler.createYamlConfig(RedisConstant.CONFIG_FILE);
+            Config config = RedisHandler.createYamlConfig(RedisConstant.CONFIG_FILE_REDISSON);
 
             redisson = RedisHandler.createRedisson(config);
         } catch (IOException e) {

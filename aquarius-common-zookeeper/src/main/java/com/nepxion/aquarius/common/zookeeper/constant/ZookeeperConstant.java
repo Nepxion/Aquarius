@@ -11,7 +11,7 @@ package com.nepxion.aquarius.common.zookeeper.constant;
  */
 
 public class ZookeeperConstant {
-    public static final String CONFIG_FILE = "config-zookeeper.properties";
+    public static final String CONFIG_FILE_CURATOR = "config-curator.properties";
 
     public static final String ROOT_PATH = "rootPath";
 

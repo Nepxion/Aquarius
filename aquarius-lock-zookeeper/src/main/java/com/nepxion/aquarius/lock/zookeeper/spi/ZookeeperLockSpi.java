@@ -42,7 +42,7 @@ public class ZookeeperLockSpi implements LockSpi {
     @Override
     public void initialize() {
         try {
-            properties = ZookeeperHandler.createPropertyConfig(ZookeeperConstant.CONFIG_FILE);
+            properties = ZookeeperHandler.createPropertyConfig(ZookeeperConstant.CONFIG_FILE_CURATOR);
             curator = ZookeeperHandler.createCurator(properties);
         } catch (Exception e) {
             LOG.error("Initialize Curator failed", e);
