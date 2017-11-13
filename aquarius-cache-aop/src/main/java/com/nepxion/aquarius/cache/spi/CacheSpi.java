@@ -19,6 +19,9 @@ public interface CacheSpi {
     // 销毁锁上下文
     void destroy();
 
+    // 获取前缀
+    String getPrefix();
+
     // 方法调用Cacheable
     Object invokeCacheable(MethodInvocation invocation, String value, String key, long expire) throws Throwable;
 

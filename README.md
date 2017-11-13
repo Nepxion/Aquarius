@@ -135,7 +135,7 @@ public class MyService4Impl {
 ```
 
 ## Nepxion Aquarius Cache
-在路上...
+基于原生的RedisTemplate来实现(Redisson的缓存模块，只在付费的Redisson PRO下才支持，故作罢)
 
 ## Nepxion Aquarius Limitation
 在路上...

@@ -17,23 +17,35 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.data.redis.core.RedisTemplate;
 
+import com.nepxion.aquarius.cache.redis.entity.RedisCacheEntity;
 import com.nepxion.aquarius.cache.spi.CacheSpi;
 import com.nepxion.aquarius.common.redis.constant.RedisConstant;
-import com.nepxion.aquarius.common.redis.handler.RedisHandler;
 
 public class RedisCacheSpi implements CacheSpi {
     private static final Logger LOG = LoggerFactory.getLogger(RedisCacheSpi.class);
 
     private RedisTemplate<String, Object> redisTemplate;
+    private RedisCacheEntity redisCacheEntity;
 
+    @SuppressWarnings({ "unchecked", "resource" })
     @Override
     public void initialize() {
-        redisTemplate = RedisHandler.createRedisTemplate();
+        LOG.info("Start to initialize RedisTemplate...");
+
+        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath*:" + RedisConstant.CONFIG_FILE);
+
+        redisTemplate = (RedisTemplate<String, Object>) applicationContext.getBean("aquariusRedisTemplate");
+        redisCacheEntity = applicationContext.getBean(RedisCacheEntity.class);
     }
 
     @Override
     public void destroy() {
 
+    }
+
+    @Override
+    public String getPrefix() {
+        return redisCacheEntity.getPrefix();
     }
 
     @Override

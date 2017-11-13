@@ -24,7 +24,7 @@ import com.nepxion.aquarius.cache.annotation.Cacheable;
 public class MyService6Impl {
     private static final Logger LOG = LoggerFactory.getLogger(MyService6Impl.class);
 
-    @Cacheable(value = "", key = "#id1 + \"-\" + #id2", expire = 60L)
+    @Cacheable(value = "aquarius", key = "#id1 + \"-\" + #id2", expire = 60L)
     public void doD(String id1, String id2) {
         try {
             TimeUnit.MILLISECONDS.sleep(2000);
@@ -35,7 +35,7 @@ public class MyService6Impl {
         LOG.info("doD");
     }
 
-    @CacheEvict(value = "", key = "#id1 + \"-\" + #id2", allEntries = false, beforeInvocation = false)
+    @CacheEvict(value = "aquarius", key = "#id1 + \"-\" + #id2", allEntries = false, beforeInvocation = false)
     public void doE(String id1, String id2) {
         try {
             TimeUnit.MILLISECONDS.sleep(2000);
@@ -46,7 +46,7 @@ public class MyService6Impl {
         LOG.info("doE");
     }
 
-    @CachePut(value = "", key = "#id1 + \"-\" + #id2", expire = 60L)
+    @CachePut(value = "aquarius", key = "#id1 + \"-\" + #id2", expire = 60L)
     public void doF(String id1, String id2) {
         try {
             TimeUnit.MILLISECONDS.sleep(2000);

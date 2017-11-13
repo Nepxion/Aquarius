@@ -12,23 +12,16 @@ package com.nepxion.aquarius.common.redis.handler;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.data.redis.core.RedisTemplate;
-
-import com.nepxion.aquarius.common.redis.constant.RedisConstant;
 
 public class RedisHandler {
     private static final Logger LOG = LoggerFactory.getLogger(RedisHandler.class);
 
     // 创建RedisTemplate
-    @SuppressWarnings({ "unchecked", "resource" })
     public static RedisTemplate<String, Object> createRedisTemplate() {
         LOG.info("Start to initialize RedisTemplate...");
 
-        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath*:" + RedisConstant.CONFIG_FILE);
-
-        return (RedisTemplate<String, Object>) applicationContext.getBean("aquariusRedisTemplate");
+        return null;
     }
 
     // 关闭Redis客户端连接

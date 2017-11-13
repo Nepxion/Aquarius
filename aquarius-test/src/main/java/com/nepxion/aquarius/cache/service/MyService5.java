@@ -15,12 +15,12 @@ import com.nepxion.aquarius.cache.annotation.CachePut;
 import com.nepxion.aquarius.cache.annotation.Cacheable;
 
 public interface MyService5 {
-    @Cacheable(value = "", key = "#id1 + \"-\" + #id2", expire = 60L)
+    @Cacheable(value = "aquarius", key = "#id1 + \"-\" + #id2", expire = 60L)
     void doA(String id1, String id2);
 
-    @CacheEvict(value = "", key = "#id1 + \"-\" + #id2", allEntries = false, beforeInvocation = false)
+    @CacheEvict(value = "aquarius", key = "#id1 + \"-\" + #id2", allEntries = false, beforeInvocation = false)
     void doB(String id1, String id2);
 
-    @CachePut(value = "", key = "#id1 + \"-\" + #id2", expire = 60L)
+    @CachePut(value = "aquarius", key = "#id1 + \"-\" + #id2", expire = 60L)
     void doC(String id1, String id2);
 }
