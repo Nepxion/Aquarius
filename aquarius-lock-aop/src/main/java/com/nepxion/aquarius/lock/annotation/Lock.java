@@ -31,13 +31,13 @@ public @interface Lock {
      * 持锁时间，持锁超过此时间则自动丢弃锁
      * 单位毫秒，默认5秒
      */
-    long leaseTime() default 5 * 1000;
+    long leaseTime() default 5000L;
 
     /**
-     * 没有获取到锁时，等待时间（单位毫秒，默认5秒）
+     * 没有获取到锁时，等待时间
      * 单位毫秒，默认60秒
      */
-    long waitTime() default 60 * 1000;
+    long waitTime() default 60000L;
 
     /**
      * 是否采用锁的异步执行方式

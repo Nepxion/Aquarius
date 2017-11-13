@@ -92,7 +92,7 @@ public class LockInterceptor extends AbstractInterceptor {
         Method method = invocation.getMethod();
         String methodName = method.getName();
 
-        LOG.info("Intercepted for annotation - {} [key={}, proxyType={}, proxiedClass={}, method={}, leaseTime={}, waitTime={}, async={}, fair={}]", lockTypeValue, spelKey, proxyType, proxiedClassName, methodName, leaseTime, waitTime, async, fair);
+        LOG.info("Intercepted for annotation - {} [key={}, leaseTime={}, waitTime={}, async={}, fair={}, proxyType={}, proxiedClass={}, method={}]", lockTypeValue, spelKey, leaseTime, waitTime, async, fair, proxyType, proxiedClassName, methodName);
 
         return LockSpiLoader.load().invoke(invocation, lockType, spelKey, leaseTime, waitTime, async, fair);
     }
