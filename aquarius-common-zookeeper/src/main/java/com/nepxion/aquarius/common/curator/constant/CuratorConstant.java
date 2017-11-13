@@ -1,4 +1,4 @@
-package com.nepxion.aquarius.common.zookeeper.constant;
+package com.nepxion.aquarius.common.curator.constant;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
@@ -10,8 +10,8 @@ package com.nepxion.aquarius.common.zookeeper.constant;
  * @version 1.0
  */
 
-public class ZookeeperConstant {
-    public static final String CONFIG_FILE_CURATOR = "config-curator.properties";
+public class CuratorConstant {
+    public static final String CONFIG_FILE = "config-curator.properties";
 
     public static final String ROOT_PATH = "rootPath";
 

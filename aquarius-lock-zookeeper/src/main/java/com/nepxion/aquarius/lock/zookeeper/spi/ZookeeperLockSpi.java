@@ -21,10 +21,10 @@ import org.apache.curator.framework.recipes.locks.InterProcessReadWriteLock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.nepxion.aquarius.common.curator.constant.CuratorConstant;
+import com.nepxion.aquarius.common.curator.handler.CuratorHandler;
 import com.nepxion.aquarius.common.exception.AquariusException;
 import com.nepxion.aquarius.common.property.AquariusProperties;
-import com.nepxion.aquarius.common.zookeeper.constant.ZookeeperConstant;
-import com.nepxion.aquarius.common.zookeeper.handler.ZookeeperHandler;
 import com.nepxion.aquarius.lock.entity.LockType;
 import com.nepxion.aquarius.lock.spi.LockSpi;
 
@@ -42,8 +42,8 @@ public class ZookeeperLockSpi implements LockSpi {
     @Override
     public void initialize() {
         try {
-            properties = ZookeeperHandler.createPropertyConfig(ZookeeperConstant.CONFIG_FILE_CURATOR);
-            curator = ZookeeperHandler.createCurator(properties);
+            properties = CuratorHandler.createPropertyConfig(CuratorConstant.CONFIG_FILE);
+            curator = CuratorHandler.createCurator(properties);
         } catch (Exception e) {
             LOG.error("Initialize Curator failed", e);
         }
@@ -51,7 +51,7 @@ public class ZookeeperLockSpi implements LockSpi {
 
     @Override
     public void destroy() {
-        ZookeeperHandler.closeCurator(curator);
+        CuratorHandler.closeCurator(curator);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class ZookeeperLockSpi implements LockSpi {
             throw new AquariusException("Curator isn't initialized");
         }
 
-        if (!ZookeeperHandler.isStarted(curator)) {
+        if (!CuratorHandler.isStarted(curator)) {
             throw new AquariusException("Curator isn't started");
         }
 
@@ -92,7 +92,7 @@ public class ZookeeperLockSpi implements LockSpi {
 
     // 锁节点路径，对应ZooKeeper一个永久节点，下挂一系列临时节点
     private String getPath(String key) {
-        return properties.getString(ZookeeperConstant.ROOT_PATH) + "/" + key;
+        return properties.getString(CuratorConstant.ROOT_PATH) + "/" + key;
     }
 
     private InterProcessMutex getLock(LockType lockType, String key) {
@@ -152,7 +152,7 @@ public class ZookeeperLockSpi implements LockSpi {
     }
 
     private void unlock(InterProcessMutex interProcessMutex) throws Throwable {
-        if (ZookeeperHandler.isStarted(curator)) {
+        if (CuratorHandler.isStarted(curator)) {
             if (interProcessMutex.isAcquiredInThisProcess()) {
                 interProcessMutex.release();
             }

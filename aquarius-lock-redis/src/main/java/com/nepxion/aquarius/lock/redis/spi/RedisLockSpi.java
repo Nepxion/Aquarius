@@ -25,8 +25,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.nepxion.aquarius.common.exception.AquariusException;
-import com.nepxion.aquarius.common.redis.constant.RedisConstant;
-import com.nepxion.aquarius.common.redis.handler.RedissonHandler;
+import com.nepxion.aquarius.common.redisson.constant.RedissonConstant;
+import com.nepxion.aquarius.common.redisson.handler.RedissonHandler;
 import com.nepxion.aquarius.lock.entity.LockType;
 import com.nepxion.aquarius.lock.spi.LockSpi;
 
@@ -43,7 +43,7 @@ public class RedisLockSpi implements LockSpi {
     @Override
     public void initialize() {
         try {
-            Config config = RedissonHandler.createYamlConfig(RedisConstant.CONFIG_FILE_REDISSON);
+            Config config = RedissonHandler.createYamlConfig(RedissonConstant.CONFIG_FILE);
 
             redisson = RedissonHandler.createRedisson(config);
         } catch (IOException e) {

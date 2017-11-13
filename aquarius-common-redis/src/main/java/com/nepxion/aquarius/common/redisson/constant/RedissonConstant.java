@@ -1,4 +1,4 @@
-package com.nepxion.aquarius.common.redis.constant;
+package com.nepxion.aquarius.common.redisson.constant;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
@@ -10,6 +10,6 @@ package com.nepxion.aquarius.common.redis.constant;
  * @version 1.0
  */
 
-public class RedisConstant {
-    public static final String CONFIG_FILE_REDISSON = "config-redisson.yaml";
+public class RedissonConstant {
+    public static final String CONFIG_FILE = "config-redisson.yaml";
 }

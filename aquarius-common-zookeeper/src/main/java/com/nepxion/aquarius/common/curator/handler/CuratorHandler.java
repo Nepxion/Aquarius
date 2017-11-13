@@ -1,4 +1,4 @@
-package com.nepxion.aquarius.common.zookeeper.handler;
+package com.nepxion.aquarius.common.curator.handler;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
@@ -32,12 +32,12 @@ import org.apache.zookeeper.data.Stat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.nepxion.aquarius.common.curator.constant.CuratorConstant;
 import com.nepxion.aquarius.common.property.AquariusContent;
 import com.nepxion.aquarius.common.property.AquariusProperties;
-import com.nepxion.aquarius.common.zookeeper.constant.ZookeeperConstant;
 
-public class ZookeeperHandler {
-    private static final Logger LOG = LoggerFactory.getLogger(ZookeeperHandler.class);
+public class CuratorHandler {
+    private static final Logger LOG = LoggerFactory.getLogger(CuratorHandler.class);
 
     // 创建Property格式的配置文件
     public static AquariusProperties createPropertyConfig(String propertyConfigPath) throws IOException {
@@ -63,36 +63,36 @@ public class ZookeeperHandler {
     }*/
 
     public static CuratorFramework createCurator(AquariusProperties properties) throws Exception {
-        String retryType = properties.getString(ZookeeperConstant.RETRY_TYPE);
+        String retryType = properties.getString(CuratorConstant.RETRY_TYPE);
         RetryPolicy retryPolicy = null;
-        if (StringUtils.equals(retryType, ZookeeperConstant.RETRY_TYPE_EXPONENTIAL_BACKOFF_RETRY)) {
-            int baseSleepTimeMs = properties.getInteger(retryType + "-" + ZookeeperConstant.PARAMETER_NAME_BASE_SLEEP_TIME_MS);
-            int maxRetries = properties.getInteger(retryType + "-" + ZookeeperConstant.PARAMETER_NAME_MAX_RETRIES);
+        if (StringUtils.equals(retryType, CuratorConstant.RETRY_TYPE_EXPONENTIAL_BACKOFF_RETRY)) {
+            int baseSleepTimeMs = properties.getInteger(retryType + "-" + CuratorConstant.PARAMETER_NAME_BASE_SLEEP_TIME_MS);
+            int maxRetries = properties.getInteger(retryType + "-" + CuratorConstant.PARAMETER_NAME_MAX_RETRIES);
             retryPolicy = createExponentialBackoffRetry(baseSleepTimeMs, maxRetries);
-        } else if (StringUtils.equals(retryType, ZookeeperConstant.RETRY_TYPE_BOUNDED_EXPONENTIAL_BACKOFF_RETRY)) {
-            int baseSleepTimeMs = properties.getInteger(retryType + "-" + ZookeeperConstant.PARAMETER_NAME_BASE_SLEEP_TIME_MS);
-            int maxSleepTimeMs = properties.getInteger(retryType + "-" + ZookeeperConstant.PARAMETER_NAME_MAX_SLEEP_TIME_MS);
-            int maxRetries = properties.getInteger(retryType + "-" + ZookeeperConstant.PARAMETER_NAME_MAX_RETRIES);
+        } else if (StringUtils.equals(retryType, CuratorConstant.RETRY_TYPE_BOUNDED_EXPONENTIAL_BACKOFF_RETRY)) {
+            int baseSleepTimeMs = properties.getInteger(retryType + "-" + CuratorConstant.PARAMETER_NAME_BASE_SLEEP_TIME_MS);
+            int maxSleepTimeMs = properties.getInteger(retryType + "-" + CuratorConstant.PARAMETER_NAME_MAX_SLEEP_TIME_MS);
+            int maxRetries = properties.getInteger(retryType + "-" + CuratorConstant.PARAMETER_NAME_MAX_RETRIES);
             retryPolicy = createBoundedExponentialBackoffRetry(baseSleepTimeMs, maxSleepTimeMs, maxRetries);
-        } else if (StringUtils.equals(retryType, ZookeeperConstant.RETRY_TYPE_RETRY_NTIMES)) {
-            int count = properties.getInteger(retryType + "-" + ZookeeperConstant.PARAMETER_NAME_COUNT);
-            int sleepMsBetweenRetries = properties.getInteger(retryType + "-" + ZookeeperConstant.PARAMETER_NAME_SLEEP_MS_BETWEEN_RETRIES);
+        } else if (StringUtils.equals(retryType, CuratorConstant.RETRY_TYPE_RETRY_NTIMES)) {
+            int count = properties.getInteger(retryType + "-" + CuratorConstant.PARAMETER_NAME_COUNT);
+            int sleepMsBetweenRetries = properties.getInteger(retryType + "-" + CuratorConstant.PARAMETER_NAME_SLEEP_MS_BETWEEN_RETRIES);
             retryPolicy = createRetryNTimes(count, sleepMsBetweenRetries);
-        } else if (StringUtils.equals(retryType, ZookeeperConstant.RETRY_TYPE_RETRY_FOREVER)) {
-            int retryIntervalMs = properties.getInteger(retryType + "-" + ZookeeperConstant.PARAMETER_NAME_RETRY_INTERVAL_MS);
+        } else if (StringUtils.equals(retryType, CuratorConstant.RETRY_TYPE_RETRY_FOREVER)) {
+            int retryIntervalMs = properties.getInteger(retryType + "-" + CuratorConstant.PARAMETER_NAME_RETRY_INTERVAL_MS);
             retryPolicy = createRetryForever(retryIntervalMs);
-        } else if (StringUtils.equals(retryType, ZookeeperConstant.RETRY_TYPE_RETRY_UNTIL_ELAPSED)) {
-            int maxElapsedTimeMs = properties.getInteger(retryType + "-" + ZookeeperConstant.PARAMETER_NAME_MAX_ELAPSED_TIME_MS);
-            int sleepMsBetweenRetries = properties.getInteger(retryType + "-" + ZookeeperConstant.PARAMETER_NAME_SLEEP_MS_BETWEEN_RETRIES);
+        } else if (StringUtils.equals(retryType, CuratorConstant.RETRY_TYPE_RETRY_UNTIL_ELAPSED)) {
+            int maxElapsedTimeMs = properties.getInteger(retryType + "-" + CuratorConstant.PARAMETER_NAME_MAX_ELAPSED_TIME_MS);
+            int sleepMsBetweenRetries = properties.getInteger(retryType + "-" + CuratorConstant.PARAMETER_NAME_SLEEP_MS_BETWEEN_RETRIES);
             retryPolicy = createRetryUntilElapsed(maxElapsedTimeMs, sleepMsBetweenRetries);
         } else {
             throw new IllegalArgumentException("Invalid config value for retryType=" + retryType);
         }
 
-        String rootPath = properties.getString(ZookeeperConstant.ROOT_PATH);
-        String connectString = properties.getString(ZookeeperConstant.CONNECT_STRING);
-        int sessionTimeoutMs = properties.getInteger(ZookeeperConstant.SESSION_TIMEOUT_MS);
-        int connectionTimeoutMs = properties.getInteger(ZookeeperConstant.CONNECTION_TIMEOUT_MS);
+        String rootPath = properties.getString(CuratorConstant.ROOT_PATH);
+        String connectString = properties.getString(CuratorConstant.CONNECT_STRING);
+        int sessionTimeoutMs = properties.getInteger(CuratorConstant.SESSION_TIMEOUT_MS);
+        int connectionTimeoutMs = properties.getInteger(CuratorConstant.CONNECTION_TIMEOUT_MS);
 
         CuratorFramework curator = createCurator(connectString, sessionTimeoutMs, connectionTimeoutMs, retryPolicy);
 
