@@ -20,8 +20,8 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.aopalliance.intercept.MethodInvocation;
 
+import com.nepxion.aquarius.common.exception.AquariusException;
 import com.nepxion.aquarius.lock.entity.LockType;
-import com.nepxion.aquarius.lock.exception.AopException;
 import com.nepxion.aquarius.lock.spi.LockSpi;
 
 public class LocalLockSpi implements LockSpi {
@@ -43,7 +43,7 @@ public class LocalLockSpi implements LockSpi {
     @Override
     public Object invoke(MethodInvocation invocation, LockType lockType, String key, long leaseTime, long waitTime, boolean async, boolean fair) throws Throwable {
         if (async) {
-            throw new AopException("Async lock of Local isn't support for " + lockType);
+            throw new AquariusException("Async lock of Local isn't support for " + lockType);
         }
 
         return invokeLock(invocation, lockType, key, leaseTime, waitTime, fair);
@@ -82,7 +82,7 @@ public class LocalLockSpi implements LockSpi {
                 return getCachedReadWriteLock(lockType, key, fair).writeLock();
         }
 
-        throw new AopException("Invalid Local lock type for " + lockType);
+        throw new AquariusException("Invalid Local lock type for " + lockType);
     }
 
     private Lock getCachedLock(LockType lockType, String key, boolean fair) {

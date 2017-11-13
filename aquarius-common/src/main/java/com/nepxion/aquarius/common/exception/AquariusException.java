@@ -1,4 +1,4 @@
-package com.nepxion.aquarius.lock.exception;
+package com.nepxion.aquarius.common.exception;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
@@ -10,22 +10,22 @@ package com.nepxion.aquarius.lock.exception;
  * @version 1.0
  */
 
-public class AopException extends RuntimeException {
+public class AquariusException extends RuntimeException {
     private static final long serialVersionUID = 7895884193269203187L;
 
-    public AopException() {
+    public AquariusException() {
         super();
     }
 
-    public AopException(String message) {
+    public AquariusException(String message) {
         super(message);
     }
 
-    public AopException(String message, Throwable cause) {
+    public AquariusException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public AopException(Throwable cause) {
+    public AquariusException(Throwable cause) {
         super(cause);
     }
 }

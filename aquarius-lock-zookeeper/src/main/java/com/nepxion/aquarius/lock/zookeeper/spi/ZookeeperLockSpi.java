@@ -21,11 +21,11 @@ import org.apache.curator.framework.recipes.locks.InterProcessReadWriteLock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.nepxion.aquarius.common.exception.AquariusException;
 import com.nepxion.aquarius.common.property.AquariusProperties;
 import com.nepxion.aquarius.common.zookeeper.constant.ZookeeperConstant;
 import com.nepxion.aquarius.common.zookeeper.handler.ZookeeperHandler;
 import com.nepxion.aquarius.lock.entity.LockType;
-import com.nepxion.aquarius.lock.exception.AopException;
 import com.nepxion.aquarius.lock.spi.LockSpi;
 
 public class ZookeeperLockSpi implements LockSpi {
@@ -57,19 +57,19 @@ public class ZookeeperLockSpi implements LockSpi {
     @Override
     public Object invoke(MethodInvocation invocation, LockType lockType, String key, long leaseTime, long waitTime, boolean async, boolean fair) throws Throwable {
         if (curator == null) {
-            throw new AopException("Curator isn't initialized");
+            throw new AquariusException("Curator isn't initialized");
         }
 
         if (!ZookeeperHandler.isStarted(curator)) {
-            throw new AopException("Curator isn't started");
+            throw new AquariusException("Curator isn't started");
         }
 
         if (fair) {
-            throw new AopException("Fair lock of Zookeeper isn't support for " + lockType);
+            throw new AquariusException("Fair lock of Zookeeper isn't support for " + lockType);
         }
 
         if (async) {
-            throw new AopException("Async lock of Zookeeper isn't support for " + lockType);
+            throw new AquariusException("Async lock of Zookeeper isn't support for " + lockType);
         }
 
         return invokeLock(invocation, lockType, key, leaseTime, waitTime);
@@ -116,7 +116,7 @@ public class ZookeeperLockSpi implements LockSpi {
                 // return new InterProcessReadWriteLock(curator, path).writeLock();
         }
 
-        throw new AopException("Invalid Zookeeper lock type for " + lockType);
+        throw new AquariusException("Invalid Zookeeper lock type for " + lockType);
     }
 
     private InterProcessMutex getCachedLock(LockType lockType, String key) {

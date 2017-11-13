@@ -19,11 +19,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import com.nepxion.aquarius.common.exception.AquariusException;
 import com.nepxion.aquarius.lock.annotation.Lock;
 import com.nepxion.aquarius.lock.annotation.ReadLock;
 import com.nepxion.aquarius.lock.annotation.WriteLock;
 import com.nepxion.aquarius.lock.entity.LockType;
-import com.nepxion.aquarius.lock.exception.AopException;
 import com.nepxion.aquarius.lock.spi.LockSpiLoader;
 import com.nepxion.matrix.aop.AbstractInterceptor;
 
@@ -72,25 +72,19 @@ public class LockInterceptor extends AbstractInterceptor {
     private Object invoke(MethodInvocation invocation, Annotation annotation, String key, long leaseTime, long waitTime, boolean async, boolean fair) throws Throwable {
         LockType lockType = getLockType(annotation);
         if (lockType == null) {
-            throw new AopException("Lock type is null for " + annotation);
+            throw new AquariusException("Lock type is null for " + annotation);
         }
 
         String lockTypeValue = lockType.getValue();
 
         if (StringUtils.isEmpty(key)) {
-            throw new AopException("Annotation [" + lockTypeValue + "]'s key is null or empty");
+            throw new AquariusException("Annotation [" + lockTypeValue + "]'s key is null or empty");
         }
 
         String spelKey = getSpelKey(invocation, key);
-
         String proxyType = getProxyType(invocation);
-
-        Object proxiedObject = invocation.getThis();
-        Class<?> proxiedClass = proxiedObject.getClass();
-        String proxiedClassName = proxiedClass.getCanonicalName();
-
-        Method method = invocation.getMethod();
-        String methodName = method.getName();
+        String proxiedClassName = getProxiedClassName(invocation);
+        String methodName = getMethodName(invocation);
 
         LOG.info("Intercepted for annotation - {} [key={}, leaseTime={}, waitTime={}, async={}, fair={}, proxyType={}, proxiedClass={}, method={}]", lockTypeValue, spelKey, leaseTime, waitTime, async, fair, proxyType, proxiedClassName, methodName);
 

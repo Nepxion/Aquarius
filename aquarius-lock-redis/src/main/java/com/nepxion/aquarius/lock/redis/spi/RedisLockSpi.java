@@ -24,10 +24,10 @@ import org.redisson.config.Config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.nepxion.aquarius.common.exception.AquariusException;
 import com.nepxion.aquarius.common.redis.constant.RedisConstant;
 import com.nepxion.aquarius.common.redis.handler.RedisHandler;
 import com.nepxion.aquarius.lock.entity.LockType;
-import com.nepxion.aquarius.lock.exception.AopException;
 import com.nepxion.aquarius.lock.spi.LockSpi;
 
 public class RedisLockSpi implements LockSpi {
@@ -59,15 +59,15 @@ public class RedisLockSpi implements LockSpi {
     @Override
     public Object invoke(MethodInvocation invocation, LockType lockType, String key, long leaseTime, long waitTime, boolean async, boolean fair) throws Throwable {
         if (redisson == null) {
-            throw new AopException("Redisson isn't initialized");
+            throw new AquariusException("Redisson isn't initialized");
         }
 
         if (!RedisHandler.isStarted(redisson)) {
-            throw new AopException("Redisson isn't started");
+            throw new AquariusException("Redisson isn't started");
         }
 
         if (lockType != LockType.LOCK && fair) {
-            throw new AopException("Fair lock of Redis isn't support for " + lockType);
+            throw new AquariusException("Fair lock of Redis isn't support for " + lockType);
         }
 
         if (async) {
@@ -131,7 +131,7 @@ public class RedisLockSpi implements LockSpi {
                 // return redisson.getReadWriteLock(key).writeLock();
         }
 
-        throw new AopException("Invalid Redis lock type for " + lockType);
+        throw new AquariusException("Invalid Redis lock type for " + lockType);
     }
 
     private RLock getCachedLock(LockType lockType, String key, boolean fair) {

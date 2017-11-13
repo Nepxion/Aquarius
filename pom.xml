@@ -18,6 +18,8 @@
         <module>aquarius-lock-redis</module>
         <module>aquarius-lock-zookeeper</module>
         <module>aquarius-lock-local</module>
+        <module>aquarius-cache-aop</module>
+        <module>aquarius-cache-redis</module>
         <module>aquarius-test</module>
     </modules>
 
@@ -81,6 +83,18 @@
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>aquarius-lock-local</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>aquarius-cache-aop</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>aquarius-cache-redis</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

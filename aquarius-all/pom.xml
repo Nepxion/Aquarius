@@ -46,6 +46,16 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>aquarius-lock-local</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>aquarius-cache-aop</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>aquarius-cache-redis</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -72,12 +82,14 @@
                                     <include>nepxion:aquarius-lock-redis</include>
                                     <include>nepxion:aquarius-lock-zookeeper</include>
                                     <include>nepxion:aquarius-lock-local</include>
+                                    <include>nepxion:aquarius-cache-aop</include>
+                                    <include>nepxion:aquarius-cache-redis</include>
                                 </includes>
                             </artifactSet>
                             <transformers>
-                                <transformer
-                                    implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
                                     <resource>META-INF/services/com.nepxion.aquarius.lock.spi.LockSpi</resource>
+                                    <resource>META-INF/services/com.nepxion.aquarius.cache.spi.CacheSpi</resource>
                                 </transformer>
                             </transformers>
                         </configuration>
