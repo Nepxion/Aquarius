@@ -5,20 +5,21 @@
 基于Redisson(Redis)、Curator(Zookeeper)分布式锁和本地锁，构建于Nepxion Matrix AOP framework，你可以在这三个锁组件中选择一个移植入你的应用中
 
 ### 介绍
-    1. 锁既支持Redisson机制，也支持Curator机制的分布式锁，也支持ReentrantLock机制的本地锁
-    2. 锁即支持普通可重入锁，也支持读/写可重入锁
-       读/写可重入锁必须配对适用，加锁后的使用
-       当写操作时，其他分布式进程/线程无法读取或写入数据；当读操作时，其他分布式进程/线程无法写入数据，但可以读取数据
-       允许同时有多个读锁，但是最多只能有一个写锁。多个读锁不互斥，读锁与写锁互斥
+    1. 锁既支持Redisson(基于Redis)和Curator(基于Zookeeper)机制的分布式锁，也支持ReentrantLock机制的本地锁
+    2. 锁既支持普通可重入锁，也支持读/写可重入锁
+       2.1 普通可重入锁都是互斥的
+       2.2 读/写可重入锁必须配对使用，规则如下：
+       1)当写操作时，其他分布式进程/线程无法读取或写入数据；当读操作时，其他分布式进程/线程无法写入数据，但可以读取数据
+       2)允许同时有多个读锁，但是最多只能有一个写锁。多个读锁不互斥，读锁与写锁互斥
     3. 锁既支持公平锁，也支持非公平锁
     4. 锁既支持同步执行方式，也支持异步执行方式
-    5. 锁既支持持锁时间，也支持持锁超时等待时间
+    5. 锁既支持持锁时间后丢弃，也支持持锁超时等待时间
     6. 锁注解既可以加在接口上，也可以加在实现类上，也可以加在没有接口只有类的情形下
-       注解说明
+       6.1 注解说明
        1)注解com.nepxion.aquarius.lock.annotation.Lock，普通可重入锁
        2)注解com.nepxion.aquarius.lock.annotation.ReadLock，读可重入锁
        3)注解com.nepxion.aquarius.lock.annotation.WriteLock，写可重入锁
-       参数说明
+       6.2 参数说明
        1)key 锁的Key
        2)leaseTime 持锁时间，持锁超过此时间则自动丢弃锁(Redisson支持，Curator不支持，本地锁不支持)
        3)waitTime 没有获取到锁时，等待时间
@@ -42,7 +43,7 @@ lockSpi=com.nepxion.aquarius.lock.redis.spi.RedisLockSpi
 # lockSpi=com.nepxion.aquarius.lock.local.spi.LocalLockSpi
 ```
 
-### 使用分布式锁示例，见aquarius-test工程下com.nepxion.aquarius.lock.test
+### 使用分布式锁示例如下，更多细节见aquarius-test工程下com.nepxion.aquarius.lock.test
 普通分布式锁的使用
 ```java
 package com.nepxion.aquarius.lock.test.service;
