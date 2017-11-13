@@ -1,5 +1,10 @@
 # Nepxion Aquarius
 [![Apache License 2](https://img.shields.io/badge/license-ASF2-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0.txt)
+分布锁应用组件的集合，包括
+    1. Nepxion Aquarius Lock 分布式锁
+    2. Nepxion Aquarius Cache 分布式缓存
+    3. Nepxion Aquarius Limitation 分布式限速限流
+    4. Nepxion Aquarius ID Generator 分布式全局唯一ID生成
 
 ## Nepxion Aquarius Lock
 基于Redisson(Redis)、Curator(Zookeeper)分布式锁和本地锁，构建于Nepxion Matrix AOP framework，你可以在这三个锁组件中选择一个移植入你的应用中
@@ -127,3 +132,12 @@ public class MyService4Impl {
     }
 }
 ```
+
+## Nepxion Aquarius Cache
+在路上...
+
+## Nepxion Aquarius Limitation
+在路上...
+
+## Nepxion Aquarius ID Generator
+在路上...
