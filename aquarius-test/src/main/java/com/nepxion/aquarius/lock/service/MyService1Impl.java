@@ -1,4 +1,4 @@
-package com.nepxion.aquarius.lock.test.service;
+package com.nepxion.aquarius.lock.service;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
@@ -16,18 +16,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-@Service("myService3Impl")
-public class MyService3Impl implements MyService3 {
-    private static final Logger LOG = LoggerFactory.getLogger(MyService3Impl.class);
+@Service("myService1Impl")
+public class MyService1Impl implements MyService1 {
+    private static final Logger LOG = LoggerFactory.getLogger(MyService1Impl.class);
 
     @Override
-    public void doR(String id1, String id2) {
+    public void doA(String id1, String id2) {
         try {
             TimeUnit.MILLISECONDS.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        LOG.info("doR");
+        LOG.info("doA");
+    }
+
+    @Override
+    public void doB(String id1, String id2) {
+        LOG.info("doB");
     }
 }

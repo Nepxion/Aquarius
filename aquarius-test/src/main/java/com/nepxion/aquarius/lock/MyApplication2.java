@@ -1,4 +1,4 @@
-package com.nepxion.aquarius.lock.test;
+package com.nepxion.aquarius.lock;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
@@ -19,9 +19,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 
-import com.nepxion.aquarius.lock.test.context.MyContextAware;
-import com.nepxion.aquarius.lock.test.service.MyService3;
-import com.nepxion.aquarius.lock.test.service.MyService4Impl;
+import com.nepxion.aquarius.lock.context.MyContextAware1;
+import com.nepxion.aquarius.lock.service.MyService3;
+import com.nepxion.aquarius.lock.service.MyService4Impl;
 
 @EnableAutoConfiguration
 @ComponentScan(basePackages = { "com.nepxion.aquarius.lock" })
@@ -36,7 +36,7 @@ public class MyApplication2 {
             public void run() {
                 LOG.info("Start to get write lock...");
                 // 写锁逻辑，最高15秒，睡眠10秒，10秒后释放读锁
-                MyService4Impl myService4 = MyContextAware.getBean(MyService4Impl.class);
+                MyService4Impl myService4 = MyContextAware1.getBean(MyService4Impl.class);
                 myService4.doW("X", "Y");
             }
         }, 0, 600000);
@@ -50,7 +50,7 @@ public class MyApplication2 {
                         @Override
                         public void run() {
                             // 读锁逻辑，最高持锁5秒，睡眠2秒，2秒后释放读锁
-                            MyService3 myService3 = MyContextAware.getBean(MyService3.class);
+                            MyService3 myService3 = MyContextAware1.getBean(MyService3.class);
                             myService3.doR("X", "Y");
                         }
 

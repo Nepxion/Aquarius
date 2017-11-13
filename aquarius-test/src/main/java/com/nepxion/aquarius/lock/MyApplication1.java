@@ -1,4 +1,4 @@
-package com.nepxion.aquarius.lock.test;
+package com.nepxion.aquarius.lock;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
@@ -14,9 +14,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 
-import com.nepxion.aquarius.lock.test.context.MyContextAware;
-import com.nepxion.aquarius.lock.test.service.MyService1;
-import com.nepxion.aquarius.lock.test.service.MyService2Impl;
+import com.nepxion.aquarius.lock.context.MyContextAware1;
+import com.nepxion.aquarius.lock.service.MyService1;
+import com.nepxion.aquarius.lock.service.MyService2Impl;
 
 @EnableAutoConfiguration
 @ComponentScan(basePackages = { "com.nepxion.aquarius.lock" })
@@ -28,7 +28,7 @@ public class MyApplication1 {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    MyService1 myService1 = MyContextAware.getBean(MyService1.class);
+                    MyService1 myService1 = MyContextAware1.getBean(MyService1.class);
                     myService1.doA("X", "Y");
                 }
 
@@ -39,7 +39,7 @@ public class MyApplication1 {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    MyService2Impl myService2 = MyContextAware.getBean(MyService2Impl.class);
+                    MyService2Impl myService2 = MyContextAware1.getBean(MyService2Impl.class);
                     myService2.doC("X", "Y");
                 }
 

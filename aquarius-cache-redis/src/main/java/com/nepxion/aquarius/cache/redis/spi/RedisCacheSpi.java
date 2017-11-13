@@ -45,16 +45,19 @@ public class RedisCacheSpi implements CacheSpi {
 
     @Override
     public Object invokeCacheable(MethodInvocation invocation, String value, String key, long expire) throws Throwable {
+        System.out.println("1");
         return null;
     }
 
     @Override
     public Object invokeCacheEvict(MethodInvocation invocation, String value, String key, boolean allEntries, boolean beforeInvocation) throws Throwable {
+        System.out.println("2");
         return null;
     }
 
     @Override
     public Object invokeCachePut(MethodInvocation invocation, String value, String key, long expire) throws Throwable {
+        System.out.println("3");
         return null;
     }
 }

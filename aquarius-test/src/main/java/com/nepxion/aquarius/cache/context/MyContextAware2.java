@@ -1,4 +1,4 @@
-package com.nepxion.aquarius.lock.test.context;
+package com.nepxion.aquarius.cache.context;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
@@ -15,19 +15,19 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MyContextAware implements ApplicationContextAware {
+public class MyContextAware2 implements ApplicationContextAware {
     private static ApplicationContext applicationContext;
 
-    private MyContextAware() {
+    private MyContextAware2() {
     }
 
     private static void setContext(ApplicationContext applicationContext) {
-        MyContextAware.applicationContext = applicationContext;
+        MyContextAware2.applicationContext = applicationContext;
     }
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) {
-        MyContextAware.setContext(applicationContext);
+        MyContextAware2.setContext(applicationContext);
     }
 
     public static <T> T getBean(Class<T> clazz) {
