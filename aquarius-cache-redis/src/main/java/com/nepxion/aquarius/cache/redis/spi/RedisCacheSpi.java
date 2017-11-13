@@ -20,8 +20,6 @@ import com.nepxion.aquarius.cache.spi.CacheSpi;
 public class RedisCacheSpi implements CacheSpi {
     private static final Logger LOG = LoggerFactory.getLogger(RedisCacheSpi.class);
 
-    private RedissonClient redisson;
-
     @Override
     public void initialize() {
 

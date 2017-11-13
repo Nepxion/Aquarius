@@ -19,7 +19,7 @@ import com.nepxion.aquarius.cache.service.MyService5;
 import com.nepxion.aquarius.cache.service.MyService6Impl;
 
 @EnableAutoConfiguration
-@ComponentScan(basePackages = { "com.nepxion.aquarius.cache" })
+@ComponentScan(basePackages = { "com.nepxion.aquarius.common.redis.config", "com.nepxion.aquarius.cache" })
 public class MyApplication3 {
     public static void main(String[] args) throws Exception {
         SpringApplication.run(MyApplication3.class, args);
