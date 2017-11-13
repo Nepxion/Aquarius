@@ -1,7 +1,7 @@
 # Nepxion Aquarius
 [![Apache License 2](https://img.shields.io/badge/license-ASF2-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-## 分布锁应用组件的集合，包括
+## 分布锁应用组件的集合
     1. Nepxion Aquarius Lock 分布式锁
     2. Nepxion Aquarius Cache 分布式缓存
     3. Nepxion Aquarius Limitation 分布式限速限流
