@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 
 import com.nepxion.aquarius.common.exception.AquariusException;
 import com.nepxion.aquarius.common.redis.constant.RedisConstant;
-import com.nepxion.aquarius.common.redis.handler.RedisHandler;
+import com.nepxion.aquarius.common.redis.handler.RedissonHandler;
 import com.nepxion.aquarius.lock.entity.LockType;
 import com.nepxion.aquarius.lock.spi.LockSpi;
 
@@ -43,9 +43,9 @@ public class RedisLockSpi implements LockSpi {
     @Override
     public void initialize() {
         try {
-            Config config = RedisHandler.createYamlConfig(RedisConstant.CONFIG_FILE_REDISSON);
+            Config config = RedissonHandler.createYamlConfig(RedisConstant.CONFIG_FILE_REDISSON);
 
-            redisson = RedisHandler.createRedisson(config);
+            redisson = RedissonHandler.createRedisson(config);
         } catch (IOException e) {
             LOG.error("Initialize Redisson failed", e);
         }
@@ -53,7 +53,7 @@ public class RedisLockSpi implements LockSpi {
 
     @Override
     public void destroy() {
-        RedisHandler.closeRedisson(redisson);
+        RedissonHandler.closeRedisson(redisson);
     }
 
     @Override
@@ -62,7 +62,7 @@ public class RedisLockSpi implements LockSpi {
             throw new AquariusException("Redisson isn't initialized");
         }
 
-        if (!RedisHandler.isStarted(redisson)) {
+        if (!RedissonHandler.isStarted(redisson)) {
             throw new AquariusException("Redisson isn't started");
         }
 
@@ -165,7 +165,7 @@ public class RedisLockSpi implements LockSpi {
     }
 
     private void unlock(RLock lock) {
-        if (RedisHandler.isStarted(redisson)) {
+        if (RedissonHandler.isStarted(redisson)) {
             if (lock.isLocked()) {
                 lock.unlock();
             }

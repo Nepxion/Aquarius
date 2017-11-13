@@ -16,7 +16,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.nepxion.aquarius.cache.spi.CacheSpi;
-import com.nepxion.aquarius.common.redis.handler.RedisHandler;
 
 public class RedisCacheSpi implements CacheSpi {
     private static final Logger LOG = LoggerFactory.getLogger(RedisCacheSpi.class);
@@ -30,7 +29,7 @@ public class RedisCacheSpi implements CacheSpi {
 
     @Override
     public void destroy() {
-        RedisHandler.closeRedisson(redisson);
+
     }
 
     @Override

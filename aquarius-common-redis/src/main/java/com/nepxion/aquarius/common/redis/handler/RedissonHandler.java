@@ -20,8 +20,8 @@ import org.slf4j.LoggerFactory;
 
 import com.nepxion.aquarius.common.property.AquariusContent;
 
-public class RedisHandler {
-    private static final Logger LOG = LoggerFactory.getLogger(RedisHandler.class);
+public class RedissonHandler {
+    private static final Logger LOG = LoggerFactory.getLogger(RedissonHandler.class);
 
     // 创建Yaml格式的配置文件
     public static Config createYamlConfig(String yamlConfigPath) throws IOException {
