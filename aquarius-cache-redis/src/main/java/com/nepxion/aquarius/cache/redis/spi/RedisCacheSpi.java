@@ -11,18 +11,24 @@ package com.nepxion.aquarius.cache.redis.spi;
  */
 
 import org.aopalliance.intercept.MethodInvocation;
-import org.redisson.api.RedissonClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import com.nepxion.aquarius.cache.spi.CacheSpi;
+import com.nepxion.aquarius.common.redis.constant.RedisConstant;
+import com.nepxion.aquarius.common.redis.handler.RedisHandler;
 
 public class RedisCacheSpi implements CacheSpi {
     private static final Logger LOG = LoggerFactory.getLogger(RedisCacheSpi.class);
 
+    private RedisTemplate<String, Object> redisTemplate;
+
     @Override
     public void initialize() {
-
+        redisTemplate = RedisHandler.createRedisTemplate();
     }
 
     @Override
