@@ -16,6 +16,7 @@
     </properties>
 
     <dependencies>
+        <!-- Use only one of aquarius-lock-redis, aquarius-lock-zookeeper, aquarius-lock-local -->
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>aquarius-lock-redis</artifactId>

@@ -41,12 +41,23 @@
        https://www.concretepage.com/java/jdk-8/java-8-reflection-access-to-parameter-names-of-method-and-constructor-with-maven-gradle-and-eclipse-using-parameters-compiler-argument
 
 ### 快速切换分布式锁组件
-参考aquarius-test下的config.properties
+参考aquarius-test下的pom.xml
 ```java
-# Lock spi config
-lockSpi=com.nepxion.aquarius.lock.redis.spi.RedisLockSpi
-# lockSpi=com.nepxion.aquarius.lock.zookeeper.spi.ZookeeperLockSpi
-# lockSpi=com.nepxion.aquarius.lock.local.spi.LocalLockSpi
+<!-- Use only one of aquarius-lock-redis, aquarius-lock-zookeeper, aquarius-lock-local -->
+<dependency>
+    <groupId>${project.groupId}</groupId>
+    <artifactId>aquarius-lock-redis</artifactId>
+</dependency>
+
+<!-- <dependency>
+    <groupId>${project.groupId}</groupId>
+    <artifactId>aquarius-lock-zookeeper</artifactId>
+</dependency>
+
+<dependency>
+    <groupId>${project.groupId}</groupId>
+        <artifactId>aquarius-lock-local</artifactId>
+    </dependency> -->
 ```
 
 ### 使用分布式锁示例如下，更多细节见aquarius-test工程下com.nepxion.aquarius.lock.test
@@ -135,7 +146,7 @@ public class MyService4Impl {
 ```
 
 ## Nepxion Aquarius Cache
-基于原生的RedisTemplate来实现(Redisson的缓存模块，只在付费的Redisson PRO下才支持，故作罢)
+基于原生的RedisTemplate来实现(本采用Redisson的缓存模块，只在付费的Redisson PRO下才支持，故作罢)
 
 ## Nepxion Aquarius Limitation
 在路上...
