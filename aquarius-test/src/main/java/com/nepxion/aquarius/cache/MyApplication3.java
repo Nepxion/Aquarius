@@ -24,14 +24,27 @@ public class MyApplication3 {
     public static void main(String[] args) throws Exception {
         SpringApplication.run(MyApplication3.class, args);
 
+        // 下面步骤请一步步操作，然后结合Redis Desktop Manager等工具查看效果
         MyService5 myService5 = MyContextAware2.getBean(MyService5.class);
-        myService5.doA("A1", "A2");
-        myService5.doB("B1", "B2");
-        myService5.doC("C1", "C2");
+
+        // 新增缓存Key为M-N，Value为A到Redis
+        myService5.doA("M", "N");
+
+        // 更新缓存Key为M-N，Value为B到Redis
+        // myService5.doB("M", "N");
+
+        // 清除缓存Key为M-N到Redis
+        // myService5.doC("M", "N");
 
         MyService6Impl myService6 = MyContextAware2.getBean(MyService6Impl.class);
-        myService6.doD("D1", "D2");
-        myService6.doE("E1", "E2");
-        myService6.doF("F1", "F2");
+
+        // 新增缓存Key为X-Y，Value为D到Redis
+        myService6.doD("X", "Y");
+
+        // 更新缓存Key为X-Y，Value为E到Redis
+        //myService6.doE("X", "Y");
+
+        // 清除缓存Key为X-Y到Redis
+        // myService6.doF("X", "Y");
     }
 }

@@ -10,6 +10,7 @@ package com.nepxion.aquarius.cache.redis.delegate;
  * @version 1.0
  */
 
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import org.aopalliance.intercept.MethodInvocation;
@@ -62,7 +63,7 @@ public class RedisCacheDelegate implements CacheDelegate {
             LOG.warn("Redis exception occurs while getting data", e);
         }
 
-        LOG.info("Before invocation, key={}, cache={} in Redis", key, object);
+        LOG.info("Before invocation, Cacheable key={}, cache={} in Redis", key, object);
 
         if (object != null) {
             return object;
@@ -81,7 +82,7 @@ public class RedisCacheDelegate implements CacheDelegate {
                 LOG.warn("Redis exception occurs while setting data", e);
             }
 
-            LOG.info("After invocation, key={}, cache={} in Redis", key, object);
+            LOG.info("After invocation, Cacheable key={}, cache={} in Redis", key, object);
         }
 
         return object;
@@ -90,12 +91,63 @@ public class RedisCacheDelegate implements CacheDelegate {
     @Override
     public Object invokeCachePut(MethodInvocation invocation, String key, long expire) throws Throwable {
         ValueOperations<String, Object> valueOperations = redisTemplate.opsForValue();
-        return null;
+
+        // 空值不缓存
+        Object object = invocation.proceed();
+        if (object != null) {
+            try {
+                if (expire == -1) {
+                    valueOperations.set(key, object);
+                } else {
+                    valueOperations.set(key, object, expire, TimeUnit.MILLISECONDS);
+                }
+            } catch (Exception e) {
+                LOG.warn("Redis exception occurs while setting data", e);
+            }
+
+            LOG.info("After invocation, CachePut key={}, cache={} in Redis", key, object);
+        }
+
+        return object;
     }
 
     @Override
-    public Object invokeCacheEvict(MethodInvocation invocation, String key, boolean allEntries, boolean beforeInvocation) throws Throwable {
-        ValueOperations<String, Object> valueOperations = redisTemplate.opsForValue();
-        return null;
+    public Object invokeCacheEvict(MethodInvocation invocation, String key, String value, boolean allEntries, boolean beforeInvocation) throws Throwable {
+        if (beforeInvocation) {
+            LOG.info("Before invocation, CacheEvict clear key={} in Redis", key);
+            try {
+                clear(key, value, allEntries);
+            } catch (Exception e) {
+                LOG.warn("Redis exception occurs while setting data", e);
+            }
+        }
+
+        Object object = invocation.proceed();
+
+        if (!beforeInvocation) {
+            LOG.info("After invocation, CacheEvict clear key={} in Redis", key);
+            try {
+                clear(key, value, allEntries);
+            } catch (Exception e) {
+                LOG.warn("Redis exception occurs while setting data", e);
+            }
+        }
+
+        return object;
+    }
+
+    private void clear(String key, String value, boolean allEntries) {
+        if (allEntries) {
+            String prefix = getPrefix();
+            Set<String> keys = redisTemplate.keys(prefix + "_" + value + "*");
+            for (String k : keys) {
+                redisTemplate.delete(k);
+            }
+        } else {
+            Set<String> keys = redisTemplate.keys(key + "*");
+            for (String k : keys) {
+                redisTemplate.delete(k);
+            }
+        }
     }
 }

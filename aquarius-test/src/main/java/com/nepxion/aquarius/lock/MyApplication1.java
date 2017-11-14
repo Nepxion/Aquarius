@@ -24,6 +24,7 @@ public class MyApplication1 {
     public static void main(String[] args) throws Exception {
         SpringApplication.run(MyApplication1.class, args);
 
+        // 执行效果是doA和doC无序打印，即谁拿到锁谁先运行
         for (int i = 0; i < 5; i++) {
             new Thread(new Runnable() {
                 @Override

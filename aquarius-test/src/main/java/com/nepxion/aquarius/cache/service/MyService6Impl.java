@@ -37,7 +37,7 @@ public class MyService6Impl {
         return "D";
     }
 
-    @CacheEvict(value = "aquarius", key = "#id1 + \"-\" + #id2", allEntries = false, beforeInvocation = false)
+    @CachePut(value = "aquarius", key = "#id1 + \"-\" + #id2", expire = 60000L)
     public String doE(String id1, String id2) {
         try {
             TimeUnit.MILLISECONDS.sleep(2000L);
@@ -50,7 +50,7 @@ public class MyService6Impl {
         return "E";
     }
 
-    @CachePut(value = "aquarius", key = "#id1 + \"-\" + #id2", expire = 60000L)
+    @CacheEvict(value = "aquarius", key = "#id1 + \"-\" + #id2", allEntries = false, beforeInvocation = false)
     public String doF(String id1, String id2) {
         try {
             TimeUnit.MILLISECONDS.sleep(2000L);

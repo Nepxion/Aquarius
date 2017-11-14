@@ -31,6 +31,7 @@ public class MyApplication2 {
     public static void main(String[] args) throws Exception {
         SpringApplication.run(MyApplication2.class, args);
 
+        // 执行效果是先打印doW，即拿到写锁，再打印若干个doR，即可以同时拿到若干个读锁
         Timer timer1 = new Timer();
         timer1.scheduleAtFixedRate(new TimerTask() {
             public void run() {

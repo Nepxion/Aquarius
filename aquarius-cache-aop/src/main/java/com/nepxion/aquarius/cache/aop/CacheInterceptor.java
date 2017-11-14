@@ -139,7 +139,7 @@ public class CacheInterceptor extends AbstractInterceptor {
 
         LOG.info("Intercepted for annotation - CacheEvict [value={}, key={}, allEntries={}, beforeInvocation={}, proxyType={}, proxiedClass={}, method={}]", value, spelKey, allEntries, beforeInvocation, proxyType, proxiedClassName, methodName);
 
-        return cacheDelegate.invokeCacheEvict(invocation, spelKey, allEntries, beforeInvocation);
+        return cacheDelegate.invokeCacheEvict(invocation, spelKey, value, allEntries, beforeInvocation);
     }
 
     public String getSpelKey(MethodInvocation invocation, String value, String key) {
