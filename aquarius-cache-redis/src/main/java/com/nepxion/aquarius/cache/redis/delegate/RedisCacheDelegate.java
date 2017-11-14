@@ -88,14 +88,14 @@ public class RedisCacheDelegate implements CacheDelegate {
     }
 
     @Override
-    public Object invokeCacheEvict(MethodInvocation invocation, String key, boolean allEntries, boolean beforeInvocation) throws Throwable {
-        System.out.println("2");
+    public Object invokeCachePut(MethodInvocation invocation, String key, long expire) throws Throwable {
+        ValueOperations<String, Object> valueOperations = redisTemplate.opsForValue();
         return null;
     }
 
     @Override
-    public Object invokeCachePut(MethodInvocation invocation, String key, long expire) throws Throwable {
-        System.out.println("3");
+    public Object invokeCacheEvict(MethodInvocation invocation, String key, boolean allEntries, boolean beforeInvocation) throws Throwable {
+        ValueOperations<String, Object> valueOperations = redisTemplate.opsForValue();
         return null;
     }
 }

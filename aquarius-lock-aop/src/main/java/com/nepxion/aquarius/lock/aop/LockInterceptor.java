@@ -77,46 +77,6 @@ public class LockInterceptor extends AbstractInterceptor {
         return invocation.proceed();
     }
 
-    private Object invoke(MethodInvocation invocation, Annotation annotation, String key, long leaseTime, long waitTime, boolean async, boolean fair) throws Throwable {
-        LockType lockType = getLockType(annotation);
-        if (lockType == null) {
-            throw new AquariusException("Lock type is null for " + annotation);
-        }
-
-        String lockTypeValue = lockType.getValue();
-
-        if (StringUtils.isEmpty(key)) {
-            throw new AquariusException("Annotation [" + lockTypeValue + "]'s key is null or empty");
-        }
-
-        String spelKey = getSpelKey(invocation, key);
-        String proxyType = getProxyType(invocation);
-        String proxiedClassName = getProxiedClassName(invocation);
-        String methodName = getMethodName(invocation);
-
-        LOG.info("Intercepted for annotation - {} [key={}, leaseTime={}, waitTime={}, async={}, fair={}, proxyType={}, proxiedClass={}, method={}]", lockTypeValue, spelKey, leaseTime, waitTime, async, fair, proxyType, proxiedClassName, methodName);
-
-        return lockDelegate.invoke(invocation, lockType, spelKey, leaseTime, waitTime, async, fair);
-    }
-
-    public String getSpelKey(MethodInvocation invocation, String key) {
-        String[] parameterNames = getParameterNames(invocation);
-        Object[] arguments = getArguments(invocation);
-
-        // 使用SPEL进行Key的解析
-        ExpressionParser parser = new SpelExpressionParser();
-
-        // SPEL上下文
-        EvaluationContext context = new StandardEvaluationContext();
-
-        // 把方法参数放入SPEL上下文中
-        for (int i = 0; i < parameterNames.length; i++) {
-            context.setVariable(parameterNames[i], arguments[i]);
-        }
-
-        return parser.parseExpression(key).getValue(context, String.class);
-    }
-
     private Lock getLockAnnotation(MethodInvocation invocation) {
         Method method = invocation.getMethod();
         if (method.isAnnotationPresent(Lock.class)) {
@@ -144,6 +104,28 @@ public class LockInterceptor extends AbstractInterceptor {
         return null;
     }
 
+    private Object invoke(MethodInvocation invocation, Annotation annotation, String key, long leaseTime, long waitTime, boolean async, boolean fair) throws Throwable {
+        LockType lockType = getLockType(annotation);
+        if (lockType == null) {
+            throw new AquariusException("Lock type is null for " + annotation);
+        }
+
+        String lockTypeValue = lockType.getValue();
+
+        if (StringUtils.isEmpty(key)) {
+            throw new AquariusException("Annotation [" + lockTypeValue + "]'s key is null or empty");
+        }
+
+        String spelKey = getSpelKey(invocation, key);
+        String proxyType = getProxyType(invocation);
+        String proxiedClassName = getProxiedClassName(invocation);
+        String methodName = getMethodName(invocation);
+
+        LOG.info("Intercepted for annotation - {} [key={}, leaseTime={}, waitTime={}, async={}, fair={}, proxyType={}, proxiedClass={}, method={}]", lockTypeValue, spelKey, leaseTime, waitTime, async, fair, proxyType, proxiedClassName, methodName);
+
+        return lockDelegate.invoke(invocation, lockType, spelKey, leaseTime, waitTime, async, fair);
+    }
+
     private LockType getLockType(Annotation annotation) {
         if (annotation instanceof Lock) {
             return LockType.LOCK;
@@ -154,5 +136,23 @@ public class LockInterceptor extends AbstractInterceptor {
         }
 
         return null;
+    }
+
+    public String getSpelKey(MethodInvocation invocation, String key) {
+        String[] parameterNames = getParameterNames(invocation);
+        Object[] arguments = getArguments(invocation);
+
+        // 使用SPEL进行Key的解析
+        ExpressionParser parser = new SpelExpressionParser();
+
+        // SPEL上下文
+        EvaluationContext context = new StandardEvaluationContext();
+
+        // 把方法参数放入SPEL上下文中
+        for (int i = 0; i < parameterNames.length; i++) {
+            context.setVariable(parameterNames[i], arguments[i]);
+        }
+
+        return parser.parseExpression(key).getValue(context, String.class);
     }
 }

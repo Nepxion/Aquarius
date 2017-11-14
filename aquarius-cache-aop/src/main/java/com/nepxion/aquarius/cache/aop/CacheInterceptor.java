@@ -48,6 +48,15 @@ public class CacheInterceptor extends AbstractInterceptor {
             return invokeCacheable(invocation, value, key, expire);
         }
 
+        CachePut cachePutAnnotation = getCachePutAnnotation(invocation);
+        if (cachePutAnnotation != null) {
+            String value = cachePutAnnotation.value();
+            String key = cachePutAnnotation.key();
+            long expire = cachePutAnnotation.expire();
+
+            return invokeCachePut(invocation, value, key, expire);
+        }
+
         CacheEvict cacheEvictAnnotation = getCacheEvictAnnotation(invocation);
         if (cacheEvictAnnotation != null) {
             String value = cacheEvictAnnotation.value();
@@ -58,16 +67,34 @@ public class CacheInterceptor extends AbstractInterceptor {
             return invokeCacheEvict(invocation, value, key, allEntries, beforeInvocation);
         }
 
-        CachePut cachePutAnnotation = getCachePutAnnotation(invocation);
-        if (cachePutAnnotation != null) {
-            String value = cachePutAnnotation.value();
-            String key = cachePutAnnotation.key();
-            long expire = cachePutAnnotation.expire();
+        return invocation.proceed();
+    }
 
-            return invokeCachePut(invocation, value, key, expire);
+    private Cacheable getCacheableAnnotation(MethodInvocation invocation) {
+        Method method = invocation.getMethod();
+        if (method.isAnnotationPresent(Cacheable.class)) {
+            return method.getAnnotation(Cacheable.class);
         }
 
-        return invocation.proceed();
+        return null;
+    }
+
+    private CachePut getCachePutAnnotation(MethodInvocation invocation) {
+        Method method = invocation.getMethod();
+        if (method.isAnnotationPresent(CachePut.class)) {
+            return method.getAnnotation(CachePut.class);
+        }
+
+        return null;
+    }
+
+    private CacheEvict getCacheEvictAnnotation(MethodInvocation invocation) {
+        Method method = invocation.getMethod();
+        if (method.isAnnotationPresent(CacheEvict.class)) {
+            return method.getAnnotation(CacheEvict.class);
+        }
+
+        return null;
     }
 
     private Object invokeCacheable(MethodInvocation invocation, String value, String key, long expire) throws Throwable {
@@ -85,21 +112,6 @@ public class CacheInterceptor extends AbstractInterceptor {
         return cacheDelegate.invokeCacheable(invocation, spelKey, expire);
     }
 
-    private Object invokeCacheEvict(MethodInvocation invocation, String value, String key, boolean allEntries, boolean beforeInvocation) throws Throwable {
-        if (StringUtils.isEmpty(key)) {
-            throw new AquariusException("Annotation [CacheEvict]'s key is null or empty");
-        }
-
-        String spelKey = getSpelKey(invocation, value, key);
-        String proxyType = getProxyType(invocation);
-        String proxiedClassName = getProxiedClassName(invocation);
-        String methodName = getMethodName(invocation);
-
-        LOG.info("Intercepted for annotation - CacheEvict [value={}, key={}, allEntries={}, beforeInvocation={}, proxyType={}, proxiedClass={}, method={}]", value, spelKey, allEntries, beforeInvocation, proxyType, proxiedClassName, methodName);
-
-        return cacheDelegate.invokeCacheEvict(invocation, spelKey, allEntries, beforeInvocation);
-    }
-
     private Object invokeCachePut(MethodInvocation invocation, String value, String key, long expire) throws Throwable {
         if (StringUtils.isEmpty(key)) {
             throw new AquariusException("Annotation [CachePut]'s key is null or empty");
@@ -113,6 +125,21 @@ public class CacheInterceptor extends AbstractInterceptor {
         LOG.info("Intercepted for annotation - CachePut [value={}, key={}, expire={}, proxyType={}, proxiedClass={}, method={}]", value, spelKey, expire, proxyType, proxiedClassName, methodName);
 
         return cacheDelegate.invokeCachePut(invocation, spelKey, expire);
+    }
+
+    private Object invokeCacheEvict(MethodInvocation invocation, String value, String key, boolean allEntries, boolean beforeInvocation) throws Throwable {
+        if (StringUtils.isEmpty(key)) {
+            throw new AquariusException("Annotation [CacheEvict]'s key is null or empty");
+        }
+
+        String spelKey = getSpelKey(invocation, value, key);
+        String proxyType = getProxyType(invocation);
+        String proxiedClassName = getProxiedClassName(invocation);
+        String methodName = getMethodName(invocation);
+
+        LOG.info("Intercepted for annotation - CacheEvict [value={}, key={}, allEntries={}, beforeInvocation={}, proxyType={}, proxiedClass={}, method={}]", value, spelKey, allEntries, beforeInvocation, proxyType, proxiedClassName, methodName);
+
+        return cacheDelegate.invokeCacheEvict(invocation, spelKey, allEntries, beforeInvocation);
     }
 
     public String getSpelKey(MethodInvocation invocation, String value, String key) {
@@ -131,32 +158,5 @@ public class CacheInterceptor extends AbstractInterceptor {
         }
 
         return cacheDelegate.getPrefix() + "_" + value + "_" + parser.parseExpression(key).getValue(context, String.class);
-    }
-
-    private Cacheable getCacheableAnnotation(MethodInvocation invocation) {
-        Method method = invocation.getMethod();
-        if (method.isAnnotationPresent(Cacheable.class)) {
-            return method.getAnnotation(Cacheable.class);
-        }
-
-        return null;
-    }
-
-    private CacheEvict getCacheEvictAnnotation(MethodInvocation invocation) {
-        Method method = invocation.getMethod();
-        if (method.isAnnotationPresent(CacheEvict.class)) {
-            return method.getAnnotation(CacheEvict.class);
-        }
-
-        return null;
-    }
-
-    private CachePut getCachePutAnnotation(MethodInvocation invocation) {
-        Method method = invocation.getMethod();
-        if (method.isAnnotationPresent(CachePut.class)) {
-            return method.getAnnotation(CachePut.class);
-        }
-
-        return null;
     }
 }

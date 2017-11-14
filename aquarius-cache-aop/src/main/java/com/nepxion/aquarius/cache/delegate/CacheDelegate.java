@@ -22,12 +22,12 @@ public interface CacheDelegate {
     // 获取前缀
     String getPrefix();
 
-    // 方法调用Cacheable
+    // 新增缓存
     Object invokeCacheable(MethodInvocation invocation, String key, long expire) throws Throwable;
 
-    // 方法调用CacheEvict
-    Object invokeCacheEvict(MethodInvocation invocation, String key, boolean allEntries, boolean beforeInvocation) throws Throwable;
-
-    // 方法调用CachePut
+    // 更新缓存
     Object invokeCachePut(MethodInvocation invocation, String key, long expire) throws Throwable;
+
+    // 清除缓存
+    Object invokeCacheEvict(MethodInvocation invocation, String key, boolean allEntries, boolean beforeInvocation) throws Throwable;
 }
