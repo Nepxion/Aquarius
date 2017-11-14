@@ -25,7 +25,7 @@ import com.nepxion.aquarius.common.exception.AquariusException;
 import com.nepxion.aquarius.lock.delegate.LockDelegate;
 import com.nepxion.aquarius.lock.entity.LockType;
 
-@Component("LocalLockDelegate")
+@Component("localLockDelegate")
 public class LocalLockDelegate implements LockDelegate {
     // 可重入锁可重复使用
     private volatile Map<String, Lock> lockMap = new ConcurrentHashMap<String, Lock>();

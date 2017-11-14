@@ -29,7 +29,7 @@ import com.nepxion.aquarius.common.property.AquariusProperties;
 import com.nepxion.aquarius.lock.delegate.LockDelegate;
 import com.nepxion.aquarius.lock.entity.LockType;
 
-@Component("ZookeeperLockDelegate")
+@Component("zookeeperLockDelegate")
 public class ZookeeperLockDelegate implements LockDelegate {
     private static final Logger LOG = LoggerFactory.getLogger(ZookeeperLockDelegate.class);
 

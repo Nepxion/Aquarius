@@ -25,9 +25,9 @@
         <!-- <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>aquarius-lock-zookeeper</artifactId>
-        </dependency>
+        </dependency> -->
 
-        <dependency>
+        <!-- <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>aquarius-lock-local</artifactId>
         </dependency> -->

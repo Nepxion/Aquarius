@@ -31,7 +31,7 @@ import com.nepxion.aquarius.common.redisson.handler.RedissonHandler;
 import com.nepxion.aquarius.lock.delegate.LockDelegate;
 import com.nepxion.aquarius.lock.entity.LockType;
 
-@Component("RedisLockDelegate")
+@Component("redisLockDelegate")
 public class RedisLockDelegate implements LockDelegate {
     private static final Logger LOG = LoggerFactory.getLogger(RedisLockDelegate.class);
 

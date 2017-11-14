@@ -25,7 +25,7 @@ import org.springframework.stereotype.Component;
 import com.nepxion.aquarius.cache.delegate.CacheDelegate;
 import com.nepxion.aquarius.cache.redis.entity.RedisCacheEntity;
 
-@Component("RedisCacheDelegate")
+@Component("redisCacheDelegate")
 public class RedisCacheDelegate implements CacheDelegate {
     private static final Logger LOG = LoggerFactory.getLogger(RedisCacheDelegate.class);
 

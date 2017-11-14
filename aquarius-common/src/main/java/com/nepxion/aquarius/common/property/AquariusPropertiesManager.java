@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 
 import com.nepxion.aquarius.common.constant.AquariusConstant;
 
-@Component("aquariusPropertiesManager")
+@Component("propertiesManager")
 public class AquariusPropertiesManager {
     private static final Logger LOG = LoggerFactory.getLogger(AquariusPropertiesManager.class);
 
