@@ -13,8 +13,6 @@ package com.nepxion.aquarius.common.curator.constant;
 public class CuratorConstant {
     public static final String CONFIG_FILE = "config-curator.properties";
 
-    public static final String ROOT_PATH = "rootPath";
-
     public static final String CONNECT_STRING = "connectString";
     public static final String SESSION_TIMEOUT_MS = "sessionTimeoutMs";
     public static final String CONNECTION_TIMEOUT_MS = "connectionTimeoutMs";

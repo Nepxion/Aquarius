@@ -89,7 +89,6 @@ public class CuratorHandler {
             throw new IllegalArgumentException("Invalid config value for retryType=" + retryType);
         }
 
-        String rootPath = properties.getString(CuratorConstant.ROOT_PATH);
         String connectString = properties.getString(CuratorConstant.CONNECT_STRING);
         int sessionTimeoutMs = properties.getInteger(CuratorConstant.SESSION_TIMEOUT_MS);
         int connectionTimeoutMs = properties.getInteger(CuratorConstant.CONNECTION_TIMEOUT_MS);
@@ -97,10 +96,6 @@ public class CuratorHandler {
         CuratorFramework curator = createCurator(connectString, sessionTimeoutMs, connectionTimeoutMs, retryPolicy);
 
         startCurator(curator);
-
-        if (!pathExist(curator, rootPath)) {
-            createPath(curator, rootPath, CreateMode.PERSISTENT);
-        }
 
         return curator;
     }

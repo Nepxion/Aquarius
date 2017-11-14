@@ -20,6 +20,8 @@
         <module>aquarius-lock-local</module>
         <module>aquarius-cache-aop</module>
         <module>aquarius-cache-redis</module>
+        <module>aquarius-id-generator-redis</module>
+        <module>aquarius-id-generator-zookeeper</module>
         <module>aquarius-test</module>
     </modules>
 
@@ -98,6 +100,18 @@
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>aquarius-cache-redis</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>aquarius-id-generator-redis</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>aquarius-id-generator-zookeeper</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

@@ -56,6 +56,16 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>aquarius-cache-redis</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>aquarius-id-generator-redis</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>aquarius-id-generator-zookeeper</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

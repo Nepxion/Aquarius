@@ -25,22 +25,22 @@ public class MyApplication1 {
         SpringApplication.run(MyApplication1.class, args);
 
         // 执行效果是doA和doC无序打印，即谁拿到锁谁先运行
+        MyService1 myService1 = MyContextAware1.getBean(MyService1.class);
         for (int i = 0; i < 5; i++) {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    MyService1 myService1 = MyContextAware1.getBean(MyService1.class);
                     myService1.doA("X", "Y");
                 }
 
             }).start();
         }
 
+        MyService2Impl myService2 = MyContextAware1.getBean(MyService2Impl.class);
         for (int i = 0; i < 5; i++) {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    MyService2Impl myService2 = MyContextAware1.getBean(MyService2Impl.class);
                     myService2.doC("X", "Y");
                 }
 

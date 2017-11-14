@@ -32,16 +32,17 @@ public class MyApplication2 {
         SpringApplication.run(MyApplication2.class, args);
 
         // 执行效果是先打印doW，即拿到写锁，再打印若干个doR，即可以同时拿到若干个读锁
+        MyService4Impl myService4 = MyContextAware1.getBean(MyService4Impl.class);
         Timer timer1 = new Timer();
         timer1.scheduleAtFixedRate(new TimerTask() {
             public void run() {
                 LOG.info("Start to get write lock...");
                 // 写锁逻辑，最高15秒，睡眠10秒，10秒后释放读锁
-                MyService4Impl myService4 = MyContextAware1.getBean(MyService4Impl.class);
                 myService4.doW("X", "Y");
             }
         }, 0L, 600000L);
 
+        MyService3 myService3 = MyContextAware1.getBean(MyService3.class);
         Timer timer2 = new Timer();
         timer2.scheduleAtFixedRate(new TimerTask() {
             public void run() {
@@ -51,7 +52,6 @@ public class MyApplication2 {
                         @Override
                         public void run() {
                             // 读锁逻辑，最高持锁5秒，睡眠2秒，2秒后释放读锁
-                            MyService3 myService3 = MyContextAware1.getBean(MyService3.class);
                             myService3.doR("X", "Y");
                         }
 

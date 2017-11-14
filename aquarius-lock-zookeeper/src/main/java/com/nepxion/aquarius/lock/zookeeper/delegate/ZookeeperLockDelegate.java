@@ -18,6 +18,7 @@ import org.aopalliance.intercept.MethodInvocation;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.recipes.locks.InterProcessMutex;
 import org.apache.curator.framework.recipes.locks.InterProcessReadWriteLock;
+import org.apache.zookeeper.CreateMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -28,6 +29,7 @@ import com.nepxion.aquarius.common.exception.AquariusException;
 import com.nepxion.aquarius.common.property.AquariusProperties;
 import com.nepxion.aquarius.lock.delegate.LockDelegate;
 import com.nepxion.aquarius.lock.entity.LockType;
+import com.nepxion.aquarius.lock.zookeeper.constant.ZookeeperLockConstant;
 
 @Component("zookeeperLockDelegate")
 public class ZookeeperLockDelegate implements LockDelegate {
@@ -35,6 +37,7 @@ public class ZookeeperLockDelegate implements LockDelegate {
 
     private AquariusProperties properties;
     private CuratorFramework curator;
+    private String rootPath;
 
     // 可重入锁可重复使用
     private volatile Map<String, InterProcessMutex> lockMap = new ConcurrentHashMap<String, InterProcessMutex>();
@@ -46,6 +49,11 @@ public class ZookeeperLockDelegate implements LockDelegate {
         try {
             properties = CuratorHandler.createPropertyConfig(CuratorConstant.CONFIG_FILE);
             curator = CuratorHandler.createCurator(properties);
+
+            rootPath = properties.getString(ZookeeperLockConstant.ROOT_PATH);
+            if (!CuratorHandler.pathExist(curator, rootPath)) {
+                CuratorHandler.createPath(curator, rootPath, CreateMode.PERSISTENT);
+            }
         } catch (Exception e) {
             LOG.error("Initialize Curator failed", e);
         }
@@ -94,7 +102,7 @@ public class ZookeeperLockDelegate implements LockDelegate {
 
     // 锁节点路径，对应ZooKeeper一个永久节点，下挂一系列临时节点
     private String getPath(String key) {
-        return properties.getString(CuratorConstant.ROOT_PATH) + "/" + key;
+        return rootPath + "/" + key;
     }
 
     private InterProcessMutex getLock(LockType lockType, String key) {
