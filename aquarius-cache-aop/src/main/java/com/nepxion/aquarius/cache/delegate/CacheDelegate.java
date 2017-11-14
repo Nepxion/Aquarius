@@ -23,11 +23,11 @@ public interface CacheDelegate {
     String getPrefix();
 
     // 方法调用Cacheable
-    Object invokeCacheable(MethodInvocation invocation, String value, String key, long expire) throws Throwable;
+    Object invokeCacheable(MethodInvocation invocation, String key, long expire) throws Throwable;
 
     // 方法调用CacheEvict
-    Object invokeCacheEvict(MethodInvocation invocation, String value, String key, boolean allEntries, boolean beforeInvocation) throws Throwable;
+    Object invokeCacheEvict(MethodInvocation invocation, String key, boolean allEntries, boolean beforeInvocation) throws Throwable;
 
     // 方法调用CachePut
-    Object invokeCachePut(MethodInvocation invocation, String value, String key, long expire) throws Throwable;
+    Object invokeCachePut(MethodInvocation invocation, String key, long expire) throws Throwable;
 }

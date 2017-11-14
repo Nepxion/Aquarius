@@ -82,7 +82,7 @@ public class CacheInterceptor extends AbstractInterceptor {
 
         LOG.info("Intercepted for annotation - Cacheable [value={}, key={}, expire={}, proxyType={}, proxiedClass={}, method={}]", value, spelKey, expire, proxyType, proxiedClassName, methodName);
 
-        return cacheDelegate.invokeCacheable(invocation, value, key, expire);
+        return cacheDelegate.invokeCacheable(invocation, spelKey, expire);
     }
 
     private Object invokeCacheEvict(MethodInvocation invocation, String value, String key, boolean allEntries, boolean beforeInvocation) throws Throwable {
@@ -97,7 +97,7 @@ public class CacheInterceptor extends AbstractInterceptor {
 
         LOG.info("Intercepted for annotation - CacheEvict [value={}, key={}, allEntries={}, beforeInvocation={}, proxyType={}, proxiedClass={}, method={}]", value, spelKey, allEntries, beforeInvocation, proxyType, proxiedClassName, methodName);
 
-        return cacheDelegate.invokeCacheEvict(invocation, value, key, allEntries, beforeInvocation);
+        return cacheDelegate.invokeCacheEvict(invocation, spelKey, allEntries, beforeInvocation);
     }
 
     private Object invokeCachePut(MethodInvocation invocation, String value, String key, long expire) throws Throwable {
@@ -112,7 +112,7 @@ public class CacheInterceptor extends AbstractInterceptor {
 
         LOG.info("Intercepted for annotation - CachePut [value={}, key={}, expire={}, proxyType={}, proxiedClass={}, method={}]", value, spelKey, expire, proxyType, proxiedClassName, methodName);
 
-        return cacheDelegate.invokeCachePut(invocation, value, key, expire);
+        return cacheDelegate.invokeCachePut(invocation, spelKey, expire);
     }
 
     public String getSpelKey(MethodInvocation invocation, String value, String key) {

@@ -34,6 +34,7 @@ public @interface CachePut {
 
     /**
      * 过期时间
+     * 单位毫秒，默认60秒
      */
-    long expire() default 60L;
+    long expire() default 60000L;
 }
