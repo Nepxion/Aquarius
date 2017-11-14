@@ -21,7 +21,6 @@ import com.nepxion.aquarius.common.redis.constant.RedisConstant;
 @Configuration
 @ImportResource(locations = { "classpath*:" + RedisConstant.CONFIG_FILE })
 public class RedisConfig {
-    // SPI下，无法注入
     @Autowired
     @Qualifier("aquariusRedisTemplate")
     private RedisTemplate<String, Object> redisTemplate;

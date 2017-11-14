@@ -1,4 +1,4 @@
-package com.nepxion.aquarius.cache.spi;
+package com.nepxion.aquarius.cache.delegate;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
@@ -12,7 +12,7 @@ package com.nepxion.aquarius.cache.spi;
 
 import org.aopalliance.intercept.MethodInvocation;
 
-public interface CacheSpi {
+public interface CacheDelegate {
     // 初始锁上下文
     void initialize();
 

@@ -10,6 +10,8 @@ package com.nepxion.aquarius.cache.constant;
  * @version 1.0
  */
 
+import com.nepxion.aquarius.common.property.AquariusPropertiesManager;
+
 public class CacheConstant {
-    public static final String SPI_NAME = "cacheSpi";
+    public static final String DELEGATE_NAME = AquariusPropertiesManager.getProperties().getString("cacheDelegate");
 }

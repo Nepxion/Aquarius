@@ -1,4 +1,4 @@
-package com.nepxion.aquarius.lock.local.spi;
+package com.nepxion.aquarius.lock.local.delegate;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
@@ -19,12 +19,14 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.aopalliance.intercept.MethodInvocation;
+import org.springframework.stereotype.Component;
 
 import com.nepxion.aquarius.common.exception.AquariusException;
+import com.nepxion.aquarius.lock.delegate.LockDelegate;
 import com.nepxion.aquarius.lock.entity.LockType;
-import com.nepxion.aquarius.lock.spi.LockSpi;
 
-public class LocalLockSpi implements LockSpi {
+@Component("LocalLockDelegate")
+public class LocalLockDelegate implements LockDelegate {
     // 可重入锁可重复使用
     private volatile Map<String, Lock> lockMap = new ConcurrentHashMap<String, Lock>();
     private volatile Map<String, ReadWriteLock> readWriteLockMap = new ConcurrentHashMap<String, ReadWriteLock>();

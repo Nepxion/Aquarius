@@ -16,12 +16,13 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import org.aopalliance.intercept.MethodInterceptor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.nepxion.aquarius.cache.annotation.CacheEvict;
 import com.nepxion.aquarius.cache.annotation.CachePut;
 import com.nepxion.aquarius.cache.annotation.Cacheable;
-import com.nepxion.aquarius.cache.spi.CacheSpiLoader;
+import com.nepxion.aquarius.cache.delegate.CacheDelegate;
 import com.nepxion.matrix.aop.DefaultAutoScanProxy;
 import com.nepxion.matrix.mode.ProxyMode;
 import com.nepxion.matrix.mode.ScanMode;
@@ -39,18 +40,21 @@ public class CacheAutoScanProxy extends DefaultAutoScanProxy {
     @SuppressWarnings("rawtypes")
     private Class[] methodAnnotations;
 
+    @Autowired
+    private CacheDelegate cacheDelegate;
+
     public CacheAutoScanProxy() {
         super(SCAN_PACKAGES, ProxyMode.BY_METHOD_ANNOTATION_ONLY, ScanMode.FOR_METHOD_ANNOTATION_ONLY);
     }
 
     @PostConstruct
     public void initialize() {
-        CacheSpiLoader.load().initialize();
+        cacheDelegate.initialize();
     }
 
     @PreDestroy
     public void destory() {
-        CacheSpiLoader.load().destroy();
+        cacheDelegate.destroy();
     }
 
     @SuppressWarnings("unchecked")

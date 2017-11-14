@@ -16,6 +16,7 @@ import org.aopalliance.intercept.MethodInvocation;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
@@ -25,13 +26,16 @@ import org.springframework.stereotype.Component;
 import com.nepxion.aquarius.cache.annotation.CacheEvict;
 import com.nepxion.aquarius.cache.annotation.CachePut;
 import com.nepxion.aquarius.cache.annotation.Cacheable;
-import com.nepxion.aquarius.cache.spi.CacheSpiLoader;
+import com.nepxion.aquarius.cache.delegate.CacheDelegate;
 import com.nepxion.aquarius.common.exception.AquariusException;
 import com.nepxion.matrix.aop.AbstractInterceptor;
 
 @Component("cacheInterceptor")
 public class CacheInterceptor extends AbstractInterceptor {
     private static final Logger LOG = LoggerFactory.getLogger(CacheInterceptor.class);
+
+    @Autowired
+    private CacheDelegate cacheDelegate;
 
     @Override
     public Object invoke(MethodInvocation invocation) throws Throwable {
@@ -78,7 +82,7 @@ public class CacheInterceptor extends AbstractInterceptor {
 
         LOG.info("Intercepted for annotation - Cacheable [value={}, key={}, expire={}, proxyType={}, proxiedClass={}, method={}]", value, spelKey, expire, proxyType, proxiedClassName, methodName);
 
-        return CacheSpiLoader.load().invokeCacheable(invocation, value, key, expire);
+        return cacheDelegate.invokeCacheable(invocation, value, key, expire);
     }
 
     private Object invokeCacheEvict(MethodInvocation invocation, String value, String key, boolean allEntries, boolean beforeInvocation) throws Throwable {
@@ -93,7 +97,7 @@ public class CacheInterceptor extends AbstractInterceptor {
 
         LOG.info("Intercepted for annotation - CacheEvict [value={}, key={}, allEntries={}, beforeInvocation={}, proxyType={}, proxiedClass={}, method={}]", value, spelKey, allEntries, beforeInvocation, proxyType, proxiedClassName, methodName);
 
-        return CacheSpiLoader.load().invokeCacheEvict(invocation, value, key, allEntries, beforeInvocation);
+        return cacheDelegate.invokeCacheEvict(invocation, value, key, allEntries, beforeInvocation);
     }
 
     private Object invokeCachePut(MethodInvocation invocation, String value, String key, long expire) throws Throwable {
@@ -108,7 +112,7 @@ public class CacheInterceptor extends AbstractInterceptor {
 
         LOG.info("Intercepted for annotation - CachePut [value={}, key={}, expire={}, proxyType={}, proxiedClass={}, method={}]", value, spelKey, expire, proxyType, proxiedClassName, methodName);
 
-        return CacheSpiLoader.load().invokeCachePut(invocation, value, key, expire);
+        return cacheDelegate.invokeCachePut(invocation, value, key, expire);
     }
 
     public String getSpelKey(MethodInvocation invocation, String value, String key) {
@@ -126,7 +130,7 @@ public class CacheInterceptor extends AbstractInterceptor {
             context.setVariable(parameterNames[i], arguments[i]);
         }
 
-        return CacheSpiLoader.load().getPrefix() + "_" + value + "_" + parser.parseExpression(key).getValue(context, String.class);
+        return cacheDelegate.getPrefix() + "_" + value + "_" + parser.parseExpression(key).getValue(context, String.class);
     }
 
     private Cacheable getCacheableAnnotation(MethodInvocation invocation) {

@@ -86,12 +86,6 @@
                                     <include>nepxion:aquarius-cache-redis</include>
                                 </includes>
                             </artifactSet>
-                            <transformers>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                                    <resource>META-INF/services/com.nepxion.aquarius.lock.spi.LockSpi</resource>
-                                    <resource>META-INF/services/com.nepxion.aquarius.cache.spi.CacheSpi</resource>
-                                </transformer>
-                            </transformers>
                         </configuration>
                     </execution>
                 </executions>

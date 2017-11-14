@@ -1,4 +1,4 @@
-package com.nepxion.aquarius.lock.spi;
+package com.nepxion.aquarius.lock.delegate;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
@@ -14,7 +14,7 @@ import org.aopalliance.intercept.MethodInvocation;
 
 import com.nepxion.aquarius.lock.entity.LockType;
 
-public interface LockSpi {
+public interface LockDelegate {
     // 初始锁上下文
     void initialize();
 

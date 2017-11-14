@@ -1,4 +1,4 @@
-package com.nepxion.aquarius.cache.redis.spi;
+package com.nepxion.aquarius.cache.redis.delegate;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
@@ -16,13 +16,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Component;
 
+import com.nepxion.aquarius.cache.delegate.CacheDelegate;
 import com.nepxion.aquarius.cache.redis.entity.RedisCacheEntity;
-import com.nepxion.aquarius.cache.spi.CacheSpi;
 import com.nepxion.aquarius.common.redis.constant.RedisConstant;
 
-public class RedisCacheSpi implements CacheSpi {
-    private static final Logger LOG = LoggerFactory.getLogger(RedisCacheSpi.class);
+@Component("RedisCacheDelegate")
+public class RedisCacheDelegate implements CacheDelegate {
+    private static final Logger LOG = LoggerFactory.getLogger(RedisCacheDelegate.class);
 
     private RedisTemplate<String, Object> redisTemplate;
     private RedisCacheEntity redisCacheEntity;

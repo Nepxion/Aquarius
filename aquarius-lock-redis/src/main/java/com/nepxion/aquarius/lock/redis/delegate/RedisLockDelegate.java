@@ -1,4 +1,4 @@
-package com.nepxion.aquarius.lock.redis.spi;
+package com.nepxion.aquarius.lock.redis.delegate;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
@@ -23,15 +23,17 @@ import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import com.nepxion.aquarius.common.exception.AquariusException;
 import com.nepxion.aquarius.common.redisson.constant.RedissonConstant;
 import com.nepxion.aquarius.common.redisson.handler.RedissonHandler;
+import com.nepxion.aquarius.lock.delegate.LockDelegate;
 import com.nepxion.aquarius.lock.entity.LockType;
-import com.nepxion.aquarius.lock.spi.LockSpi;
 
-public class RedisLockSpi implements LockSpi {
-    private static final Logger LOG = LoggerFactory.getLogger(RedisLockSpi.class);
+@Component("RedisLockDelegate")
+public class RedisLockDelegate implements LockDelegate {
+    private static final Logger LOG = LoggerFactory.getLogger(RedisLockDelegate.class);
 
     private RedissonClient redisson;
 

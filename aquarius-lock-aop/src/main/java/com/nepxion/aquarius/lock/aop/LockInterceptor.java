@@ -17,6 +17,7 @@ import org.aopalliance.intercept.MethodInvocation;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
@@ -27,13 +28,16 @@ import com.nepxion.aquarius.common.exception.AquariusException;
 import com.nepxion.aquarius.lock.annotation.Lock;
 import com.nepxion.aquarius.lock.annotation.ReadLock;
 import com.nepxion.aquarius.lock.annotation.WriteLock;
+import com.nepxion.aquarius.lock.delegate.LockDelegate;
 import com.nepxion.aquarius.lock.entity.LockType;
-import com.nepxion.aquarius.lock.spi.LockSpiLoader;
 import com.nepxion.matrix.aop.AbstractInterceptor;
 
 @Component("lockInterceptor")
 public class LockInterceptor extends AbstractInterceptor {
     private static final Logger LOG = LoggerFactory.getLogger(LockInterceptor.class);
+
+    @Autowired
+    private LockDelegate lockDelegate;
 
     @Override
     public Object invoke(MethodInvocation invocation) throws Throwable {
@@ -92,7 +96,7 @@ public class LockInterceptor extends AbstractInterceptor {
 
         LOG.info("Intercepted for annotation - {} [key={}, leaseTime={}, waitTime={}, async={}, fair={}, proxyType={}, proxiedClass={}, method={}]", lockTypeValue, spelKey, leaseTime, waitTime, async, fair, proxyType, proxiedClassName, methodName);
 
-        return LockSpiLoader.load().invoke(invocation, lockType, spelKey, leaseTime, waitTime, async, fair);
+        return lockDelegate.invoke(invocation, lockType, spelKey, leaseTime, waitTime, async, fair);
     }
 
     public String getSpelKey(MethodInvocation invocation, String key) {

@@ -10,6 +10,8 @@ package com.nepxion.aquarius.lock.constant;
  * @version 1.0
  */
 
+import com.nepxion.aquarius.common.property.AquariusPropertiesManager;
+
 public class LockConstant {
-    public static final String SPI_NAME = "lockSpi";
+    public static final String DELEGATE_NAME = AquariusPropertiesManager.getProperties().getString("lockDelegate");
 }

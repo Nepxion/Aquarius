@@ -1,4 +1,4 @@
-package com.nepxion.aquarius.lock.zookeeper.spi;
+package com.nepxion.aquarius.lock.zookeeper.delegate;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
@@ -20,16 +20,18 @@ import org.apache.curator.framework.recipes.locks.InterProcessMutex;
 import org.apache.curator.framework.recipes.locks.InterProcessReadWriteLock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import com.nepxion.aquarius.common.curator.constant.CuratorConstant;
 import com.nepxion.aquarius.common.curator.handler.CuratorHandler;
 import com.nepxion.aquarius.common.exception.AquariusException;
 import com.nepxion.aquarius.common.property.AquariusProperties;
+import com.nepxion.aquarius.lock.delegate.LockDelegate;
 import com.nepxion.aquarius.lock.entity.LockType;
-import com.nepxion.aquarius.lock.spi.LockSpi;
 
-public class ZookeeperLockSpi implements LockSpi {
-    private static final Logger LOG = LoggerFactory.getLogger(ZookeeperLockSpi.class);
+@Component("ZookeeperLockDelegate")
+public class ZookeeperLockDelegate implements LockDelegate {
+    private static final Logger LOG = LoggerFactory.getLogger(ZookeeperLockDelegate.class);
 
     private AquariusProperties properties;
     private CuratorFramework curator;
