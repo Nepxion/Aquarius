@@ -32,13 +32,11 @@ public class AquariusPropertiesManager {
         System.out.println("      ╚╝");
         System.out.println("Nepxion Aquarius  v1.0.0.RELEASE");
         System.out.println("");
+
+        initializeProperties();
     }
 
     private static AquariusProperties properties;
-
-    static {
-        initializeProperties();
-    }
 
     private static void initializeProperties() {
         try {
