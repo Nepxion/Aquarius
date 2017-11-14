@@ -13,31 +13,28 @@ package com.nepxion.aquarius.cache.redis.delegate;
 import org.aopalliance.intercept.MethodInvocation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import com.nepxion.aquarius.cache.delegate.CacheDelegate;
 import com.nepxion.aquarius.cache.redis.entity.RedisCacheEntity;
-import com.nepxion.aquarius.common.redis.constant.RedisConstant;
 
 @Component("RedisCacheDelegate")
 public class RedisCacheDelegate implements CacheDelegate {
     private static final Logger LOG = LoggerFactory.getLogger(RedisCacheDelegate.class);
 
+    @Autowired
+    @Qualifier("aquariusRedisTemplate")
     private RedisTemplate<String, Object> redisTemplate;
+
+    @Autowired
     private RedisCacheEntity redisCacheEntity;
 
-    @SuppressWarnings({ "unchecked", "resource" })
     @Override
     public void initialize() {
-        LOG.info("Start to initialize RedisTemplate...");
 
-        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath*:" + RedisConstant.CONFIG_FILE);
-
-        redisTemplate = (RedisTemplate<String, Object>) applicationContext.getBean("aquariusRedisTemplate");
-        redisCacheEntity = applicationContext.getBean(RedisCacheEntity.class);
     }
 
     @Override
