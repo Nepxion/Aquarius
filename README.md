@@ -4,8 +4,7 @@
 ## 分布式应用组件集合
     1. Nepxion Aquarius Lock 分布式锁
     2. Nepxion Aquarius Cache 分布式缓存
-    3. Nepxion Aquarius Limitation 分布式限速限流
-    4. Nepxion Aquarius ID Generator 分布式全局唯一ID生成
+    3. Nepxion Aquarius ID Generator 分布式全局唯一ID生成
 
 ## Nepxion Aquarius Lock
 基于Redisson(Redis)、Curator(Zookeeper)分布式锁和本地锁，构建于Nepxion Matrix AOP framework，你可以在这三个锁组件中选择一个移植入你的应用中
@@ -316,9 +315,6 @@ public class MyApplication3 {
     }
 }
 ```
-
-## Nepxion Aquarius Limitation
-在路上...
 
 ## Nepxion Aquarius ID Generator
 在路上...
