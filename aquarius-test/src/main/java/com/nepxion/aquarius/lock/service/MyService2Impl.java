@@ -22,18 +22,22 @@ import com.nepxion.aquarius.lock.annotation.Lock;
 public class MyService2Impl {
     private static final Logger LOG = LoggerFactory.getLogger(MyService2Impl.class);
 
-    @Lock(key = "#id1 + \"-\" + #id2", leaseTime = 5000, waitTime = 60000, async = false, fair = false)
-    public void doC(String id1, String id2) {
+    @Lock(key = "#id1 + \"-\" + #id2", leaseTime = 5000L, waitTime = 60000L, async = false, fair = false)
+    public String doC(String id1, String id2) {
         try {
-            TimeUnit.MILLISECONDS.sleep(4000);
+            TimeUnit.MILLISECONDS.sleep(4000L);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
         LOG.info("doC");
+
+        return "C";
     }
 
-    public void doD(String id1, String id2) {
+    public String doD(String id1, String id2) {
         LOG.info("doD");
+
+        return "D";
     }
 }

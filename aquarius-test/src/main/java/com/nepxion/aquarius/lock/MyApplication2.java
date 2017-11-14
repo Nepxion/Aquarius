@@ -39,7 +39,7 @@ public class MyApplication2 {
                 MyService4Impl myService4 = MyContextAware1.getBean(MyService4Impl.class);
                 myService4.doW("X", "Y");
             }
-        }, 0, 600000);
+        }, 0L, 600000L);
 
         Timer timer2 = new Timer();
         timer2.scheduleAtFixedRate(new TimerTask() {
@@ -57,6 +57,6 @@ public class MyApplication2 {
                     }).start();
                 }
             }
-        }, 2000, 2000);
+        }, 2000L, 2000L);
     }
 }

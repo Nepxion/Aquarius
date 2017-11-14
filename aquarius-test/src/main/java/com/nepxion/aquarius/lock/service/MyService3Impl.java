@@ -21,13 +21,15 @@ public class MyService3Impl implements MyService3 {
     private static final Logger LOG = LoggerFactory.getLogger(MyService3Impl.class);
 
     @Override
-    public void doR(String id1, String id2) {
+    public String doR(String id1, String id2) {
         try {
-            TimeUnit.MILLISECONDS.sleep(2000);
+            TimeUnit.MILLISECONDS.sleep(2000L);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
         LOG.info("doR");
+
+        return "R";
     }
 }

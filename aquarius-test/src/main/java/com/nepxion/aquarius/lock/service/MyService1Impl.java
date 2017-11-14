@@ -21,18 +21,22 @@ public class MyService1Impl implements MyService1 {
     private static final Logger LOG = LoggerFactory.getLogger(MyService1Impl.class);
 
     @Override
-    public void doA(String id1, String id2) {
+    public String doA(String id1, String id2) {
         try {
-            TimeUnit.MILLISECONDS.sleep(2000);
+            TimeUnit.MILLISECONDS.sleep(2000L);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
         LOG.info("doA");
+
+        return "A";
     }
 
     @Override
-    public void doB(String id1, String id2) {
+    public String doB(String id1, String id2) {
         LOG.info("doB");
+
+        return "B";
     }
 }

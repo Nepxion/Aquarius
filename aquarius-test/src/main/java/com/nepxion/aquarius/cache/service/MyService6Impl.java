@@ -24,36 +24,42 @@ import com.nepxion.aquarius.cache.annotation.Cacheable;
 public class MyService6Impl {
     private static final Logger LOG = LoggerFactory.getLogger(MyService6Impl.class);
 
-    @Cacheable(value = "aquarius", key = "#id1 + \"-\" + #id2", expire = 60L)
-    public void doD(String id1, String id2) {
+    @Cacheable(value = "aquarius", key = "#id1 + \"-\" + #id2", expire = 60000L)
+    public String doD(String id1, String id2) {
         try {
-            TimeUnit.MILLISECONDS.sleep(2000);
+            TimeUnit.MILLISECONDS.sleep(2000L);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
         LOG.info("doD");
+
+        return "D";
     }
 
     @CacheEvict(value = "aquarius", key = "#id1 + \"-\" + #id2", allEntries = false, beforeInvocation = false)
-    public void doE(String id1, String id2) {
+    public String doE(String id1, String id2) {
         try {
-            TimeUnit.MILLISECONDS.sleep(2000);
+            TimeUnit.MILLISECONDS.sleep(2000L);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
         LOG.info("doE");
+
+        return "E";
     }
 
-    @CachePut(value = "aquarius", key = "#id1 + \"-\" + #id2", expire = 60L)
-    public void doF(String id1, String id2) {
+    @CachePut(value = "aquarius", key = "#id1 + \"-\" + #id2", expire = 60000L)
+    public String doF(String id1, String id2) {
         try {
-            TimeUnit.MILLISECONDS.sleep(2000);
+            TimeUnit.MILLISECONDS.sleep(2000L);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
         LOG.info("doF");
+
+        return "F";
     }
 }
