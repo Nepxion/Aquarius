@@ -55,8 +55,8 @@ public class ZookeeperLockDelegate implements LockDelegate {
             curator = CuratorHandler.createCurator(config);
 
             prefix = properties.getString(AquariusConstant.NAMESPACE);
-            if (!CuratorHandler.pathExist(curator, prefix)) {
-                CuratorHandler.createPath(curator, prefix, CreateMode.PERSISTENT);
+            if (!CuratorHandler.pathExist(curator, "/" + prefix)) {
+                CuratorHandler.createPath(curator, "/" + prefix, CreateMode.PERSISTENT);
             }
         } catch (Exception e) {
             LOG.error("Initialize Curator failed", e);
@@ -106,7 +106,7 @@ public class ZookeeperLockDelegate implements LockDelegate {
 
     // 锁节点路径，对应ZooKeeper一个永久节点，下挂一系列临时节点
     private String getPath(String key) {
-        return prefix + "/" + key;
+        return "/" + prefix + "/" + key;
     }
 
     private InterProcessMutex getLock(LockType lockType, String key) {

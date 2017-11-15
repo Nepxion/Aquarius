@@ -45,8 +45,8 @@ public class ZookeeperIdGeneratorImpl implements ZookeeperIdGenerator {
             curator = CuratorHandler.createCurator(config);
 
             prefix = properties.getString(AquariusConstant.NAMESPACE);
-            if (!CuratorHandler.pathExist(curator, prefix)) {
-                CuratorHandler.createPath(curator, prefix, CreateMode.PERSISTENT);
+            if (!CuratorHandler.pathExist(curator, "/" + prefix)) {
+                CuratorHandler.createPath(curator, "/" + prefix, CreateMode.PERSISTENT);
             }
         } catch (Exception e) {
             LOG.error("Initialize Curator failed", e);
@@ -78,6 +78,6 @@ public class ZookeeperIdGeneratorImpl implements ZookeeperIdGenerator {
     }
 
     private String getPath(String name, String key) {
-        return prefix + "/" + name + "_" + key;
+        return "/" + prefix + "/" + name + "_" + key;
     }
 }
