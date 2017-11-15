@@ -441,10 +441,15 @@ public class MyApplication3 {
 
 ## Nepxion Aquarius ID Generator
 ### 介绍
-    1 支持序号在Zookeeper上分布式生成，在Zookeeper中的节点名为"/" + prefix + "/" + name + "_" + key
+    1 支持序号在Zookeeper上分布式生成
+      1)计算对象在Zookeeper中的节点名为"/" + prefix + "/" + name + "_" + key
+      2)每个分布式系统拿到的ID都是全局不重复，加1
     2 支持全局唯一ID在Redis上分布式生成
-      在路上...
-
+      1)计算对象在Redis中的Key名为prefix + "_" + name + "_" + key
+      2)每个分布式系统拿到的ID都是全局不重复，ID规则：
+        ID的前半部分为yyyyMMddHHmmssSSS格式的17位数字
+        ID的后半部分为由length(最大为8位，如果length > 8，则取8)决定，取值Redis对应Value，如果小于length所对应的数位，如果不足该数位，前面补足0
+        例如Redis对应Value为1234，length为8，那么ID的后半部分为00001234；length为2，那么ID的后半部分为34
 ### 使用ID Generator示例如下，更多细节见aquarius-test工程下com.nepxion.aquarius.idgenerator
 ```java
 package com.nepxion.aquarius.idgenerator;
@@ -524,6 +529,84 @@ public class MyApplication4 {
 }
 ```
 
+```java
+package com.nepxion.aquarius.idgenerator;
+
+/**
+ * <p>Title: Nepxion Aquarius</p>
+ * <p>Description: Nepxion Aquarius</p>
+ * <p>Copyright: Copyright (c) 2017</p>
+ * <p>Company: Nepxion</p>
+ * @author Haojun Ren
+ * @email 1394997@qq.com
+ * @version 1.0
+ */
+
+import java.util.Timer;
+import java.util.TimerTask;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.context.annotation.ComponentScan;
+
+import com.nepxion.aquarius.idgenerator.context.MyContextAware3;
+import com.nepxion.aquarius.idgenerator.redis.RedisIdGenerator;
+
+@EnableAutoConfiguration
+@ComponentScan(basePackages = { "com.nepxion.aquarius.idgenerator" })
+public class MyApplication5 {
+    private static final Logger LOG = LoggerFactory.getLogger(MyApplication5.class);
+
+    public static void main(String[] args) throws Exception {
+        SpringApplication.run(MyApplication5.class, args);
+
+        RedisIdGenerator redisIdGenerator = MyContextAware3.getBean(RedisIdGenerator.class);
+
+        Timer timer1 = new Timer();
+        timer1.scheduleAtFixedRate(new TimerTask() {
+            public void run() {
+                for (int i = 0; i < 3; i++) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                LOG.info("Timer1 - Unique id={}", redisIdGenerator.nextUniqueId("idgenerater", "X-Y", 1, 8));
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                    }).start();
+                }
+
+            }
+        }, 0L, 100L);
+
+        Timer timer2 = new Timer();
+        timer2.scheduleAtFixedRate(new TimerTask() {
+            public void run() {
+                for (int i = 0; i < 3; i++) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                LOG.info("Timer2 - Unique id={}", redisIdGenerator.nextUniqueId("idgenerater", "X-Y", 1, 8));
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                    }).start();
+                }
+
+            }
+        }, 0L, 500L);
+    }
+}
+```
+
 ## Nepxion Aquarius Limit
 ### 介绍
     1 支持若干个分布式系统对同一资源在给定的时间段里最多的访问限制次数(超出次数返回false)；等下个时间段开始，才允许再次被访问(返回true)，周而复始
@@ -561,7 +644,7 @@ import com.nepxion.aquarius.limit.redis.RedisLimit;
 
 @EnableAutoConfiguration
 @ComponentScan(basePackages = { "com.nepxion.aquarius.limit" })
-public class MyApplication5 {
+public class MyApplication6 {
     private static final Logger LOG = LoggerFactory.getLogger(MyApplication5.class);
 
     public static void main(String[] args) throws Exception {
