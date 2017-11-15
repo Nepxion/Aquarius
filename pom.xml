@@ -22,6 +22,7 @@
         <module>aquarius-cache-redis</module>
         <module>aquarius-id-generator-redis</module>
         <module>aquarius-id-generator-zookeeper</module>
+        <module>aquarius-limit-redis</module>
         <module>aquarius-test</module>
     </modules>
 
@@ -112,6 +113,12 @@
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>aquarius-id-generator-zookeeper</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>aquarius-limit-redis</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
