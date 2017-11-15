@@ -24,11 +24,11 @@ import com.nepxion.aquarius.limit.redis.RedisLimit;
 
 @EnableAutoConfiguration
 @ComponentScan(basePackages = { "com.nepxion.aquarius.limit" })
-public class MyApplication5 {
-    private static final Logger LOG = LoggerFactory.getLogger(MyApplication5.class);
+public class MyApplication6 {
+    private static final Logger LOG = LoggerFactory.getLogger(MyApplication6.class);
 
     public static void main(String[] args) throws Exception {
-        SpringApplication.run(MyApplication5.class, args);
+        SpringApplication.run(MyApplication6.class, args);
 
         // 在给定的10秒里最多访问5次(超出次数返回false)；等下个10秒开始，才允许再次被访问(返回true)，周而复始
         RedisLimit redisLimit = MyContextAware4.getBean(RedisLimit.class);

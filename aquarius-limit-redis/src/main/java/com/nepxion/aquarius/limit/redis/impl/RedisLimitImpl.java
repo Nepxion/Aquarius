@@ -51,11 +51,11 @@ public class RedisLimitImpl implements RedisLimit {
 
     private boolean tryAccess(String name, String key, int limitPeriod, int limitCount, int lockPeriod, int lockCount, boolean limitLockEnabled) {
         if (StringUtils.isEmpty(name)) {
-            throw new AquariusException("name is null or empty");
+            throw new AquariusException("Name is null or empty");
         }
 
         if (StringUtils.isEmpty(key)) {
-            throw new AquariusException("key is null or empty");
+            throw new AquariusException("Key is null or empty");
         }
 
         List<String> keys = new ArrayList<String>();
