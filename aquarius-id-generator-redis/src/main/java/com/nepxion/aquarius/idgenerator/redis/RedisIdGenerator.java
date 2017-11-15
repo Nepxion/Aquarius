@@ -1,4 +1,4 @@
-package com.nepxion.aquarius.cache.redis;
+package com.nepxion.aquarius.idgenerator.redis;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
@@ -10,6 +10,6 @@ package com.nepxion.aquarius.cache.redis;
  * @version 1.0
  */
 
-public interface RedisLimit {
-
+public interface RedisIdGenerator {
+    String nextUniqueId() throws Exception;
 }

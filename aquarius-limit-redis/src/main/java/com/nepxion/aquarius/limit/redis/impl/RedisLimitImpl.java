@@ -1,4 +1,4 @@
-package com.nepxion.aquarius.cache.redis.impl;
+package com.nepxion.aquarius.limit.redis.impl;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
@@ -14,7 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import com.nepxion.aquarius.cache.redis.RedisLimit;
+import com.nepxion.aquarius.limit.redis.RedisLimit;
 
 @Component("redisLimitImpl")
 public class RedisLimitImpl implements RedisLimit {

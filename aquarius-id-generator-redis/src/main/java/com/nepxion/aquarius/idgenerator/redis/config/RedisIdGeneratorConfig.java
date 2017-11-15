@@ -1,4 +1,4 @@
-package com.nepxion.aquarius.cache.redis.config;
+package com.nepxion.aquarius.idgenerator.redis.config;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
@@ -17,6 +17,6 @@ import org.springframework.context.annotation.Import;
 @Configuration
 @ComponentScan(basePackages = { "com.nepxion.aquarius.common" })
 @Import({ com.nepxion.aquarius.common.redis.config.RedisConfig.class })
-public class RedisLimitConfig {
+public class RedisIdGeneratorConfig {
 
 }
