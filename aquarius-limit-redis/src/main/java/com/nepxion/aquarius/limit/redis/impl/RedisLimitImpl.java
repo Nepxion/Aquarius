@@ -55,7 +55,8 @@ public class RedisLimitImpl implements RedisLimit {
         }
 
         List<String> keys = new ArrayList<String>();
-        keys.add(prefix + "-" + name + "_" + key);
+        String spelKey = getSpelKey(name, key);
+        keys.add(spelKey);
 
         String luaScript = buildLuaScript(limitLockEnabled);
 
@@ -84,5 +85,9 @@ public class RedisLimitImpl implements RedisLimit {
         lua.append("\nreturn c;");
 
         return lua.toString();
+    }
+
+    private String getSpelKey(String name, String key) {
+        return prefix + "-" + name + "_" + key;
     }
 }

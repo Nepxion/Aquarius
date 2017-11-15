@@ -40,7 +40,7 @@ public class MyApplication4 {
                         @Override
                         public void run() {
                             try {
-                                LOG.info("Timer1 - Sequence id={}", zookeeperIdGenerator.nextSequenceId("id-generater", "X-Y"));
+                                LOG.info("Timer1 - Sequence id={}", zookeeperIdGenerator.nextSequenceId("idgenerater", "X-Y"));
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -60,7 +60,7 @@ public class MyApplication4 {
                         @Override
                         public void run() {
                             try {
-                                LOG.info("Timer2 - Sequence id={}", zookeeperIdGenerator.nextSequenceId("id-generater", "X-Y"));
+                                LOG.info("Timer2 - Sequence id={}", zookeeperIdGenerator.nextSequenceId("idgenerater", "X-Y"));
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }

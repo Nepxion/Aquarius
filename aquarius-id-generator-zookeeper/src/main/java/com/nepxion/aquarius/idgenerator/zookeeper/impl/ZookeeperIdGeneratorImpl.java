@@ -78,6 +78,6 @@ public class ZookeeperIdGeneratorImpl implements ZookeeperIdGenerator {
     }
 
     private String getPath(String name, String key) {
-        return "/" + prefix + "/" + name + "_" + key;
+        return "/" + prefix + "/" + prefix + "_" + name + "_" + key;
     }
 }
