@@ -45,7 +45,11 @@ public class RedisLimitImpl implements RedisLimit {
     }
 
     @Override
-    public boolean tryAccess(String name, String key, int limitPeriod, int limitCount, int lockPeriod, int lockCount, boolean limitLockEnabled) {
+    public boolean tryAccess(String name, String key, int limitPeriod, int limitCount) {
+        return tryAccess(name, key, limitPeriod, limitCount, 0, 0, false);
+    }
+
+    private boolean tryAccess(String name, String key, int limitPeriod, int limitCount, int lockPeriod, int lockCount, boolean limitLockEnabled) {
         if (StringUtils.isEmpty(name)) {
             throw new AquariusException("name is null or empty");
         }
@@ -88,6 +92,6 @@ public class RedisLimitImpl implements RedisLimit {
     }
 
     private String getSpelKey(String name, String key) {
-        return prefix + "-" + name + "_" + key;
+        return prefix + "_" + name + "_" + key;
     }
 }
