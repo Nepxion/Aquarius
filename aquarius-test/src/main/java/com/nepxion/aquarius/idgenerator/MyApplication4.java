@@ -26,7 +26,7 @@ import com.nepxion.aquarius.idgenerator.zookeeper.ZookeeperIdGenerator;
 @ComponentScan(basePackages = { "com.nepxion.aquarius.idgenerator" })
 public class MyApplication4 {
     private static final Logger LOG = LoggerFactory.getLogger(MyApplication4.class);
-    
+
     public static void main(String[] args) throws Exception {
         SpringApplication.run(MyApplication4.class, args);
 
