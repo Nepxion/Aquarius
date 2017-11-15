@@ -86,7 +86,7 @@
                         </goals>
                         <configuration>
                             <finalName>nepxion-aquarius-all${project.version}</finalName>
-                            <createSourcesJar>false</createSourcesJar>
+                            <createSourcesJar>true</createSourcesJar>
                             <promoteTransitiveDependencies>true</promoteTransitiveDependencies>
                             <artifactSet>
                                 <includes>
