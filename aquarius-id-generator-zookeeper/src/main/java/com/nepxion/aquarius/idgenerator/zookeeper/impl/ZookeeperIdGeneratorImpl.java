@@ -35,6 +35,7 @@ public class ZookeeperIdGeneratorImpl implements ZookeeperIdGenerator {
     private AquariusProperties properties;
 
     private CuratorFramework curator;
+
     private String prefix;
 
     @PostConstruct

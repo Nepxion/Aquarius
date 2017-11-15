@@ -37,9 +37,11 @@ public class RedisCacheDelegate implements CacheDelegate {
     @Autowired
     private AquariusProperties properties;
 
+    private String prefix;
+
     @Override
     public void initialize() {
-
+        prefix = properties.getString(AquariusConstant.NAMESPACE);
     }
 
     @Override
@@ -134,7 +136,6 @@ public class RedisCacheDelegate implements CacheDelegate {
 
     private void clear(String key, String name, boolean allEntries) {
         if (allEntries) {
-            String prefix = properties.getString(AquariusConstant.NAMESPACE);
             Set<String> keys = redisTemplate.keys(prefix + "_" + name + "*");
             for (String k : keys) {
                 redisTemplate.delete(k);

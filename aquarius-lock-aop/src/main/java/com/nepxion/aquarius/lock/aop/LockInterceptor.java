@@ -45,6 +45,7 @@ public class LockInterceptor extends AbstractInterceptor {
 
     @Autowired
     private AquariusProperties properties;
+
     private String prefix;
 
     @PostConstruct

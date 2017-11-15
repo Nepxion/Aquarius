@@ -12,6 +12,8 @@ package com.nepxion.aquarius.cache.aop;
 
 import java.lang.reflect.Method;
 
+import javax.annotation.PostConstruct;
+
 import org.aopalliance.intercept.MethodInvocation;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -41,6 +43,13 @@ public class CacheInterceptor extends AbstractInterceptor {
 
     @Autowired
     private AquariusProperties properties;
+
+    private String prefix;
+
+    @PostConstruct
+    public void initialize() {
+        prefix = properties.getString(AquariusConstant.NAMESPACE);
+    }
 
     @Override
     public Object invoke(MethodInvocation invocation) throws Throwable {
@@ -173,8 +182,6 @@ public class CacheInterceptor extends AbstractInterceptor {
         for (int i = 0; i < parameterNames.length; i++) {
             context.setVariable(parameterNames[i], arguments[i]);
         }
-
-        String prefix = properties.getString(AquariusConstant.NAMESPACE);
 
         return prefix + "_" + name + "_" + parser.parseExpression(key).getValue(context, String.class);
     }
