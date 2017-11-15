@@ -19,10 +19,6 @@
         <property name="poolConfig" ref="aquariusJedisPoolConfig" />
     </bean>
 
-    <bean id="aquariusRedisCacheEntity" class="com.nepxion.aquarius.cache.redis.entity.RedisCacheEntity">
-        <property name="prefix" value="nepxion" />
-    </bean>
-
     <bean id="aquariusStringRedisSerializer" class="org.springframework.data.redis.serializer.StringRedisSerializer" />
 
     <bean id="aquariusGenericJackson2JsonRedisSerializer" class="org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer" />
