@@ -60,10 +60,10 @@ public class RedisLimitImpl implements RedisLimit {
 
         String luaScript = buildLuaScript(limitLockEnabled);
 
-        RedisScript<Long> redisScript = new DefaultRedisScript<Long>(luaScript, Long.class);
-        Long count = redisTemplate.execute(redisScript, keys, Math.max(limitCount, lockCount), limitPeriod, lockCount, lockPeriod);
+        RedisScript<Number> redisScript = new DefaultRedisScript<Number>(luaScript, Number.class);
+        Number count = redisTemplate.execute(redisScript, keys, Math.max(limitCount, lockCount), limitPeriod, lockCount, lockPeriod);
 
-        return count <= limitCount;
+        return count.intValue() <= limitCount;
     }
 
     private String buildLuaScript(boolean limitLockEnabled) {

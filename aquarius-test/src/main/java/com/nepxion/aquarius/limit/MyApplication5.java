@@ -10,6 +10,9 @@ package com.nepxion.aquarius.limit;
  * @version 1.0
  */
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -28,8 +31,45 @@ public class MyApplication5 {
         SpringApplication.run(MyApplication5.class, args);
 
         RedisLimit redisLimit = MyContextAware4.getBean(RedisLimit.class);
-        boolean result = redisLimit.tryAccess("limit", "A-B", 10, 5, 0, 0, false);
+        
+        Timer timer1 = new Timer();
+        timer1.scheduleAtFixedRate(new TimerTask() {
+            public void run() {
+                for (int i = 0; i < 3; i++) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                LOG.info("Timer1 - Limit={}", redisLimit.tryAccess("limit", "A-B", 10, 5, 0, 0, false));
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
 
-        LOG.info("{}", result);
+                    }).start();
+                }
+
+            }
+        }, 0L, 1000L);
+
+        Timer timer2 = new Timer();
+        timer2.scheduleAtFixedRate(new TimerTask() {
+            public void run() {
+                for (int i = 0; i < 3; i++) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                LOG.info("Timer1 - Limit={}", redisLimit.tryAccess("limit", "A-B", 10, 5, 0, 0, false));
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                    }).start();
+                }
+
+            }
+        }, 0L, 1500L);
     }
 }
