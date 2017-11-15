@@ -10,68 +10,39 @@ package com.nepxion.aquarius.common.redis.handler;
  * @version 1.0
  */
 
-import java.io.IOException;
-
-import org.redisson.Redisson;
-import org.redisson.api.RedissonClient;
-import org.redisson.config.Config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.data.redis.core.RedisTemplate;
 
-import com.nepxion.aquarius.common.property.AquariusContent;
+import com.nepxion.aquarius.common.redis.constant.RedisConstant;
 
+// 将废弃
 public class RedisHandler {
     private static final Logger LOG = LoggerFactory.getLogger(RedisHandler.class);
 
-    // 创建Yaml格式的配置文件
-    public static Config createYamlConfig(String yamlConfigPath) throws IOException {
-        LOG.info("Start to read {}...", yamlConfigPath);
+    public static ApplicationContext createApplicationContext() {
+        LOG.info("Start to initialize application context...");
 
-        AquariusContent content = new AquariusContent(yamlConfigPath);
-
-        return Config.fromYAML(content.getContent());
+        return new ClassPathXmlApplicationContext("classpath*:" + RedisConstant.CONFIG_FILE);
     }
 
-    // 创建Json格式的配置文件
-    public static Config createJsonConfig(String jsonConfigPath) throws IOException {
-        LOG.info("Start to read {}...", jsonConfigPath);
+    // 创建RedisTemplate
+    @SuppressWarnings({ "unchecked" })
+    public static RedisTemplate<String, Object> createRedisTemplate(ApplicationContext applicationContext) {
+        LOG.info("Start to initialize Redis...");
 
-        AquariusContent content = new AquariusContent(jsonConfigPath);
-
-        return Config.fromJSON(content.getContent());
+        return (RedisTemplate<String, Object>) applicationContext.getBean("aquariusRedisTemplate");
     }
 
-    // 创建单例Redisson
-    /*public static RedissonClient getRedisson() throws IOException {
-        if (redisson == null) {
-            synchronized (RedisHandler.class) {
-                if (redisson == null) {
-                    redisson = createRedisson();
-                }
-            }
-        }
-
-        return redisson;
-    }*/
-
-    // 使用config创建Redisson
-    public static RedissonClient createRedisson(Config config) {
-        LOG.info("Start to initialize Redisson...");
-
-        RedissonClient redisson = Redisson.create(config);
-
-        return redisson;
+    // 关闭Redis客户端连接
+    public static void closeRedisson(RedisTemplate<String, Object> redisTemplate) {
+        LOG.info("Start to close Redis...");
     }
 
-    // 关闭Redisson客户端连接
-    public static void closeRedisson(RedissonClient redisson) {
-        LOG.info("Start to close Redisson...");
-
-        redisson.shutdown();
-    }
-
-    // Redisson客户端连接是否正常
-    public static boolean isStarted(RedissonClient redisson) {
-        return !redisson.isShutdown() && !redisson.isShuttingDown();
+    // Redis客户端连接是否正常
+    public static boolean isStarted(RedisTemplate<String, Object> redisTemplate) {
+        return true;
     }
 }

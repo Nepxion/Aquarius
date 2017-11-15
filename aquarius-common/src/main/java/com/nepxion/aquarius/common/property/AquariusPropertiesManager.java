@@ -14,9 +14,12 @@ import java.io.IOException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 
 import com.nepxion.aquarius.common.constant.AquariusConstant;
 
+@Component("propertiesManager")
 public class AquariusPropertiesManager {
     private static final Logger LOG = LoggerFactory.getLogger(AquariusPropertiesManager.class);
 
@@ -34,25 +37,18 @@ public class AquariusPropertiesManager {
         System.out.println("");
     }
 
-    private static AquariusProperties properties;
-
-    static {
-        initializeProperties();
-    }
-
-    private static void initializeProperties() {
+    @Bean
+    public AquariusProperties properties() {
         try {
             LOG.info("Start to read {}...", AquariusConstant.CONFIG_FILE);
 
             AquariusContent content = new AquariusContent(AquariusConstant.CONFIG_FILE);
 
-            properties = new AquariusProperties(content.getContent());
+            return new AquariusProperties(content.getContent());
         } catch (IOException e) {
             LOG.error("Read {} failed", AquariusConstant.CONFIG_FILE, e);
         }
-    }
 
-    public static AquariusProperties getProperties() {
-        return properties;
+        return null;
     }
 }

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <artifactId>aquarius-id-generator-zookeeper</artifactId>
+    <name>Nepxion Aquarius Id Generator For Zookeeper</name>
+    <packaging>jar</packaging>
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>nepxion</groupId>
+        <artifactId>aquarius</artifactId>
+        <version>1.0.0</version>
+    </parent>
+
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>aquarius-common-zookeeper</artifactId>
+        </dependency>
+    </dependencies>
+</project>

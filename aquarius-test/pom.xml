@@ -12,24 +12,45 @@
     </parent>
 
     <properties>
-        <spring.boot.version>1.3.8.RELEASE</spring.boot.version>
+        <spring.boot.version>1.5.8.RELEASE</spring.boot.version>
     </properties>
 
     <dependencies>
+        <!-- Use only one of aquarius-lock-redis, aquarius-lock-zookeeper, aquarius-lock-local -->
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>aquarius-lock-redis</artifactId>
         </dependency>
 
-        <dependency>
+        <!-- <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>aquarius-lock-zookeeper</artifactId>
+        </dependency> -->
+
+        <!-- <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>aquarius-lock-local</artifactId>
+        </dependency> -->
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>aquarius-cache-redis</artifactId>
         </dependency>
 
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>aquarius-lock-local</artifactId>
+            <artifactId>aquarius-id-generator-redis</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>aquarius-id-generator-zookeeper</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>aquarius-limit-redis</artifactId>
+        </dependency>        
 
         <dependency>
             <groupId>org.springframework.boot</groupId>

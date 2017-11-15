@@ -18,6 +18,11 @@
         <module>aquarius-lock-redis</module>
         <module>aquarius-lock-zookeeper</module>
         <module>aquarius-lock-local</module>
+        <module>aquarius-cache-aop</module>
+        <module>aquarius-cache-redis</module>
+        <module>aquarius-id-generator-redis</module>
+        <module>aquarius-id-generator-zookeeper</module>
+        <module>aquarius-limit-redis</module>
         <module>aquarius-test</module>
     </modules>
 
@@ -26,7 +31,10 @@
         <commons.lang3.version>3.6</commons.lang3.version>
         <commons.collections4.version>4.1</commons.collections4.version>
         <commons.io.version>2.5</commons.io.version>
+        <spring.version>4.3.12.RELEASE</spring.version>
         <redisson.version>3.5.4</redisson.version>
+        <jedis.version>2.9.0</jedis.version>
+        <spring.data.redis.version>1.8.8.RELEASE</spring.data.redis.version>
         <curator.version>2.12.0</curator.version>
         <disruptor.version>3.3.7</disruptor.version>
         <log4j.version>2.9.1</log4j.version>
@@ -86,6 +94,36 @@
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
+                <artifactId>aquarius-cache-aop</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>aquarius-cache-redis</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>aquarius-id-generator-redis</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>aquarius-id-generator-zookeeper</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>aquarius-limit-redis</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>${project.groupId}</groupId>
                 <artifactId>aquarius-test</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -115,9 +153,27 @@
             </dependency>
 
             <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-context</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>org.redisson</groupId>
                 <artifactId>redisson</artifactId>
                 <version>${redisson.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>redis.clients</groupId>
+                <artifactId>jedis</artifactId>
+                <version>${jedis.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.data</groupId>
+                <artifactId>spring-data-redis</artifactId>
+                <version>${spring.data.redis.version}</version>
             </dependency>
 
             <dependency>
@@ -182,7 +238,6 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <!-- <compilerArgument>-parameters</compilerArgument> -->
                     <compilerArgs>
                         <arg>-parameters</arg>
                     </compilerArgs>

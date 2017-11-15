@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+    <bean id="aquariusJedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+        <property name="maxTotal" value="30" />
+        <property name="maxIdle" value="10" />
+        <property name="minIdle" value="5" />
+        <property name="maxWaitMillis" value="3000" />
+        <property name="testOnBorrow" value="true" />
+        <property name="testOnReturn" value="true" />
+    </bean>
+
+    <bean id="aquariusJedisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+        <property name="hostName" value="127.0.0.1" />
+        <property name="port" value="6379" />
+        <property name="password" value="" />
+        <property name="timeout" value="5000" />
+        <property name="poolConfig" ref="aquariusJedisPoolConfig" />
+    </bean>
+
+    <bean id="aquariusStringRedisSerializer" class="org.springframework.data.redis.serializer.StringRedisSerializer" />
+
+    <bean id="aquariusGenericJackson2JsonRedisSerializer" class="org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer" />
+
+    <bean id="aquariusRedisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
+        <property name="connectionFactory" ref="aquariusJedisConnectionFactory" />
+        <property name="keySerializer" ref="aquariusStringRedisSerializer" />
+        <property name="valueSerializer" ref="aquariusGenericJackson2JsonRedisSerializer" />
+    </bean>
+</beans>
