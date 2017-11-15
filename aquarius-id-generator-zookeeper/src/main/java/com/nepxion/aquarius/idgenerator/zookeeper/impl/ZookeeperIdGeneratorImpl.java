@@ -16,31 +16,34 @@ import org.apache.curator.framework.CuratorFramework;
 import org.apache.zookeeper.CreateMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.nepxion.aquarius.common.constant.AquariusConstant;
 import com.nepxion.aquarius.common.curator.constant.CuratorConstant;
 import com.nepxion.aquarius.common.curator.handler.CuratorHandler;
 import com.nepxion.aquarius.common.property.AquariusProperties;
 import com.nepxion.aquarius.idgenerator.zookeeper.ZookeeperIdGenerator;
-import com.nepxion.aquarius.idgenerator.zookeeper.constant.ZookeeperIdGeneratorConstant;
 
 @Component("zookeeperIdGeneratorImpl")
 public class ZookeeperIdGeneratorImpl implements ZookeeperIdGenerator {
     private static final Logger LOG = LoggerFactory.getLogger(ZookeeperIdGeneratorImpl.class);
 
+    @Autowired
     private AquariusProperties properties;
+
     private CuratorFramework curator;
-    private String rootPath;
+    private String prefix;
 
     @PostConstruct
     public void initialize() {
         try {
-            properties = CuratorHandler.createPropertyConfig(CuratorConstant.CONFIG_FILE);
-            curator = CuratorHandler.createCurator(properties);
+            AquariusProperties config = CuratorHandler.createPropertyConfig(CuratorConstant.CONFIG_FILE);
+            curator = CuratorHandler.createCurator(config);
 
-            rootPath = properties.getString(ZookeeperIdGeneratorConstant.ROOT_PATH);
-            if (!CuratorHandler.pathExist(curator, rootPath)) {
-                CuratorHandler.createPath(curator, rootPath, CreateMode.PERSISTENT);
+            prefix = properties.getString(AquariusConstant.NAMESPACE);
+            if (!CuratorHandler.pathExist(curator, prefix)) {
+                CuratorHandler.createPath(curator, prefix, CreateMode.PERSISTENT);
             }
         } catch (Exception e) {
             LOG.error("Initialize Curator failed", e);
@@ -48,8 +51,8 @@ public class ZookeeperIdGeneratorImpl implements ZookeeperIdGenerator {
     }
 
     @Override
-    public int nextSequenceId(String sequenceName) throws Exception {
-        String path = getPath(sequenceName);
+    public int nextSequenceId(String name, String key) throws Exception {
+        String path = getPath(name, key);
 
         // 并发过快，这里会抛“节点已经存在”的错误，当节点存在时候，就不会创建，所以不必打印异常
         try {
@@ -63,7 +66,7 @@ public class ZookeeperIdGeneratorImpl implements ZookeeperIdGenerator {
         return curator.setData().withVersion(-1).forPath(path, "".getBytes()).getVersion();
     }
 
-    private String getPath(String sequenceName) {
-        return rootPath + "/" + sequenceName;
+    private String getPath(String name, String key) {
+        return prefix + "/" + name + "_" + key;
     }
 }

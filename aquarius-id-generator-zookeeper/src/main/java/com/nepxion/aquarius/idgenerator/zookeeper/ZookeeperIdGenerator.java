@@ -11,5 +11,12 @@ package com.nepxion.aquarius.idgenerator.zookeeper;
  */
 
 public interface ZookeeperIdGenerator {
-    int nextSequenceId(String sequenceName) throws Exception;
+    /**
+     * 获取序号
+     * @param name 资源名字
+     * @param key 资源Key。在Zookeeper中的节点名为"/" + prefix + "/" + name + "_" + key
+     * @return
+     * @throws Exception
+     */
+    int nextSequenceId(String name, String key) throws Exception;
 }
