@@ -11,5 +11,5 @@ package com.nepxion.aquarius.limit.redis;
  */
 
 public interface RedisLimit {
-
+    boolean tryAccess(String key, int seconds, int limitCount, int lockCount, int lockTime, boolean limitLockEnabled);
 }
