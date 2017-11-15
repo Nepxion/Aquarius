@@ -21,23 +21,27 @@ import org.apache.curator.framework.recipes.locks.InterProcessReadWriteLock;
 import org.apache.zookeeper.CreateMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.nepxion.aquarius.common.constant.AquariusConstant;
 import com.nepxion.aquarius.common.curator.constant.CuratorConstant;
 import com.nepxion.aquarius.common.curator.handler.CuratorHandler;
 import com.nepxion.aquarius.common.exception.AquariusException;
 import com.nepxion.aquarius.common.property.AquariusProperties;
 import com.nepxion.aquarius.lock.delegate.LockDelegate;
 import com.nepxion.aquarius.lock.entity.LockType;
-import com.nepxion.aquarius.lock.zookeeper.constant.ZookeeperLockConstant;
 
 @Component("zookeeperLockDelegate")
 public class ZookeeperLockDelegate implements LockDelegate {
     private static final Logger LOG = LoggerFactory.getLogger(ZookeeperLockDelegate.class);
 
+    @Autowired
     private AquariusProperties properties;
+
     private CuratorFramework curator;
-    private String rootPath;
+
+    private String prefix;
 
     // 可重入锁可重复使用
     private volatile Map<String, InterProcessMutex> lockMap = new ConcurrentHashMap<String, InterProcessMutex>();
@@ -47,12 +51,12 @@ public class ZookeeperLockDelegate implements LockDelegate {
     @Override
     public void initialize() {
         try {
-            properties = CuratorHandler.createPropertyConfig(CuratorConstant.CONFIG_FILE);
-            curator = CuratorHandler.createCurator(properties);
+            AquariusProperties config = CuratorHandler.createPropertyConfig(CuratorConstant.CONFIG_FILE);
+            curator = CuratorHandler.createCurator(config);
 
-            rootPath = properties.getString(ZookeeperLockConstant.ROOT_PATH);
-            if (!CuratorHandler.pathExist(curator, rootPath)) {
-                CuratorHandler.createPath(curator, rootPath, CreateMode.PERSISTENT);
+            prefix = properties.getString(AquariusConstant.NAMESPACE);
+            if (!CuratorHandler.pathExist(curator, prefix)) {
+                CuratorHandler.createPath(curator, prefix, CreateMode.PERSISTENT);
             }
         } catch (Exception e) {
             LOG.error("Initialize Curator failed", e);
@@ -102,7 +106,7 @@ public class ZookeeperLockDelegate implements LockDelegate {
 
     // 锁节点路径，对应ZooKeeper一个永久节点，下挂一系列临时节点
     private String getPath(String key) {
-        return rootPath + "/" + key;
+        return prefix + "/" + key;
     }
 
     private InterProcessMutex getLock(LockType lockType, String key) {
