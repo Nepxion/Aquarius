@@ -13,6 +13,8 @@ package com.nepxion.aquarius.lock.aop;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
+import javax.annotation.PostConstruct;
+
 import org.aopalliance.intercept.MethodInvocation;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -24,7 +26,9 @@ import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.stereotype.Component;
 
+import com.nepxion.aquarius.common.constant.AquariusConstant;
 import com.nepxion.aquarius.common.exception.AquariusException;
+import com.nepxion.aquarius.common.property.AquariusProperties;
 import com.nepxion.aquarius.lock.annotation.Lock;
 import com.nepxion.aquarius.lock.annotation.ReadLock;
 import com.nepxion.aquarius.lock.annotation.WriteLock;
@@ -39,39 +43,51 @@ public class LockInterceptor extends AbstractInterceptor {
     @Autowired
     private LockDelegate lockDelegate;
 
+    @Autowired
+    private AquariusProperties properties;
+    private String prefix;
+
+    @PostConstruct
+    public void initialize() {
+        prefix = properties.getString(AquariusConstant.NAMESPACE);
+    }
+
     @Override
     public Object invoke(MethodInvocation invocation) throws Throwable {
         Lock lockAnnotation = getLockAnnotation(invocation);
         if (lockAnnotation != null) {
+            String name = lockAnnotation.name();
             String key = lockAnnotation.key();
             long leaseTime = lockAnnotation.leaseTime();
             long waitTime = lockAnnotation.waitTime();
             boolean async = lockAnnotation.async();
             boolean fair = lockAnnotation.fair();
 
-            return invoke(invocation, lockAnnotation, key, leaseTime, waitTime, async, fair);
+            return invoke(invocation, lockAnnotation, name, key, leaseTime, waitTime, async, fair);
         }
 
         ReadLock readLockAnnotation = getReadLockAnnotation(invocation);
         if (readLockAnnotation != null) {
+            String name = readLockAnnotation.name();
             String key = readLockAnnotation.key();
             long leaseTime = readLockAnnotation.leaseTime();
             long waitTime = readLockAnnotation.waitTime();
             boolean async = readLockAnnotation.async();
             boolean fair = readLockAnnotation.fair();
 
-            return invoke(invocation, readLockAnnotation, key, leaseTime, waitTime, async, fair);
+            return invoke(invocation, readLockAnnotation, name, key, leaseTime, waitTime, async, fair);
         }
 
         WriteLock writeLockAnnotation = getWriteLockAnnotation(invocation);
         if (writeLockAnnotation != null) {
+            String name = writeLockAnnotation.name();
             String key = writeLockAnnotation.key();
             long leaseTime = writeLockAnnotation.leaseTime();
             long waitTime = writeLockAnnotation.waitTime();
             boolean async = writeLockAnnotation.async();
             boolean fair = writeLockAnnotation.fair();
 
-            return invoke(invocation, writeLockAnnotation, key, leaseTime, waitTime, async, fair);
+            return invoke(invocation, writeLockAnnotation, name, key, leaseTime, waitTime, async, fair);
         }
 
         return invocation.proceed();
@@ -104,7 +120,7 @@ public class LockInterceptor extends AbstractInterceptor {
         return null;
     }
 
-    private Object invoke(MethodInvocation invocation, Annotation annotation, String key, long leaseTime, long waitTime, boolean async, boolean fair) throws Throwable {
+    private Object invoke(MethodInvocation invocation, Annotation annotation, String name, String key, long leaseTime, long waitTime, boolean async, boolean fair) throws Throwable {
         LockType lockType = getLockType(annotation);
         if (lockType == null) {
             throw new AquariusException("Lock type is null for " + annotation);
@@ -112,11 +128,15 @@ public class LockInterceptor extends AbstractInterceptor {
 
         String lockTypeValue = lockType.getValue();
 
+        if (StringUtils.isEmpty(name)) {
+            throw new AquariusException("Annotation [" + lockTypeValue + "]'s name is null or empty");
+        }
+
         if (StringUtils.isEmpty(key)) {
             throw new AquariusException("Annotation [" + lockTypeValue + "]'s key is null or empty");
         }
 
-        String spelKey = getSpelKey(invocation, key);
+        String spelKey = getSpelKey(invocation, name, key);
         String proxyType = getProxyType(invocation);
         String proxiedClassName = getProxiedClassName(invocation);
         String methodName = getMethodName(invocation);
@@ -138,7 +158,7 @@ public class LockInterceptor extends AbstractInterceptor {
         return null;
     }
 
-    public String getSpelKey(MethodInvocation invocation, String key) {
+    public String getSpelKey(MethodInvocation invocation, String name, String key) {
         String[] parameterNames = getParameterNames(invocation);
         Object[] arguments = getArguments(invocation);
 
@@ -153,6 +173,6 @@ public class LockInterceptor extends AbstractInterceptor {
             context.setVariable(parameterNames[i], arguments[i]);
         }
 
-        return parser.parseExpression(key).getValue(context, String.class);
+        return prefix + "_" + name + "_" + parser.parseExpression(key).getValue(context, String.class);
     }
 }

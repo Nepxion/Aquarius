@@ -22,7 +22,7 @@ import com.nepxion.aquarius.lock.annotation.WriteLock;
 public class MyService4Impl {
     private static final Logger LOG = LoggerFactory.getLogger(MyService4Impl.class);
 
-    @WriteLock(key = "#id1 + \"-\" + #id2", leaseTime = 15000L, waitTime = 60000L, async = false, fair = false)
+    @WriteLock(name = "lock", key = "#id1 + \"-\" + #id2", leaseTime = 15000L, waitTime = 60000L, async = false, fair = false)
     public String doW(String id1, String id2) {
         try {
             TimeUnit.MILLISECONDS.sleep(10000L);

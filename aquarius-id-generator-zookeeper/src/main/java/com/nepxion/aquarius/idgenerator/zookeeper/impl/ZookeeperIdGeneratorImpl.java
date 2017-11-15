@@ -12,6 +12,7 @@ package com.nepxion.aquarius.idgenerator.zookeeper.impl;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.zookeeper.CreateMode;
 import org.slf4j.Logger;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Component;
 import com.nepxion.aquarius.common.constant.AquariusConstant;
 import com.nepxion.aquarius.common.curator.constant.CuratorConstant;
 import com.nepxion.aquarius.common.curator.handler.CuratorHandler;
+import com.nepxion.aquarius.common.exception.AquariusException;
 import com.nepxion.aquarius.common.property.AquariusProperties;
 import com.nepxion.aquarius.idgenerator.zookeeper.ZookeeperIdGenerator;
 
@@ -52,6 +54,14 @@ public class ZookeeperIdGeneratorImpl implements ZookeeperIdGenerator {
 
     @Override
     public int nextSequenceId(String name, String key) throws Exception {
+        if (StringUtils.isEmpty(name)) {
+            throw new AquariusException("name is null or empty");
+        }
+
+        if (StringUtils.isEmpty(key)) {
+            throw new AquariusException("key is null or empty");
+        }
+
         String path = getPath(name, key);
 
         // 并发过快，这里会抛“节点已经存在”的错误，当节点存在时候，就不会创建，所以不必打印异常

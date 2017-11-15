@@ -13,6 +13,7 @@ package com.nepxion.aquarius.limit.redis.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -21,6 +22,7 @@ import org.springframework.data.redis.core.script.RedisScript;
 import org.springframework.stereotype.Component;
 
 import com.nepxion.aquarius.common.constant.AquariusConstant;
+import com.nepxion.aquarius.common.exception.AquariusException;
 import com.nepxion.aquarius.common.property.AquariusProperties;
 import com.nepxion.aquarius.limit.redis.RedisLimit;
 
@@ -35,8 +37,16 @@ public class RedisLimitImpl implements RedisLimit {
 
     @Override
     public boolean tryAccess(String name, String key, int limitPeriod, int limitCount, int lockPeriod, int lockCount, boolean limitLockEnabled) {
+        if (StringUtils.isEmpty(name)) {
+            throw new AquariusException("name is null or empty");
+        }
+
+        if (StringUtils.isEmpty(key)) {
+            throw new AquariusException("key is null or empty");
+        }
+
         String prefix = properties.getString(AquariusConstant.NAMESPACE);
-        
+
         List<String> keys = new ArrayList<String>();
         keys.add(prefix + "-" + name + "_" + key);
 

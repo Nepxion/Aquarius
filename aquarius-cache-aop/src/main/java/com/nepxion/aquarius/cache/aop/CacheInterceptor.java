@@ -103,6 +103,10 @@ public class CacheInterceptor extends AbstractInterceptor {
     }
 
     private Object invokeCacheable(MethodInvocation invocation, String name, String key, long expire) throws Throwable {
+        if (StringUtils.isEmpty(name)) {
+            throw new AquariusException("Annotation [Cacheable]'s name is null or empty");
+        }
+
         if (StringUtils.isEmpty(key)) {
             throw new AquariusException("Annotation [Cacheable]'s key is null or empty");
         }
@@ -118,6 +122,10 @@ public class CacheInterceptor extends AbstractInterceptor {
     }
 
     private Object invokeCachePut(MethodInvocation invocation, String name, String key, long expire) throws Throwable {
+        if (StringUtils.isEmpty(name)) {
+            throw new AquariusException("Annotation [CachePut]'s name is null or empty");
+        }
+
         if (StringUtils.isEmpty(key)) {
             throw new AquariusException("Annotation [CachePut]'s key is null or empty");
         }
@@ -133,6 +141,10 @@ public class CacheInterceptor extends AbstractInterceptor {
     }
 
     private Object invokeCacheEvict(MethodInvocation invocation, String name, String key, boolean allEntries, boolean beforeInvocation) throws Throwable {
+        if (StringUtils.isEmpty(name)) {
+            throw new AquariusException("Annotation [CacheEvict]'s name is null or empty");
+        }
+
         if (StringUtils.isEmpty(key)) {
             throw new AquariusException("Annotation [CacheEvict]'s key is null or empty");
         }

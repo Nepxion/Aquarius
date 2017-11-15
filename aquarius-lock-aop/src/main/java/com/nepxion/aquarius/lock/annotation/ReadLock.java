@@ -23,9 +23,14 @@ import java.lang.annotation.Target;
 @Documented
 public @interface ReadLock {
     /**
+     * 锁的名字
+     */
+    String name() default "";
+
+    /**
      * 锁的key
      */
-    String key();
+    String key() default "";
 
     /** 
      * 持锁时间，持锁超过此时间则自动丢弃锁
