@@ -23,7 +23,7 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
 
 import com.nepxion.aquarius.cache.delegate.CacheDelegate;
-import com.nepxion.aquarius.cache.redis.entity.RedisCacheEntity;
+import com.nepxion.aquarius.common.redis.entity.RedisEntity;
 
 @Component("redisCacheDelegate")
 public class RedisCacheDelegate implements CacheDelegate {
@@ -34,7 +34,7 @@ public class RedisCacheDelegate implements CacheDelegate {
     private RedisTemplate<String, Object> redisTemplate;
 
     @Autowired
-    private RedisCacheEntity redisCacheEntity;
+    private RedisEntity redisEntity;
 
     @Override
     public void initialize() {
@@ -48,7 +48,7 @@ public class RedisCacheDelegate implements CacheDelegate {
 
     @Override
     public String getPrefix() {
-        return redisCacheEntity.getPrefix();
+        return redisEntity.getPrefix();
     }
 
     @Override
@@ -112,11 +112,11 @@ public class RedisCacheDelegate implements CacheDelegate {
     }
 
     @Override
-    public Object invokeCacheEvict(MethodInvocation invocation, String key, String value, boolean allEntries, boolean beforeInvocation) throws Throwable {
+    public Object invokeCacheEvict(MethodInvocation invocation, String key, String name, boolean allEntries, boolean beforeInvocation) throws Throwable {
         if (beforeInvocation) {
             LOG.info("Before invocation, CacheEvict clear key={} in Redis", key);
             try {
-                clear(key, value, allEntries);
+                clear(key, name, allEntries);
             } catch (Exception e) {
                 LOG.warn("Redis exception occurs while setting data", e);
             }
@@ -127,7 +127,7 @@ public class RedisCacheDelegate implements CacheDelegate {
         if (!beforeInvocation) {
             LOG.info("After invocation, CacheEvict clear key={} in Redis", key);
             try {
-                clear(key, value, allEntries);
+                clear(key, name, allEntries);
             } catch (Exception e) {
                 LOG.warn("Redis exception occurs while setting data", e);
             }
@@ -136,10 +136,10 @@ public class RedisCacheDelegate implements CacheDelegate {
         return object;
     }
 
-    private void clear(String key, String value, boolean allEntries) {
+    private void clear(String key, String name, boolean allEntries) {
         if (allEntries) {
             String prefix = getPrefix();
-            Set<String> keys = redisTemplate.keys(prefix + "_" + value + "*");
+            Set<String> keys = redisTemplate.keys(prefix + "_" + name + "*");
             for (String k : keys) {
                 redisTemplate.delete(k);
             }

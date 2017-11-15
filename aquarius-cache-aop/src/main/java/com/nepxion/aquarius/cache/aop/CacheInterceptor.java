@@ -41,30 +41,30 @@ public class CacheInterceptor extends AbstractInterceptor {
     public Object invoke(MethodInvocation invocation) throws Throwable {
         Cacheable cacheableAnnotation = getCacheableAnnotation(invocation);
         if (cacheableAnnotation != null) {
-            String value = cacheableAnnotation.value();
+            String name = cacheableAnnotation.name();
             String key = cacheableAnnotation.key();
             long expire = cacheableAnnotation.expire();
 
-            return invokeCacheable(invocation, value, key, expire);
+            return invokeCacheable(invocation, name, key, expire);
         }
 
         CachePut cachePutAnnotation = getCachePutAnnotation(invocation);
         if (cachePutAnnotation != null) {
-            String value = cachePutAnnotation.value();
+            String name = cachePutAnnotation.name();
             String key = cachePutAnnotation.key();
             long expire = cachePutAnnotation.expire();
 
-            return invokeCachePut(invocation, value, key, expire);
+            return invokeCachePut(invocation, name, key, expire);
         }
 
         CacheEvict cacheEvictAnnotation = getCacheEvictAnnotation(invocation);
         if (cacheEvictAnnotation != null) {
-            String value = cacheEvictAnnotation.value();
+            String name = cacheEvictAnnotation.name();
             String key = cacheEvictAnnotation.key();
             boolean allEntries = cacheEvictAnnotation.allEntries();
             boolean beforeInvocation = cacheEvictAnnotation.beforeInvocation();
 
-            return invokeCacheEvict(invocation, value, key, allEntries, beforeInvocation);
+            return invokeCacheEvict(invocation, name, key, allEntries, beforeInvocation);
         }
 
         return invocation.proceed();
@@ -97,52 +97,52 @@ public class CacheInterceptor extends AbstractInterceptor {
         return null;
     }
 
-    private Object invokeCacheable(MethodInvocation invocation, String value, String key, long expire) throws Throwable {
+    private Object invokeCacheable(MethodInvocation invocation, String name, String key, long expire) throws Throwable {
         if (StringUtils.isEmpty(key)) {
             throw new AquariusException("Annotation [Cacheable]'s key is null or empty");
         }
 
-        String spelKey = getSpelKey(invocation, value, key);
+        String spelKey = getSpelKey(invocation, name, key);
         String proxyType = getProxyType(invocation);
         String proxiedClassName = getProxiedClassName(invocation);
         String methodName = getMethodName(invocation);
 
-        LOG.info("Intercepted for annotation - Cacheable [value={}, key={}, expire={}, proxyType={}, proxiedClass={}, method={}]", value, spelKey, expire, proxyType, proxiedClassName, methodName);
+        LOG.info("Intercepted for annotation - Cacheable [name={}, key={}, expire={}, proxyType={}, proxiedClass={}, method={}]", name, spelKey, expire, proxyType, proxiedClassName, methodName);
 
         return cacheDelegate.invokeCacheable(invocation, spelKey, expire);
     }
 
-    private Object invokeCachePut(MethodInvocation invocation, String value, String key, long expire) throws Throwable {
+    private Object invokeCachePut(MethodInvocation invocation, String name, String key, long expire) throws Throwable {
         if (StringUtils.isEmpty(key)) {
             throw new AquariusException("Annotation [CachePut]'s key is null or empty");
         }
 
-        String spelKey = getSpelKey(invocation, value, key);
+        String spelKey = getSpelKey(invocation, name, key);
         String proxyType = getProxyType(invocation);
         String proxiedClassName = getProxiedClassName(invocation);
         String methodName = getMethodName(invocation);
 
-        LOG.info("Intercepted for annotation - CachePut [value={}, key={}, expire={}, proxyType={}, proxiedClass={}, method={}]", value, spelKey, expire, proxyType, proxiedClassName, methodName);
+        LOG.info("Intercepted for annotation - CachePut [name={}, key={}, expire={}, proxyType={}, proxiedClass={}, method={}]", name, spelKey, expire, proxyType, proxiedClassName, methodName);
 
         return cacheDelegate.invokeCachePut(invocation, spelKey, expire);
     }
 
-    private Object invokeCacheEvict(MethodInvocation invocation, String value, String key, boolean allEntries, boolean beforeInvocation) throws Throwable {
+    private Object invokeCacheEvict(MethodInvocation invocation, String name, String key, boolean allEntries, boolean beforeInvocation) throws Throwable {
         if (StringUtils.isEmpty(key)) {
             throw new AquariusException("Annotation [CacheEvict]'s key is null or empty");
         }
 
-        String spelKey = getSpelKey(invocation, value, key);
+        String spelKey = getSpelKey(invocation, name, key);
         String proxyType = getProxyType(invocation);
         String proxiedClassName = getProxiedClassName(invocation);
         String methodName = getMethodName(invocation);
 
-        LOG.info("Intercepted for annotation - CacheEvict [value={}, key={}, allEntries={}, beforeInvocation={}, proxyType={}, proxiedClass={}, method={}]", value, spelKey, allEntries, beforeInvocation, proxyType, proxiedClassName, methodName);
+        LOG.info("Intercepted for annotation - CacheEvict [name={}, key={}, allEntries={}, beforeInvocation={}, proxyType={}, proxiedClass={}, method={}]", name, spelKey, allEntries, beforeInvocation, proxyType, proxiedClassName, methodName);
 
-        return cacheDelegate.invokeCacheEvict(invocation, spelKey, value, allEntries, beforeInvocation);
+        return cacheDelegate.invokeCacheEvict(invocation, spelKey, name, allEntries, beforeInvocation);
     }
 
-    public String getSpelKey(MethodInvocation invocation, String value, String key) {
+    public String getSpelKey(MethodInvocation invocation, String name, String key) {
         String[] parameterNames = getParameterNames(invocation);
         Object[] arguments = getArguments(invocation);
 
@@ -157,6 +157,6 @@ public class CacheInterceptor extends AbstractInterceptor {
             context.setVariable(parameterNames[i], arguments[i]);
         }
 
-        return cacheDelegate.getPrefix() + "_" + value + "_" + parser.parseExpression(key).getValue(context, String.class);
+        return cacheDelegate.getPrefix() + "_" + name + "_" + parser.parseExpression(key).getValue(context, String.class);
     }
 }

@@ -29,5 +29,5 @@ public interface CacheDelegate {
     Object invokeCachePut(MethodInvocation invocation, String key, long expire) throws Throwable;
 
     // 清除缓存
-    Object invokeCacheEvict(MethodInvocation invocation, String key, String value, boolean allEntries, boolean beforeInvocation) throws Throwable;
+    Object invokeCacheEvict(MethodInvocation invocation, String key, String name, boolean allEntries, boolean beforeInvocation) throws Throwable;
 }

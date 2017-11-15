@@ -25,7 +25,7 @@ public @interface CachePut {
     /**
      * 缓存名字
      */
-    String value() default "";
+    String name() default "";
 
     /**
      * 缓存Key

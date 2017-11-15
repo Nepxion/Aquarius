@@ -155,15 +155,15 @@ public class MyService4Impl {
        2)注解com.nepxion.aquarius.cache.annotation.CachePut，更新缓存
        3)注解com.nepxion.aquarius.cache.annotation.CacheEvict，清除缓存
        1.2 参数说明
-       1)value 缓存的名字
+       1)name 缓存的名字
        2)key 缓存Key
        3)expire 过期时间，一旦过期，缓存数据自动会从Redis删除（只用于Cacheable和CachePut）
-       4)allEntries 是否全部清除缓存内容（只用于CacheEvict）。如果为true，按照prefix + "_" + value + "*"方式去匹配删除Key；如果为false，则按照prefix + "_" + value + "_" + key + "*"
+       4)allEntries 是否全部清除缓存内容（只用于CacheEvict）。如果为true，按照prefix + "_" + name + "*"方式去匹配删除Key；如果为false，则按照prefix + "_" + name + "_" + key + "*"
        5)beforeInvocation 缓存清理是在方法调用前还是调用后（只用于CacheEvict）
     2 缓存的Key支持SPEL语义拼装。但SPEL语义对于接口代理的方式，需要打开编译参数项
        参照Nepxion Marix文档里的说明，需要在IDE和Maven里设置"-parameters"的Compiler Argument。具体参考如下：
        https://www.concretepage.com/java/jdk-8/java-8-reflection-access-to-parameter-names-of-method-and-constructor-with-maven-gradle-and-eclipse-using-parameters-compiler-argument
-       在config-redis.xml中有个RedisCacheEntity的prefix(前缀)全局配置项目，它和value，key组成一个SPEL语义，即[prefix]_[value]_[key]，该值将作为Redis的Key存储，对应的Redis的Value就是缓存
+       在config-redis.xml中有个RedisCacheEntity的prefix(前缀)全局配置项目，它和name，key组成一个SPEL语义，即[prefix]_[name]_[key]，该值将作为Redis的Key存储，对应的Redis的Value就是缓存
     3 对于方法返回的值为null的时候，不做任何缓存相关操作；对于方法执行过程中抛出异常后，不做任何缓存相关操作
 
 ### 使用分布式缓存示例如下，更多细节见aquarius-test工程下com.nepxion.aquarius.cache
@@ -185,13 +185,13 @@ import com.nepxion.aquarius.cache.annotation.CachePut;
 import com.nepxion.aquarius.cache.annotation.Cacheable;
 
 public interface MyService5 {
-    @Cacheable(value = "aquarius", key = "#id1 + \"-\" + #id2", expire = -1L)
+    @Cacheable(name = "cache", key = "#id1 + \"-\" + #id2", expire = -1L)
     String doA(String id1, String id2);
 
-    @CachePut(value = "aquarius", key = "#id1 + \"-\" + #id2", expire = -1L)
+    @CachePut(name = "cache", key = "#id1 + \"-\" + #id2", expire = -1L)
     String doB(String id1, String id2);
 
-    @CacheEvict(value = "aquarius", key = "#id1 + \"-\" + #id2", allEntries = false, beforeInvocation = false)
+    @CacheEvict(name = "cache", key = "#id1 + \"-\" + #id2", allEntries = false, beforeInvocation = false)
     String doC(String id1, String id2);
 }
 ```
@@ -223,7 +223,7 @@ import com.nepxion.aquarius.cache.annotation.Cacheable;
 public class MyService6Impl {
     private static final Logger LOG = LoggerFactory.getLogger(MyService6Impl.class);
 
-    @Cacheable(value = "aquarius", key = "#id1 + \"-\" + #id2", expire = 60000L)
+    @Cacheable(name = "cache", key = "#id1 + \"-\" + #id2", expire = 60000L)
     public String doD(String id1, String id2) {
         try {
             TimeUnit.MILLISECONDS.sleep(2000L);
@@ -236,7 +236,7 @@ public class MyService6Impl {
         return "D";
     }
 
-    @CachePut(value = "aquarius", key = "#id1 + \"-\" + #id2", expire = 60000L)
+    @CachePut(name = "cache", key = "#id1 + \"-\" + #id2", expire = 60000L)
     public String doE(String id1, String id2) {
         try {
             TimeUnit.MILLISECONDS.sleep(2000L);
@@ -249,7 +249,7 @@ public class MyService6Impl {
         return "E";
     }
 
-    @CacheEvict(value = "aquarius", key = "#id1 + \"-\" + #id2", allEntries = false, beforeInvocation = false)
+    @CacheEvict(name = "cache", key = "#id1 + \"-\" + #id2", allEntries = false, beforeInvocation = false)
     public String doF(String id1, String id2) {
         try {
             TimeUnit.MILLISECONDS.sleep(2000L);
