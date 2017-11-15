@@ -10,6 +10,8 @@ package com.nepxion.aquarius.idgenerator.redis.impl;
  * @version 1.0
  */
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -21,7 +23,12 @@ public class RedisIdGeneratorImpl implements RedisIdGenerator {
     private static final Logger LOG = LoggerFactory.getLogger(RedisIdGeneratorImpl.class);
 
     @Override
-    public String nextUniqueId() throws Exception {
+    public String nextUniqueId(String name, String key) {
+        return null;
+    }
+
+    @Override
+    public List<String> nextUniqueIds(String name, String key) {
         return null;
     }
 }
