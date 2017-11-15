@@ -26,11 +26,12 @@
        2)注解com.nepxion.aquarius.lock.annotation.ReadLock，读可重入锁
        3)注解com.nepxion.aquarius.lock.annotation.WriteLock，写可重入锁
        6.2 参数说明
-       1)key 锁的Key
-       2)leaseTime 持锁时间，持锁超过此时间则自动丢弃锁(Redisson支持，Curator不支持，本地锁不支持)
-       3)waitTime 没有获取到锁时，等待时间
-       4)async 是否采用锁的异步执行方式(默认都支持同步执行方式，Redisson三种锁都支持异步，Curator三种锁都不支持异步，本地锁三种锁都不支持异步)
-       5)fair 是否采用公平锁(默认都支持非公平锁，Redisson三种锁只有普通可重入锁支持公平锁，Curator三种锁都不支持公平锁，本地锁三种锁都支持公平锁)
+       1)name 锁的名字
+       2)key 锁的Key。锁Key的完整路径是prefix + "_" + name + "_" + key，prefix为config.propertie里的namespace值
+       3)leaseTime 持锁时间，持锁超过此时间则自动丢弃锁(Redisson支持，Curator不支持，本地锁不支持)
+       4)waitTime 没有获取到锁时，等待时间
+       5)async 是否采用锁的异步执行方式(默认都支持同步执行方式，Redisson三种锁都支持异步，Curator三种锁都不支持异步，本地锁三种锁都不支持异步)
+       6)fair 是否采用公平锁(默认都支持非公平锁，Redisson三种锁只有普通可重入锁支持公平锁，Curator三种锁都不支持公平锁，本地锁三种锁都支持公平锁)
     7 锁由于是可重入锁，支持缓存和重用机制
     8 锁组件采用通过改变Pom中对锁中间件类型的引用，达到快速切换分布式锁的目的
        8.1 实现对redisson支持若干种部署方式(例如单机，集群，哨兵模式)，并支持json和yaml(默认)两种配置方式，要切换部署方式，只需要修改相应的config-redisson.yaml文件即可。具体参考如下：
@@ -78,15 +79,14 @@ package com.nepxion.aquarius.lock.service;
 import com.nepxion.aquarius.lock.annotation.Lock;
 
 public interface MyService1 {
-    @Lock(key = "#id1 + \"-\" + #id2", leaseTime = 5000, waitTime = 60000, async=false, fair=false)
-    void doA(String id1, String id2);
+    @Lock(name = "lock", key = "#id1 + \"-\" + #id2", leaseTime = 5000L, waitTime = 60000L, async = false, fair = false)
+    String doA(String id1, String id2);
 
-    void doB(String id1, String id2);
+    String doB(String id1, String id2);
 }
 ```
 
 读/写分布式锁的使用
-```java
 package com.nepxion.aquarius.lock.service;
 
 /**
@@ -102,8 +102,8 @@ package com.nepxion.aquarius.lock.service;
 import com.nepxion.aquarius.lock.annotation.ReadLock;
 
 public interface MyService3 {
-    @ReadLock(key = "#id1 + \"-\" + #id2", leaseTime = 5000, waitTime = 60000, async=false, fair = false)
-    void doR(String id1, String id2);
+    @ReadLock(name = "lock", key = "#id1 + \"-\" + #id2", leaseTime = 5000L, waitTime = 60000L, async = false, fair = false)
+    String doR(String id1, String id2);
 }
 ```
 
@@ -132,15 +132,17 @@ import com.nepxion.aquarius.lock.annotation.WriteLock;
 public class MyService4Impl {
     private static final Logger LOG = LoggerFactory.getLogger(MyService4Impl.class);
 
-    @WriteLock(key = "#id1 + \"-\" + #id2", leaseTime = 15000, waitTime = 60000, async = false, fair = false)
-    public void doW(String id1, String id2) {
+    @WriteLock(name = "lock", key = "#id1 + \"-\" + #id2", leaseTime = 15000L, waitTime = 60000L, async = false, fair = false)
+    public String doW(String id1, String id2) {
         try {
-            TimeUnit.MILLISECONDS.sleep(10000);
+            TimeUnit.MILLISECONDS.sleep(10000L);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
         LOG.info("doW");
+
+        return "W";
     }
 }
 ```
@@ -156,7 +158,7 @@ public class MyService4Impl {
        3)注解com.nepxion.aquarius.cache.annotation.CacheEvict，清除缓存
        1.2 参数说明
        1)name 缓存的名字
-       2)key 缓存Key
+       2)key 缓存Key。缓存Key的完整路径是prefix + "_" + name + "_" + key，prefix为config.propertie里的namespace值
        3)expire 过期时间，一旦过期，缓存数据自动会从Redis删除（只用于Cacheable和CachePut）
        4)allEntries 是否全部清除缓存内容（只用于CacheEvict）。如果为true，按照prefix + "_" + name + "*"方式去匹配删除Key；如果为false，则按照prefix + "_" + name + "_" + key + "*"
        5)beforeInvocation 缓存清理是在方法调用前还是调用后（只用于CacheEvict）
@@ -319,9 +321,9 @@ public class MyApplication3 {
 
 ## Nepxion Aquarius ID Generator
 ### 介绍
-    1 支持序号在Zookeeper上分布式生成
+    1 支持序号在Zookeeper上分布式生成，在Zookeeper中的节点名为"/" + prefix + "/" + name + "_" + key
     2 支持全局唯一ID在Redis上分布式生成
-	  在路上...
+      在路上...
 
 ### 使用ID Generator示例如下，更多细节见aquarius-test工程下com.nepxion.aquarius.idgenerator
 ```java
@@ -367,7 +369,7 @@ public class MyApplication4 {
                         @Override
                         public void run() {
                             try {
-                                LOG.info("Timer1 - Sequence id={}", zookeeperIdGenerator.nextSequenceId("X-Y"));
+                                LOG.info("Timer1 - Sequence id={}", zookeeperIdGenerator.nextSequenceId("idgenerater", "X-Y"));
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -387,7 +389,7 @@ public class MyApplication4 {
                         @Override
                         public void run() {
                             try {
-                                LOG.info("Timer2 - Sequence id={}", zookeeperIdGenerator.nextSequenceId("X-Y"));
+                                LOG.info("Timer2 - Sequence id={}", zookeeperIdGenerator.nextSequenceId("idgenerater", "X-Y"));
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -403,4 +405,90 @@ public class MyApplication4 {
 ```
 
 ## Nepxion Aquarius Limit
-在路上...
+### 介绍
+    1 支持若干个分布式系统对同一资源在给定的时间段里最多的访问限制次数(超出次数返回false)；等下个时间段开始，才允许再次被访问(返回true)，周而复始
+    2 参数说明
+      1)name 资源的名字
+      2)key  资源Key。资源Key的完整路径是prefix + "_" + name + "_" + key，prefix为config.propertie里的namespace值
+      3)limitPeriod 给定的时间段(单位为秒)
+      4)limitCount 最多的访问限制次数
+
+### 使用Limit示例如下，更多细节见aquarius-test工程下com.nepxion.aquarius.limit
+```java
+package com.nepxion.aquarius.limit;
+
+/**
+ * <p>Title: Nepxion Aquarius</p>
+ * <p>Description: Nepxion Aquarius</p>
+ * <p>Copyright: Copyright (c) 2017</p>
+ * <p>Company: Nepxion</p>
+ * @author Haojun Ren
+ * @email 1394997@qq.com
+ * @version 1.0
+ */
+
+import java.util.Timer;
+import java.util.TimerTask;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.context.annotation.ComponentScan;
+
+import com.nepxion.aquarius.limit.context.MyContextAware4;
+import com.nepxion.aquarius.limit.redis.RedisLimit;
+
+@EnableAutoConfiguration
+@ComponentScan(basePackages = { "com.nepxion.aquarius.limit" })
+public class MyApplication5 {
+    private static final Logger LOG = LoggerFactory.getLogger(MyApplication5.class);
+
+    public static void main(String[] args) throws Exception {
+        SpringApplication.run(MyApplication5.class, args);
+
+        // 在给定的10秒里最多访问5次(超出次数返回false)；等下个10秒开始，才允许再次被访问(返回true)，周而复始
+        RedisLimit redisLimit = MyContextAware4.getBean(RedisLimit.class);
+        
+        Timer timer1 = new Timer();
+        timer1.scheduleAtFixedRate(new TimerTask() {
+            public void run() {
+                for (int i = 0; i < 3; i++) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                LOG.info("Timer1 - Limit={}", redisLimit.tryAccess("limit", "A-B", 10, 5));
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                    }).start();
+                }
+
+            }
+        }, 0L, 1000L);
+
+        Timer timer2 = new Timer();
+        timer2.scheduleAtFixedRate(new TimerTask() {
+            public void run() {
+                for (int i = 0; i < 3; i++) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                LOG.info("Timer1 - Limit={}", redisLimit.tryAccess("limit", "A-B", 10, 5));
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                    }).start();
+                }
+
+            }
+        }, 0L, 1500L);
+    }
+}
+```
