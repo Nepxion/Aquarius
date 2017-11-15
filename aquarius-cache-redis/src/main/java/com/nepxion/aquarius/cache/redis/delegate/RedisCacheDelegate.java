@@ -23,7 +23,8 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
 
 import com.nepxion.aquarius.cache.delegate.CacheDelegate;
-import com.nepxion.aquarius.common.redis.entity.RedisEntity;
+import com.nepxion.aquarius.common.constant.AquariusConstant;
+import com.nepxion.aquarius.common.property.AquariusProperties;
 
 @Component("redisCacheDelegate")
 public class RedisCacheDelegate implements CacheDelegate {
@@ -34,7 +35,7 @@ public class RedisCacheDelegate implements CacheDelegate {
     private RedisTemplate<String, Object> redisTemplate;
 
     @Autowired
-    private RedisEntity redisEntity;
+    private AquariusProperties properties;
 
     @Override
     public void initialize() {
@@ -44,11 +45,6 @@ public class RedisCacheDelegate implements CacheDelegate {
     @Override
     public void destroy() {
 
-    }
-
-    @Override
-    public String getPrefix() {
-        return redisEntity.getPrefix();
     }
 
     @Override
@@ -138,7 +134,7 @@ public class RedisCacheDelegate implements CacheDelegate {
 
     private void clear(String key, String name, boolean allEntries) {
         if (allEntries) {
-            String prefix = getPrefix();
+            String prefix = properties.getString(AquariusConstant.NAMESPACE);
             Set<String> keys = redisTemplate.keys(prefix + "_" + name + "*");
             for (String k : keys) {
                 redisTemplate.delete(k);

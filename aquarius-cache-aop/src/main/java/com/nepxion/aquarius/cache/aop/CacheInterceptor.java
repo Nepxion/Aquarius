@@ -27,7 +27,9 @@ import com.nepxion.aquarius.cache.annotation.CacheEvict;
 import com.nepxion.aquarius.cache.annotation.CachePut;
 import com.nepxion.aquarius.cache.annotation.Cacheable;
 import com.nepxion.aquarius.cache.delegate.CacheDelegate;
+import com.nepxion.aquarius.common.constant.AquariusConstant;
 import com.nepxion.aquarius.common.exception.AquariusException;
+import com.nepxion.aquarius.common.property.AquariusProperties;
 import com.nepxion.matrix.aop.AbstractInterceptor;
 
 @Component("cacheInterceptor")
@@ -36,6 +38,9 @@ public class CacheInterceptor extends AbstractInterceptor {
 
     @Autowired
     private CacheDelegate cacheDelegate;
+
+    @Autowired
+    private AquariusProperties properties;
 
     @Override
     public Object invoke(MethodInvocation invocation) throws Throwable {
@@ -157,6 +162,8 @@ public class CacheInterceptor extends AbstractInterceptor {
             context.setVariable(parameterNames[i], arguments[i]);
         }
 
-        return cacheDelegate.getPrefix() + "_" + name + "_" + parser.parseExpression(key).getValue(context, String.class);
+        String prefix = properties.getString(AquariusConstant.NAMESPACE);
+
+        return prefix + "_" + name + "_" + parser.parseExpression(key).getValue(context, String.class);
     }
 }

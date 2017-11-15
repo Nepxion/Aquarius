@@ -19,9 +19,6 @@ public interface CacheDelegate {
     // 销毁锁上下文
     void destroy();
 
-    // 获取前缀
-    String getPrefix();
-
     // 新增缓存
     Object invokeCacheable(MethodInvocation invocation, String key, long expire) throws Throwable;
 

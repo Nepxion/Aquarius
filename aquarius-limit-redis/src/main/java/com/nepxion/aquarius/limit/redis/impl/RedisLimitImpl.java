@@ -17,8 +17,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
+import org.springframework.data.redis.core.script.RedisScript;
 import org.springframework.stereotype.Component;
 
+import com.nepxion.aquarius.common.constant.AquariusConstant;
+import com.nepxion.aquarius.common.property.AquariusProperties;
 import com.nepxion.aquarius.limit.redis.RedisLimit;
 
 @Component("redisLimitImpl")
@@ -27,16 +30,20 @@ public class RedisLimitImpl implements RedisLimit {
     @Qualifier("aquariusRedisTemplate")
     private RedisTemplate<String, Object> redisTemplate;
 
-    // 针对资源Key，每seconds秒最多访问maxCount次，超过maxCount次返回false
+    @Autowired
+    private AquariusProperties properties;
+
     @Override
-    public boolean tryAccess(String key, int seconds, int limitCount, int lockCount, int lockTime, boolean limitLockEnabled) {
+    public boolean tryAccess(String name, String key, int limitPeriod, int limitCount, int lockPeriod, int lockCount, boolean limitLockEnabled) {
+        String prefix = properties.getString(AquariusConstant.NAMESPACE);
+        
         List<String> keys = new ArrayList<String>();
-        keys.add(key);
+        keys.add(prefix + "-" + name + "_" + key);
 
         String luaScript = buildLuaScript(limitLockEnabled);
 
-        DefaultRedisScript<Long> redisScript = new DefaultRedisScript<Long>(luaScript, Long.class);
-        Long count = redisTemplate.execute(redisScript, keys, Math.max(limitCount, lockCount), seconds, lockCount, lockTime);
+        RedisScript<Long> redisScript = new DefaultRedisScript<Long>(luaScript, Long.class);
+        Long count = redisTemplate.execute(redisScript, keys, Math.max(limitCount, lockCount), limitPeriod, lockCount, lockPeriod);
 
         return count <= limitCount;
     }

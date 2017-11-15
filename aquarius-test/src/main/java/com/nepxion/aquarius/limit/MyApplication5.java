@@ -28,6 +28,8 @@ public class MyApplication5 {
         SpringApplication.run(MyApplication5.class, args);
 
         RedisLimit redisLimit = MyContextAware4.getBean(RedisLimit.class);
-        System.out.println(redisLimit.tryAccess("Limit-abc", 10, 5, 0, 0, true));
+        boolean result = redisLimit.tryAccess("limit", "A-B", 10, 5, 0, 0, false);
+
+        LOG.info("{}", result);
     }
 }
