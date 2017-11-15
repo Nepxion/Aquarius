@@ -4,7 +4,7 @@
 ## 分布式应用组件集合
     1 Nepxion Aquarius Lock 分布式锁(支持Redis、Zookeeper、ReentrantLock本地锁)
     2 Nepxion Aquarius Cache 分布式缓存(支持Redis)
-    3 Nepxion Aquarius ID Generator 分布式全局唯一ID或者序号生成(支持Redis、Zookeeper)
+    3 Nepxion Aquarius ID Generator 分布式全局唯一ID(支持Redis)、序号生成(支持Zookeeper)
     4 Nepxion Aquarius Limit 分布式限速限流(支持Redis)
 
 ## Nepxion Aquarius Lock
