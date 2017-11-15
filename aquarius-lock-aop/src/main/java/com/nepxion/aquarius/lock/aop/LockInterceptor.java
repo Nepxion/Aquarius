@@ -50,6 +50,8 @@ public class LockInterceptor extends AbstractInterceptor {
 
     @PostConstruct
     public void initialize() {
+        LOG.info("Lock delegate instance is {}...", lockDelegate.getClass());
+
         prefix = properties.getString(AquariusConstant.NAMESPACE);
     }
 
