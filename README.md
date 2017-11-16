@@ -103,18 +103,18 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 
-import com.nepxion.aquarius.lock.context.MyContextAware1;
+import com.nepxion.aquarius.common.context.AquariusContextAware;
 import com.nepxion.aquarius.lock.service.MyService1;
 import com.nepxion.aquarius.lock.service.MyService2Impl;
 
 @EnableAutoConfiguration
 @ComponentScan(basePackages = { "com.nepxion.aquarius.lock" })
-public class MyApplication1 {
+public class LockApplication {
     public static void main(String[] args) throws Exception {
-        SpringApplication.run(MyApplication1.class, args);
+        SpringApplication.run(LockApplication.class, args);
 
         // 执行效果是doA和doC无序打印，即谁拿到锁谁先运行
-        MyService1 myService1 = MyContextAware1.getBean(MyService1.class);
+        MyService1 myService1 = AquariusContextAware.getBean(MyService1.class);
         for (int i = 0; i < 5; i++) {
             new Thread(new Runnable() {
                 @Override
@@ -125,7 +125,7 @@ public class MyApplication1 {
             }).start();
         }
 
-        MyService2Impl myService2 = MyContextAware1.getBean(MyService2Impl.class);
+        MyService2Impl myService2 = AquariusContextAware.getBean(MyService2Impl.class);
         for (int i = 0; i < 5; i++) {
             new Thread(new Runnable() {
                 @Override
@@ -223,20 +223,20 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 
-import com.nepxion.aquarius.lock.context.MyContextAware1;
+import com.nepxion.aquarius.common.context.AquariusContextAware;
 import com.nepxion.aquarius.lock.service.MyService3;
 import com.nepxion.aquarius.lock.service.MyService4Impl;
 
 @EnableAutoConfiguration
 @ComponentScan(basePackages = { "com.nepxion.aquarius.lock" })
-public class MyApplication2 {
-    private static final Logger LOG = LoggerFactory.getLogger(MyApplication2.class);
+public class ReadWriteLockApplication {
+    private static final Logger LOG = LoggerFactory.getLogger(ReadWriteLockApplication.class);
 
     public static void main(String[] args) throws Exception {
-        SpringApplication.run(MyApplication2.class, args);
+        SpringApplication.run(ReadWriteLockApplication.class, args);
 
         // 执行效果是先打印doW，即拿到写锁，再打印若干个doR，即可以同时拿到若干个读锁
-        MyService4Impl myService4 = MyContextAware1.getBean(MyService4Impl.class);
+        MyService4Impl myService4 = AquariusContextAware.getBean(MyService4Impl.class);
         Timer timer1 = new Timer();
         timer1.scheduleAtFixedRate(new TimerTask() {
             public void run() {
@@ -246,7 +246,7 @@ public class MyApplication2 {
             }
         }, 0L, 600000L);
 
-        MyService3 myService3 = MyContextAware1.getBean(MyService3.class);
+        MyService3 myService3 = AquariusContextAware.getBean(MyService3.class);
         Timer timer2 = new Timer();
         timer2.scheduleAtFixedRate(new TimerTask() {
             public void run() {
@@ -403,18 +403,18 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 
-import com.nepxion.aquarius.cache.context.MyContextAware2;
 import com.nepxion.aquarius.cache.service.MyService5;
 import com.nepxion.aquarius.cache.service.MyService6Impl;
+import com.nepxion.aquarius.common.context.AquariusContextAware;
 
 @EnableAutoConfiguration
 @ComponentScan(basePackages = { "com.nepxion.aquarius.cache" })
-public class MyApplication3 {
+public class CacheApplication {
     public static void main(String[] args) throws Exception {
-        SpringApplication.run(MyApplication3.class, args);
+        SpringApplication.run(CacheApplication.class, args);
 
         // 下面步骤请一步步操作，然后结合Redis Desktop Manager等工具查看效果
-        MyService5 myService5 = MyContextAware2.getBean(MyService5.class);
+        MyService5 myService5 = AquariusContextAware.getBean(MyService5.class);
 
         // 新增缓存Key为M-N，Value为A到Redis
         myService5.doA("M", "N");
@@ -425,7 +425,7 @@ public class MyApplication3 {
         // 清除缓存Key为M-N到Redis
         // myService5.doC("M", "N");
 
-        MyService6Impl myService6 = MyContextAware2.getBean(MyService6Impl.class);
+        MyService6Impl myService6 = AquariusContextAware.getBean(MyService6Impl.class);
 
         // 新增缓存Key为X-Y，Value为D到Redis
         myService6.doD("X", "Y");
@@ -473,18 +473,18 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 
-import com.nepxion.aquarius.idgenerator.context.MyContextAware3;
-import com.nepxion.aquarius.idgenerator.zookeeper.ZookeeperIdGenerator;
+import com.nepxion.aquarius.common.context.AquariusContextAware;
+import com.nepxion.aquarius.idgenerator.redis.RedisIdGenerator;
 
 @EnableAutoConfiguration
-@ComponentScan(basePackages = { "com.nepxion.aquarius.idgenerator" })
-public class MyApplication4 {
-    private static final Logger LOG = LoggerFactory.getLogger(MyApplication4.class);
+@ComponentScan(basePackages = { "com.nepxion.aquarius.idgenerator.redis" })
+public class RedisIdGeneratorApplication {
+    private static final Logger LOG = LoggerFactory.getLogger(RedisIdGeneratorApplication.class);
 
     public static void main(String[] args) throws Exception {
-        SpringApplication.run(MyApplication4.class, args);
+        SpringApplication.run(RedisIdGeneratorApplication.class, args);
 
-        ZookeeperIdGenerator zookeeperIdGenerator = MyContextAware3.getBean(ZookeeperIdGenerator.class);
+        RedisIdGenerator redisIdGenerator = AquariusContextAware.getBean(RedisIdGenerator.class);
 
         Timer timer1 = new Timer();
         timer1.scheduleAtFixedRate(new TimerTask() {
@@ -494,7 +494,7 @@ public class MyApplication4 {
                         @Override
                         public void run() {
                             try {
-                                LOG.info("Timer1 - Sequence id={}", zookeeperIdGenerator.nextSequenceId("idgenerater", "X-Y"));
+                                LOG.info("Timer1 - Unique id={}", redisIdGenerator.nextUniqueId("idgenerater", "X-Y", 1, 8));
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -514,7 +514,7 @@ public class MyApplication4 {
                         @Override
                         public void run() {
                             try {
-                                LOG.info("Timer2 - Sequence id={}", zookeeperIdGenerator.nextSequenceId("idgenerater", "X-Y"));
+                                LOG.info("Timer2 - Unique id={}", redisIdGenerator.nextUniqueId("idgenerater", "X-Y", 1, 8));
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -551,18 +551,18 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 
-import com.nepxion.aquarius.idgenerator.context.MyContextAware3;
-import com.nepxion.aquarius.idgenerator.redis.RedisIdGenerator;
+import com.nepxion.aquarius.common.context.AquariusContextAware;
+import com.nepxion.aquarius.idgenerator.zookeeper.ZookeeperIdGenerator;
 
 @EnableAutoConfiguration
-@ComponentScan(basePackages = { "com.nepxion.aquarius.idgenerator" })
-public class MyApplication5 {
-    private static final Logger LOG = LoggerFactory.getLogger(MyApplication5.class);
+@ComponentScan(basePackages = { "com.nepxion.aquarius.idgenerator.zookeeper" })
+public class ZookeeperIdGeneratorApplication {
+    private static final Logger LOG = LoggerFactory.getLogger(ZookeeperIdGeneratorApplication.class);
 
     public static void main(String[] args) throws Exception {
-        SpringApplication.run(MyApplication5.class, args);
+        SpringApplication.run(ZookeeperIdGeneratorApplication.class, args);
 
-        RedisIdGenerator redisIdGenerator = MyContextAware3.getBean(RedisIdGenerator.class);
+        ZookeeperIdGenerator zookeeperIdGenerator = AquariusContextAware.getBean(ZookeeperIdGenerator.class);
 
         Timer timer1 = new Timer();
         timer1.scheduleAtFixedRate(new TimerTask() {
@@ -572,7 +572,7 @@ public class MyApplication5 {
                         @Override
                         public void run() {
                             try {
-                                LOG.info("Timer1 - Unique id={}", redisIdGenerator.nextUniqueId("idgenerater", "X-Y", 1, 8));
+                                LOG.info("Timer1 - Sequence id={}", zookeeperIdGenerator.nextSequenceId("idgenerater", "X-Y"));
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -592,7 +592,7 @@ public class MyApplication5 {
                         @Override
                         public void run() {
                             try {
-                                LOG.info("Timer2 - Unique id={}", redisIdGenerator.nextUniqueId("idgenerater", "X-Y", 1, 8));
+                                LOG.info("Timer2 - Sequence id={}", zookeeperIdGenerator.nextSequenceId("idgenerater", "X-Y"));
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -639,19 +639,19 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 
-import com.nepxion.aquarius.limit.context.MyContextAware4;
+import com.nepxion.aquarius.common.context.AquariusContextAware;
 import com.nepxion.aquarius.limit.redis.RedisLimit;
 
 @EnableAutoConfiguration
-@ComponentScan(basePackages = { "com.nepxion.aquarius.limit" })
-public class MyApplication6 {
-    private static final Logger LOG = LoggerFactory.getLogger(MyApplication5.class);
+@ComponentScan(basePackages = { "com.nepxion.aquarius.limit.redis" })
+public class RedisLimitApplication {
+    private static final Logger LOG = LoggerFactory.getLogger(RedisLimitApplication.class);
 
     public static void main(String[] args) throws Exception {
-        SpringApplication.run(MyApplication5.class, args);
+        SpringApplication.run(RedisLimitApplication.class, args);
 
         // 在给定的10秒里最多访问5次(超出次数返回false)；等下个10秒开始，才允许再次被访问(返回true)，周而复始
-        RedisLimit redisLimit = MyContextAware4.getBean(RedisLimit.class);
+        RedisLimit redisLimit = AquariusContextAware.getBean(RedisLimit.class);
         
         Timer timer1 = new Timer();
         timer1.scheduleAtFixedRate(new TimerTask() {

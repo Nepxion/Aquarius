@@ -1,4 +1,4 @@
-package com.nepxion.aquarius.idgenerator.context;
+package com.nepxion.aquarius.common.context;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
@@ -15,19 +15,19 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MyContextAware3 implements ApplicationContextAware {
+public class AquariusContextAware implements ApplicationContextAware {
     private static ApplicationContext applicationContext;
 
-    private MyContextAware3() {
+    private AquariusContextAware() {
     }
 
     private static void setContext(ApplicationContext applicationContext) {
-        MyContextAware3.applicationContext = applicationContext;
+        AquariusContextAware.applicationContext = applicationContext;
     }
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) {
-        MyContextAware3.setContext(applicationContext);
+        AquariusContextAware.setContext(applicationContext);
     }
 
     public static <T> T getBean(Class<T> clazz) {

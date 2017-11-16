@@ -19,18 +19,18 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 
-import com.nepxion.aquarius.idgenerator.context.MyContextAware3;
-import com.nepxion.aquarius.idgenerator.redis.RedisIdGenerator;
+import com.nepxion.aquarius.common.context.AquariusContextAware;
+import com.nepxion.aquarius.idgenerator.zookeeper.ZookeeperIdGenerator;
 
 @EnableAutoConfiguration
-@ComponentScan(basePackages = { "com.nepxion.aquarius.idgenerator" })
-public class MyApplication5 {
-    private static final Logger LOG = LoggerFactory.getLogger(MyApplication5.class);
+@ComponentScan(basePackages = { "com.nepxion.aquarius.idgenerator.zookeeper" })
+public class ZookeeperIdGeneratorApplication {
+    private static final Logger LOG = LoggerFactory.getLogger(ZookeeperIdGeneratorApplication.class);
 
     public static void main(String[] args) throws Exception {
-        SpringApplication.run(MyApplication5.class, args);
+        SpringApplication.run(ZookeeperIdGeneratorApplication.class, args);
 
-        RedisIdGenerator redisIdGenerator = MyContextAware3.getBean(RedisIdGenerator.class);
+        ZookeeperIdGenerator zookeeperIdGenerator = AquariusContextAware.getBean(ZookeeperIdGenerator.class);
 
         Timer timer1 = new Timer();
         timer1.scheduleAtFixedRate(new TimerTask() {
@@ -40,7 +40,7 @@ public class MyApplication5 {
                         @Override
                         public void run() {
                             try {
-                                LOG.info("Timer1 - Unique id={}", redisIdGenerator.nextUniqueId("idgenerater", "X-Y", 1, 8));
+                                LOG.info("Timer1 - Sequence id={}", zookeeperIdGenerator.nextSequenceId("idgenerater", "X-Y"));
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -60,7 +60,7 @@ public class MyApplication5 {
                         @Override
                         public void run() {
                             try {
-                                LOG.info("Timer2 - Unique id={}", redisIdGenerator.nextUniqueId("idgenerater", "X-Y", 1, 8));
+                                LOG.info("Timer2 - Sequence id={}", zookeeperIdGenerator.nextSequenceId("idgenerater", "X-Y"));
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }

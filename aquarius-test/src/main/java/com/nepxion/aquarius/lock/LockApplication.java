@@ -14,18 +14,18 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 
-import com.nepxion.aquarius.lock.context.MyContextAware1;
+import com.nepxion.aquarius.common.context.AquariusContextAware;
 import com.nepxion.aquarius.lock.service.MyService1;
 import com.nepxion.aquarius.lock.service.MyService2Impl;
 
 @EnableAutoConfiguration
 @ComponentScan(basePackages = { "com.nepxion.aquarius.lock" })
-public class MyApplication1 {
+public class LockApplication {
     public static void main(String[] args) throws Exception {
-        SpringApplication.run(MyApplication1.class, args);
+        SpringApplication.run(LockApplication.class, args);
 
         // 执行效果是doA和doC无序打印，即谁拿到锁谁先运行
-        MyService1 myService1 = MyContextAware1.getBean(MyService1.class);
+        MyService1 myService1 = AquariusContextAware.getBean(MyService1.class);
         for (int i = 0; i < 5; i++) {
             new Thread(new Runnable() {
                 @Override
@@ -36,7 +36,7 @@ public class MyApplication1 {
             }).start();
         }
 
-        MyService2Impl myService2 = MyContextAware1.getBean(MyService2Impl.class);
+        MyService2Impl myService2 = AquariusContextAware.getBean(MyService2Impl.class);
         for (int i = 0; i < 5; i++) {
             new Thread(new Runnable() {
                 @Override

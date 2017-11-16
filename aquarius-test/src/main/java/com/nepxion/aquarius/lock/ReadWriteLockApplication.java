@@ -19,20 +19,20 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 
-import com.nepxion.aquarius.lock.context.MyContextAware1;
+import com.nepxion.aquarius.common.context.AquariusContextAware;
 import com.nepxion.aquarius.lock.service.MyService3;
 import com.nepxion.aquarius.lock.service.MyService4Impl;
 
 @EnableAutoConfiguration
 @ComponentScan(basePackages = { "com.nepxion.aquarius.lock" })
-public class MyApplication2 {
-    private static final Logger LOG = LoggerFactory.getLogger(MyApplication2.class);
+public class ReadWriteLockApplication {
+    private static final Logger LOG = LoggerFactory.getLogger(ReadWriteLockApplication.class);
 
     public static void main(String[] args) throws Exception {
-        SpringApplication.run(MyApplication2.class, args);
+        SpringApplication.run(ReadWriteLockApplication.class, args);
 
         // 执行效果是先打印doW，即拿到写锁，再打印若干个doR，即可以同时拿到若干个读锁
-        MyService4Impl myService4 = MyContextAware1.getBean(MyService4Impl.class);
+        MyService4Impl myService4 = AquariusContextAware.getBean(MyService4Impl.class);
         Timer timer1 = new Timer();
         timer1.scheduleAtFixedRate(new TimerTask() {
             public void run() {
@@ -42,7 +42,7 @@ public class MyApplication2 {
             }
         }, 0L, 600000L);
 
-        MyService3 myService3 = MyContextAware1.getBean(MyService3.class);
+        MyService3 myService3 = AquariusContextAware.getBean(MyService3.class);
         Timer timer2 = new Timer();
         timer2.scheduleAtFixedRate(new TimerTask() {
             public void run() {

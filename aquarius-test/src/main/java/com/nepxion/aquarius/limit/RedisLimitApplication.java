@@ -19,19 +19,19 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 
-import com.nepxion.aquarius.limit.context.MyContextAware4;
+import com.nepxion.aquarius.common.context.AquariusContextAware;
 import com.nepxion.aquarius.limit.redis.RedisLimit;
 
 @EnableAutoConfiguration
-@ComponentScan(basePackages = { "com.nepxion.aquarius.limit" })
-public class MyApplication6 {
-    private static final Logger LOG = LoggerFactory.getLogger(MyApplication6.class);
+@ComponentScan(basePackages = { "com.nepxion.aquarius.limit.redis" })
+public class RedisLimitApplication {
+    private static final Logger LOG = LoggerFactory.getLogger(RedisLimitApplication.class);
 
     public static void main(String[] args) throws Exception {
-        SpringApplication.run(MyApplication6.class, args);
+        SpringApplication.run(RedisLimitApplication.class, args);
 
         // 在给定的10秒里最多访问5次(超出次数返回false)；等下个10秒开始，才允许再次被访问(返回true)，周而复始
-        RedisLimit redisLimit = MyContextAware4.getBean(RedisLimit.class);
+        RedisLimit redisLimit = AquariusContextAware.getBean(RedisLimit.class);
         
         Timer timer1 = new Timer();
         timer1.scheduleAtFixedRate(new TimerTask() {
