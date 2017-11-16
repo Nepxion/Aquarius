@@ -42,23 +42,12 @@
        https://www.concretepage.com/java/jdk-8/java-8-reflection-access-to-parameter-names-of-method-and-constructor-with-maven-gradle-and-eclipse-using-parameters-compiler-argument
 
 ### 快速切换分布式锁组件
-参考aquarius-test下的pom.xml
+aquarius-test\src\main\resources\config.properties，切换lockDelegate即可
 ```java
-<!-- Use only one of aquarius-lock-redis, aquarius-lock-zookeeper, aquarius-lock-local -->
-<dependency>
-    <groupId>${project.groupId}</groupId>
-    <artifactId>aquarius-lock-redis</artifactId>
-</dependency>
-
-<!-- <dependency>
-    <groupId>${project.groupId}</groupId>
-    <artifactId>aquarius-lock-zookeeper</artifactId>
-</dependency>
-
-<dependency>
-    <groupId>${project.groupId}</groupId>
-        <artifactId>aquarius-lock-local</artifactId>
-    </dependency> -->
+# Lock delegate config
+lockDelegate=redisLockDelegate
+# lockDelegate=zookeeperLockDelegate
+# lockDelegate=localLockDelegate
 ```
 
 ### 使用分布式锁示例如下，更多细节见aquarius-test工程下com.nepxion.aquarius.lock
