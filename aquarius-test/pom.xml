@@ -16,21 +16,20 @@
     </properties>
 
     <dependencies>
-        <!-- Use only one of aquarius-lock-redis, aquarius-lock-zookeeper, aquarius-lock-local -->
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>aquarius-lock-redis</artifactId>
         </dependency>
 
-        <!-- <dependency>
+        <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>aquarius-lock-zookeeper</artifactId>
-        </dependency> -->
+        </dependency>
 
-        <!-- <dependency>
+        <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>aquarius-lock-local</artifactId>
-        </dependency> -->
+        </dependency>
 
         <dependency>
             <groupId>${project.groupId}</groupId>
@@ -50,7 +49,7 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>aquarius-limit-redis</artifactId>
-        </dependency>        
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>

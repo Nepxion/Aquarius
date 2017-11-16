@@ -22,7 +22,6 @@ import org.apache.zookeeper.CreateMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import com.nepxion.aquarius.common.constant.AquariusConstant;
 import com.nepxion.aquarius.common.curator.constant.CuratorConstant;
@@ -32,7 +31,6 @@ import com.nepxion.aquarius.common.property.AquariusProperties;
 import com.nepxion.aquarius.lock.delegate.LockDelegate;
 import com.nepxion.aquarius.lock.entity.LockType;
 
-@Component("zookeeperLockDelegate")
 public class ZookeeperLockDelegate implements LockDelegate {
     private static final Logger LOG = LoggerFactory.getLogger(ZookeeperLockDelegate.class);
 

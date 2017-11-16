@@ -19,13 +19,11 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.aopalliance.intercept.MethodInvocation;
-import org.springframework.stereotype.Component;
 
 import com.nepxion.aquarius.common.exception.AquariusException;
 import com.nepxion.aquarius.lock.delegate.LockDelegate;
 import com.nepxion.aquarius.lock.entity.LockType;
 
-@Component("localLockDelegate")
 public class LocalLockDelegate implements LockDelegate {
     // 可重入锁可重复使用
     private volatile Map<String, Lock> lockMap = new ConcurrentHashMap<String, Lock>();
