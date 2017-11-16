@@ -10,11 +10,18 @@ package com.nepxion.aquarius.common.context;
  * @version 1.0
  */
 
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.core.ResolvableType;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
-@Component
+import com.nepxion.aquarius.common.property.AquariusProperties;
+
+@Component("contextAware")
 public class AquariusContextAware implements ApplicationContextAware {
     private static ApplicationContext applicationContext;
 
@@ -32,6 +39,9 @@ public class AquariusContextAware implements ApplicationContextAware {
         System.out.println("");
     }
 
+    @Autowired
+    private AquariusProperties properties;
+
     private AquariusContextAware() {
     }
 
@@ -44,19 +54,67 @@ public class AquariusContextAware implements ApplicationContextAware {
         AquariusContextAware.setContext(applicationContext);
     }
 
-    public static <T> T getBean(Class<T> clazz) {
-        return applicationContext.getBean(clazz);
+    public Object getBeanByKey(String keyName) {
+        String beanName = properties.getString(keyName);
+
+        return getBean(beanName);
     }
 
-    public static Object getBean(String beanName) {
-        return applicationContext.getBean(beanName);
+    public <T> T getBeanByKey(String keyName, Class<T> requiredType) {
+        String beanName = properties.getString(keyName);
+
+        return getBean(beanName, requiredType);
     }
 
-    public static String getProperty(String key) {
-        return applicationContext.getEnvironment().getProperty(key);
+    public static Object getBean(String name) throws BeansException {
+        return applicationContext.getBean(name);
     }
 
-    public static boolean isProfileActive(String profile) {
-        return applicationContext.getEnvironment().acceptsProfiles(profile);
+    public static <T> T getBean(String name, Class<T> requiredType) throws BeansException {
+        return applicationContext.getBean(name, requiredType);
+    }
+
+    public static Object getBean(String name, Object... args) throws BeansException {
+        return applicationContext.getBean(name, args);
+    }
+
+    public static <T> T getBean(Class<T> requiredType) throws BeansException {
+        return applicationContext.getBean(requiredType);
+    }
+
+    public static <T> T getBean(Class<T> requiredType, Object... args) throws BeansException {
+        return applicationContext.getBean(requiredType, args);
+    }
+
+    public static boolean containsBean(String name) {
+        return applicationContext.containsBean(name);
+    }
+
+    public static boolean isSingleton(String name) throws NoSuchBeanDefinitionException {
+        return applicationContext.isSingleton(name);
+    }
+
+    public static boolean isPrototype(String name) throws NoSuchBeanDefinitionException {
+        return applicationContext.isPrototype(name);
+    }
+
+    public static boolean isTypeMatch(String name, ResolvableType typeToMatch) throws NoSuchBeanDefinitionException {
+        return applicationContext.isTypeMatch(name, typeToMatch);
+    }
+
+    public static boolean isTypeMatch(String name, Class<?> typeToMatch) throws NoSuchBeanDefinitionException {
+        return applicationContext.isTypeMatch(name, typeToMatch);
+    }
+
+    public static Class<?> getType(String name) throws NoSuchBeanDefinitionException {
+        return applicationContext.getType(name);
+    }
+
+    public static String[] getAliases(String name) {
+        return applicationContext.getAliases(name);
+    }
+
+    public static Environment getEnvironment() {
+        return applicationContext.getEnvironment();
     }
 }
