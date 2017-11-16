@@ -14,18 +14,18 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 
-import com.nepxion.aquarius.cache.context.MyContextAware2;
 import com.nepxion.aquarius.cache.service.MyService5;
 import com.nepxion.aquarius.cache.service.MyService6Impl;
+import com.nepxion.aquarius.common.context.AquariusContextAware;
 
 @EnableAutoConfiguration
 @ComponentScan(basePackages = { "com.nepxion.aquarius.cache" })
-public class MyApplication3 {
+public class CacheApplication {
     public static void main(String[] args) throws Exception {
-        SpringApplication.run(MyApplication3.class, args);
+        SpringApplication.run(CacheApplication.class, args);
 
         // 下面步骤请一步步操作，然后结合Redis Desktop Manager等工具查看效果
-        MyService5 myService5 = MyContextAware2.getBean(MyService5.class);
+        MyService5 myService5 = AquariusContextAware.getBean(MyService5.class);
 
         // 新增缓存Key为M-N，Value为A到Redis
         myService5.doA("M", "N");
@@ -36,7 +36,7 @@ public class MyApplication3 {
         // 清除缓存Key为M-N到Redis
         // myService5.doC("M", "N");
 
-        MyService6Impl myService6 = MyContextAware2.getBean(MyService6Impl.class);
+        MyService6Impl myService6 = AquariusContextAware.getBean(MyService6Impl.class);
 
         // 新增缓存Key为X-Y，Value为D到Redis
         myService6.doD("X", "Y");
