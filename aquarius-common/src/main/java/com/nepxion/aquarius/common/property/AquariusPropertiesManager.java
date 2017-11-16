@@ -23,25 +23,9 @@ import com.nepxion.aquarius.common.constant.AquariusConstant;
 public class AquariusPropertiesManager {
     private static final Logger LOG = LoggerFactory.getLogger(AquariusPropertiesManager.class);
 
-    static {
-        System.out.println("");
-        System.out.println("╔═══╗");
-        System.out.println("║╔═╗║");
-        System.out.println("║║ ║╠══╦╗╔╦══╦═╦╦╗╔╦══╗");
-        System.out.println("║╚═╝║╔╗║║║║╔╗║╔╬╣║║║══╣");
-        System.out.println("║╔═╗║╚╝║╚╝║╔╗║║║║╚╝╠══║");
-        System.out.println("╚╝─╚╩═╗╠══╩╝╚╩╝╚╩══╩══╝");
-        System.out.println("      ║║");
-        System.out.println("      ╚╝");
-        System.out.println("Nepxion Aquarius  v1.0.0.RELEASE");
-        System.out.println("");
-    }
-
     @Bean
     public AquariusProperties properties() {
         try {
-            LOG.info("Start to read {}...", AquariusConstant.CONFIG_FILE);
-
             AquariusContent content = new AquariusContent(AquariusConstant.CONFIG_FILE);
 
             return new AquariusProperties(content.getContent());
