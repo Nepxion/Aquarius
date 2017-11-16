@@ -22,9 +22,7 @@ import org.springframework.stereotype.Component;
 import com.nepxion.aquarius.cache.annotation.CacheEvict;
 import com.nepxion.aquarius.cache.annotation.CachePut;
 import com.nepxion.aquarius.cache.annotation.Cacheable;
-import com.nepxion.aquarius.cache.constant.CacheConstant;
 import com.nepxion.aquarius.cache.delegate.CacheDelegate;
-import com.nepxion.aquarius.common.context.AquariusContextAware;
 import com.nepxion.matrix.aop.DefaultAutoScanProxy;
 import com.nepxion.matrix.mode.ProxyMode;
 import com.nepxion.matrix.mode.ScanMode;
@@ -42,10 +40,8 @@ public class CacheAutoScanProxy extends DefaultAutoScanProxy {
     @SuppressWarnings("rawtypes")
     private Class[] methodAnnotations;
 
-    private CacheDelegate cacheDelegate;
-
     @Autowired
-    private AquariusContextAware contextAware;
+    private CacheDelegate cacheDelegate;
 
     public CacheAutoScanProxy() {
         super(SCAN_PACKAGES, ProxyMode.BY_METHOD_ANNOTATION_ONLY, ScanMode.FOR_METHOD_ANNOTATION_ONLY);
@@ -53,7 +49,6 @@ public class CacheAutoScanProxy extends DefaultAutoScanProxy {
 
     @PostConstruct
     public void initialize() {
-        cacheDelegate = contextAware.getBeanByKey(CacheConstant.DELEGATE, CacheDelegate.class);
         cacheDelegate.initialize();
     }
 

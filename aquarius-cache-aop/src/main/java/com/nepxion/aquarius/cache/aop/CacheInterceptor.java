@@ -24,10 +24,8 @@ import org.springframework.stereotype.Component;
 import com.nepxion.aquarius.cache.annotation.CacheEvict;
 import com.nepxion.aquarius.cache.annotation.CachePut;
 import com.nepxion.aquarius.cache.annotation.Cacheable;
-import com.nepxion.aquarius.cache.constant.CacheConstant;
 import com.nepxion.aquarius.cache.delegate.CacheDelegate;
 import com.nepxion.aquarius.common.constant.AquariusConstant;
-import com.nepxion.aquarius.common.context.AquariusContextAware;
 import com.nepxion.aquarius.common.exception.AquariusException;
 import com.nepxion.aquarius.common.property.AquariusProperties;
 import com.nepxion.matrix.aop.AbstractInterceptor;
@@ -36,10 +34,8 @@ import com.nepxion.matrix.aop.AbstractInterceptor;
 public class CacheInterceptor extends AbstractInterceptor {
     private static final Logger LOG = LoggerFactory.getLogger(CacheInterceptor.class);
 
-    private CacheDelegate cacheDelegate;
-
     @Autowired
-    private AquariusContextAware contextAware;
+    private CacheDelegate cacheDelegate;
 
     @Autowired
     private AquariusProperties properties;
@@ -48,8 +44,6 @@ public class CacheInterceptor extends AbstractInterceptor {
 
     @PostConstruct
     public void initialize() {
-        cacheDelegate = contextAware.getBeanByKey(CacheConstant.DELEGATE, CacheDelegate.class);
-
         prefix = properties.getString(AquariusConstant.NAMESPACE);
     }
 

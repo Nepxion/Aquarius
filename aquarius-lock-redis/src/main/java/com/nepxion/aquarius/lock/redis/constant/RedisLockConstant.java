@@ -1,4 +1,4 @@
-package com.nepxion.aquarius.cache.constant;
+package com.nepxion.aquarius.lock.redis.constant;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
@@ -10,6 +10,6 @@ package com.nepxion.aquarius.cache.constant;
  * @version 1.0
  */
 
-public class CacheConstant {
-    public static final String DELEGATE_KEY = "cacheDelegate";
+public class RedisLockConstant {
+    public static final String DELEGATE_VALUE = "redisLockDelegate";
 }

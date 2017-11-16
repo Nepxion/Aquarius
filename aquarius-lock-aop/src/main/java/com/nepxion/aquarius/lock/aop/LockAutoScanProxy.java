@@ -19,11 +19,9 @@ import org.aopalliance.intercept.MethodInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.nepxion.aquarius.common.context.AquariusContextAware;
 import com.nepxion.aquarius.lock.annotation.Lock;
 import com.nepxion.aquarius.lock.annotation.ReadLock;
 import com.nepxion.aquarius.lock.annotation.WriteLock;
-import com.nepxion.aquarius.lock.constant.LockConstant;
 import com.nepxion.aquarius.lock.delegate.LockDelegate;
 import com.nepxion.matrix.aop.DefaultAutoScanProxy;
 import com.nepxion.matrix.mode.ProxyMode;
@@ -42,10 +40,8 @@ public class LockAutoScanProxy extends DefaultAutoScanProxy {
     @SuppressWarnings("rawtypes")
     private Class[] methodAnnotations;
 
-    private LockDelegate lockDelegate;
-
     @Autowired
-    private AquariusContextAware contextAware;
+    private LockDelegate lockDelegate;
 
     public LockAutoScanProxy() {
         super(SCAN_PACKAGES, ProxyMode.BY_METHOD_ANNOTATION_ONLY, ScanMode.FOR_METHOD_ANNOTATION_ONLY);
@@ -53,7 +49,6 @@ public class LockAutoScanProxy extends DefaultAutoScanProxy {
 
     @PostConstruct
     public void initialize() {
-        lockDelegate = contextAware.getBeanByKey(LockConstant.DELEGATE, LockDelegate.class);
         lockDelegate.initialize();
     }
 

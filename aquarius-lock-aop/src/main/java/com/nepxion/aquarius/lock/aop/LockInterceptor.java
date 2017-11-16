@@ -23,13 +23,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.nepxion.aquarius.common.constant.AquariusConstant;
-import com.nepxion.aquarius.common.context.AquariusContextAware;
 import com.nepxion.aquarius.common.exception.AquariusException;
 import com.nepxion.aquarius.common.property.AquariusProperties;
 import com.nepxion.aquarius.lock.annotation.Lock;
 import com.nepxion.aquarius.lock.annotation.ReadLock;
 import com.nepxion.aquarius.lock.annotation.WriteLock;
-import com.nepxion.aquarius.lock.constant.LockConstant;
 import com.nepxion.aquarius.lock.delegate.LockDelegate;
 import com.nepxion.aquarius.lock.entity.LockType;
 import com.nepxion.matrix.aop.AbstractInterceptor;
@@ -38,10 +36,8 @@ import com.nepxion.matrix.aop.AbstractInterceptor;
 public class LockInterceptor extends AbstractInterceptor {
     private static final Logger LOG = LoggerFactory.getLogger(LockInterceptor.class);
 
-    private LockDelegate lockDelegate;
-
     @Autowired
-    private AquariusContextAware contextAware;
+    private LockDelegate lockDelegate;
 
     @Autowired
     private AquariusProperties properties;
@@ -50,8 +46,6 @@ public class LockInterceptor extends AbstractInterceptor {
 
     @PostConstruct
     public void initialize() {
-        lockDelegate = contextAware.getBeanByKey(LockConstant.DELEGATE, LockDelegate.class);
-
         prefix = properties.getString(AquariusConstant.NAMESPACE);
     }
 
