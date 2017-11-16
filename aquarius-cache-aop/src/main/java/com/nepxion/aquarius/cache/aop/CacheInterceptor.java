@@ -44,8 +44,6 @@ public class CacheInterceptor extends AbstractInterceptor {
 
     @PostConstruct
     public void initialize() {
-        LOG.info("Cache delegate instance is {}...", cacheDelegate.getClass());
-
         prefix = properties.getString(AquariusConstant.NAMESPACE);
     }
 

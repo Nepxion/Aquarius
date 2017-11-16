@@ -18,6 +18,20 @@ import org.springframework.stereotype.Component;
 public class AquariusContextAware implements ApplicationContextAware {
     private static ApplicationContext applicationContext;
 
+    static {
+        System.out.println("");
+        System.out.println("╔═══╗");
+        System.out.println("║╔═╗║");
+        System.out.println("║║ ║╠══╦╗╔╦══╦═╦╦╗╔╦══╗");
+        System.out.println("║╚═╝║╔╗║║║║╔╗║╔╬╣║║║══╣");
+        System.out.println("║╔═╗║╚╝║╚╝║╔╗║║║║╚╝╠══║");
+        System.out.println("╚╝─╚╩═╗╠══╩╝╚╩╝╚╩══╩══╝");
+        System.out.println("      ║║");
+        System.out.println("      ╚╝");
+        System.out.println("Nepxion Aquarius  v1.0.0.RELEASE");
+        System.out.println("");
+    }
+
     private AquariusContextAware() {
     }
 
