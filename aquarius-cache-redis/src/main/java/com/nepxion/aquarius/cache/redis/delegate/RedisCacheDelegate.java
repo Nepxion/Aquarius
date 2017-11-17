@@ -18,12 +18,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 
 import com.nepxion.aquarius.cache.delegate.CacheDelegate;
 import com.nepxion.aquarius.common.constant.AquariusConstant;
-import com.nepxion.aquarius.common.property.AquariusProperties;
 
 public class RedisCacheDelegate implements CacheDelegate {
     private static final Logger LOG = LoggerFactory.getLogger(RedisCacheDelegate.class);
@@ -32,14 +32,12 @@ public class RedisCacheDelegate implements CacheDelegate {
     @Qualifier("aquariusRedisTemplate")
     private RedisTemplate<String, Object> redisTemplate;
 
-    @Autowired
-    private AquariusProperties properties;
-
+    @Value("${" + AquariusConstant.PREFIX + "}")
     private String prefix;
 
     @Override
     public void initialize() {
-        prefix = properties.getString(AquariusConstant.NAMESPACE);
+
     }
 
     @Override

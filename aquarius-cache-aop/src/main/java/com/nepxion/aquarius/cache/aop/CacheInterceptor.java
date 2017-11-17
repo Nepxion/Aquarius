@@ -12,13 +12,12 @@ package com.nepxion.aquarius.cache.aop;
 
 import java.lang.reflect.Method;
 
-import javax.annotation.PostConstruct;
-
 import org.aopalliance.intercept.MethodInvocation;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.nepxion.aquarius.cache.annotation.CacheEvict;
@@ -27,7 +26,6 @@ import com.nepxion.aquarius.cache.annotation.Cacheable;
 import com.nepxion.aquarius.cache.delegate.CacheDelegate;
 import com.nepxion.aquarius.common.constant.AquariusConstant;
 import com.nepxion.aquarius.common.exception.AquariusException;
-import com.nepxion.aquarius.common.property.AquariusProperties;
 import com.nepxion.matrix.aop.AbstractInterceptor;
 
 @Component("cacheInterceptor")
@@ -37,15 +35,8 @@ public class CacheInterceptor extends AbstractInterceptor {
     @Autowired
     private CacheDelegate cacheDelegate;
 
-    @Autowired
-    private AquariusProperties properties;
-
+    @Value("${" + AquariusConstant.PREFIX + "}")
     private String prefix;
-
-    @PostConstruct
-    public void initialize() {
-        prefix = properties.getString(AquariusConstant.NAMESPACE);
-    }
 
     @Override
     public Object invoke(MethodInvocation invocation) throws Throwable {

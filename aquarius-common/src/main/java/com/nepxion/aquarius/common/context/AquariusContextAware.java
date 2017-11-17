@@ -12,14 +12,11 @@ package com.nepxion.aquarius.common.context;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.ResolvableType;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
-
-import com.nepxion.aquarius.common.property.AquariusProperties;
 
 @Component("contextAware")
 public class AquariusContextAware implements ApplicationContextAware {
@@ -39,9 +36,6 @@ public class AquariusContextAware implements ApplicationContextAware {
         System.out.println("");
     }
 
-    @Autowired
-    private AquariusProperties properties;
-
     private AquariusContextAware() {
     }
 
@@ -52,18 +46,6 @@ public class AquariusContextAware implements ApplicationContextAware {
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) {
         AquariusContextAware.setContext(applicationContext);
-    }
-
-    public Object getBeanByKey(String keyName) {
-        String beanName = properties.getString(keyName);
-
-        return getBean(beanName);
-    }
-
-    public <T> T getBeanByKey(String keyName, Class<T> requiredType) {
-        String beanName = properties.getString(keyName);
-
-        return getBean(beanName, requiredType);
     }
 
     public static Object getBean(String name) throws BeansException {

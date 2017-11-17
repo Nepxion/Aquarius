@@ -15,8 +15,6 @@ import org.springframework.context.annotation.Condition;
 import org.springframework.context.annotation.ConditionContext;
 import org.springframework.core.type.AnnotatedTypeMetadata;
 
-import com.nepxion.aquarius.common.property.AquariusProperties;
-
 public class AquariusCondition implements Condition {
     private String key;
     private String value;
@@ -28,9 +26,7 @@ public class AquariusCondition implements Condition {
 
     @Override
     public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
-        AquariusProperties properties = context.getBeanFactory().getBean(AquariusProperties.class);
-
-        String beanName = properties.getString(key);
+        String beanName = context.getEnvironment().getProperty(key);
 
         return StringUtils.equals(beanName, value);
     }

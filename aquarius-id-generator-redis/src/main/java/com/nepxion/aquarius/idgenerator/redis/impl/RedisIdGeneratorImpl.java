@@ -19,6 +19,7 @@ import javax.annotation.PostConstruct;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.data.redis.core.script.RedisScript;
@@ -37,15 +38,8 @@ public class RedisIdGeneratorImpl implements RedisIdGenerator {
     @Qualifier("aquariusRedisTemplate")
     private RedisTemplate<String, Object> redisTemplate;
 
-    @Autowired
-    private AquariusProperties properties;
-
+    @Value("${" + AquariusConstant.PREFIX + "}")
     private String prefix;
-
-    @PostConstruct
-    public void initialize() {
-        prefix = properties.getString(AquariusConstant.NAMESPACE);
-    }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
