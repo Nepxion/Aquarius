@@ -21,7 +21,7 @@ import com.nepxion.aquarius.lock.zookeeper.constant.ZookeeperLockConstant;
 import com.nepxion.aquarius.lock.zookeeper.delegate.ZookeeperLockDelegate;
 
 @Configuration
-@ComponentScan(basePackages = { "com.nepxion.aquarius.common" })
+@ComponentScan(basePackages = { "com.nepxion.aquarius.common.context" })
 public class ZookeeperLockConfig {
     @Bean(name = ZookeeperLockConstant.DELEGATE_VALUE)
     @Conditional(ZookeeperLockCondition.class)

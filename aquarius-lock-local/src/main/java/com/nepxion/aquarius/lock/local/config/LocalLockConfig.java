@@ -21,7 +21,7 @@ import com.nepxion.aquarius.lock.local.constant.LocalLockConstant;
 import com.nepxion.aquarius.lock.local.delegate.LocalLockDelegate;
 
 @Configuration
-@ComponentScan(basePackages = { "com.nepxion.aquarius.common" })
+@ComponentScan(basePackages = { "com.nepxion.aquarius.common.context" })
 public class LocalLockConfig {
     @Bean(name = LocalLockConstant.DELEGATE_VALUE)
     @Conditional(LocalLockCondition.class)
