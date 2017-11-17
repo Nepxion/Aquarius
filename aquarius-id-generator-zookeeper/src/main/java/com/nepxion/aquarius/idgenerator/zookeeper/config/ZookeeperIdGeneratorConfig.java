@@ -14,7 +14,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ComponentScan(basePackages = { "com.nepxion.aquarius.common" })
+@ComponentScan(basePackages = { "com.nepxion.aquarius.common.context" })
 public class ZookeeperIdGeneratorConfig {
 
 }

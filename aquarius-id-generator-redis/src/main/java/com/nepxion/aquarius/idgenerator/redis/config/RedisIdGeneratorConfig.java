@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 @Configuration
-@ComponentScan(basePackages = { "com.nepxion.aquarius.common" })
+@ComponentScan(basePackages = { "com.nepxion.aquarius.common.context" })
 @Import({ com.nepxion.aquarius.common.redis.config.RedisConfig.class })
 public class RedisIdGeneratorConfig {
 

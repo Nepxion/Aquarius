@@ -21,7 +21,7 @@ import com.nepxion.aquarius.lock.redis.constant.RedisLockConstant;
 import com.nepxion.aquarius.lock.redis.delegate.RedisLockDelegate;
 
 @Configuration
-@ComponentScan(basePackages = { "com.nepxion.aquarius.common" })
+@ComponentScan(basePackages = { "com.nepxion.aquarius.common.context" })
 public class RedisLockConfig {
     @Bean(name = RedisLockConstant.DELEGATE_VALUE)
     @Conditional(RedisLockCondition.class)

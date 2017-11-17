@@ -17,7 +17,7 @@ import org.apache.curator.framework.CuratorFramework;
 import org.apache.zookeeper.CreateMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.nepxion.aquarius.common.constant.AquariusConstant;
@@ -31,11 +31,9 @@ import com.nepxion.aquarius.idgenerator.zookeeper.ZookeeperIdGenerator;
 public class ZookeeperIdGeneratorImpl implements ZookeeperIdGenerator {
     private static final Logger LOG = LoggerFactory.getLogger(ZookeeperIdGeneratorImpl.class);
 
-    @Autowired
-    private AquariusProperties properties;
-
     private CuratorFramework curator;
 
+    @Value("${" + AquariusConstant.PREFIX + "}")
     private String prefix;
 
     @PostConstruct
@@ -44,7 +42,6 @@ public class ZookeeperIdGeneratorImpl implements ZookeeperIdGenerator {
             AquariusProperties config = CuratorHandler.createPropertyConfig(CuratorConstant.CONFIG_FILE);
             curator = CuratorHandler.createCurator(config);
 
-            prefix = properties.getString(AquariusConstant.NAMESPACE);
             if (!CuratorHandler.pathExist(curator, "/" + prefix)) {
                 CuratorHandler.createPath(curator, "/" + prefix, CreateMode.PERSISTENT);
             }

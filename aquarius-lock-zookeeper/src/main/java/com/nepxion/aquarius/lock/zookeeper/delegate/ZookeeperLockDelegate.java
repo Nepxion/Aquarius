@@ -21,7 +21,7 @@ import org.apache.curator.framework.recipes.locks.InterProcessReadWriteLock;
 import org.apache.zookeeper.CreateMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 import com.nepxion.aquarius.common.constant.AquariusConstant;
 import com.nepxion.aquarius.common.curator.constant.CuratorConstant;
@@ -34,11 +34,9 @@ import com.nepxion.aquarius.lock.entity.LockType;
 public class ZookeeperLockDelegate implements LockDelegate {
     private static final Logger LOG = LoggerFactory.getLogger(ZookeeperLockDelegate.class);
 
-    @Autowired
-    private AquariusProperties properties;
-
     private CuratorFramework curator;
 
+    @Value("${" + AquariusConstant.PREFIX + "}")
     private String prefix;
 
     // 可重入锁可重复使用
@@ -52,7 +50,6 @@ public class ZookeeperLockDelegate implements LockDelegate {
             AquariusProperties config = CuratorHandler.createPropertyConfig(CuratorConstant.CONFIG_FILE);
             curator = CuratorHandler.createCurator(config);
 
-            prefix = properties.getString(AquariusConstant.NAMESPACE);
             if (!CuratorHandler.pathExist(curator, "/" + prefix)) {
                 CuratorHandler.createPath(curator, "/" + prefix, CreateMode.PERSISTENT);
             }
