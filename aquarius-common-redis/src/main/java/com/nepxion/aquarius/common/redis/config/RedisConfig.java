@@ -16,7 +16,7 @@ import org.springframework.context.annotation.ImportResource;
 import com.nepxion.aquarius.common.redis.constant.RedisConstant;
 
 @Configuration
-@ImportResource(locations = { "classpath*:" + RedisConstant.CONFIG_FILE, "file:" + RedisConstant.CONFIG_FILE })
+@ImportResource(locations = { "classpath*:" + RedisConstant.CONFIG_FILE })
 // @ImportResource(locations = { "classpath*:" + RedisConstant.CONFIG_FILE, "file:" + RedisConstant.CONFIG_FILE })
 public class RedisConfig {
 
