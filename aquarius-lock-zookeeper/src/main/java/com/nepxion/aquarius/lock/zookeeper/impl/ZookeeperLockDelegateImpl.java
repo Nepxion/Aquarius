@@ -85,10 +85,6 @@ public class ZookeeperLockDelegateImpl implements LockDelegate {
             throw new AquariusException("Async lock of Zookeeper isn't support for " + lockType);
         }
 
-        return invokeLock(invocation, lockType, key, leaseTime, waitTime);
-    }
-
-    private Object invokeLock(MethodInvocation invocation, LockType lockType, String key, long leaseTime, long waitTime) throws Throwable {
         InterProcessMutex interProcessMutex = null;
         try {
             interProcessMutex = getLock(lockType, key);
