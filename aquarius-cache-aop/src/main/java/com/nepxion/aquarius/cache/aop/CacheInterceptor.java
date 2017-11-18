@@ -26,6 +26,7 @@ import com.nepxion.aquarius.cache.annotation.Cacheable;
 import com.nepxion.aquarius.cache.delegate.CacheDelegate;
 import com.nepxion.aquarius.common.constant.AquariusConstant;
 import com.nepxion.aquarius.common.exception.AquariusException;
+import com.nepxion.aquarius.common.util.KeyUtil;
 import com.nepxion.matrix.aop.AbstractInterceptor;
 
 @Component("cacheInterceptor")
@@ -107,14 +108,15 @@ public class CacheInterceptor extends AbstractInterceptor {
             throw new AquariusException("Annotation [Cacheable]'s key is null or empty");
         }
 
-        String spelKey = getSpelKey(invocation, prefix, name, key);
+        String spelKey = getSpelKey(invocation, key);
+        String compositeKey = KeyUtil.getCompositeKey(prefix, name, spelKey);
         String proxyType = getProxyType(invocation);
         String proxiedClassName = getProxiedClassName(invocation);
         String methodName = getMethodName(invocation);
 
-        LOG.info("Intercepted for annotation - Cacheable [name={}, key={}, expire={}, proxyType={}, proxiedClass={}, method={}]", name, spelKey, expire, proxyType, proxiedClassName, methodName);
+        LOG.info("Intercepted for annotation - Cacheable [name={}, key={}, expire={}, proxyType={}, proxiedClass={}, method={}]", name, compositeKey, expire, proxyType, proxiedClassName, methodName);
 
-        return cacheDelegate.invokeCacheable(invocation, spelKey, expire);
+        return cacheDelegate.invokeCacheable(invocation, compositeKey, expire);
     }
 
     private Object invokeCachePut(MethodInvocation invocation, String name, String key, long expire) throws Throwable {
@@ -126,14 +128,15 @@ public class CacheInterceptor extends AbstractInterceptor {
             throw new AquariusException("Annotation [CachePut]'s key is null or empty");
         }
 
-        String spelKey = getSpelKey(invocation, prefix, name, key);
+        String spelKey = getSpelKey(invocation, key);
+        String compositeKey = KeyUtil.getCompositeKey(prefix, name, spelKey);
         String proxyType = getProxyType(invocation);
         String proxiedClassName = getProxiedClassName(invocation);
         String methodName = getMethodName(invocation);
 
-        LOG.info("Intercepted for annotation - CachePut [name={}, key={}, expire={}, proxyType={}, proxiedClass={}, method={}]", name, spelKey, expire, proxyType, proxiedClassName, methodName);
+        LOG.info("Intercepted for annotation - CachePut [name={}, key={}, expire={}, proxyType={}, proxiedClass={}, method={}]", name, compositeKey, expire, proxyType, proxiedClassName, methodName);
 
-        return cacheDelegate.invokeCachePut(invocation, spelKey, expire);
+        return cacheDelegate.invokeCachePut(invocation, compositeKey, expire);
     }
 
     private Object invokeCacheEvict(MethodInvocation invocation, String name, String key, boolean allEntries, boolean beforeInvocation) throws Throwable {
@@ -145,13 +148,14 @@ public class CacheInterceptor extends AbstractInterceptor {
             throw new AquariusException("Annotation [CacheEvict]'s key is null or empty");
         }
 
-        String spelKey = getSpelKey(invocation, prefix, name, key);
+        String spelKey = getSpelKey(invocation, key);
+        String compositeKey = KeyUtil.getCompositeKey(prefix, name, spelKey);
         String proxyType = getProxyType(invocation);
         String proxiedClassName = getProxiedClassName(invocation);
         String methodName = getMethodName(invocation);
 
-        LOG.info("Intercepted for annotation - CacheEvict [name={}, key={}, allEntries={}, beforeInvocation={}, proxyType={}, proxiedClass={}, method={}]", name, spelKey, allEntries, beforeInvocation, proxyType, proxiedClassName, methodName);
+        LOG.info("Intercepted for annotation - CacheEvict [name={}, key={}, allEntries={}, beforeInvocation={}, proxyType={}, proxiedClass={}, method={}]", name, compositeKey, allEntries, beforeInvocation, proxyType, proxiedClassName, methodName);
 
-        return cacheDelegate.invokeCacheEvict(invocation, spelKey, name, allEntries, beforeInvocation);
+        return cacheDelegate.invokeCacheEvict(invocation, compositeKey, name, allEntries, beforeInvocation);
     }
 }

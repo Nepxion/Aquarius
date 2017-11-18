@@ -24,6 +24,7 @@ import org.springframework.stereotype.Component;
 
 import com.nepxion.aquarius.common.constant.AquariusConstant;
 import com.nepxion.aquarius.common.exception.AquariusException;
+import com.nepxion.aquarius.common.util.KeyUtil;
 import com.nepxion.aquarius.limit.redis.RedisLimit;
 
 @Component("redisLimitImpl")
@@ -50,8 +51,8 @@ public class RedisLimitImpl implements RedisLimit {
         }
 
         List<String> keys = new ArrayList<String>();
-        String spelKey = getSpelKey(name, key);
-        keys.add(spelKey);
+        String compositeKey = KeyUtil.getCompositeKey(prefix, name, key);
+        keys.add(compositeKey);
 
         String luaScript = buildLuaScript(limitLockEnabled);
 
@@ -80,9 +81,5 @@ public class RedisLimitImpl implements RedisLimit {
         lua.append("\nreturn c;");
 
         return lua.toString();
-    }
-
-    private String getSpelKey(String name, String key) {
-        return prefix + "_" + name + "_" + key;
     }
 }

@@ -26,6 +26,7 @@ import org.springframework.stereotype.Component;
 import com.nepxion.aquarius.common.constant.AquariusConstant;
 import com.nepxion.aquarius.common.exception.AquariusException;
 import com.nepxion.aquarius.common.util.DateUtil;
+import com.nepxion.aquarius.common.util.KeyUtil;
 import com.nepxion.aquarius.common.util.StringUtil;
 import com.nepxion.aquarius.idgenerator.redis.RedisIdGenerator;
 
@@ -50,8 +51,8 @@ public class RedisIdGeneratorImpl implements RedisIdGenerator {
         }
 
         List<String> keys = new ArrayList<String>();
-        String spelKey = getSpelKey(name, key);
-        keys.add(spelKey);
+        String compositeKey = KeyUtil.getCompositeKey(prefix, name, key);
+        keys.add(compositeKey);
 
         String luaScript = buildLuaScript();
 
@@ -81,9 +82,5 @@ public class RedisIdGeneratorImpl implements RedisIdGenerator {
         lua.append("\nreturn {now[1], now[2], count}");
 
         return lua.toString();
-    }
-
-    private String getSpelKey(String name, String key) {
-        return prefix + "_" + name + "_" + key;
     }
 }

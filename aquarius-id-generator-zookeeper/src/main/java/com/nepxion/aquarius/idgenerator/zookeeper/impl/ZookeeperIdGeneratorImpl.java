@@ -25,6 +25,7 @@ import com.nepxion.aquarius.common.curator.constant.CuratorConstant;
 import com.nepxion.aquarius.common.curator.handler.CuratorHandler;
 import com.nepxion.aquarius.common.exception.AquariusException;
 import com.nepxion.aquarius.common.property.AquariusProperties;
+import com.nepxion.aquarius.common.util.KeyUtil;
 import com.nepxion.aquarius.idgenerator.zookeeper.ZookeeperIdGenerator;
 
 @Component("zookeeperIdGeneratorImpl")
@@ -75,6 +76,8 @@ public class ZookeeperIdGeneratorImpl implements ZookeeperIdGenerator {
     }
 
     private String getPath(String name, String key) {
-        return "/" + prefix + "/" + prefix + "_" + name + "_" + key;
+        String compositeKey = KeyUtil.getCompositeKey(prefix, name, key);
+
+        return "/" + prefix + "/" + compositeKey;
     }
 }

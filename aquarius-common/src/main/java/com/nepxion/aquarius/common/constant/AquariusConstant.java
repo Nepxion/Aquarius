@@ -15,6 +15,4 @@ public class AquariusConstant {
     public static final String ENCODING_GBK = "GBK";
 
     public static final String PREFIX = "prefix";
-
-    public static final String CONFIG_FILE = "config.properties";
 }

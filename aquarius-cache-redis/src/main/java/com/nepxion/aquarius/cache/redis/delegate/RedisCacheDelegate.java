@@ -24,6 +24,7 @@ import org.springframework.data.redis.core.ValueOperations;
 
 import com.nepxion.aquarius.cache.delegate.CacheDelegate;
 import com.nepxion.aquarius.common.constant.AquariusConstant;
+import com.nepxion.aquarius.common.util.KeyUtil;
 
 public class RedisCacheDelegate implements CacheDelegate {
     private static final Logger LOG = LoggerFactory.getLogger(RedisCacheDelegate.class);
@@ -131,16 +132,16 @@ public class RedisCacheDelegate implements CacheDelegate {
     }
 
     private void clear(String key, String name, boolean allEntries) {
+        String compositeWildcardKey = null;
         if (allEntries) {
-            Set<String> keys = redisTemplate.keys(prefix + "_" + name + "*");
-            for (String k : keys) {
-                redisTemplate.delete(k);
-            }
+            compositeWildcardKey = KeyUtil.getCompositeWildcardKey(prefix, name);
         } else {
-            Set<String> keys = redisTemplate.keys(key + "*");
-            for (String k : keys) {
-                redisTemplate.delete(k);
-            }
+            compositeWildcardKey = KeyUtil.getCompositeWildcardKey(key);
+        }
+
+        Set<String> keys = redisTemplate.keys(compositeWildcardKey);
+        for (String k : keys) {
+            redisTemplate.delete(k);
         }
     }
 }
