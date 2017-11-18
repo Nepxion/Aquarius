@@ -28,7 +28,7 @@ public class MyService1Impl implements MyService1 {
             e.printStackTrace();
         }
 
-        LOG.info("doA");
+        LOG.info("doA - lock is got");
 
         return "A";
     }

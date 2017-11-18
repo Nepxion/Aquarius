@@ -25,12 +25,12 @@ public class MyService2Impl {
     @Lock(name = "lock", key = "#id1 + \"-\" + #id2", leaseTime = 5000L, waitTime = 60000L, async = false, fair = false)
     public String doC(String id1, String id2) {
         try {
-            TimeUnit.MILLISECONDS.sleep(4000L);
+            TimeUnit.MILLISECONDS.sleep(2000L);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        LOG.info("doC");
+        LOG.info("doC - lock is got");
 
         return "C";
     }

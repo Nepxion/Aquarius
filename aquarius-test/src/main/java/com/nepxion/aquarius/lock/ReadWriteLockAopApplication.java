@@ -37,7 +37,7 @@ public class ReadWriteLockAopApplication {
         timer1.scheduleAtFixedRate(new TimerTask() {
             public void run() {
                 LOG.info("Start to get write lock...");
-                // 写锁逻辑，最高15秒，睡眠10秒，10秒后释放读锁
+                // 写锁逻辑，最高持锁15秒，睡眠10秒，10秒后释放读锁
                 myService4.doW("X", "Y");
             }
         }, 0L, 600000L);

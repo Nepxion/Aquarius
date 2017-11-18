@@ -28,7 +28,7 @@ public class MyService3Impl implements MyService3 {
             e.printStackTrace();
         }
 
-        LOG.info("doR");
+        LOG.info("doR - read lock is got");
 
         return "R";
     }

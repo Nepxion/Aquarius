@@ -12,4 +12,6 @@ package com.nepxion.aquarius.lock.local.constant;
 
 public class LocalLockConstant {
     public static final String DELEGATE_VALUE = "localLockDelegate";
+
+    public static final String EXECUTOR_VALUE = "localLockExecutor";
 }
