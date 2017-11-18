@@ -14,6 +14,9 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+
 import org.aopalliance.intercept.MethodInvocation;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.recipes.locks.InterProcessMutex;
@@ -44,7 +47,7 @@ public class ZookeeperLockDelegate implements LockDelegate {
     private volatile Map<String, InterProcessReadWriteLock> readWriteLockMap = new ConcurrentHashMap<String, InterProcessReadWriteLock>();
     private boolean lockCached = true;
 
-    @Override
+    @PostConstruct
     public void initialize() {
         try {
             AquariusProperties config = CuratorHandler.createPropertyConfig(CuratorConstant.CONFIG_FILE);
@@ -59,7 +62,7 @@ public class ZookeeperLockDelegate implements LockDelegate {
         }
     }
 
-    @Override
+    @PreDestroy
     public void destroy() {
         CuratorHandler.closeCurator(curator);
     }

@@ -40,16 +40,6 @@ public class RedisCacheDelegate implements CacheDelegate {
     private Boolean frequentLogPrint;
 
     @Override
-    public void initialize() {
-
-    }
-
-    @Override
-    public void destroy() {
-
-    }
-
-    @Override
     public Object invokeCacheable(MethodInvocation invocation, String key, long expire) throws Throwable {
         ValueOperations<String, Object> valueOperations = redisTemplate.opsForValue();
 

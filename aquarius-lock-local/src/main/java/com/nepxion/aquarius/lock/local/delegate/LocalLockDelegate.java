@@ -31,16 +31,6 @@ public class LocalLockDelegate implements LockDelegate {
     private boolean lockCached = true;
 
     @Override
-    public void initialize() {
-
-    }
-
-    @Override
-    public void destroy() {
-
-    }
-
-    @Override
     public Object invoke(MethodInvocation invocation, LockType lockType, String key, long leaseTime, long waitTime, boolean async, boolean fair) throws Throwable {
         if (async) {
             throw new AquariusException("Async lock of Local isn't support for " + lockType);

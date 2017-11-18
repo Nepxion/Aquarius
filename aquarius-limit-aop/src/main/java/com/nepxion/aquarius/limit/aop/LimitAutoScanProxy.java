@@ -12,15 +12,10 @@ package com.nepxion.aquarius.limit.aop;
 
 import java.lang.annotation.Annotation;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-
 import org.aopalliance.intercept.MethodInterceptor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.nepxion.aquarius.limit.annotation.Limit;
-import com.nepxion.aquarius.limit.delegate.LimitDelegate;
 import com.nepxion.matrix.aop.DefaultAutoScanProxy;
 import com.nepxion.matrix.mode.ProxyMode;
 import com.nepxion.matrix.mode.ScanMode;
@@ -38,21 +33,8 @@ public class LimitAutoScanProxy extends DefaultAutoScanProxy {
     @SuppressWarnings("rawtypes")
     private Class[] methodAnnotations;
 
-    @Autowired
-    private LimitDelegate limitDelegate;
-
     public LimitAutoScanProxy() {
         super(SCAN_PACKAGES, ProxyMode.BY_METHOD_ANNOTATION_ONLY, ScanMode.FOR_METHOD_ANNOTATION_ONLY);
-    }
-
-    @PostConstruct
-    public void initialize() {
-        limitDelegate.initialize();
-    }
-
-    @PreDestroy
-    public void destory() {
-        limitDelegate.destroy();
     }
 
     @SuppressWarnings("unchecked")

@@ -13,12 +13,6 @@ package com.nepxion.aquarius.cache.delegate;
 import org.aopalliance.intercept.MethodInvocation;
 
 public interface CacheDelegate {
-    // 初始锁上下文
-    void initialize();
-
-    // 销毁锁上下文
-    void destroy();
-
     // 新增缓存
     Object invokeCacheable(MethodInvocation invocation, String key, long expire) throws Throwable;
 

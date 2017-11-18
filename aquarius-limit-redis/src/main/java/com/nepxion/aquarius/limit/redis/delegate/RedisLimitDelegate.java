@@ -22,16 +22,6 @@ public class RedisLimitDelegate implements LimitDelegate {
     private AquariusLimit limit;
 
     @Override
-    public void initialize() {
-
-    }
-
-    @Override
-    public void destroy() {
-
-    }
-
-    @Override
     public Object invoke(MethodInvocation invocation, String key, int limitPeriod, int limitCount) throws Throwable {
         boolean status = limit.tryAccess(key, limitPeriod, limitCount);
         if (status) {

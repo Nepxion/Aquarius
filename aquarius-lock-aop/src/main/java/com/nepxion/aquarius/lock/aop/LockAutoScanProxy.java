@@ -12,17 +12,12 @@ package com.nepxion.aquarius.lock.aop;
 
 import java.lang.annotation.Annotation;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-
 import org.aopalliance.intercept.MethodInterceptor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.nepxion.aquarius.lock.annotation.Lock;
 import com.nepxion.aquarius.lock.annotation.ReadLock;
 import com.nepxion.aquarius.lock.annotation.WriteLock;
-import com.nepxion.aquarius.lock.delegate.LockDelegate;
 import com.nepxion.matrix.aop.DefaultAutoScanProxy;
 import com.nepxion.matrix.mode.ProxyMode;
 import com.nepxion.matrix.mode.ScanMode;
@@ -40,21 +35,8 @@ public class LockAutoScanProxy extends DefaultAutoScanProxy {
     @SuppressWarnings("rawtypes")
     private Class[] methodAnnotations;
 
-    @Autowired
-    private LockDelegate lockDelegate;
-
     public LockAutoScanProxy() {
         super(SCAN_PACKAGES, ProxyMode.BY_METHOD_ANNOTATION_ONLY, ScanMode.FOR_METHOD_ANNOTATION_ONLY);
-    }
-
-    @PostConstruct
-    public void initialize() {
-        lockDelegate.initialize();
-    }
-
-    @PreDestroy
-    public void destory() {
-        lockDelegate.destroy();
     }
 
     @SuppressWarnings("unchecked")

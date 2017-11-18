@@ -13,12 +13,5 @@ package com.nepxion.aquarius.limit.delegate;
 import org.aopalliance.intercept.MethodInvocation;
 
 public interface LimitDelegate {
-    // 初始锁上下文
-    void initialize();
-
-    // 销毁锁上下文
-    void destroy();
-
-    // 方法调用
     Object invoke(MethodInvocation invocation, String key, int limitPeriod, int limitCount) throws Throwable;
 }
