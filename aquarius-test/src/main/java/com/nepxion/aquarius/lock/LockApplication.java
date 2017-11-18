@@ -32,7 +32,6 @@ public class LockApplication {
                 public void run() {
                     myService1.doA("X", "Y");
                 }
-
             }).start();
         }
 
@@ -43,7 +42,6 @@ public class LockApplication {
                 public void run() {
                     myService2.doC("X", "Y");
                 }
-
             }).start();
         }
     }

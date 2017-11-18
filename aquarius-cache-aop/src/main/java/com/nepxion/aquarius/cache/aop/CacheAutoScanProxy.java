@@ -73,6 +73,7 @@ public class CacheAutoScanProxy extends DefaultAutoScanProxy {
         if (methodAnnotations == null) {
             methodAnnotations = new Class[] { Cacheable.class, CacheEvict.class, CachePut.class };
         }
+
         return methodAnnotations;
     }
 }

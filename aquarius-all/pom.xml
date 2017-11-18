@@ -69,6 +69,11 @@
 
         <dependency>
             <groupId>${project.groupId}</groupId>
+            <artifactId>aquarius-limit-aop</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
             <artifactId>aquarius-limit-redis</artifactId>
         </dependency>
     </dependencies>
@@ -101,6 +106,7 @@
                                     <include>nepxion:aquarius-cache-redis</include>
                                     <include>nepxion:aquarius-id-generator-redis</include>
                                     <include>nepxion:aquarius-id-generator-zookeeper</include>
+                                    <include>nepxion:aquarius-limit-aop</include>
                                     <include>nepxion:aquarius-limit-redis</include>
                                 </includes>
                             </artifactSet>

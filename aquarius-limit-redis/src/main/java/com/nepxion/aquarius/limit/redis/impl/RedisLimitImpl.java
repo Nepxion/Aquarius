@@ -45,10 +45,6 @@ public class RedisLimitImpl implements RedisLimit {
 
     @Override
     public boolean tryAccess(String name, String key, int limitPeriod, int limitCount) {
-        return tryAccess(name, key, limitPeriod, limitCount, 0, 0, false);
-    }
-
-    private boolean tryAccess(String name, String key, int limitPeriod, int limitCount, int lockPeriod, int lockCount, boolean limitLockEnabled) {
         if (StringUtils.isEmpty(name)) {
             throw new AquariusException("Name is null or empty");
         }
@@ -57,8 +53,18 @@ public class RedisLimitImpl implements RedisLimit {
             throw new AquariusException("Key is null or empty");
         }
 
-        List<String> keys = new ArrayList<String>();
         String compositeKey = KeyUtil.getCompositeKey(prefix, name, key);
+
+        return tryAccess(compositeKey, limitPeriod, limitCount);
+    }
+
+    @Override
+    public boolean tryAccess(String compositeKey, int limitPeriod, int limitCount) {
+        return tryAccess(compositeKey, limitPeriod, limitCount, 0, 0, false);
+    }
+
+    private boolean tryAccess(String compositeKey, int limitPeriod, int limitCount, int lockPeriod, int lockCount, boolean limitLockEnabled) {
+        List<String> keys = new ArrayList<String>();
         keys.add(compositeKey);
 
         String luaScript = buildLuaScript(limitLockEnabled);

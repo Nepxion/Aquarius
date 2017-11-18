@@ -46,10 +46,8 @@ public class RedisLimitApplication {
                                 e.printStackTrace();
                             }
                         }
-
                     }).start();
                 }
-
             }
         }, 0L, 1000L);
 
@@ -66,10 +64,8 @@ public class RedisLimitApplication {
                                 e.printStackTrace();
                             }
                         }
-
                     }).start();
                 }
-
             }
         }, 0L, 1500L);
     }

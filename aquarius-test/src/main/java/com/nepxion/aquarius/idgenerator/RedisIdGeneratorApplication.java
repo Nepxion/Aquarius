@@ -45,12 +45,10 @@ public class RedisIdGeneratorApplication {
                                 e.printStackTrace();
                             }
                         }
-
                     }).start();
                 }
-
             }
-        }, 0L, 100L);
+        }, 0L, 1000L);
 
         Timer timer2 = new Timer();
         timer2.scheduleAtFixedRate(new TimerTask() {
@@ -65,11 +63,9 @@ public class RedisIdGeneratorApplication {
                                 e.printStackTrace();
                             }
                         }
-
                     }).start();
                 }
-
             }
-        }, 0L, 500L);
+        }, 0L, 1500L);
     }
 }

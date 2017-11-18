@@ -54,7 +54,6 @@ public class ReadWriteLockApplication {
                             // 读锁逻辑，最高持锁5秒，睡眠2秒，2秒后释放读锁
                             myService3.doR("X", "Y");
                         }
-
                     }).start();
                 }
             }

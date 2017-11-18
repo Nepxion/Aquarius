@@ -20,4 +20,6 @@ public interface RedisLimit {
      * @return
      */
     boolean tryAccess(String name, String key, int limitPeriod, int limitCount);
+
+    boolean tryAccess(String compositeKey, int limitPeriod, int limitCount);
 }

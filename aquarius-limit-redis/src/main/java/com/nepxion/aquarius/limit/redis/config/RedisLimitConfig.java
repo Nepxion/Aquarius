@@ -10,11 +10,22 @@ package com.nepxion.aquarius.limit.redis.config;
  * @version 1.0
  */
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+
+import com.nepxion.aquarius.limit.delegate.LimitDelegate;
+import com.nepxion.aquarius.limit.redis.condition.RedisLimitCondition;
+import com.nepxion.aquarius.limit.redis.constant.RedisLimitConstant;
+import com.nepxion.aquarius.limit.redis.delegate.RedisLimitDelegate;
 
 @Configuration
 @Import({ com.nepxion.aquarius.common.config.AquariusConfig.class, com.nepxion.aquarius.common.redis.config.RedisConfig.class })
 public class RedisLimitConfig {
-
+    @Bean(name = RedisLimitConstant.DELEGATE_VALUE)
+    @Conditional(RedisLimitCondition.class)
+    public LimitDelegate redisLimitDelegate() {
+        return new RedisLimitDelegate();
+    }
 }
