@@ -22,14 +22,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.data.redis.core.script.RedisScript;
-import org.springframework.stereotype.Component;
 
 import com.nepxion.aquarius.common.constant.AquariusConstant;
 import com.nepxion.aquarius.common.exception.AquariusException;
 import com.nepxion.aquarius.common.util.KeyUtil;
 import com.nepxion.aquarius.limit.LimitExecutor;
 
-@Component("redisLimitExecutorImpl")
 public class RedisLimitExecutorImpl implements LimitExecutor {
     private static final Logger LOG = LoggerFactory.getLogger(RedisLimitExecutorImpl.class);
 

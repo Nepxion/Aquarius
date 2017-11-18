@@ -12,4 +12,6 @@ package com.nepxion.aquarius.limit.redis.constant;
 
 public class RedisLimitConstant {
     public static final String DELEGATE_VALUE = "redisLimitDelegate";
+
+    public static final String EXECUTOR_VALUE = "redisLimitExecutor";
 }
