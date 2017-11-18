@@ -15,10 +15,10 @@ import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import com.nepxion.aquarius.lock.delegate.LockDelegate;
+import com.nepxion.aquarius.lock.LockDelegate;
 import com.nepxion.aquarius.lock.zookeeper.condition.ZookeeperLockCondition;
 import com.nepxion.aquarius.lock.zookeeper.constant.ZookeeperLockConstant;
-import com.nepxion.aquarius.lock.zookeeper.delegate.ZookeeperLockDelegate;
+import com.nepxion.aquarius.lock.zookeeper.impl.ZookeeperLockDelegateImpl;
 
 @Configuration
 @Import({ com.nepxion.aquarius.common.config.AquariusConfig.class })
@@ -26,6 +26,6 @@ public class ZookeeperLockConfig {
     @Bean(name = ZookeeperLockConstant.DELEGATE_VALUE)
     @Conditional(ZookeeperLockCondition.class)
     public LockDelegate zookeeperLockDelegate() {
-        return new ZookeeperLockDelegate();
+        return new ZookeeperLockDelegateImpl();
     }
 }

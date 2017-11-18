@@ -1,4 +1,4 @@
-package com.nepxion.aquarius.lock.zookeeper.delegate;
+package com.nepxion.aquarius.lock.zookeeper.impl;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
@@ -31,11 +31,11 @@ import com.nepxion.aquarius.common.curator.constant.CuratorConstant;
 import com.nepxion.aquarius.common.curator.handler.CuratorHandler;
 import com.nepxion.aquarius.common.exception.AquariusException;
 import com.nepxion.aquarius.common.property.AquariusProperties;
-import com.nepxion.aquarius.lock.delegate.LockDelegate;
+import com.nepxion.aquarius.lock.LockDelegate;
 import com.nepxion.aquarius.lock.entity.LockType;
 
-public class ZookeeperLockDelegate implements LockDelegate {
-    private static final Logger LOG = LoggerFactory.getLogger(ZookeeperLockDelegate.class);
+public class ZookeeperLockDelegateImpl implements LockDelegate {
+    private static final Logger LOG = LoggerFactory.getLogger(ZookeeperLockDelegateImpl.class);
 
     private CuratorFramework curator;
 

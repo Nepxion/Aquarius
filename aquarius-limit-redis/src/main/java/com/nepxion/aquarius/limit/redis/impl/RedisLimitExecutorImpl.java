@@ -27,11 +27,11 @@ import org.springframework.stereotype.Component;
 import com.nepxion.aquarius.common.constant.AquariusConstant;
 import com.nepxion.aquarius.common.exception.AquariusException;
 import com.nepxion.aquarius.common.util.KeyUtil;
-import com.nepxion.aquarius.limit.AquariusLimit;
+import com.nepxion.aquarius.limit.LimitExecutor;
 
-@Component("redisLimitImpl")
-public class RedisLimitImpl implements AquariusLimit {
-    private static final Logger LOG = LoggerFactory.getLogger(RedisLimitImpl.class);
+@Component("redisLimitExecutorImpl")
+public class RedisLimitExecutorImpl implements LimitExecutor {
+    private static final Logger LOG = LoggerFactory.getLogger(RedisLimitExecutorImpl.class);
 
     @Autowired
     @Qualifier("aquariusRedisTemplate")

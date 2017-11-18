@@ -24,10 +24,10 @@ import org.springframework.stereotype.Component;
 import com.nepxion.aquarius.common.constant.AquariusConstant;
 import com.nepxion.aquarius.common.exception.AquariusException;
 import com.nepxion.aquarius.common.util.KeyUtil;
+import com.nepxion.aquarius.lock.LockDelegate;
 import com.nepxion.aquarius.lock.annotation.Lock;
 import com.nepxion.aquarius.lock.annotation.ReadLock;
 import com.nepxion.aquarius.lock.annotation.WriteLock;
-import com.nepxion.aquarius.lock.delegate.LockDelegate;
 import com.nepxion.aquarius.lock.entity.LockType;
 import com.nepxion.matrix.aop.AbstractInterceptor;
 

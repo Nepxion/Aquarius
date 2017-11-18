@@ -1,4 +1,4 @@
-package com.nepxion.aquarius.lock.local.delegate;
+package com.nepxion.aquarius.lock.local.impl;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
@@ -21,10 +21,10 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import org.aopalliance.intercept.MethodInvocation;
 
 import com.nepxion.aquarius.common.exception.AquariusException;
-import com.nepxion.aquarius.lock.delegate.LockDelegate;
+import com.nepxion.aquarius.lock.LockDelegate;
 import com.nepxion.aquarius.lock.entity.LockType;
 
-public class LocalLockDelegate implements LockDelegate {
+public class LocalLockDelegateImpl implements LockDelegate {
     // 可重入锁可重复使用
     private volatile Map<String, Lock> lockMap = new ConcurrentHashMap<String, Lock>();
     private volatile Map<String, ReadWriteLock> readWriteLockMap = new ConcurrentHashMap<String, ReadWriteLock>();

@@ -1,4 +1,4 @@
-package com.nepxion.aquarius.lock.delegate;
+package com.nepxion.aquarius.lock;
 
 /**
  * <p>Title: Nepxion Aquarius</p>

@@ -1,4 +1,4 @@
-package com.nepxion.aquarius.limit.redis.delegate;
+package com.nepxion.aquarius.limit.redis.impl;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
@@ -14,16 +14,16 @@ import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.nepxion.aquarius.common.exception.AquariusException;
-import com.nepxion.aquarius.limit.AquariusLimit;
-import com.nepxion.aquarius.limit.delegate.LimitDelegate;
+import com.nepxion.aquarius.limit.LimitExecutor;
+import com.nepxion.aquarius.limit.LimitDelegate;
 
-public class RedisLimitDelegate implements LimitDelegate {
+public class RedisLimitDelegateImpl implements LimitDelegate {
     @Autowired
-    private AquariusLimit limit;
+    private LimitExecutor limitExecutor;
 
     @Override
     public Object invoke(MethodInvocation invocation, String key, int limitPeriod, int limitCount) throws Throwable {
-        boolean status = limit.tryAccess(key, limitPeriod, limitCount);
+        boolean status = limitExecutor.tryAccess(key, limitPeriod, limitCount);
         if (status) {
             return invocation.proceed();
         } else {

@@ -1,4 +1,4 @@
-package com.nepxion.aquarius.cache.redis.delegate;
+package com.nepxion.aquarius.cache.redis.impl;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
@@ -22,12 +22,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 
-import com.nepxion.aquarius.cache.delegate.CacheDelegate;
+import com.nepxion.aquarius.cache.CacheDelegate;
 import com.nepxion.aquarius.common.constant.AquariusConstant;
 import com.nepxion.aquarius.common.util.KeyUtil;
 
-public class RedisCacheDelegate implements CacheDelegate {
-    private static final Logger LOG = LoggerFactory.getLogger(RedisCacheDelegate.class);
+public class RedisCacheDelegateImpl implements CacheDelegate {
+    private static final Logger LOG = LoggerFactory.getLogger(RedisCacheDelegateImpl.class);
 
     @Autowired
     @Qualifier("aquariusRedisTemplate")

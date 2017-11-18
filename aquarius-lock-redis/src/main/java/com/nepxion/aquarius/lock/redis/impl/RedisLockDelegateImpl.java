@@ -1,4 +1,4 @@
-package com.nepxion.aquarius.lock.redis.delegate;
+package com.nepxion.aquarius.lock.redis.impl;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
@@ -30,11 +30,11 @@ import org.slf4j.LoggerFactory;
 import com.nepxion.aquarius.common.exception.AquariusException;
 import com.nepxion.aquarius.common.redisson.constant.RedissonConstant;
 import com.nepxion.aquarius.common.redisson.handler.RedissonHandler;
-import com.nepxion.aquarius.lock.delegate.LockDelegate;
+import com.nepxion.aquarius.lock.LockDelegate;
 import com.nepxion.aquarius.lock.entity.LockType;
 
-public class RedisLockDelegate implements LockDelegate {
-    private static final Logger LOG = LoggerFactory.getLogger(RedisLockDelegate.class);
+public class RedisLockDelegateImpl implements LockDelegate {
+    private static final Logger LOG = LoggerFactory.getLogger(RedisLockDelegateImpl.class);
 
     private RedissonClient redisson;
 

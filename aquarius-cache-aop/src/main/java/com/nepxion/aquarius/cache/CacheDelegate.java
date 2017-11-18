@@ -1,4 +1,4 @@
-package com.nepxion.aquarius.cache.delegate;
+package com.nepxion.aquarius.cache;
 
 /**
  * <p>Title: Nepxion Aquarius</p>

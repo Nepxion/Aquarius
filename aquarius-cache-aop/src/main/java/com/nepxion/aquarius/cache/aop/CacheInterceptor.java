@@ -20,10 +20,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import com.nepxion.aquarius.cache.CacheDelegate;
 import com.nepxion.aquarius.cache.annotation.CacheEvict;
 import com.nepxion.aquarius.cache.annotation.CachePut;
 import com.nepxion.aquarius.cache.annotation.Cacheable;
-import com.nepxion.aquarius.cache.delegate.CacheDelegate;
 import com.nepxion.aquarius.common.constant.AquariusConstant;
 import com.nepxion.aquarius.common.exception.AquariusException;
 import com.nepxion.aquarius.common.util.KeyUtil;

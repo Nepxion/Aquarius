@@ -10,7 +10,7 @@ package com.nepxion.aquarius.limit;
  * @version 1.0
  */
 
-public interface AquariusLimit {
+public interface LimitExecutor {
     /**
      * 在给定的时间段里最多的访问限制次数(超出次数返回false)；等下个时间段开始，才允许再次被访问(返回true)，周而复始
      * @param name 资源名字
