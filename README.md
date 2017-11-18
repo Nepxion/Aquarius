@@ -40,6 +40,7 @@
     9 锁的Key支持SPEL语义拼装。但SPEL语义对于接口代理的方式，需要打开编译参数项
        参照Nepxion Marix文档里的说明，需要在IDE和Maven里设置"-parameters"的Compiler Argument。具体参考如下：
        https://www.concretepage.com/java/jdk-8/java-8-reflection-access-to-parameter-names-of-method-and-constructor-with-maven-gradle-and-eclipse-using-parameters-compiler-argument
+    10 锁支持两种调用方式，注解方式和直接调用
 
 ### 快速切换分布式锁组件
 aquarius-test\src\main\resources\config.properties，切换lockDelegate即可
@@ -52,6 +53,8 @@ lockDelegate=redisLockDelegate
 
 ### 使用分布式锁示例如下，更多细节见aquarius-test工程下com.nepxion.aquarius.lock
 普通分布式锁的使用
+
+注解方式
 ```java
 package com.nepxion.aquarius.lock.service;
 
@@ -72,6 +75,52 @@ public interface MyService1 {
     String doA(String id1, String id2);
 
     String doB(String id1, String id2);
+}
+```
+
+```java
+package com.nepxion.aquarius.lock.service;
+
+/**
+ * <p>Title: Nepxion Aquarius</p>
+ * <p>Description: Nepxion Aquarius</p>
+ * <p>Copyright: Copyright (c) 2017</p>
+ * <p>Company: Nepxion</p>
+ * @author Haojun Ren
+ * @email 1394997@qq.com
+ * @version 1.0
+ */
+
+import java.util.concurrent.TimeUnit;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
+import com.nepxion.aquarius.lock.annotation.Lock;
+
+@Service("myService2Impl")
+public class MyService2Impl {
+    private static final Logger LOG = LoggerFactory.getLogger(MyService2Impl.class);
+
+    @Lock(name = "lock", key = "#id1 + \"-\" + #id2", leaseTime = 5000L, waitTime = 60000L, async = false, fair = false)
+    public String doC(String id1, String id2) {
+        try {
+            TimeUnit.MILLISECONDS.sleep(2000L);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        LOG.info("doC - lock is got");
+
+        return "C";
+    }
+
+    public String doD(String id1, String id2) {
+        LOG.info("doD");
+
+        return "D";
+    }
 }
 ```
 
@@ -128,7 +177,104 @@ public class LockAopApplication {
 }
 ```
 
+直接调用方式
+```java
+package com.nepxion.aquarius.lock;
+
+/**
+ * <p>Title: Nepxion Aquarius</p>
+ * <p>Description: Nepxion Aquarius</p>
+ * <p>Copyright: Copyright (c) 2017</p>
+ * <p>Company: Nepxion</p>
+ * @author Haojun Ren
+ * @email 1394997@qq.com
+ * @version 1.0
+ */
+
+import java.util.concurrent.TimeUnit;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.context.annotation.ComponentScan;
+
+import com.nepxion.aquarius.common.context.AquariusContextAware;
+import com.nepxion.aquarius.lock.entity.LockType;
+
+@EnableAutoConfiguration
+@ComponentScan(basePackages = { "com.nepxion.aquarius.lock" })
+public class LockApplication {
+    private static final Logger LOG = LoggerFactory.getLogger(LockApplication.class);
+
+    @SuppressWarnings("unchecked")
+    public static void main(String[] args) throws Exception {
+        SpringApplication.run(LockApplication.class, args);
+
+        LockExecutor<Object> lockExecutor = AquariusContextAware.getBean(LockExecutor.class);
+        for (int i = 0; i < 5; i++) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    Object lock = null;
+                    try {
+                        lock = lockExecutor.tryLock(LockType.LOCK, "lock", "X-Y", 5000L, 60000L, false, false);
+                        if (lock != null) {
+                            try {
+                                TimeUnit.MILLISECONDS.sleep(2000L);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+
+                            LOG.info("doA - lock is got");
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    } finally {
+                        try {
+                            lockExecutor.unlock(lock);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }).start();
+        }
+
+        for (int i = 0; i < 5; i++) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    Object lock = null;
+                    try {
+                        lock = lockExecutor.tryLock(LockType.LOCK, "lock", "X-Y", 5000L, 60000L, false, false);
+                        if (lock != null) {
+                            try {
+                                TimeUnit.MILLISECONDS.sleep(2000L);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+
+                            LOG.info("doC - lock is got");
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    } finally {
+                        try {
+                            lockExecutor.unlock(lock);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }).start();
+        }
+    }
+}
+```
+
 读/写分布式锁的使用
+注解方式
 ```java
 package com.nepxion.aquarius.lock.service;
 
@@ -183,7 +329,7 @@ public class MyService4Impl {
             e.printStackTrace();
         }
 
-        LOG.info("doW");
+        LOG.info("doW - write lock is got");
 
         return "W";
     }
@@ -230,7 +376,7 @@ public class ReadWriteLockAopApplication {
         timer1.scheduleAtFixedRate(new TimerTask() {
             public void run() {
                 LOG.info("Start to get write lock...");
-                // 写锁逻辑，最高15秒，睡眠10秒，10秒后释放读锁
+                // 写锁逻辑，最高持锁15秒，睡眠10秒，10秒后释放读锁
                 myService4.doW("X", "Y");
             }
         }, 0L, 600000L);
@@ -247,7 +393,111 @@ public class ReadWriteLockAopApplication {
                             // 读锁逻辑，最高持锁5秒，睡眠2秒，2秒后释放读锁
                             myService3.doR("X", "Y");
                         }
+                    }).start();
+                }
+            }
+        }, 2000L, 2000L);
+    }
+}
+```
 
+直接调用方式
+```java
+package com.nepxion.aquarius.lock;
+
+/**
+ * <p>Title: Nepxion Aquarius</p>
+ * <p>Description: Nepxion Aquarius</p>
+ * <p>Copyright: Copyright (c) 2017</p>
+ * <p>Company: Nepxion</p>
+ * @author Haojun Ren
+ * @email 1394997@qq.com
+ * @version 1.0
+ */
+
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.context.annotation.ComponentScan;
+
+import com.nepxion.aquarius.common.context.AquariusContextAware;
+import com.nepxion.aquarius.lock.entity.LockType;
+
+@EnableAutoConfiguration
+@ComponentScan(basePackages = { "com.nepxion.aquarius.lock" })
+public class ReadWriteLockApplication {
+    private static final Logger LOG = LoggerFactory.getLogger(ReadWriteLockApplication.class);
+
+    @SuppressWarnings("unchecked")
+    public static void main(String[] args) throws Exception {
+        SpringApplication.run(ReadWriteLockApplication.class, args);
+
+        LockExecutor<Object> lockExecutor = AquariusContextAware.getBean(LockExecutor.class);
+        Timer timer1 = new Timer();
+        timer1.scheduleAtFixedRate(new TimerTask() {
+            public void run() {
+                LOG.info("Start to get write lock...");
+                // 写锁逻辑，最高持锁15秒，睡眠10秒，10秒后释放读锁
+                Object lock = null;
+                try {
+                    lock = lockExecutor.tryLock(LockType.WRITE_LOCK, "lock", "X-Y", 15000L, 60000L, false, false);
+                    if (lock != null) {
+                        try {
+                            TimeUnit.MILLISECONDS.sleep(10000L);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+
+                        LOG.info("doW - write lock is got");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        lockExecutor.unlock(lock);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }, 0L, 600000L);
+
+        Timer timer2 = new Timer();
+        timer2.scheduleAtFixedRate(new TimerTask() {
+            public void run() {
+                LOG.info("Start to get read lock...");
+                for (int i = 0; i < 3; i++) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // 读锁逻辑，最高持锁5秒，睡眠2秒，2秒后释放读锁
+                            Object lock = null;
+                            try {
+                                lock = lockExecutor.tryLock(LockType.READ_LOCK, "lock", "X-Y", 5000L, 60000L, false, false);
+                                if (lock != null) {
+                                    try {
+                                        TimeUnit.MILLISECONDS.sleep(2000L);
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                    LOG.info("doR - read lock is got");
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            } finally {
+                                try {
+                                    lockExecutor.unlock(lock);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
                     }).start();
                 }
             }
@@ -599,7 +849,7 @@ public class ZookeeperIdGeneratorApplication {
 ## Nepxion Aquarius Limit
 ### 介绍
     1 支持若干个分布式系统对同一资源在给定的时间段里最多的访问限制次数(超出次数返回false)；等下个时间段开始，才允许再次被访问(返回true)，周而复始
-    2 支持两种方式访问，注解方式和直接调用方式
+    2 支持两种调用方式，注解方式和直接调用
     3 参数说明
       1)name 资源的名字
       2)key  资源Key。资源Key的完整路径是prefix + "_" + name + "_" + key，prefix为config.propertie里的namespace值
