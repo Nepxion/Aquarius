@@ -40,7 +40,7 @@
     9 锁的Key支持SPEL语义拼装。但SPEL语义对于接口代理的方式，需要打开编译参数项
        参照Nepxion Marix文档里的说明，需要在IDE和Maven里设置"-parameters"的Compiler Argument。具体参考如下：
        https://www.concretepage.com/java/jdk-8/java-8-reflection-access-to-parameter-names-of-method-and-constructor-with-maven-gradle-and-eclipse-using-parameters-compiler-argument
-    10 锁支持两种调用方式，注解方式和直接调用
+    10 锁支持两种调用方式，注解方式和直接调用方式
 
 ### 快速切换分布式锁组件
 aquarius-test\src\main\resources\config.properties，切换lockDelegate即可
@@ -274,6 +274,7 @@ public class LockApplication {
 ```
 
 读/写分布式锁的使用
+
 注解方式
 ```java
 package com.nepxion.aquarius.lock.service;
@@ -857,6 +858,7 @@ public class ZookeeperIdGeneratorApplication {
       4)limitCount 最多的访问限制次数
 
 ### 使用Limit示例如下，更多细节见aquarius-test工程下com.nepxion.aquarius.limit
+
 注解方式
 ```java
 package com.nepxion.aquarius.limit.service;
