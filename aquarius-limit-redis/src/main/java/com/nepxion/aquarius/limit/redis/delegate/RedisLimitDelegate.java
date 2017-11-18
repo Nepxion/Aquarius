@@ -14,12 +14,12 @@ import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.nepxion.aquarius.common.exception.AquariusException;
-import com.nepxion.aquarius.limit.RedisLimit;
+import com.nepxion.aquarius.limit.AquariusLimit;
 import com.nepxion.aquarius.limit.delegate.LimitDelegate;
 
 public class RedisLimitDelegate implements LimitDelegate {
     @Autowired
-    private RedisLimit redisLimit;
+    private AquariusLimit limit;
 
     @Override
     public void initialize() {
@@ -33,7 +33,7 @@ public class RedisLimitDelegate implements LimitDelegate {
 
     @Override
     public Object invoke(MethodInvocation invocation, String key, int limitPeriod, int limitCount) throws Throwable {
-        boolean status = redisLimit.tryAccess(key, limitPeriod, limitCount);
+        boolean status = limit.tryAccess(key, limitPeriod, limitCount);
         if (status) {
             return invocation.proceed();
         } else {
