@@ -14,7 +14,7 @@ public interface ZookeeperIdGenerator {
     /**
      * 获取序号
      * @param name 资源名字
-     * @param key 资源Key。在Zookeeper中的节点名为"/" + prefix + "/" + prefix + "_" + name + "_" + key
+     * @param key 资源Key
      * @return
      * @throws Exception
      */
