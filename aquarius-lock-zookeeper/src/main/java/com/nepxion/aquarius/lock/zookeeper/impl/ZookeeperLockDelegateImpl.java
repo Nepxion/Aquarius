@@ -1,4 +1,4 @@
-package com.nepxion.aquarius.lock.zookeeper.delegate;
+package com.nepxion.aquarius.lock.zookeeper.impl;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
@@ -14,6 +14,9 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+
 import org.aopalliance.intercept.MethodInvocation;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.recipes.locks.InterProcessMutex;
@@ -28,11 +31,11 @@ import com.nepxion.aquarius.common.curator.constant.CuratorConstant;
 import com.nepxion.aquarius.common.curator.handler.CuratorHandler;
 import com.nepxion.aquarius.common.exception.AquariusException;
 import com.nepxion.aquarius.common.property.AquariusProperties;
-import com.nepxion.aquarius.lock.delegate.LockDelegate;
+import com.nepxion.aquarius.lock.LockDelegate;
 import com.nepxion.aquarius.lock.entity.LockType;
 
-public class ZookeeperLockDelegate implements LockDelegate {
-    private static final Logger LOG = LoggerFactory.getLogger(ZookeeperLockDelegate.class);
+public class ZookeeperLockDelegateImpl implements LockDelegate {
+    private static final Logger LOG = LoggerFactory.getLogger(ZookeeperLockDelegateImpl.class);
 
     private CuratorFramework curator;
 
@@ -44,21 +47,22 @@ public class ZookeeperLockDelegate implements LockDelegate {
     private volatile Map<String, InterProcessReadWriteLock> readWriteLockMap = new ConcurrentHashMap<String, InterProcessReadWriteLock>();
     private boolean lockCached = true;
 
-    @Override
+    @PostConstruct
     public void initialize() {
         try {
             AquariusProperties config = CuratorHandler.createPropertyConfig(CuratorConstant.CONFIG_FILE);
             curator = CuratorHandler.createCurator(config);
 
-            if (!CuratorHandler.pathExist(curator, "/" + prefix)) {
-                CuratorHandler.createPath(curator, "/" + prefix, CreateMode.PERSISTENT);
+            String rootPath = CuratorHandler.getRootPath(prefix);
+            if (!CuratorHandler.pathExist(curator, rootPath)) {
+                CuratorHandler.createPath(curator, rootPath, CreateMode.PERSISTENT);
             }
         } catch (Exception e) {
             LOG.error("Initialize Curator failed", e);
         }
     }
 
-    @Override
+    @PreDestroy
     public void destroy() {
         CuratorHandler.closeCurator(curator);
     }
@@ -99,11 +103,6 @@ public class ZookeeperLockDelegate implements LockDelegate {
         return null;
     }
 
-    // 锁节点路径，对应ZooKeeper一个永久节点，下挂一系列临时节点
-    private String getPath(String key) {
-        return "/" + prefix + "/" + key;
-    }
-
     private InterProcessMutex getLock(LockType lockType, String key) {
         if (lockCached) {
             return getCachedLock(lockType, key);
@@ -113,7 +112,7 @@ public class ZookeeperLockDelegate implements LockDelegate {
     }
 
     private InterProcessMutex getNewLock(LockType lockType, String key) {
-        String path = getPath(key);
+        String path = CuratorHandler.getPath(prefix, key);
         switch (lockType) {
             case LOCK:
                 return new InterProcessMutex(curator, path);
@@ -129,7 +128,7 @@ public class ZookeeperLockDelegate implements LockDelegate {
     }
 
     private InterProcessMutex getCachedLock(LockType lockType, String key) {
-        String path = getPath(key);
+        String path = CuratorHandler.getPath(prefix, key);
         String newKey = path + "-" + lockType;
 
         InterProcessMutex lock = lockMap.get(newKey);
@@ -145,7 +144,7 @@ public class ZookeeperLockDelegate implements LockDelegate {
     }
 
     private InterProcessReadWriteLock getCachedReadWriteLock(LockType lockType, String key) {
-        String path = getPath(key);
+        String path = CuratorHandler.getPath(prefix, key);
         String newKey = path;
 
         InterProcessReadWriteLock readWriteLock = readWriteLockMap.get(newKey);

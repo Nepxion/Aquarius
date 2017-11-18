@@ -20,7 +20,6 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 
 import com.nepxion.aquarius.common.context.AquariusContextAware;
-import com.nepxion.aquarius.limit.redis.RedisLimit;
 
 @EnableAutoConfiguration
 @ComponentScan(basePackages = { "com.nepxion.aquarius.limit.redis" })
@@ -31,7 +30,7 @@ public class RedisLimitApplication {
         SpringApplication.run(RedisLimitApplication.class, args);
 
         // 在给定的10秒里最多访问5次(超出次数返回false)；等下个10秒开始，才允许再次被访问(返回true)，周而复始
-        RedisLimit redisLimit = AquariusContextAware.getBean(RedisLimit.class);
+        LimitExecutor limitExecutor = AquariusContextAware.getBean(LimitExecutor.class);
         
         Timer timer1 = new Timer();
         timer1.scheduleAtFixedRate(new TimerTask() {
@@ -41,15 +40,13 @@ public class RedisLimitApplication {
                         @Override
                         public void run() {
                             try {
-                                LOG.info("Timer1 - Limit={}", redisLimit.tryAccess("limit", "A-B", 10, 5));
+                                LOG.info("Timer1 - Limit={}", limitExecutor.tryAccess("limit", "A-B", 10, 5));
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
                         }
-
                     }).start();
                 }
-
             }
         }, 0L, 1000L);
 
@@ -61,15 +58,13 @@ public class RedisLimitApplication {
                         @Override
                         public void run() {
                             try {
-                                LOG.info("Timer1 - Limit={}", redisLimit.tryAccess("limit", "A-B", 10, 5));
+                                LOG.info("Timer1 - Limit={}", limitExecutor.tryAccess("limit", "A-B", 10, 5));
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
                         }
-
                     }).start();
                 }
-
             }
         }, 0L, 1500L);
     }

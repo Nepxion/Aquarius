@@ -1,4 +1,4 @@
-package com.nepxion.aquarius.lock.aop;
+package com.nepxion.aquarius.limit.aop;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
@@ -15,19 +15,17 @@ import java.lang.annotation.Annotation;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.springframework.stereotype.Component;
 
-import com.nepxion.aquarius.lock.annotation.Lock;
-import com.nepxion.aquarius.lock.annotation.ReadLock;
-import com.nepxion.aquarius.lock.annotation.WriteLock;
+import com.nepxion.aquarius.limit.annotation.Limit;
 import com.nepxion.matrix.aop.DefaultAutoScanProxy;
 import com.nepxion.matrix.mode.ProxyMode;
 import com.nepxion.matrix.mode.ScanMode;
 
 // 通过全局拦截器实现对类头部注解的扫描和代理
-@Component("lockAutoScanProxy")
-public class LockAutoScanProxy extends DefaultAutoScanProxy {
+@Component("limitAutoScanProxy")
+public class LimitAutoScanProxy extends DefaultAutoScanProxy {
     private static final long serialVersionUID = -6456216398492047529L;
 
-    private static final String[] SCAN_PACKAGES = { "com.nepxion.aquarius.lock" };
+    private static final String[] SCAN_PACKAGES = { "com.nepxion.aquarius.limit" };
 
     @SuppressWarnings("rawtypes")
     private Class[] commonInterceptorClasses;
@@ -35,7 +33,7 @@ public class LockAutoScanProxy extends DefaultAutoScanProxy {
     @SuppressWarnings("rawtypes")
     private Class[] methodAnnotations;
 
-    public LockAutoScanProxy() {
+    public LimitAutoScanProxy() {
         super(SCAN_PACKAGES, ProxyMode.BY_METHOD_ANNOTATION_ONLY, ScanMode.FOR_METHOD_ANNOTATION_ONLY);
     }
 
@@ -43,7 +41,7 @@ public class LockAutoScanProxy extends DefaultAutoScanProxy {
     @Override
     protected Class<? extends MethodInterceptor>[] getCommonInterceptors() {
         if (commonInterceptorClasses == null) {
-            commonInterceptorClasses = new Class[] { LockInterceptor.class };
+            commonInterceptorClasses = new Class[] { LimitInterceptor.class };
         }
 
         return commonInterceptorClasses;
@@ -53,7 +51,7 @@ public class LockAutoScanProxy extends DefaultAutoScanProxy {
     @Override
     protected Class<? extends Annotation>[] getMethodAnnotations() {
         if (methodAnnotations == null) {
-            methodAnnotations = new Class[] { Lock.class, ReadLock.class, WriteLock.class };
+            methodAnnotations = new Class[] { Limit.class };
         }
 
         return methodAnnotations;

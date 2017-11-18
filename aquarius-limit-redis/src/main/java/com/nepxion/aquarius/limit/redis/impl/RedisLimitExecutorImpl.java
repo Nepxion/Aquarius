@@ -14,20 +14,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.data.redis.core.script.RedisScript;
-import org.springframework.stereotype.Component;
 
 import com.nepxion.aquarius.common.constant.AquariusConstant;
 import com.nepxion.aquarius.common.exception.AquariusException;
-import com.nepxion.aquarius.limit.redis.RedisLimit;
+import com.nepxion.aquarius.common.util.KeyUtil;
+import com.nepxion.aquarius.limit.LimitExecutor;
 
-@Component("redisLimitImpl")
-public class RedisLimitImpl implements RedisLimit {
+public class RedisLimitExecutorImpl implements LimitExecutor {
+    private static final Logger LOG = LoggerFactory.getLogger(RedisLimitExecutorImpl.class);
+
     @Autowired
     @Qualifier("aquariusRedisTemplate")
     private RedisTemplate<String, Object> redisTemplate;
@@ -35,12 +38,11 @@ public class RedisLimitImpl implements RedisLimit {
     @Value("${" + AquariusConstant.PREFIX + "}")
     private String prefix;
 
+    @Value("${" + AquariusConstant.FREQUENT_LOG_PRINT + "}")
+    private Boolean frequentLogPrint;
+
     @Override
     public boolean tryAccess(String name, String key, int limitPeriod, int limitCount) {
-        return tryAccess(name, key, limitPeriod, limitCount, 0, 0, false);
-    }
-
-    private boolean tryAccess(String name, String key, int limitPeriod, int limitCount, int lockPeriod, int lockCount, boolean limitLockEnabled) {
         if (StringUtils.isEmpty(name)) {
             throw new AquariusException("Name is null or empty");
         }
@@ -49,14 +51,32 @@ public class RedisLimitImpl implements RedisLimit {
             throw new AquariusException("Key is null or empty");
         }
 
+        String compositeKey = KeyUtil.getCompositeKey(prefix, name, key);
+
+        return tryAccess(compositeKey, limitPeriod, limitCount);
+    }
+
+    @Override
+    public boolean tryAccess(String compositeKey, int limitPeriod, int limitCount) {
+        if (StringUtils.isEmpty(compositeKey)) {
+            throw new AquariusException("Composite key is null or empty");
+        }
+
+        return tryAccess(compositeKey, limitPeriod, limitCount, 0, 0, false);
+    }
+
+    private boolean tryAccess(String compositeKey, int limitPeriod, int limitCount, int lockPeriod, int lockCount, boolean limitLockEnabled) {
         List<String> keys = new ArrayList<String>();
-        String spelKey = getSpelKey(name, key);
-        keys.add(spelKey);
+        keys.add(compositeKey);
 
         String luaScript = buildLuaScript(limitLockEnabled);
 
         RedisScript<Number> redisScript = new DefaultRedisScript<Number>(luaScript, Number.class);
         Number count = redisTemplate.execute(redisScript, keys, Math.max(limitCount, lockCount), limitPeriod, lockCount, lockPeriod);
+
+        if (frequentLogPrint) {
+            LOG.info("Access try count is {} for key={}", count, compositeKey);
+        }
 
         return count.intValue() <= limitCount;
     }
@@ -80,9 +100,5 @@ public class RedisLimitImpl implements RedisLimit {
         lua.append("\nreturn c;");
 
         return lua.toString();
-    }
-
-    private String getSpelKey(String name, String key) {
-        return prefix + "_" + name + "_" + key;
     }
 }

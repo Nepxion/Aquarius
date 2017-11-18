@@ -16,5 +16,5 @@ public class AquariusConstant {
 
     public static final String PREFIX = "prefix";
 
-    public static final String CONFIG_FILE = "config.properties";
+    public static final String FREQUENT_LOG_PRINT = "frequentLogPrint";
 }

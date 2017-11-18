@@ -252,4 +252,14 @@ public class CuratorHandler {
 
         return childPathList;
     }
+
+    // 组装根节点路径
+    public static String getRootPath(String prefix) {
+        return "/" + prefix;
+    }
+
+    // 组装节点路径
+    public static String getPath(String prefix, String key) {
+        return "/" + prefix + "/" + key;
+    }
 }

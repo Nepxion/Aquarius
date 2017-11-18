@@ -1,4 +1,4 @@
-package com.nepxion.aquarius.lock.delegate;
+package com.nepxion.aquarius.lock;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
@@ -15,12 +15,5 @@ import org.aopalliance.intercept.MethodInvocation;
 import com.nepxion.aquarius.lock.entity.LockType;
 
 public interface LockDelegate {
-    // 初始锁上下文
-    void initialize();
-
-    // 销毁锁上下文
-    void destroy();
-
-    // 方法调用
     Object invoke(MethodInvocation invocation, LockType lockType, String key, long leaseTime, long waitTime, boolean async, boolean fair) throws Throwable;
 }

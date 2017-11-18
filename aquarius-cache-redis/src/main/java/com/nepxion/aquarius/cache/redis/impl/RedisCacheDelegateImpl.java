@@ -1,4 +1,4 @@
-package com.nepxion.aquarius.cache.redis.delegate;
+package com.nepxion.aquarius.cache.redis.impl;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
@@ -22,11 +22,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 
-import com.nepxion.aquarius.cache.delegate.CacheDelegate;
+import com.nepxion.aquarius.cache.CacheDelegate;
 import com.nepxion.aquarius.common.constant.AquariusConstant;
+import com.nepxion.aquarius.common.util.KeyUtil;
 
-public class RedisCacheDelegate implements CacheDelegate {
-    private static final Logger LOG = LoggerFactory.getLogger(RedisCacheDelegate.class);
+public class RedisCacheDelegateImpl implements CacheDelegate {
+    private static final Logger LOG = LoggerFactory.getLogger(RedisCacheDelegateImpl.class);
 
     @Autowired
     @Qualifier("aquariusRedisTemplate")
@@ -35,15 +36,8 @@ public class RedisCacheDelegate implements CacheDelegate {
     @Value("${" + AquariusConstant.PREFIX + "}")
     private String prefix;
 
-    @Override
-    public void initialize() {
-
-    }
-
-    @Override
-    public void destroy() {
-
-    }
+    @Value("${" + AquariusConstant.FREQUENT_LOG_PRINT + "}")
+    private Boolean frequentLogPrint;
 
     @Override
     public Object invokeCacheable(MethodInvocation invocation, String key, long expire) throws Throwable {
@@ -57,7 +51,9 @@ public class RedisCacheDelegate implements CacheDelegate {
             LOG.warn("Redis exception occurs while getting data", e);
         }
 
-        LOG.info("Before invocation, Cacheable key={}, cache={} in Redis", key, object);
+        if (frequentLogPrint) {
+            LOG.info("Before invocation, Cacheable key={}, cache={} in Redis", key, object);
+        }
 
         if (object != null) {
             return object;
@@ -76,7 +72,9 @@ public class RedisCacheDelegate implements CacheDelegate {
                 LOG.warn("Redis exception occurs while setting data", e);
             }
 
-            LOG.info("After invocation, Cacheable key={}, cache={} in Redis", key, object);
+            if (frequentLogPrint) {
+                LOG.info("After invocation, Cacheable key={}, cache={} in Redis", key, object);
+            }
         }
 
         return object;
@@ -99,7 +97,9 @@ public class RedisCacheDelegate implements CacheDelegate {
                 LOG.warn("Redis exception occurs while setting data", e);
             }
 
-            LOG.info("After invocation, CachePut key={}, cache={} in Redis", key, object);
+            if (frequentLogPrint) {
+                LOG.info("After invocation, CachePut key={}, cache={} in Redis", key, object);
+            }
         }
 
         return object;
@@ -108,7 +108,10 @@ public class RedisCacheDelegate implements CacheDelegate {
     @Override
     public Object invokeCacheEvict(MethodInvocation invocation, String key, String name, boolean allEntries, boolean beforeInvocation) throws Throwable {
         if (beforeInvocation) {
-            LOG.info("Before invocation, CacheEvict clear key={} in Redis", key);
+            if (frequentLogPrint) {
+                LOG.info("Before invocation, CacheEvict clear key={} in Redis", key);
+            }
+
             try {
                 clear(key, name, allEntries);
             } catch (Exception e) {
@@ -119,7 +122,10 @@ public class RedisCacheDelegate implements CacheDelegate {
         Object object = invocation.proceed();
 
         if (!beforeInvocation) {
-            LOG.info("After invocation, CacheEvict clear key={} in Redis", key);
+            if (frequentLogPrint) {
+                LOG.info("After invocation, CacheEvict clear key={} in Redis", key);
+            }
+
             try {
                 clear(key, name, allEntries);
             } catch (Exception e) {
@@ -131,16 +137,16 @@ public class RedisCacheDelegate implements CacheDelegate {
     }
 
     private void clear(String key, String name, boolean allEntries) {
+        String compositeWildcardKey = null;
         if (allEntries) {
-            Set<String> keys = redisTemplate.keys(prefix + "_" + name + "*");
-            for (String k : keys) {
-                redisTemplate.delete(k);
-            }
+            compositeWildcardKey = KeyUtil.getCompositeWildcardKey(prefix, name);
         } else {
-            Set<String> keys = redisTemplate.keys(key + "*");
-            for (String k : keys) {
-                redisTemplate.delete(k);
-            }
+            compositeWildcardKey = KeyUtil.getCompositeWildcardKey(key);
+        }
+
+        Set<String> keys = redisTemplate.keys(compositeWildcardKey);
+        for (String k : keys) {
+            redisTemplate.delete(k);
         }
     }
 }

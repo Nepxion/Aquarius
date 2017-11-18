@@ -25,6 +25,7 @@ import com.nepxion.aquarius.common.curator.constant.CuratorConstant;
 import com.nepxion.aquarius.common.curator.handler.CuratorHandler;
 import com.nepxion.aquarius.common.exception.AquariusException;
 import com.nepxion.aquarius.common.property.AquariusProperties;
+import com.nepxion.aquarius.common.util.KeyUtil;
 import com.nepxion.aquarius.idgenerator.zookeeper.ZookeeperIdGenerator;
 
 @Component("zookeeperIdGeneratorImpl")
@@ -36,14 +37,18 @@ public class ZookeeperIdGeneratorImpl implements ZookeeperIdGenerator {
     @Value("${" + AquariusConstant.PREFIX + "}")
     private String prefix;
 
+    @Value("${" + AquariusConstant.FREQUENT_LOG_PRINT + "}")
+    private Boolean frequentLogPrint;
+
     @PostConstruct
     public void initialize() {
         try {
             AquariusProperties config = CuratorHandler.createPropertyConfig(CuratorConstant.CONFIG_FILE);
             curator = CuratorHandler.createCurator(config);
 
-            if (!CuratorHandler.pathExist(curator, "/" + prefix)) {
-                CuratorHandler.createPath(curator, "/" + prefix, CreateMode.PERSISTENT);
+            String rootPath = CuratorHandler.getRootPath(prefix);
+            if (!CuratorHandler.pathExist(curator, rootPath)) {
+                CuratorHandler.createPath(curator, rootPath, CreateMode.PERSISTENT);
             }
         } catch (Exception e) {
             LOG.error("Initialize Curator failed", e);
@@ -60,7 +65,18 @@ public class ZookeeperIdGeneratorImpl implements ZookeeperIdGenerator {
             throw new AquariusException("key is null or empty");
         }
 
-        String path = getPath(name, key);
+        String compositeKey = KeyUtil.getCompositeKey(prefix, name, key);
+
+        return nextSequenceId(compositeKey);
+    }
+
+    @Override
+    public int nextSequenceId(String compositeKey) throws Exception {
+        if (StringUtils.isEmpty(compositeKey)) {
+            throw new AquariusException("Composite key is null or empty");
+        }
+
+        String path = CuratorHandler.getPath(prefix, compositeKey);
 
         // 并发过快，这里会抛“节点已经存在”的错误，当节点存在时候，就不会创建，所以不必打印异常
         try {
@@ -71,10 +87,12 @@ public class ZookeeperIdGeneratorImpl implements ZookeeperIdGenerator {
 
         }
 
-        return curator.setData().withVersion(-1).forPath(path, "".getBytes()).getVersion();
-    }
+        int nextSequenceId = curator.setData().withVersion(-1).forPath(path, "".getBytes()).getVersion();
 
-    private String getPath(String name, String key) {
-        return "/" + prefix + "/" + prefix + "_" + name + "_" + key;
+        if (frequentLogPrint) {
+            LOG.info("Next sequenceId id is {} for key={}", nextSequenceId, compositeKey);
+        }
+
+        return nextSequenceId;
     }
 }

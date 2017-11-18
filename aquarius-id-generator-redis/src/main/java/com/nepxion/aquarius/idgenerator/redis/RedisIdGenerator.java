@@ -25,4 +25,6 @@ public interface RedisIdGenerator {
      * @throws Exception
      */
     String nextUniqueId(String name, String key, int step, int length);
+
+    String nextUniqueId(String compositeKey, int step, int length);
 }

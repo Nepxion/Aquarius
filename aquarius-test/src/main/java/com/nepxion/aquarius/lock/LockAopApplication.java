@@ -20,9 +20,9 @@ import com.nepxion.aquarius.lock.service.MyService2Impl;
 
 @EnableAutoConfiguration
 @ComponentScan(basePackages = { "com.nepxion.aquarius.lock" })
-public class LockApplication {
+public class LockAopApplication {
     public static void main(String[] args) throws Exception {
-        SpringApplication.run(LockApplication.class, args);
+        SpringApplication.run(LockAopApplication.class, args);
 
         // 执行效果是doA和doC无序打印，即谁拿到锁谁先运行
         MyService1 myService1 = AquariusContextAware.getBean(MyService1.class);
@@ -32,7 +32,6 @@ public class LockApplication {
                 public void run() {
                     myService1.doA("X", "Y");
                 }
-
             }).start();
         }
 
@@ -43,7 +42,6 @@ public class LockApplication {
                 public void run() {
                     myService2.doC("X", "Y");
                 }
-
             }).start();
         }
     }

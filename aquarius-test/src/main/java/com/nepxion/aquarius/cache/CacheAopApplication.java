@@ -20,9 +20,9 @@ import com.nepxion.aquarius.common.context.AquariusContextAware;
 
 @EnableAutoConfiguration
 @ComponentScan(basePackages = { "com.nepxion.aquarius.cache" })
-public class CacheApplication {
+public class CacheAopApplication {
     public static void main(String[] args) throws Exception {
-        SpringApplication.run(CacheApplication.class, args);
+        SpringApplication.run(CacheAopApplication.class, args);
 
         // 下面步骤请一步步操作，然后结合Redis Desktop Manager等工具查看效果
         MyService5 myService5 = AquariusContextAware.getBean(MyService5.class);

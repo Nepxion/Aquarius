@@ -15,10 +15,10 @@ import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import com.nepxion.aquarius.lock.delegate.LockDelegate;
+import com.nepxion.aquarius.lock.LockDelegate;
 import com.nepxion.aquarius.lock.redis.condition.RedisLockCondition;
 import com.nepxion.aquarius.lock.redis.constant.RedisLockConstant;
-import com.nepxion.aquarius.lock.redis.delegate.RedisLockDelegate;
+import com.nepxion.aquarius.lock.redis.impl.RedisLockDelegateImpl;
 
 @Configuration
 @Import({ com.nepxion.aquarius.common.config.AquariusConfig.class })
@@ -26,6 +26,6 @@ public class RedisLockConfig {
     @Bean(name = RedisLockConstant.DELEGATE_VALUE)
     @Conditional(RedisLockCondition.class)
     public LockDelegate redisLockDelegate() {
-        return new RedisLockDelegate();
+        return new RedisLockDelegateImpl();
     }
 }

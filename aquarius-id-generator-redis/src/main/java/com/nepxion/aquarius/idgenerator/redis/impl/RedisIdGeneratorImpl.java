@@ -15,6 +15,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,11 +28,14 @@ import org.springframework.stereotype.Component;
 import com.nepxion.aquarius.common.constant.AquariusConstant;
 import com.nepxion.aquarius.common.exception.AquariusException;
 import com.nepxion.aquarius.common.util.DateUtil;
+import com.nepxion.aquarius.common.util.KeyUtil;
 import com.nepxion.aquarius.common.util.StringUtil;
 import com.nepxion.aquarius.idgenerator.redis.RedisIdGenerator;
 
 @Component("redisIdGeneratorImpl")
 public class RedisIdGeneratorImpl implements RedisIdGenerator {
+    private static final Logger LOG = LoggerFactory.getLogger(RedisIdGeneratorImpl.class);
+
     @Autowired
     @Qualifier("aquariusRedisTemplate")
     private RedisTemplate<String, Object> redisTemplate;
@@ -38,7 +43,9 @@ public class RedisIdGeneratorImpl implements RedisIdGenerator {
     @Value("${" + AquariusConstant.PREFIX + "}")
     private String prefix;
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @Value("${" + AquariusConstant.FREQUENT_LOG_PRINT + "}")
+    private Boolean frequentLogPrint;
+
     @Override
     public String nextUniqueId(String name, String key, int step, int length) {
         if (StringUtils.isEmpty(name)) {
@@ -49,9 +56,20 @@ public class RedisIdGeneratorImpl implements RedisIdGenerator {
             throw new AquariusException("Key is null or empty");
         }
 
+        String compositeKey = KeyUtil.getCompositeKey(prefix, name, key);
+
+        return nextUniqueId(compositeKey, step, length);
+    }
+
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @Override
+    public String nextUniqueId(String compositeKey, int step, int length) {
+        if (StringUtils.isEmpty(compositeKey)) {
+            throw new AquariusException("Composite key is null or empty");
+        }
+
         List<String> keys = new ArrayList<String>();
-        String spelKey = getSpelKey(name, key);
-        keys.add(spelKey);
+        keys.add(compositeKey);
 
         String luaScript = buildLuaScript();
 
@@ -68,7 +86,13 @@ public class RedisIdGeneratorImpl implements RedisIdGenerator {
         builder.append(DateUtil.formatDate(date, DateUtil.DATE_FMT_YMDHMSSSSS));
         builder.append(StringUtil.subString((long) value3, length));
 
-        return builder.toString();
+        String nextUniqueId = builder.toString();
+
+        if (frequentLogPrint) {
+            LOG.info("Next unique id is {} for key={}", nextUniqueId, compositeKey);
+        }
+
+        return nextUniqueId;
     }
 
     private String buildLuaScript() {
@@ -81,9 +105,5 @@ public class RedisIdGeneratorImpl implements RedisIdGenerator {
         lua.append("\nreturn {now[1], now[2], count}");
 
         return lua.toString();
-    }
-
-    private String getSpelKey(String name, String key) {
-        return prefix + "_" + name + "_" + key;
     }
 }

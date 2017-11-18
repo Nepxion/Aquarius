@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <artifactId>aquarius-limit-redis</artifactId>
-    <name>Nepxion Aquarius Limit For Redis</name>
+    <artifactId>aquarius-limit-aop</artifactId>
+    <name>Nepxion Aquarius Limit For Aop</name>
     <packaging>jar</packaging>
     <modelVersion>4.0.0</modelVersion>
     <parent>
@@ -14,12 +14,12 @@
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>aquarius-common-redis</artifactId>
+            <artifactId>aquarius-common</artifactId>
         </dependency>
 
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>aquarius-limit-aop</artifactId>
+            <artifactId>matrix-aop</artifactId>
         </dependency>
     </dependencies>
 </project>

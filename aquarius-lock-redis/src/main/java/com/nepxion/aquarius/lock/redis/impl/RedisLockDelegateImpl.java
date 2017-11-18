@@ -1,4 +1,4 @@
-package com.nepxion.aquarius.lock.redis.delegate;
+package com.nepxion.aquarius.lock.redis.impl;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
@@ -16,6 +16,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+
 import org.aopalliance.intercept.MethodInvocation;
 import org.redisson.api.RLock;
 import org.redisson.api.RReadWriteLock;
@@ -27,11 +30,11 @@ import org.slf4j.LoggerFactory;
 import com.nepxion.aquarius.common.exception.AquariusException;
 import com.nepxion.aquarius.common.redisson.constant.RedissonConstant;
 import com.nepxion.aquarius.common.redisson.handler.RedissonHandler;
-import com.nepxion.aquarius.lock.delegate.LockDelegate;
+import com.nepxion.aquarius.lock.LockDelegate;
 import com.nepxion.aquarius.lock.entity.LockType;
 
-public class RedisLockDelegate implements LockDelegate {
-    private static final Logger LOG = LoggerFactory.getLogger(RedisLockDelegate.class);
+public class RedisLockDelegateImpl implements LockDelegate {
+    private static final Logger LOG = LoggerFactory.getLogger(RedisLockDelegateImpl.class);
 
     private RedissonClient redisson;
 
@@ -40,7 +43,7 @@ public class RedisLockDelegate implements LockDelegate {
     private volatile Map<String, RReadWriteLock> readWriteLockMap = new ConcurrentHashMap<String, RReadWriteLock>();
     private boolean lockCached = true;
 
-    @Override
+    @PostConstruct
     public void initialize() {
         try {
             Config config = RedissonHandler.createYamlConfig(RedissonConstant.CONFIG_FILE);
@@ -51,7 +54,7 @@ public class RedisLockDelegate implements LockDelegate {
         }
     }
 
-    @Override
+    @PreDestroy
     public void destroy() {
         RedissonHandler.closeRedisson(redisson);
     }

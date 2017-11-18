@@ -25,11 +25,11 @@ import com.nepxion.aquarius.lock.service.MyService4Impl;
 
 @EnableAutoConfiguration
 @ComponentScan(basePackages = { "com.nepxion.aquarius.lock" })
-public class ReadWriteLockApplication {
-    private static final Logger LOG = LoggerFactory.getLogger(ReadWriteLockApplication.class);
+public class ReadWriteLockAopApplication {
+    private static final Logger LOG = LoggerFactory.getLogger(ReadWriteLockAopApplication.class);
 
     public static void main(String[] args) throws Exception {
-        SpringApplication.run(ReadWriteLockApplication.class, args);
+        SpringApplication.run(ReadWriteLockAopApplication.class, args);
 
         // 执行效果是先打印doW，即拿到写锁，再打印若干个doR，即可以同时拿到若干个读锁
         MyService4Impl myService4 = AquariusContextAware.getBean(MyService4Impl.class);
@@ -54,7 +54,6 @@ public class ReadWriteLockApplication {
                             // 读锁逻辑，最高持锁5秒，睡眠2秒，2秒后释放读锁
                             myService3.doR("X", "Y");
                         }
-
                     }).start();
                 }
             }

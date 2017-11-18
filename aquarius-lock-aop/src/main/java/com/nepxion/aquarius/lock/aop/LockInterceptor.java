@@ -23,10 +23,11 @@ import org.springframework.stereotype.Component;
 
 import com.nepxion.aquarius.common.constant.AquariusConstant;
 import com.nepxion.aquarius.common.exception.AquariusException;
+import com.nepxion.aquarius.common.util.KeyUtil;
+import com.nepxion.aquarius.lock.LockDelegate;
 import com.nepxion.aquarius.lock.annotation.Lock;
 import com.nepxion.aquarius.lock.annotation.ReadLock;
 import com.nepxion.aquarius.lock.annotation.WriteLock;
-import com.nepxion.aquarius.lock.delegate.LockDelegate;
 import com.nepxion.aquarius.lock.entity.LockType;
 import com.nepxion.matrix.aop.AbstractInterceptor;
 
@@ -39,6 +40,9 @@ public class LockInterceptor extends AbstractInterceptor {
 
     @Value("${" + AquariusConstant.PREFIX + "}")
     private String prefix;
+
+    @Value("${" + AquariusConstant.FREQUENT_LOG_PRINT + "}")
+    private Boolean frequentLogPrint;
 
     @Override
     public Object invoke(MethodInvocation invocation) throws Throwable {
@@ -124,14 +128,17 @@ public class LockInterceptor extends AbstractInterceptor {
             throw new AquariusException("Annotation [" + lockTypeValue + "]'s key is null or empty");
         }
 
-        String spelKey = getSpelKey(invocation, prefix, name, key);
+        String spelKey = getSpelKey(invocation, key);
+        String compositeKey = KeyUtil.getCompositeKey(prefix, name, spelKey);
         String proxyType = getProxyType(invocation);
         String proxiedClassName = getProxiedClassName(invocation);
         String methodName = getMethodName(invocation);
 
-        LOG.info("Intercepted for annotation - {} [key={}, leaseTime={}, waitTime={}, async={}, fair={}, proxyType={}, proxiedClass={}, method={}]", lockTypeValue, spelKey, leaseTime, waitTime, async, fair, proxyType, proxiedClassName, methodName);
+        if (frequentLogPrint) {
+            LOG.info("Intercepted for annotation - {} [key={}, leaseTime={}, waitTime={}, async={}, fair={}, proxyType={}, proxiedClass={}, method={}]", lockTypeValue, compositeKey, leaseTime, waitTime, async, fair, proxyType, proxiedClassName, methodName);
+        }
 
-        return lockDelegate.invoke(invocation, lockType, spelKey, leaseTime, waitTime, async, fair);
+        return lockDelegate.invoke(invocation, lockType, compositeKey, leaseTime, waitTime, async, fair);
     }
 
     private LockType getLockType(Annotation annotation) {
