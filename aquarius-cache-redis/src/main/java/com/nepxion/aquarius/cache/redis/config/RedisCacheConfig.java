@@ -11,7 +11,6 @@ package com.nepxion.aquarius.cache.redis.config;
  */
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -22,8 +21,7 @@ import com.nepxion.aquarius.cache.redis.constant.RedisCacheConstant;
 import com.nepxion.aquarius.cache.redis.delegate.RedisCacheDelegate;
 
 @Configuration
-@ComponentScan(basePackages = { "com.nepxion.aquarius.common.context" })
-@Import({ com.nepxion.aquarius.common.redis.config.RedisConfig.class })
+@Import({ com.nepxion.aquarius.common.config.AquariusConfig.class, com.nepxion.aquarius.common.redis.config.RedisConfig.class })
 public class RedisCacheConfig {
     @Bean(name = RedisCacheConstant.DELEGATE_VALUE)
     @Conditional(RedisCacheCondition.class)
