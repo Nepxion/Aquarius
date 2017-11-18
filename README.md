@@ -98,9 +98,9 @@ import com.nepxion.aquarius.lock.service.MyService2Impl;
 
 @EnableAutoConfiguration
 @ComponentScan(basePackages = { "com.nepxion.aquarius.lock" })
-public class LockApplication {
+public class LockAopApplication {
     public static void main(String[] args) throws Exception {
-        SpringApplication.run(LockApplication.class, args);
+        SpringApplication.run(LockAopApplication.class, args);
 
         // 执行效果是doA和doC无序打印，即谁拿到锁谁先运行
         MyService1 myService1 = AquariusContextAware.getBean(MyService1.class);
@@ -218,11 +218,11 @@ import com.nepxion.aquarius.lock.service.MyService4Impl;
 
 @EnableAutoConfiguration
 @ComponentScan(basePackages = { "com.nepxion.aquarius.lock" })
-public class ReadWriteLockApplication {
-    private static final Logger LOG = LoggerFactory.getLogger(ReadWriteLockApplication.class);
+public class ReadWriteLockAopApplication {
+    private static final Logger LOG = LoggerFactory.getLogger(ReadWriteLockAopApplication.class);
 
     public static void main(String[] args) throws Exception {
-        SpringApplication.run(ReadWriteLockApplication.class, args);
+        SpringApplication.run(ReadWriteLockAopApplication.class, args);
 
         // 执行效果是先打印doW，即拿到写锁，再打印若干个doR，即可以同时拿到若干个读锁
         MyService4Impl myService4 = AquariusContextAware.getBean(MyService4Impl.class);
@@ -398,9 +398,9 @@ import com.nepxion.aquarius.common.context.AquariusContextAware;
 
 @EnableAutoConfiguration
 @ComponentScan(basePackages = { "com.nepxion.aquarius.cache" })
-public class CacheApplication {
+public class CacheAopApplication {
     public static void main(String[] args) throws Exception {
-        SpringApplication.run(CacheApplication.class, args);
+        SpringApplication.run(CacheAopApplication.class, args);
 
         // 下面步骤请一步步操作，然后结合Redis Desktop Manager等工具查看效果
         MyService5 myService5 = AquariusContextAware.getBean(MyService5.class);
@@ -599,13 +599,130 @@ public class ZookeeperIdGeneratorApplication {
 ## Nepxion Aquarius Limit
 ### 介绍
     1 支持若干个分布式系统对同一资源在给定的时间段里最多的访问限制次数(超出次数返回false)；等下个时间段开始，才允许再次被访问(返回true)，周而复始
-    2 参数说明
+    2 支持两种方式访问，注解方式和直接调用方式
+    3 参数说明
       1)name 资源的名字
       2)key  资源Key。资源Key的完整路径是prefix + "_" + name + "_" + key，prefix为config.propertie里的namespace值
       3)limitPeriod 给定的时间段(单位为秒)
       4)limitCount 最多的访问限制次数
 
 ### 使用Limit示例如下，更多细节见aquarius-test工程下com.nepxion.aquarius.limit
+注解方式
+```java
+package com.nepxion.aquarius.limit.service;
+
+/**
+ * <p>Title: Nepxion Aquarius</p>
+ * <p>Description: Nepxion Aquarius</p>
+ * <p>Copyright: Copyright (c) 2017</p>
+ * <p>Company: Nepxion</p>
+ * @author Haojun Ren
+ * @email 1394997@qq.com
+ * @version 1.0
+ */
+
+import com.nepxion.aquarius.limit.annotation.Limit;
+
+public interface MyService7 {
+    @Limit(name = "limit", key = "#id1 + \"-\" + #id2", limitPeriod = 10, limitCount = 5)
+    String doA(String id1, String id2);
+}
+```
+
+```java
+package com.nepxion.aquarius.limit.service;
+
+/**
+ * <p>Title: Nepxion Aquarius</p>
+ * <p>Description: Nepxion Aquarius</p>
+ * <p>Copyright: Copyright (c) 2017</p>
+ * <p>Company: Nepxion</p>
+ * @author Haojun Ren
+ * @email 1394997@qq.com
+ * @version 1.0
+ */
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
+import com.nepxion.aquarius.limit.annotation.Limit;
+
+@Service("myService8Impl")
+public class MyService8Impl {
+    private static final Logger LOG = LoggerFactory.getLogger(MyService8Impl.class);
+
+    @Limit(name = "limit", key = "#id1 + \"-\" + #id2", limitPeriod = 10, limitCount = 5)
+    public String doB(String id1, String id2) {
+        LOG.info("doB");
+
+        return "B";
+    }
+}
+```
+
+```java
+package com.nepxion.aquarius.limit;
+
+/**
+ * <p>Title: Nepxion Aquarius</p>
+ * <p>Description: Nepxion Aquarius</p>
+ * <p>Copyright: Copyright (c) 2017</p>
+ * <p>Company: Nepxion</p>
+ * @author Haojun Ren
+ * @email 1394997@qq.com
+ * @version 1.0
+ */
+
+import java.util.Timer;
+import java.util.TimerTask;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.context.annotation.ComponentScan;
+
+import com.nepxion.aquarius.common.context.AquariusContextAware;
+import com.nepxion.aquarius.limit.service.MyService7;
+import com.nepxion.aquarius.limit.service.MyService8Impl;
+
+@EnableAutoConfiguration
+@ComponentScan(basePackages = { "com.nepxion.aquarius.limit" })
+public class RedisLimitAopApplication {
+    public static void main(String[] args) throws Exception {
+        SpringApplication.run(RedisLimitAopApplication.class, args);
+
+        MyService7 myService7 = AquariusContextAware.getBean(MyService7.class);
+        Timer timer1 = new Timer();
+        timer1.scheduleAtFixedRate(new TimerTask() {
+            public void run() {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        myService7.doA("X", "Y");
+                    }
+
+                }).start();
+            }
+        }, 0L, 3000L);
+
+        MyService8Impl myService8 = AquariusContextAware.getBean(MyService8Impl.class);
+        Timer timer2 = new Timer();
+        timer2.scheduleAtFixedRate(new TimerTask() {
+            public void run() {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        myService8.doB("X", "Y");
+                    }
+
+                }).start();
+            }
+        }, 0L, 4000L);
+    }
+}
+```
+
+直接调用方式
 ```java
 package com.nepxion.aquarius.limit;
 
