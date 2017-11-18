@@ -27,7 +27,7 @@ import org.springframework.stereotype.Component;
 import com.nepxion.aquarius.common.constant.AquariusConstant;
 import com.nepxion.aquarius.common.exception.AquariusException;
 import com.nepxion.aquarius.common.util.KeyUtil;
-import com.nepxion.aquarius.limit.redis.RedisLimit;
+import com.nepxion.aquarius.limit.RedisLimit;
 
 @Component("redisLimitImpl")
 public class RedisLimitImpl implements RedisLimit {
@@ -60,6 +60,10 @@ public class RedisLimitImpl implements RedisLimit {
 
     @Override
     public boolean tryAccess(String compositeKey, int limitPeriod, int limitCount) {
+        if (StringUtils.isEmpty(compositeKey)) {
+            throw new AquariusException("Composite key is null or empty");
+        }
+
         return tryAccess(compositeKey, limitPeriod, limitCount, 0, 0, false);
     }
 

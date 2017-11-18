@@ -20,7 +20,6 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 
 import com.nepxion.aquarius.common.context.AquariusContextAware;
-import com.nepxion.aquarius.limit.redis.RedisLimit;
 
 @EnableAutoConfiguration
 @ComponentScan(basePackages = { "com.nepxion.aquarius.limit.redis" })

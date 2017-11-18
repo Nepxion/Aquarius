@@ -14,8 +14,8 @@ import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.nepxion.aquarius.common.exception.AquariusException;
+import com.nepxion.aquarius.limit.RedisLimit;
 import com.nepxion.aquarius.limit.delegate.LimitDelegate;
-import com.nepxion.aquarius.limit.redis.RedisLimit;
 
 public class RedisLimitDelegate implements LimitDelegate {
     @Autowired

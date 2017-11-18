@@ -46,7 +46,6 @@ public class RedisIdGeneratorImpl implements RedisIdGenerator {
     @Value("${" + AquariusConstant.FREQUENT_LOG_PRINT + "}")
     private Boolean frequentLogPrint;
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public String nextUniqueId(String name, String key, int step, int length) {
         if (StringUtils.isEmpty(name)) {
@@ -57,8 +56,19 @@ public class RedisIdGeneratorImpl implements RedisIdGenerator {
             throw new AquariusException("Key is null or empty");
         }
 
-        List<String> keys = new ArrayList<String>();
         String compositeKey = KeyUtil.getCompositeKey(prefix, name, key);
+
+        return nextUniqueId(compositeKey, step, length);
+    }
+
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @Override
+    public String nextUniqueId(String compositeKey, int step, int length) {
+        if (StringUtils.isEmpty(compositeKey)) {
+            throw new AquariusException("Composite key is null or empty");
+        }
+
+        List<String> keys = new ArrayList<String>();
         keys.add(compositeKey);
 
         String luaScript = buildLuaScript();

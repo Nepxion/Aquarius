@@ -50,8 +50,9 @@ public class ZookeeperLockDelegate implements LockDelegate {
             AquariusProperties config = CuratorHandler.createPropertyConfig(CuratorConstant.CONFIG_FILE);
             curator = CuratorHandler.createCurator(config);
 
-            if (!CuratorHandler.pathExist(curator, "/" + prefix)) {
-                CuratorHandler.createPath(curator, "/" + prefix, CreateMode.PERSISTENT);
+            String rootPath = CuratorHandler.getRootPath(prefix);
+            if (!CuratorHandler.pathExist(curator, rootPath)) {
+                CuratorHandler.createPath(curator, rootPath, CreateMode.PERSISTENT);
             }
         } catch (Exception e) {
             LOG.error("Initialize Curator failed", e);
@@ -99,11 +100,6 @@ public class ZookeeperLockDelegate implements LockDelegate {
         return null;
     }
 
-    // 锁节点路径，对应ZooKeeper一个永久节点，下挂一系列临时节点
-    private String getPath(String key) {
-        return "/" + prefix + "/" + key;
-    }
-
     private InterProcessMutex getLock(LockType lockType, String key) {
         if (lockCached) {
             return getCachedLock(lockType, key);
@@ -113,7 +109,7 @@ public class ZookeeperLockDelegate implements LockDelegate {
     }
 
     private InterProcessMutex getNewLock(LockType lockType, String key) {
-        String path = getPath(key);
+        String path = CuratorHandler.getPath(prefix, key);
         switch (lockType) {
             case LOCK:
                 return new InterProcessMutex(curator, path);
@@ -129,7 +125,7 @@ public class ZookeeperLockDelegate implements LockDelegate {
     }
 
     private InterProcessMutex getCachedLock(LockType lockType, String key) {
-        String path = getPath(key);
+        String path = CuratorHandler.getPath(prefix, key);
         String newKey = path + "-" + lockType;
 
         InterProcessMutex lock = lockMap.get(newKey);
@@ -145,7 +141,7 @@ public class ZookeeperLockDelegate implements LockDelegate {
     }
 
     private InterProcessReadWriteLock getCachedReadWriteLock(LockType lockType, String key) {
-        String path = getPath(key);
+        String path = CuratorHandler.getPath(prefix, key);
         String newKey = path;
 
         InterProcessReadWriteLock readWriteLock = readWriteLockMap.get(newKey);

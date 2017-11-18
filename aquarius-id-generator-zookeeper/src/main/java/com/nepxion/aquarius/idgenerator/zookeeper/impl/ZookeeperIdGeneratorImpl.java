@@ -46,8 +46,9 @@ public class ZookeeperIdGeneratorImpl implements ZookeeperIdGenerator {
             AquariusProperties config = CuratorHandler.createPropertyConfig(CuratorConstant.CONFIG_FILE);
             curator = CuratorHandler.createCurator(config);
 
-            if (!CuratorHandler.pathExist(curator, "/" + prefix)) {
-                CuratorHandler.createPath(curator, "/" + prefix, CreateMode.PERSISTENT);
+            String rootPath = CuratorHandler.getRootPath(prefix);
+            if (!CuratorHandler.pathExist(curator, rootPath)) {
+                CuratorHandler.createPath(curator, rootPath, CreateMode.PERSISTENT);
             }
         } catch (Exception e) {
             LOG.error("Initialize Curator failed", e);
@@ -65,7 +66,17 @@ public class ZookeeperIdGeneratorImpl implements ZookeeperIdGenerator {
         }
 
         String compositeKey = KeyUtil.getCompositeKey(prefix, name, key);
-        String path = getPath(name, compositeKey);
+
+        return nextSequenceId(compositeKey);
+    }
+
+    @Override
+    public int nextSequenceId(String compositeKey) throws Exception {
+        if (StringUtils.isEmpty(compositeKey)) {
+            throw new AquariusException("Composite key is null or empty");
+        }
+
+        String path = CuratorHandler.getPath(prefix, compositeKey);
 
         // 并发过快，这里会抛“节点已经存在”的错误，当节点存在时候，就不会创建，所以不必打印异常
         try {
@@ -83,9 +94,5 @@ public class ZookeeperIdGeneratorImpl implements ZookeeperIdGenerator {
         }
 
         return nextSequenceId;
-    }
-
-    private String getPath(String name, String key) {
-        return "/" + prefix + "/" + key;
     }
 }
