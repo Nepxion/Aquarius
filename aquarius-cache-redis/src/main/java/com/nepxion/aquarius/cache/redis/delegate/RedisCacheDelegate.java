@@ -36,6 +36,9 @@ public class RedisCacheDelegate implements CacheDelegate {
     @Value("${" + AquariusConstant.PREFIX + "}")
     private String prefix;
 
+    @Value("${" + AquariusConstant.FREQUENT_LOG_PRINT + "}")
+    private Boolean frequentLogPrint;
+
     @Override
     public void initialize() {
 
@@ -58,7 +61,9 @@ public class RedisCacheDelegate implements CacheDelegate {
             LOG.warn("Redis exception occurs while getting data", e);
         }
 
-        LOG.info("Before invocation, Cacheable key={}, cache={} in Redis", key, object);
+        if (frequentLogPrint) {
+            LOG.info("Before invocation, Cacheable key={}, cache={} in Redis", key, object);
+        }
 
         if (object != null) {
             return object;
@@ -77,7 +82,9 @@ public class RedisCacheDelegate implements CacheDelegate {
                 LOG.warn("Redis exception occurs while setting data", e);
             }
 
-            LOG.info("After invocation, Cacheable key={}, cache={} in Redis", key, object);
+            if (frequentLogPrint) {
+                LOG.info("After invocation, Cacheable key={}, cache={} in Redis", key, object);
+            }
         }
 
         return object;
@@ -100,7 +107,9 @@ public class RedisCacheDelegate implements CacheDelegate {
                 LOG.warn("Redis exception occurs while setting data", e);
             }
 
-            LOG.info("After invocation, CachePut key={}, cache={} in Redis", key, object);
+            if (frequentLogPrint) {
+                LOG.info("After invocation, CachePut key={}, cache={} in Redis", key, object);
+            }
         }
 
         return object;
@@ -109,7 +118,10 @@ public class RedisCacheDelegate implements CacheDelegate {
     @Override
     public Object invokeCacheEvict(MethodInvocation invocation, String key, String name, boolean allEntries, boolean beforeInvocation) throws Throwable {
         if (beforeInvocation) {
-            LOG.info("Before invocation, CacheEvict clear key={} in Redis", key);
+            if (frequentLogPrint) {
+                LOG.info("Before invocation, CacheEvict clear key={} in Redis", key);
+            }
+
             try {
                 clear(key, name, allEntries);
             } catch (Exception e) {
@@ -120,7 +132,10 @@ public class RedisCacheDelegate implements CacheDelegate {
         Object object = invocation.proceed();
 
         if (!beforeInvocation) {
-            LOG.info("After invocation, CacheEvict clear key={} in Redis", key);
+            if (frequentLogPrint) {
+                LOG.info("After invocation, CacheEvict clear key={} in Redis", key);
+            }
+
             try {
                 clear(key, name, allEntries);
             } catch (Exception e) {

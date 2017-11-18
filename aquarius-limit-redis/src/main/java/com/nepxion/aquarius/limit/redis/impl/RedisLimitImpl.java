@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,12 +31,17 @@ import com.nepxion.aquarius.limit.redis.RedisLimit;
 
 @Component("redisLimitImpl")
 public class RedisLimitImpl implements RedisLimit {
+    private static final Logger LOG = LoggerFactory.getLogger(RedisLimitImpl.class);
+
     @Autowired
     @Qualifier("aquariusRedisTemplate")
     private RedisTemplate<String, Object> redisTemplate;
 
     @Value("${" + AquariusConstant.PREFIX + "}")
     private String prefix;
+
+    @Value("${" + AquariusConstant.FREQUENT_LOG_PRINT + "}")
+    private Boolean frequentLogPrint;
 
     @Override
     public boolean tryAccess(String name, String key, int limitPeriod, int limitCount) {
@@ -58,6 +65,10 @@ public class RedisLimitImpl implements RedisLimit {
 
         RedisScript<Number> redisScript = new DefaultRedisScript<Number>(luaScript, Number.class);
         Number count = redisTemplate.execute(redisScript, keys, Math.max(limitCount, lockCount), limitPeriod, lockCount, lockPeriod);
+
+        if (frequentLogPrint) {
+            LOG.info("Access try count is {} for key={}", count, compositeKey);
+        }
 
         return count.intValue() <= limitCount;
     }

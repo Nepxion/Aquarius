@@ -41,6 +41,9 @@ public class LockInterceptor extends AbstractInterceptor {
     @Value("${" + AquariusConstant.PREFIX + "}")
     private String prefix;
 
+    @Value("${" + AquariusConstant.FREQUENT_LOG_PRINT + "}")
+    private Boolean frequentLogPrint;
+
     @Override
     public Object invoke(MethodInvocation invocation) throws Throwable {
         Lock lockAnnotation = getLockAnnotation(invocation);
@@ -131,7 +134,9 @@ public class LockInterceptor extends AbstractInterceptor {
         String proxiedClassName = getProxiedClassName(invocation);
         String methodName = getMethodName(invocation);
 
-        LOG.info("Intercepted for annotation - {} [key={}, leaseTime={}, waitTime={}, async={}, fair={}, proxyType={}, proxiedClass={}, method={}]", lockTypeValue, compositeKey, leaseTime, waitTime, async, fair, proxyType, proxiedClassName, methodName);
+        if (frequentLogPrint) {
+            LOG.info("Intercepted for annotation - {} [key={}, leaseTime={}, waitTime={}, async={}, fair={}, proxyType={}, proxiedClass={}, method={}]", lockTypeValue, compositeKey, leaseTime, waitTime, async, fair, proxyType, proxiedClassName, methodName);
+        }
 
         return lockDelegate.invoke(invocation, lockType, compositeKey, leaseTime, waitTime, async, fair);
     }

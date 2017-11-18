@@ -37,6 +37,9 @@ public class ZookeeperIdGeneratorImpl implements ZookeeperIdGenerator {
     @Value("${" + AquariusConstant.PREFIX + "}")
     private String prefix;
 
+    @Value("${" + AquariusConstant.FREQUENT_LOG_PRINT + "}")
+    private Boolean frequentLogPrint;
+
     @PostConstruct
     public void initialize() {
         try {
@@ -61,7 +64,8 @@ public class ZookeeperIdGeneratorImpl implements ZookeeperIdGenerator {
             throw new AquariusException("key is null or empty");
         }
 
-        String path = getPath(name, key);
+        String compositeKey = KeyUtil.getCompositeKey(prefix, name, key);
+        String path = getPath(name, compositeKey);
 
         // 并发过快，这里会抛“节点已经存在”的错误，当节点存在时候，就不会创建，所以不必打印异常
         try {
@@ -72,12 +76,16 @@ public class ZookeeperIdGeneratorImpl implements ZookeeperIdGenerator {
 
         }
 
-        return curator.setData().withVersion(-1).forPath(path, "".getBytes()).getVersion();
+        int nextSequenceId = curator.setData().withVersion(-1).forPath(path, "".getBytes()).getVersion();
+
+        if (frequentLogPrint) {
+            LOG.info("Next sequenceId id is {} for key={}", nextSequenceId, compositeKey);
+        }
+
+        return nextSequenceId;
     }
 
     private String getPath(String name, String key) {
-        String compositeKey = KeyUtil.getCompositeKey(prefix, name, key);
-
-        return "/" + prefix + "/" + compositeKey;
+        return "/" + prefix + "/" + key;
     }
 }

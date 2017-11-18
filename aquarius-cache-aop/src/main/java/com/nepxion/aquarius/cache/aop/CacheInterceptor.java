@@ -39,6 +39,9 @@ public class CacheInterceptor extends AbstractInterceptor {
     @Value("${" + AquariusConstant.PREFIX + "}")
     private String prefix;
 
+    @Value("${" + AquariusConstant.FREQUENT_LOG_PRINT + "}")
+    private Boolean frequentLogPrint;
+
     @Override
     public Object invoke(MethodInvocation invocation) throws Throwable {
         Cacheable cacheableAnnotation = getCacheableAnnotation(invocation);
@@ -114,7 +117,9 @@ public class CacheInterceptor extends AbstractInterceptor {
         String proxiedClassName = getProxiedClassName(invocation);
         String methodName = getMethodName(invocation);
 
-        LOG.info("Intercepted for annotation - Cacheable [name={}, key={}, expire={}, proxyType={}, proxiedClass={}, method={}]", name, compositeKey, expire, proxyType, proxiedClassName, methodName);
+        if (frequentLogPrint) {
+            LOG.info("Intercepted for annotation - Cacheable [key={}, expire={}, proxyType={}, proxiedClass={}, method={}]", compositeKey, expire, proxyType, proxiedClassName, methodName);
+        }
 
         return cacheDelegate.invokeCacheable(invocation, compositeKey, expire);
     }
@@ -134,7 +139,9 @@ public class CacheInterceptor extends AbstractInterceptor {
         String proxiedClassName = getProxiedClassName(invocation);
         String methodName = getMethodName(invocation);
 
-        LOG.info("Intercepted for annotation - CachePut [name={}, key={}, expire={}, proxyType={}, proxiedClass={}, method={}]", name, compositeKey, expire, proxyType, proxiedClassName, methodName);
+        if (frequentLogPrint) {
+            LOG.info("Intercepted for annotation - CachePut [key={}, expire={}, proxyType={}, proxiedClass={}, method={}]", compositeKey, expire, proxyType, proxiedClassName, methodName);
+        }
 
         return cacheDelegate.invokeCachePut(invocation, compositeKey, expire);
     }
@@ -154,7 +161,9 @@ public class CacheInterceptor extends AbstractInterceptor {
         String proxiedClassName = getProxiedClassName(invocation);
         String methodName = getMethodName(invocation);
 
-        LOG.info("Intercepted for annotation - CacheEvict [name={}, key={}, allEntries={}, beforeInvocation={}, proxyType={}, proxiedClass={}, method={}]", name, compositeKey, allEntries, beforeInvocation, proxyType, proxiedClassName, methodName);
+        if (frequentLogPrint) {
+            LOG.info("Intercepted for annotation - CacheEvict [key={}, allEntries={}, beforeInvocation={}, proxyType={}, proxiedClass={}, method={}]", compositeKey, allEntries, beforeInvocation, proxyType, proxiedClassName, methodName);
+        }
 
         return cacheDelegate.invokeCacheEvict(invocation, compositeKey, name, allEntries, beforeInvocation);
     }

@@ -15,6 +15,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,12 +34,17 @@ import com.nepxion.aquarius.idgenerator.redis.RedisIdGenerator;
 
 @Component("redisIdGeneratorImpl")
 public class RedisIdGeneratorImpl implements RedisIdGenerator {
+    private static final Logger LOG = LoggerFactory.getLogger(RedisIdGeneratorImpl.class);
+
     @Autowired
     @Qualifier("aquariusRedisTemplate")
     private RedisTemplate<String, Object> redisTemplate;
 
     @Value("${" + AquariusConstant.PREFIX + "}")
     private String prefix;
+
+    @Value("${" + AquariusConstant.FREQUENT_LOG_PRINT + "}")
+    private Boolean frequentLogPrint;
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
@@ -69,7 +76,13 @@ public class RedisIdGeneratorImpl implements RedisIdGenerator {
         builder.append(DateUtil.formatDate(date, DateUtil.DATE_FMT_YMDHMSSSSS));
         builder.append(StringUtil.subString((long) value3, length));
 
-        return builder.toString();
+        String nextUniqueId = builder.toString();
+
+        if (frequentLogPrint) {
+            LOG.info("Next unique id is {} for key={}", nextUniqueId, compositeKey);
+        }
+
+        return nextUniqueId;
     }
 
     private String buildLuaScript() {
