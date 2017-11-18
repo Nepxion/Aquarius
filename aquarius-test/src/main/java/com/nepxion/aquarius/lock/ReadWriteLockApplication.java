@@ -48,7 +48,7 @@ public class ReadWriteLockApplication {
                             e.printStackTrace();
                         }
 
-                        LOG.info("doW");
+                        LOG.info("doW - write lock is got");
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -81,7 +81,7 @@ public class ReadWriteLockApplication {
                                         e.printStackTrace();
                                     }
 
-                                    LOG.info("doR");
+                                    LOG.info("doR - read lock is got");
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();

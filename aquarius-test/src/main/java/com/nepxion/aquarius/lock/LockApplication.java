@@ -45,7 +45,7 @@ public class LockApplication {
                                 e.printStackTrace();
                             }
 
-                            LOG.info("doA");
+                            LOG.info("doA - lock is got");
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -74,7 +74,7 @@ public class LockApplication {
                                 e.printStackTrace();
                             }
 
-                            LOG.info("doC");
+                            LOG.info("doC - lock is got");
                         }
                     } catch (Exception e) {
                         e.printStackTrace();

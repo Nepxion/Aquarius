@@ -30,7 +30,7 @@ public class MyService2Impl {
             e.printStackTrace();
         }
 
-        LOG.info("doC");
+        LOG.info("doC - lock is got");
 
         return "C";
     }

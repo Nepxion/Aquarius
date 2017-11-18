@@ -30,7 +30,7 @@ public class MyService4Impl {
             e.printStackTrace();
         }
 
-        LOG.info("doW");
+        LOG.info("doW - write lock is got");
 
         return "W";
     }
