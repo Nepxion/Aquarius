@@ -36,10 +36,6 @@ public class LocalLockDelegateImpl implements LockDelegate {
             throw new AquariusException("Async lock of Local isn't support for " + lockType);
         }
 
-        return invokeLock(invocation, lockType, key, leaseTime, waitTime, fair);
-    }
-
-    private Object invokeLock(MethodInvocation invocation, LockType lockType, String key, long leaseTime, long waitTime, boolean fair) throws Throwable {
         Lock lock = null;
         try {
             lock = getLock(lockType, key, fair);
