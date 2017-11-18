@@ -12,4 +12,6 @@ package com.nepxion.aquarius.lock.zookeeper.constant;
 
 public class ZookeeperLockConstant {
     public static final String DELEGATE_VALUE = "zookeeperLockDelegate";
+
+    public static final String EXECUTOR_VALUE = "zookeeperLockExecutor";
 }

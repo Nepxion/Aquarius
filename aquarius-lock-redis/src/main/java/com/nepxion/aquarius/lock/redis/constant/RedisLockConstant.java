@@ -12,4 +12,6 @@ package com.nepxion.aquarius.lock.redis.constant;
 
 public class RedisLockConstant {
     public static final String DELEGATE_VALUE = "redisLockDelegate";
+
+    public static final String EXECUTOR_VALUE = "redisLockExecutor";
 }

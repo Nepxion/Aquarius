@@ -10,15 +10,18 @@ package com.nepxion.aquarius.lock.zookeeper.config;
  * @version 1.0
  */
 
+import org.apache.curator.framework.recipes.locks.InterProcessMutex;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import com.nepxion.aquarius.lock.LockDelegate;
+import com.nepxion.aquarius.lock.LockExecutor;
 import com.nepxion.aquarius.lock.zookeeper.condition.ZookeeperLockCondition;
 import com.nepxion.aquarius.lock.zookeeper.constant.ZookeeperLockConstant;
 import com.nepxion.aquarius.lock.zookeeper.impl.ZookeeperLockDelegateImpl;
+import com.nepxion.aquarius.lock.zookeeper.impl.ZookeeperLockExecutorImpl;
 
 @Configuration
 @Import({ com.nepxion.aquarius.common.config.AquariusConfig.class })
@@ -27,5 +30,11 @@ public class ZookeeperLockConfig {
     @Conditional(ZookeeperLockCondition.class)
     public LockDelegate zookeeperLockDelegate() {
         return new ZookeeperLockDelegateImpl();
+    }
+
+    @Bean(name = ZookeeperLockConstant.EXECUTOR_VALUE)
+    @Conditional(ZookeeperLockCondition.class)
+    public LockExecutor<InterProcessMutex> zookeeperLockExecutor() {
+        return new ZookeeperLockExecutorImpl();
     }
 }
