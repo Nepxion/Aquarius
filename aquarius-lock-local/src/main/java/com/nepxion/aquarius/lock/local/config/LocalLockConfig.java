@@ -11,9 +11,9 @@ package com.nepxion.aquarius.lock.local.config;
  */
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 import com.nepxion.aquarius.lock.delegate.LockDelegate;
 import com.nepxion.aquarius.lock.local.condition.LocalLockCondition;
@@ -21,7 +21,7 @@ import com.nepxion.aquarius.lock.local.constant.LocalLockConstant;
 import com.nepxion.aquarius.lock.local.delegate.LocalLockDelegate;
 
 @Configuration
-@ComponentScan(basePackages = { "com.nepxion.aquarius.common.context" })
+@Import({ com.nepxion.aquarius.common.config.AquariusConfig.class })
 public class LocalLockConfig {
     @Bean(name = LocalLockConstant.DELEGATE_VALUE)
     @Conditional(LocalLockCondition.class)

@@ -10,13 +10,11 @@ package com.nepxion.aquarius.limit.redis.config;
  * @version 1.0
  */
 
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 @Configuration
-@ComponentScan(basePackages = { "com.nepxion.aquarius.common.context" })
-@Import({ com.nepxion.aquarius.common.redis.config.RedisConfig.class })
+@Import({ com.nepxion.aquarius.common.config.AquariusConfig.class, com.nepxion.aquarius.common.redis.config.RedisConfig.class })
 public class RedisLimitConfig {
 
 }
