@@ -45,7 +45,7 @@ public @interface ReadLock {
     long waitTime() default 60000L;
 
     /**
-     * 是否采用锁的异步执行方式
+     * 是否采用锁的异步执行方式(异步拿锁，同步阻塞)
      */
     boolean async() default false;
 
