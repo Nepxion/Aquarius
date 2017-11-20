@@ -18,14 +18,20 @@ import org.springframework.data.redis.core.RedisTemplate;
 
 import com.nepxion.aquarius.common.redis.constant.RedisConstant;
 
-// 将废弃
 public class RedisHandler {
     private static final Logger LOG = LoggerFactory.getLogger(RedisHandler.class);
 
-    public static ApplicationContext createApplicationContext() {
-        LOG.info("Start to initialize application context...");
+    public static ApplicationContext createApplicationContext(String configPath) {
+        LOG.info("Start to initialize application context with {}...", RedisConstant.CONFIG_FILE);
 
-        return new ClassPathXmlApplicationContext("classpath*:" + RedisConstant.CONFIG_FILE);
+        String path = null;
+        if (RedisHandler.class.getClassLoader().getResourceAsStream(configPath) != null) {
+            path = "classpath*:" + configPath;
+        } else {
+            path = "file:" + configPath;
+        }
+
+        return new ClassPathXmlApplicationContext(path);
     }
 
     // 创建RedisTemplate
@@ -34,15 +40,5 @@ public class RedisHandler {
         LOG.info("Start to initialize Redis...");
 
         return (RedisTemplate<String, Object>) applicationContext.getBean("aquariusRedisTemplate");
-    }
-
-    // 关闭Redis客户端连接
-    public static void closeRedisson(RedisTemplate<String, Object> redisTemplate) {
-        LOG.info("Start to close Redis...");
-    }
-
-    // Redis客户端连接是否正常
-    public static boolean isStarted(RedisTemplate<String, Object> redisTemplate) {
-        return true;
     }
 }

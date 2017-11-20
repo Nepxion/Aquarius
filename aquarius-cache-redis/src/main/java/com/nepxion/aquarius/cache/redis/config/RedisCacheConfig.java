@@ -21,7 +21,7 @@ import com.nepxion.aquarius.cache.redis.constant.RedisCacheConstant;
 import com.nepxion.aquarius.cache.redis.impl.RedisCacheDelegateImpl;
 
 @Configuration
-@Import({ com.nepxion.aquarius.common.config.AquariusConfig.class, com.nepxion.aquarius.common.redis.config.RedisConfig.class })
+@Import({ com.nepxion.aquarius.common.config.AquariusConfig.class })
 public class RedisCacheConfig {
     @Bean(name = RedisCacheConstant.DELEGATE_VALUE)
     @Conditional(RedisCacheCondition.class)

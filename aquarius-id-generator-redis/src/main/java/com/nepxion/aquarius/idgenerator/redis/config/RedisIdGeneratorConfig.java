@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 @Configuration
-@Import({ com.nepxion.aquarius.common.config.AquariusConfig.class, com.nepxion.aquarius.common.redis.config.RedisConfig.class })
+@Import({ com.nepxion.aquarius.common.config.AquariusConfig.class })
 public class RedisIdGeneratorConfig {
 
 }
