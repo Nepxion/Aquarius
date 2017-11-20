@@ -21,14 +21,14 @@ import com.nepxion.aquarius.common.redis.constant.RedisConstant;
 public class RedisHandler {
     private static final Logger LOG = LoggerFactory.getLogger(RedisHandler.class);
 
-    public static ApplicationContext createApplicationContext() {
+    public static ApplicationContext createApplicationContext(String configPath) {
         LOG.info("Start to initialize application context with {}...", RedisConstant.CONFIG_FILE);
 
         String path = null;
-        if (RedisHandler.class.getClassLoader().getResourceAsStream(RedisConstant.CONFIG_FILE) != null) {
-            path = "classpath*:" + RedisConstant.CONFIG_FILE;
+        if (RedisHandler.class.getClassLoader().getResourceAsStream(configPath) != null) {
+            path = "classpath*:" + configPath;
         } else {
-            path = "file:" + RedisConstant.CONFIG_FILE;
+            path = "file:" + configPath;
         }
 
         return new ClassPathXmlApplicationContext(path);
@@ -40,15 +40,5 @@ public class RedisHandler {
         LOG.info("Start to initialize Redis...");
 
         return (RedisTemplate<String, Object>) applicationContext.getBean("aquariusRedisTemplate");
-    }
-
-    // 关闭Redis客户端连接
-    public static void closeRedisson(RedisTemplate<String, Object> redisTemplate) {
-        LOG.info("Start to close Redis...");
-    }
-
-    // Redis客户端连接是否正常
-    public static boolean isStarted(RedisTemplate<String, Object> redisTemplate) {
-        return true;
     }
 }
