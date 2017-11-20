@@ -14,13 +14,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
-
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationContext;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.data.redis.core.script.RedisScript;
@@ -28,8 +26,6 @@ import org.springframework.stereotype.Component;
 
 import com.nepxion.aquarius.common.constant.AquariusConstant;
 import com.nepxion.aquarius.common.exception.AquariusException;
-import com.nepxion.aquarius.common.redis.constant.RedisConstant;
-import com.nepxion.aquarius.common.redis.handler.RedisHandler;
 import com.nepxion.aquarius.common.util.DateUtil;
 import com.nepxion.aquarius.common.util.KeyUtil;
 import com.nepxion.aquarius.common.util.StringUtil;
@@ -39,6 +35,7 @@ import com.nepxion.aquarius.idgenerator.redis.RedisIdGenerator;
 public class RedisIdGeneratorImpl implements RedisIdGenerator {
     private static final Logger LOG = LoggerFactory.getLogger(RedisIdGeneratorImpl.class);
 
+    @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 
     @Value("${" + AquariusConstant.PREFIX + "}")
@@ -46,17 +43,6 @@ public class RedisIdGeneratorImpl implements RedisIdGenerator {
 
     @Value("${" + AquariusConstant.FREQUENT_LOG_PRINT + "}")
     private Boolean frequentLogPrint;
-
-    @PostConstruct
-    public void initialize() {
-        try {
-            ApplicationContext applicationContext = RedisHandler.createApplicationContext(RedisConstant.CONFIG_FILE);
-
-            redisTemplate = RedisHandler.createRedisTemplate(applicationContext);
-        } catch (Exception e) {
-            LOG.error("Initialize Redis failed", e);
-        }
-    }
 
     @Override
     public String nextUniqueId(String name, String key, int step, int length) {

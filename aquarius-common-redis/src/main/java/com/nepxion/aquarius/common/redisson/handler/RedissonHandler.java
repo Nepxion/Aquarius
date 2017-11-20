@@ -19,9 +19,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.nepxion.aquarius.common.property.AquariusContent;
+import com.nepxion.aquarius.common.redisson.constant.RedissonConstant;
 
 public class RedissonHandler {
     private static final Logger LOG = LoggerFactory.getLogger(RedissonHandler.class);
+
+    // 创建默认Redisson
+    public static RedissonClient createDefaultRedisson() {
+        try {
+            Config config = RedissonHandler.createYamlConfig(RedissonConstant.CONFIG_FILE);
+
+            return RedissonHandler.createRedisson(config);
+        } catch (IOException e) {
+            LOG.error("Initialize Redisson failed", e);
+        }
+
+        return null;
+    }
 
     // 创建Yaml格式的配置文件
     public static Config createYamlConfig(String yamlConfigPath) throws IOException {

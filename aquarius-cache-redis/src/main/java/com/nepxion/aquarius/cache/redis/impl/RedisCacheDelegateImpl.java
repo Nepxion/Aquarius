@@ -13,25 +13,22 @@ package com.nepxion.aquarius.cache.redis.impl;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import javax.annotation.PostConstruct;
-
 import org.aopalliance.intercept.MethodInvocation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationContext;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 
 import com.nepxion.aquarius.cache.CacheDelegate;
 import com.nepxion.aquarius.common.constant.AquariusConstant;
-import com.nepxion.aquarius.common.redis.constant.RedisConstant;
-import com.nepxion.aquarius.common.redis.handler.RedisHandler;
 import com.nepxion.aquarius.common.util.KeyUtil;
 
 public class RedisCacheDelegateImpl implements CacheDelegate {
     private static final Logger LOG = LoggerFactory.getLogger(RedisCacheDelegateImpl.class);
 
+    @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 
     @Value("${" + AquariusConstant.PREFIX + "}")
@@ -39,17 +36,6 @@ public class RedisCacheDelegateImpl implements CacheDelegate {
 
     @Value("${" + AquariusConstant.FREQUENT_LOG_PRINT + "}")
     private Boolean frequentLogPrint;
-
-    @PostConstruct
-    public void initialize() {
-        try {
-            ApplicationContext applicationContext = RedisHandler.createApplicationContext(RedisConstant.CONFIG_FILE);
-
-            redisTemplate = RedisHandler.createRedisTemplate(applicationContext);
-        } catch (Exception e) {
-            LOG.error("Initialize Redis failed", e);
-        }
-    }
 
     @Override
     public Object invokeCacheable(MethodInvocation invocation, String key, long expire) throws Throwable {

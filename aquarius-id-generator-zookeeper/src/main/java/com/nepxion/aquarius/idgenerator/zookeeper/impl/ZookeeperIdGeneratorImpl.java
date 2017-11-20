@@ -10,21 +10,18 @@ package com.nepxion.aquarius.idgenerator.zookeeper.impl;
  * @version 1.0
  */
 
-import javax.annotation.PostConstruct;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.zookeeper.CreateMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.nepxion.aquarius.common.constant.AquariusConstant;
-import com.nepxion.aquarius.common.curator.constant.CuratorConstant;
 import com.nepxion.aquarius.common.curator.handler.CuratorHandler;
 import com.nepxion.aquarius.common.exception.AquariusException;
-import com.nepxion.aquarius.common.property.AquariusProperties;
 import com.nepxion.aquarius.common.util.KeyUtil;
 import com.nepxion.aquarius.idgenerator.zookeeper.ZookeeperIdGenerator;
 
@@ -32,6 +29,7 @@ import com.nepxion.aquarius.idgenerator.zookeeper.ZookeeperIdGenerator;
 public class ZookeeperIdGeneratorImpl implements ZookeeperIdGenerator {
     private static final Logger LOG = LoggerFactory.getLogger(ZookeeperIdGeneratorImpl.class);
 
+    @Autowired
     private CuratorFramework curator;
 
     @Value("${" + AquariusConstant.PREFIX + "}")
@@ -39,21 +37,6 @@ public class ZookeeperIdGeneratorImpl implements ZookeeperIdGenerator {
 
     @Value("${" + AquariusConstant.FREQUENT_LOG_PRINT + "}")
     private Boolean frequentLogPrint;
-
-    @PostConstruct
-    public void initialize() {
-        try {
-            AquariusProperties config = CuratorHandler.createPropertyConfig(CuratorConstant.CONFIG_FILE);
-            curator = CuratorHandler.createCurator(config);
-
-            String rootPath = CuratorHandler.getRootPath(prefix);
-            if (!CuratorHandler.pathExist(curator, rootPath)) {
-                CuratorHandler.createPath(curator, rootPath, CreateMode.PERSISTENT);
-            }
-        } catch (Exception e) {
-            LOG.error("Initialize Curator failed", e);
-        }
-    }
 
     @Override
     public int nextSequenceId(String name, String key) throws Exception {
@@ -74,6 +57,10 @@ public class ZookeeperIdGeneratorImpl implements ZookeeperIdGenerator {
     public int nextSequenceId(String compositeKey) throws Exception {
         if (StringUtils.isEmpty(compositeKey)) {
             throw new AquariusException("Composite key is null or empty");
+        }
+
+        if (!CuratorHandler.isStarted(curator)) {
+            throw new AquariusException("Curator isn't started");
         }
 
         String path = CuratorHandler.getPath(prefix, compositeKey);

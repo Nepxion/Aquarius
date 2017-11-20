@@ -14,30 +14,24 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.recipes.locks.InterProcessMutex;
 import org.apache.curator.framework.recipes.locks.InterProcessReadWriteLock;
-import org.apache.zookeeper.CreateMode;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 import com.nepxion.aquarius.common.constant.AquariusConstant;
-import com.nepxion.aquarius.common.curator.constant.CuratorConstant;
 import com.nepxion.aquarius.common.curator.handler.CuratorHandler;
 import com.nepxion.aquarius.common.exception.AquariusException;
-import com.nepxion.aquarius.common.property.AquariusProperties;
 import com.nepxion.aquarius.common.util.KeyUtil;
 import com.nepxion.aquarius.lock.LockExecutor;
 import com.nepxion.aquarius.lock.entity.LockType;
 
 public class ZookeeperLockExecutorImpl implements LockExecutor<InterProcessMutex> {
-    private static final Logger LOG = LoggerFactory.getLogger(ZookeeperLockExecutorImpl.class);
-
+    @Autowired
     private CuratorFramework curator;
 
     @Value("${" + AquariusConstant.PREFIX + "}")
@@ -47,21 +41,6 @@ public class ZookeeperLockExecutorImpl implements LockExecutor<InterProcessMutex
     private volatile Map<String, InterProcessMutex> lockMap = new ConcurrentHashMap<String, InterProcessMutex>();
     private volatile Map<String, InterProcessReadWriteLock> readWriteLockMap = new ConcurrentHashMap<String, InterProcessReadWriteLock>();
     private boolean lockCached = true;
-
-    @PostConstruct
-    public void initialize() {
-        try {
-            AquariusProperties config = CuratorHandler.createPropertyConfig(CuratorConstant.CONFIG_FILE);
-            curator = CuratorHandler.createCurator(config);
-
-            String rootPath = CuratorHandler.getRootPath(prefix);
-            if (!CuratorHandler.pathExist(curator, rootPath)) {
-                CuratorHandler.createPath(curator, rootPath, CreateMode.PERSISTENT);
-            }
-        } catch (Exception e) {
-            LOG.error("Initialize Curator failed", e);
-        }
-    }
 
     @PreDestroy
     public void destroy() {

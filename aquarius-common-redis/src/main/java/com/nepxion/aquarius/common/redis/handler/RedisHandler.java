@@ -21,6 +21,20 @@ import com.nepxion.aquarius.common.redis.constant.RedisConstant;
 public class RedisHandler {
     private static final Logger LOG = LoggerFactory.getLogger(RedisHandler.class);
 
+    // 创建默认RedisTemplate
+    public static RedisTemplate<String, Object> createDefaultRedisTemplate() {
+        try {
+            ApplicationContext applicationContext = createApplicationContext(RedisConstant.CONFIG_FILE);
+
+            return RedisHandler.createRedisTemplate(applicationContext);
+        } catch (Exception e) {
+            LOG.error("Initialize Redis failed", e);
+        }
+
+        return null;
+    }
+
+    // 创建ApplicationContext
     public static ApplicationContext createApplicationContext(String configPath) {
         LOG.info("Start to initialize application context with {}...", RedisConstant.CONFIG_FILE);
 
