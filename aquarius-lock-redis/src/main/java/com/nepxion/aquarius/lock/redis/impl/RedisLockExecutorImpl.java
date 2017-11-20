@@ -10,34 +10,28 @@ package com.nepxion.aquarius.lock.redis.impl;
  * @version 1.0
  */
 
-import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import org.apache.commons.lang3.StringUtils;
 import org.redisson.api.RLock;
 import org.redisson.api.RReadWriteLock;
 import org.redisson.api.RedissonClient;
-import org.redisson.config.Config;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 import com.nepxion.aquarius.common.constant.AquariusConstant;
 import com.nepxion.aquarius.common.exception.AquariusException;
-import com.nepxion.aquarius.common.redisson.constant.RedissonConstant;
 import com.nepxion.aquarius.common.redisson.handler.RedissonHandler;
 import com.nepxion.aquarius.common.util.KeyUtil;
 import com.nepxion.aquarius.lock.LockExecutor;
 import com.nepxion.aquarius.lock.entity.LockType;
 
 public class RedisLockExecutorImpl implements LockExecutor<RLock> {
-    private static final Logger LOG = LoggerFactory.getLogger(RedisLockExecutorImpl.class);
-
+    @Autowired
     private RedissonClient redisson;
 
     @Value("${" + AquariusConstant.PREFIX + "}")
@@ -47,17 +41,6 @@ public class RedisLockExecutorImpl implements LockExecutor<RLock> {
     private volatile Map<String, RLock> lockMap = new ConcurrentHashMap<String, RLock>();
     private volatile Map<String, RReadWriteLock> readWriteLockMap = new ConcurrentHashMap<String, RReadWriteLock>();
     private boolean lockCached = true;
-
-    @PostConstruct
-    public void initialize() {
-        try {
-            Config config = RedissonHandler.createYamlConfig(RedissonConstant.CONFIG_FILE);
-
-            redisson = RedissonHandler.createRedisson(config);
-        } catch (IOException e) {
-            LOG.error("Initialize Redisson failed", e);
-        }
-    }
 
     @PreDestroy
     public void destroy() {

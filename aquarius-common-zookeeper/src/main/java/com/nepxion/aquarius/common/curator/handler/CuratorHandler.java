@@ -39,6 +39,25 @@ import com.nepxion.aquarius.common.property.AquariusProperties;
 public class CuratorHandler {
     private static final Logger LOG = LoggerFactory.getLogger(CuratorHandler.class);
 
+    // 创建默认Curator，并初始化根节点
+    public static CuratorFramework createDefaultCurator(String prefix) {
+        try {
+            AquariusProperties config = CuratorHandler.createPropertyConfig(CuratorConstant.CONFIG_FILE);
+            CuratorFramework curator = CuratorHandler.createCurator(config);
+
+            String rootPath = CuratorHandler.getRootPath(prefix);
+            if (!CuratorHandler.pathExist(curator, rootPath)) {
+                CuratorHandler.createPath(curator, rootPath, CreateMode.PERSISTENT);
+            }
+
+            return curator;
+        } catch (Exception e) {
+            LOG.error("Initialize Curator failed", e);
+        }
+
+        return null;
+    }
+
     // 创建Property格式的配置文件
     public static AquariusProperties createPropertyConfig(String propertyConfigPath) throws IOException {
         LOG.info("Start to read {}...", propertyConfigPath);
@@ -48,6 +67,7 @@ public class CuratorHandler {
         return new AquariusProperties(content.getContent());
     }
 
+    // 创建Curator
     public static CuratorFramework createCurator(AquariusProperties properties) throws Exception {
         String retryType = properties.getString(CuratorConstant.RETRY_TYPE);
         RetryPolicy retryPolicy = null;

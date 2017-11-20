@@ -11,11 +11,13 @@ package com.nepxion.aquarius.lock.redis.config;
  */
 
 import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import com.nepxion.aquarius.common.redisson.handler.RedissonHandler;
 import com.nepxion.aquarius.lock.LockDelegate;
 import com.nepxion.aquarius.lock.LockExecutor;
 import com.nepxion.aquarius.lock.redis.condition.RedisLockCondition;
@@ -36,5 +38,11 @@ public class RedisLockConfig {
     @Conditional(RedisLockCondition.class)
     public LockExecutor<RLock> redisLockExecutor() {
         return new RedisLockExecutorImpl();
+    }
+
+    @Bean(name = "redisson")
+    @Conditional(RedisLockCondition.class)
+    public RedissonClient redisson() {
+        return RedissonHandler.createDefaultRedisson();
     }
 }

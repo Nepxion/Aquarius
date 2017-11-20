@@ -14,7 +14,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.redis.core.RedisTemplate;
 
+import com.nepxion.aquarius.common.redis.handler.RedisHandler;
 import com.nepxion.aquarius.limit.LimitDelegate;
 import com.nepxion.aquarius.limit.LimitExecutor;
 import com.nepxion.aquarius.limit.redis.condition.RedisLimitCondition;
@@ -35,5 +37,11 @@ public class RedisLimitConfig {
     @Conditional(RedisLimitCondition.class)
     public LimitExecutor redisLimitExecutor() {
         return new RedisLimitExecutorImpl();
+    }
+
+    @Bean(name = "redisTemplate")
+    @Conditional(RedisLimitCondition.class)
+    public RedisTemplate<String, Object> redisTemplate() {
+        return RedisHandler.createDefaultRedisTemplate();
     }
 }
