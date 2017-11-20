@@ -11,5 +11,7 @@ package com.nepxion.aquarius.limit.constant;
  */
 
 public class LimitConstant {
-    public static final String DELEGATE_KEY = "limitDelegate";
+    public static final String LIMIT_TYPE = "limitType";
+
+    public static final String LIMIT_TYPE_REDIS = "redisLimit";
 }

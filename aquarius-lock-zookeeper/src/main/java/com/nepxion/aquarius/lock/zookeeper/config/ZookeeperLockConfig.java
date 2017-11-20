@@ -23,7 +23,6 @@ import com.nepxion.aquarius.common.curator.handler.CuratorHandler;
 import com.nepxion.aquarius.lock.LockDelegate;
 import com.nepxion.aquarius.lock.LockExecutor;
 import com.nepxion.aquarius.lock.zookeeper.condition.ZookeeperLockCondition;
-import com.nepxion.aquarius.lock.zookeeper.constant.ZookeeperLockConstant;
 import com.nepxion.aquarius.lock.zookeeper.impl.ZookeeperLockDelegateImpl;
 import com.nepxion.aquarius.lock.zookeeper.impl.ZookeeperLockExecutorImpl;
 
@@ -33,13 +32,13 @@ public class ZookeeperLockConfig {
     @Value("${" + AquariusConstant.PREFIX + "}")
     private String prefix;
 
-    @Bean(name = ZookeeperLockConstant.DELEGATE_VALUE)
+    @Bean(name = "zookeeperLockDelegate")
     @Conditional(ZookeeperLockCondition.class)
     public LockDelegate zookeeperLockDelegate() {
         return new ZookeeperLockDelegateImpl();
     }
 
-    @Bean(name = ZookeeperLockConstant.EXECUTOR_VALUE)
+    @Bean(name = "zookeeperLockExecutor")
     @Conditional(ZookeeperLockCondition.class)
     public LockExecutor<InterProcessMutex> zookeeperLockExecutor() {
         return new ZookeeperLockExecutorImpl();

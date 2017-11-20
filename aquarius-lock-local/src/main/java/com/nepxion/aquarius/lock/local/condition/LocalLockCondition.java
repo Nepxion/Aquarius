@@ -12,10 +12,9 @@ package com.nepxion.aquarius.lock.local.condition;
 
 import com.nepxion.aquarius.common.condition.AquariusCondition;
 import com.nepxion.aquarius.lock.constant.LockConstant;
-import com.nepxion.aquarius.lock.local.constant.LocalLockConstant;
 
 public class LocalLockCondition extends AquariusCondition {
     public LocalLockCondition() {
-        super(LockConstant.DELEGATE_KEY, LocalLockConstant.DELEGATE_VALUE);
+        super(LockConstant.LOCK_TYPE, LockConstant.LOCK_TYPE_LOCAL);
     }
 }

@@ -11,11 +11,10 @@ package com.nepxion.aquarius.cache.redis.condition;
  */
 
 import com.nepxion.aquarius.cache.constant.CacheConstant;
-import com.nepxion.aquarius.cache.redis.constant.RedisCacheConstant;
 import com.nepxion.aquarius.common.condition.AquariusCondition;
 
 public class RedisCacheCondition extends AquariusCondition {
     public RedisCacheCondition() {
-        super(CacheConstant.DELEGATE_KEY, RedisCacheConstant.DELEGATE_VALUE);
+        super(CacheConstant.CACHE_TYPE, CacheConstant.CACHE_TYPE_REDIS);
     }
 }

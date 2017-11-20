@@ -43,12 +43,12 @@
     10 锁支持两种调用方式，注解方式和直接调用方式
 
 ### 快速切换分布式锁组件
-aquarius-test\src\main\resources\config.properties，切换lockDelegate即可
+aquarius-test\src\main\resources\application.properties，切换lockType即可
 ```java
-# Lock delegate config
-lockDelegate=redisLockDelegate
-# lockDelegate=zookeeperLockDelegate
-# lockDelegate=localLockDelegate
+# Lock config
+lockType=redisLock
+# lockType=zookeeperLock
+# lockType=localLock
 ```
 
 ### 使用分布式锁示例如下，更多细节见aquarius-test工程下com.nepxion.aquarius.lock

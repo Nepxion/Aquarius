@@ -12,10 +12,9 @@ package com.nepxion.aquarius.lock.zookeeper.condition;
 
 import com.nepxion.aquarius.common.condition.AquariusCondition;
 import com.nepxion.aquarius.lock.constant.LockConstant;
-import com.nepxion.aquarius.lock.zookeeper.constant.ZookeeperLockConstant;
 
 public class ZookeeperLockCondition extends AquariusCondition {
     public ZookeeperLockCondition() {
-        super(LockConstant.DELEGATE_KEY, ZookeeperLockConstant.DELEGATE_VALUE);
+        super(LockConstant.LOCK_TYPE, LockConstant.LOCK_TYPE_ZOOKEEPER);
     }
 }

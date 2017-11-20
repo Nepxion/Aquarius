@@ -12,10 +12,9 @@ package com.nepxion.aquarius.limit.redis.condition;
 
 import com.nepxion.aquarius.common.condition.AquariusCondition;
 import com.nepxion.aquarius.limit.constant.LimitConstant;
-import com.nepxion.aquarius.limit.redis.constant.RedisLimitConstant;
 
 public class RedisLimitCondition extends AquariusCondition {
     public RedisLimitCondition() {
-        super(LimitConstant.DELEGATE_KEY, RedisLimitConstant.DELEGATE_VALUE);
+        super(LimitConstant.LIMIT_TYPE, LimitConstant.LIMIT_TYPE_REDIS);
     }
 }
