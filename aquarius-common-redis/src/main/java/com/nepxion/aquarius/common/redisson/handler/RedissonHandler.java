@@ -41,19 +41,6 @@ public class RedissonHandler {
         return Config.fromJSON(content.getContent());
     }
 
-    // 创建单例Redisson
-    /*public static RedissonClient getRedisson() throws IOException {
-        if (redisson == null) {
-            synchronized (RedisHandler.class) {
-                if (redisson == null) {
-                    redisson = createRedisson();
-                }
-            }
-        }
-
-        return redisson;
-    }*/
-
     // 使用config创建Redisson
     public static RedissonClient createRedisson(Config config) {
         LOG.info("Start to initialize Redisson...");

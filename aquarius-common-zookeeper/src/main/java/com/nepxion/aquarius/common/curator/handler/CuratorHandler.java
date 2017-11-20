@@ -48,20 +48,6 @@ public class CuratorHandler {
         return new AquariusProperties(content.getContent());
     }
 
-    // 创建单例Curator
-    /*public static CuratorFramework getCurator() throws Exception {
-        if (curator == null) {
-            synchronized (ZookeeperHandler.class) {
-                if (curator == null) {
-                    AquariusProperties properties = createPropertyConfig(ZookeeperConstant.CONFIG_FILE);
-                    curator = createCurator(properties);
-                }
-            }
-        }
-
-        return curator;
-    }*/
-
     public static CuratorFramework createCurator(AquariusProperties properties) throws Exception {
         String retryType = properties.getString(CuratorConstant.RETRY_TYPE);
         RetryPolicy retryPolicy = null;
