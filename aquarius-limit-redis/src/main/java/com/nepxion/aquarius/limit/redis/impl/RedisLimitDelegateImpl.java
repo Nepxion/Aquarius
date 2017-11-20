@@ -27,7 +27,7 @@ public class RedisLimitDelegateImpl implements LimitDelegate {
         if (status) {
             return invocation.proceed();
         } else {
-            throw new AquariusException("Reach max limited access count=" + limitCount + " within period=" + limitPeriod);
+            throw new AquariusException("Reach max limited access count=" + limitCount + " within period=" + limitPeriod + " seconds");
         }
     }
 }
