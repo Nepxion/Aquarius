@@ -11,5 +11,7 @@ package com.nepxion.aquarius.cache.constant;
  */
 
 public class CacheConstant {
-    public static final String DELEGATE_KEY = "cacheDelegate";
+    public static final String CACHE_TYPE = "cacheType";
+
+    public static final String CACHE_TYPE_REDIS = "redisCache";
 }

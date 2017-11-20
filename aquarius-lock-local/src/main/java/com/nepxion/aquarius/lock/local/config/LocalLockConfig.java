@@ -20,20 +20,19 @@ import org.springframework.context.annotation.Import;
 import com.nepxion.aquarius.lock.LockDelegate;
 import com.nepxion.aquarius.lock.LockExecutor;
 import com.nepxion.aquarius.lock.local.condition.LocalLockCondition;
-import com.nepxion.aquarius.lock.local.constant.LocalLockConstant;
 import com.nepxion.aquarius.lock.local.impl.LocalLockDelegateImpl;
 import com.nepxion.aquarius.lock.local.impl.LocalLockExecutorImpl;
 
 @Configuration
 @Import({ com.nepxion.aquarius.common.config.AquariusConfig.class })
 public class LocalLockConfig {
-    @Bean(name = LocalLockConstant.DELEGATE_VALUE)
+    @Bean(name = "localLockDelegate")
     @Conditional(LocalLockCondition.class)
     public LockDelegate localLockDelegate() {
         return new LocalLockDelegateImpl();
     }
 
-    @Bean(name = LocalLockConstant.EXECUTOR_VALUE)
+    @Bean(name = "localLockExecutor")
     @Conditional(LocalLockCondition.class)
     public LockExecutor<Lock> localLockExecutor() {
         return new LocalLockExecutorImpl();

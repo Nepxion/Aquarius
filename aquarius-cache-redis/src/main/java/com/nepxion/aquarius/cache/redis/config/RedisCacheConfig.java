@@ -18,14 +18,13 @@ import org.springframework.data.redis.core.RedisTemplate;
 
 import com.nepxion.aquarius.cache.CacheDelegate;
 import com.nepxion.aquarius.cache.redis.condition.RedisCacheCondition;
-import com.nepxion.aquarius.cache.redis.constant.RedisCacheConstant;
 import com.nepxion.aquarius.cache.redis.impl.RedisCacheDelegateImpl;
 import com.nepxion.aquarius.common.redis.handler.RedisHandler;
 
 @Configuration
 @Import({ com.nepxion.aquarius.common.config.AquariusConfig.class })
 public class RedisCacheConfig {
-    @Bean(name = RedisCacheConstant.DELEGATE_VALUE)
+    @Bean(name = "redisCacheDelegate")
     @Conditional(RedisCacheCondition.class)
     public CacheDelegate redisCacheDelegate() {
         return new RedisCacheDelegateImpl();

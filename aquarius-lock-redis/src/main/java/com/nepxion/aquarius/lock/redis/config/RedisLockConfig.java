@@ -21,20 +21,19 @@ import com.nepxion.aquarius.common.redisson.handler.RedissonHandler;
 import com.nepxion.aquarius.lock.LockDelegate;
 import com.nepxion.aquarius.lock.LockExecutor;
 import com.nepxion.aquarius.lock.redis.condition.RedisLockCondition;
-import com.nepxion.aquarius.lock.redis.constant.RedisLockConstant;
 import com.nepxion.aquarius.lock.redis.impl.RedisLockDelegateImpl;
 import com.nepxion.aquarius.lock.redis.impl.RedisLockExecutorImpl;
 
 @Configuration
 @Import({ com.nepxion.aquarius.common.config.AquariusConfig.class })
 public class RedisLockConfig {
-    @Bean(name = RedisLockConstant.DELEGATE_VALUE)
+    @Bean(name = "redisLockDelegate")
     @Conditional(RedisLockCondition.class)
     public LockDelegate redisLockDelegate() {
         return new RedisLockDelegateImpl();
     }
 
-    @Bean(name = RedisLockConstant.EXECUTOR_VALUE)
+    @Bean(name = "redisLockExecutor")
     @Conditional(RedisLockCondition.class)
     public LockExecutor<RLock> redisLockExecutor() {
         return new RedisLockExecutorImpl();

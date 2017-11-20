@@ -11,5 +11,9 @@ package com.nepxion.aquarius.lock.constant;
  */
 
 public class LockConstant {
-    public static final String DELEGATE_KEY = "lockDelegate";
+    public static final String LOCK_TYPE = "lockType";
+
+    public static final String LOCK_TYPE_REDIS = "redisLock";
+    public static final String LOCK_TYPE_ZOOKEEPER = "zookeeperLock";
+    public static final String LOCK_TYPE_LOCAL = "localLock";
 }

@@ -12,10 +12,9 @@ package com.nepxion.aquarius.lock.redis.condition;
 
 import com.nepxion.aquarius.common.condition.AquariusCondition;
 import com.nepxion.aquarius.lock.constant.LockConstant;
-import com.nepxion.aquarius.lock.redis.constant.RedisLockConstant;
 
 public class RedisLockCondition extends AquariusCondition {
     public RedisLockCondition() {
-        super(LockConstant.DELEGATE_KEY, RedisLockConstant.DELEGATE_VALUE);
+        super(LockConstant.LOCK_TYPE, LockConstant.LOCK_TYPE_REDIS);
     }
 }
