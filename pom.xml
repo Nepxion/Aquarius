@@ -24,7 +24,7 @@
         <module>aquarius-id-generator-zookeeper</module>
         <module>aquarius-limit-aop</module>
         <module>aquarius-limit-redis</module>
-        <module>aquarius-test</module>
+        <module>aquarius-spring-boot</module>
     </modules>
 
     <properties>
@@ -131,7 +131,7 @@
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>aquarius-test</artifactId>
+                <artifactId>aquarius-spring-boot</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
