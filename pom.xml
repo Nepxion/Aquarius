@@ -25,6 +25,7 @@
         <module>aquarius-limit-aop</module>
         <module>aquarius-limit-redis</module>
         <module>aquarius-spring-boot</module>
+        <module>aquarius-spring-cloud</module>
     </modules>
 
     <properties>
@@ -137,6 +138,12 @@
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
+                <artifactId>aquarius-spring-cloud</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>${project.groupId}</groupId>
                 <artifactId>matrix-aop</artifactId>
                 <version>${matrix.version}</version>
             </dependency>
@@ -203,12 +210,6 @@
 
             <dependency>
                 <groupId>org.apache.logging.log4j</groupId>
-                <artifactId>log4j-core</artifactId>
-                <version>${log4j.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.logging.log4j</groupId>
                 <artifactId>log4j-1.2-api</artifactId>
                 <version>${log4j.version}</version>
             </dependency>
@@ -216,24 +217,6 @@
             <dependency>
                 <groupId>org.apache.logging.log4j</groupId>
                 <artifactId>log4j-slf4j-impl</artifactId>
-                <version>${log4j.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.logging.log4j</groupId>
-                <artifactId>log4j-jcl</artifactId>
-                <version>${log4j.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.logging.log4j</groupId>
-                <artifactId>log4j-jul</artifactId>
-                <version>${log4j.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.logging.log4j</groupId>
-                <artifactId>log4j-web</artifactId>
                 <version>${log4j.version}</version>
             </dependency>
         </dependencies>
