@@ -13,7 +13,6 @@ package com.nepxion.aquarius.limit.aop;
 import java.lang.annotation.Annotation;
 
 import org.aopalliance.intercept.MethodInterceptor;
-import org.springframework.stereotype.Component;
 
 import com.nepxion.aquarius.limit.annotation.Limit;
 import com.nepxion.matrix.aop.DefaultAutoScanProxy;
@@ -21,11 +20,8 @@ import com.nepxion.matrix.mode.ProxyMode;
 import com.nepxion.matrix.mode.ScanMode;
 
 // 通过全局拦截器实现对类头部注解的扫描和代理
-@Component("limitAutoScanProxy")
 public class LimitAutoScanProxy extends DefaultAutoScanProxy {
     private static final long serialVersionUID = -6456216398492047529L;
-
-    private static final String[] SCAN_PACKAGES = { "com.nepxion.aquarius.limit" };
 
     @SuppressWarnings("rawtypes")
     private Class[] commonInterceptorClasses;
@@ -33,8 +29,8 @@ public class LimitAutoScanProxy extends DefaultAutoScanProxy {
     @SuppressWarnings("rawtypes")
     private Class[] methodAnnotations;
 
-    public LimitAutoScanProxy() {
-        super(SCAN_PACKAGES, ProxyMode.BY_METHOD_ANNOTATION_ONLY, ScanMode.FOR_METHOD_ANNOTATION_ONLY);
+    public LimitAutoScanProxy(String scanPackages) {
+        super(scanPackages, ProxyMode.BY_METHOD_ANNOTATION_ONLY, ScanMode.FOR_METHOD_ANNOTATION_ONLY);
     }
 
     @SuppressWarnings("unchecked")

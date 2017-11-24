@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn" monitorInterval="30">
+    <Appenders>
+        <Console name="stdout" target="SYSTEM_OUT">
+            <!-- <PatternLayout pattern="%highlight{%date{yyyy-MM-dd HH:mm:ss.SSS} %level [%thread][%class:%line] - %msg%n}{FATAL=Red, ERROR=Magenta, WARN=Yellow, INFO=Green, DEBUG=Cyan, TRACE=White}"/> -->
+            <!-- <PatternLayout pattern="%highlight{%date{yyyy-MM-dd HH:mm:ss.SSS} %level [%thread][%class:%line] - %msg%n}{FATAL=Bright Red, ERROR=Bright Magenta, WARN=Bright Yellow, INFO=Bright Green, DEBUG=Bright Cyan, TRACE=Bright White}"/> -->
+            <PatternLayout pattern="%date{yyyy-MM-dd HH:mm:ss.SSS} %level [%thread][%class:%line] - %msg%n"/>
+            <!-- <PatternLayout pattern="%date{yyyy-MM-dd HH:mm:ss.SSS} %level [%thread][%file:%line] - %msg%n"/> -->
+            <!-- <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %C %L - %msg%n"/> -->
+        </Console>
+        <!-- log/aquarius.log to project path -->
+        <!-- /log/aquarius.log to root path -->
+        <RollingRandomAccessFile name="logfile" fileName="log/aquarius.log" filePattern="log/aquarius-%d{yyyy-MM-dd}.log.%i">
+            <PatternLayout>
+                <Pattern>%date{yyyy-MM-dd HH:mm:ss.SSS} %level [%thread][%class:%line] - %msg%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="12" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="50MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="50"/>
+        </RollingRandomAccessFile>
+    </Appenders>
+    <Loggers>
+        <AsyncLogger name="com.nepxion.aquarius" level="info" additivity="false" includeLocation="true">
+            <AppenderRef ref="stdout"/>
+        </AsyncLogger>
+        <AsyncRoot level="info" includeLocation="true">
+            <!-- <AppenderRef ref="logfile"/> -->
+            <AppenderRef ref="stdout"/>
+        </AsyncRoot>
+    </Loggers>
+</Configuration>

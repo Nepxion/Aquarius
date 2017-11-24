@@ -13,7 +13,6 @@ package com.nepxion.aquarius.lock.aop;
 import java.lang.annotation.Annotation;
 
 import org.aopalliance.intercept.MethodInterceptor;
-import org.springframework.stereotype.Component;
 
 import com.nepxion.aquarius.lock.annotation.Lock;
 import com.nepxion.aquarius.lock.annotation.ReadLock;
@@ -23,11 +22,8 @@ import com.nepxion.matrix.mode.ProxyMode;
 import com.nepxion.matrix.mode.ScanMode;
 
 // 通过全局拦截器实现对类头部注解的扫描和代理
-@Component("lockAutoScanProxy")
 public class LockAutoScanProxy extends DefaultAutoScanProxy {
-    private static final long serialVersionUID = -6456216398492047529L;
-
-    private static final String[] SCAN_PACKAGES = { "com.nepxion.aquarius.lock" };
+    private static final long serialVersionUID = -957037966342626931L;
 
     @SuppressWarnings("rawtypes")
     private Class[] commonInterceptorClasses;
@@ -35,8 +31,8 @@ public class LockAutoScanProxy extends DefaultAutoScanProxy {
     @SuppressWarnings("rawtypes")
     private Class[] methodAnnotations;
 
-    public LockAutoScanProxy() {
-        super(SCAN_PACKAGES, ProxyMode.BY_METHOD_ANNOTATION_ONLY, ScanMode.FOR_METHOD_ANNOTATION_ONLY);
+    public LockAutoScanProxy(String scanPackages) {
+        super(scanPackages, ProxyMode.BY_METHOD_ANNOTATION_ONLY, ScanMode.FOR_METHOD_ANNOTATION_ONLY);
     }
 
     @SuppressWarnings("unchecked")

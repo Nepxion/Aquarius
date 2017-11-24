@@ -7,6 +7,8 @@
     3 Nepxion Aquarius ID Generator 分布式全局唯一ID(支持Redis)、序号生成(支持Zookeeper)
     4 Nepxion Aquarius Limit 分布式限速限流(支持Redis)
 
+    上述4大组件同时支持SpringBoot和SpringCloud部署，分别参考aquarius-spring-boot和aquarius-spring-cloud工程，文档只以aquarius-spring-boot为例来阐述使用方法
+
 ## Nepxion Aquarius Lock
 基于Redisson(Redis)、Curator(Zookeeper)分布式锁和本地锁，构建于Nepxion Matrix AOP framework，你可以在这三个锁组件中选择一个移植入你的应用中
 
@@ -43,15 +45,18 @@
     10 锁支持两种调用方式，注解方式和直接调用方式
 
 ### 快速切换分布式锁组件
-aquarius-test\src\main\resources\application.properties，切换lockType即可
+aquarius-spring-boot\src\main\resources\application.properties，切换lockType即可
 ```java
 # Lock config
 lockType=redisLock
 # lockType=zookeeperLock
 # lockType=localLock
+# 指定你使用相关注解所在的接口或者类的目录
+# 扫描目录，如果不指定，则扫描全局。两种方式运行结果没区别，只是指定扫描目录加快扫描速度，同时可以减少缓存量
+lockScanPackages=com.nepxion.aquarius.lock
 ```
 
-### 使用分布式锁示例如下，更多细节见aquarius-test工程下com.nepxion.aquarius.lock
+### 使用分布式锁示例如下，更多细节见aquarius-spring-boot工程下com.nepxion.aquarius.lock
 普通分布式锁的使用
 
 注解方式
@@ -528,7 +533,7 @@ public class ReadWriteLockApplication {
        在config-redis.xml中有个RedisCacheEntity的prefix(前缀)全局配置项目，它和name，key组成一个SPEL语义，即[prefix]_[name]_[key]，该值将作为Redis的Key存储，对应的Redis的Value就是缓存
     3 对于方法返回的值为null的时候，不做任何缓存相关操作；对于方法执行过程中抛出异常后，不做任何缓存相关操作
 
-### 使用分布式缓存示例如下，更多细节见aquarius-test工程下com.nepxion.aquarius.cache
+### 使用分布式缓存示例如下，更多细节见aquarius-spring-boot工程下com.nepxion.aquarius.cache
 ```java
 package com.nepxion.aquarius.cache.service;
 
@@ -690,7 +695,7 @@ public class CacheAopApplication {
         ID的前半部分为yyyyMMddHHmmssSSS格式的17位数字
         ID的后半部分为由length(最大为8位，如果length > 8，则取8)决定，取值Redis对应Value，如果小于length所对应的数位，如果不足该数位，前面补足0
         例如Redis对应Value为1234，length为8，那么ID的后半部分为00001234；length为2，那么ID的后半部分为34
-### 使用ID Generator示例如下，更多细节见aquarius-test工程下com.nepxion.aquarius.idgenerator
+### 使用ID Generator示例如下，更多细节见aquarius-spring-boot工程下com.nepxion.aquarius.idgenerator
 ```java
 package com.nepxion.aquarius.idgenerator;
 
@@ -857,7 +862,7 @@ public class ZookeeperIdGeneratorApplication {
       3)limitPeriod 给定的时间段(单位为秒)
       4)limitCount 最多的访问限制次数
 
-### 使用Limit示例如下，更多细节见aquarius-test工程下com.nepxion.aquarius.limit
+### 使用Limit示例如下，更多细节见aquarius-spring-boot工程下com.nepxion.aquarius.limit
 
 注解方式
 ```java
@@ -1052,4 +1057,35 @@ public class RedisLimitApplication {
         }, 0L, 1500L);
     }
 }
+```
+
+## Nepxion Aquarius Spring Cloud的使用方式
+### 介绍
+    1 配置好Euraka服务器，aquarius-spring-cloud/src/main/resources/application.properties里面，修改成你本地的Eureka环境
+      eureka.client.serviceUrl.defaultZone=http://cluster-1:1111/eureka/,http://cluster-2:1112/eureka/,http://cluster-3:1113/eureka/
+    2 启动AquariusApplication
+    3 打开Postman，或者浏览器，执行Get操作，参考下面的URL
+```java
+Lock
+# 注解方式
+http://localhost:2222/doC?id1=X&id2=Y
+# 直接调用方式
+http://localhost:2222/tryLock?lockType=WriteLock&name=lock&key=X-Y&leaseTime=5000&waitTime=60000&async=false&fair=false
+
+Cache
+# 注解方式
+http://localhost:2222/doD?id1=X&id2=Y
+
+Limit
+# 注解方式
+http://localhost:2222/doG?id1=X&id2=Y
+# 直接调用方式
+http://localhost:2222/tryAccess?name=limit&key=A-B&limitPeriod=10&limitCount=5
+
+ID Generator
+# 直接调用方式(Redis)
+http://localhost:2222/nextUniqueId?name=idgenerater&key=X-Y&step=1&length=8
+
+# 直接调用方式(Zookeeper)
+http://localhost:2222/nextSequenceId?name=idgenerater&key=X-Y
 ```
