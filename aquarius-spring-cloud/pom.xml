@@ -18,7 +18,6 @@
     <properties>
         <spring.cloud.version>Dalston.SR4</spring.cloud.version>
         <aquarius.version>1.0.0</aquarius.version>
-        <log4j.version>2.9.1</log4j.version>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
