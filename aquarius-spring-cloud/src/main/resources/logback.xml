@@ -8,7 +8,7 @@
             <charset>UTF-8</charset>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>log/info-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <fileNamePattern>log/aquarius-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <maxFileSize>50MB</maxFileSize>
         </rollingPolicy>
          <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
