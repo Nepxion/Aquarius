@@ -10,7 +10,6 @@ package com.nepxion.aquarius.common.property;
  * @version 1.0
  */
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
@@ -28,10 +27,14 @@ public class AquariusProperties implements Serializable {
 
     private final Map<String, Object> map = new ConcurrentHashMap<String, Object>();
 
-    public AquariusProperties(String content) throws IOException {
-        byte[] bytes = content.getBytes();
-        InputStream inputStream = new ByteArrayInputStream(bytes);
+    public AquariusProperties(String path, String encoding) throws IOException {
+        this(new StringBuilder(new AquariusContent(path, encoding).getContent()), encoding);
+    }
+
+    public AquariusProperties(StringBuilder stringBuilder, String encoding) throws IOException {
+        InputStream inputStream = null;
         try {
+            inputStream = IOUtils.toInputStream(stringBuilder.toString(), encoding);
             Properties properties = new Properties();
             properties.load(inputStream);
             for (Iterator<Object> iterator = properties.keySet().iterator(); iterator.hasNext();) {
