@@ -18,6 +18,7 @@ import org.redisson.config.Config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.nepxion.aquarius.common.constant.AquariusConstant;
 import com.nepxion.aquarius.common.property.AquariusContent;
 import com.nepxion.aquarius.common.redisson.constant.RedissonConstant;
 
@@ -41,7 +42,7 @@ public class RedissonHandler {
     public static Config createYamlConfig(String yamlConfigPath) throws IOException {
         LOG.info("Start to read {}...", yamlConfigPath);
 
-        AquariusContent content = new AquariusContent(yamlConfigPath);
+        AquariusContent content = new AquariusContent(yamlConfigPath, AquariusConstant.ENCODING_UTF_8);
 
         return Config.fromYAML(content.getContent());
     }
@@ -50,7 +51,7 @@ public class RedissonHandler {
     public static Config createJsonConfig(String jsonConfigPath) throws IOException {
         LOG.info("Start to read {}...", jsonConfigPath);
 
-        AquariusContent content = new AquariusContent(jsonConfigPath);
+        AquariusContent content = new AquariusContent(jsonConfigPath, AquariusConstant.ENCODING_UTF_8);
 
         return Config.fromJSON(content.getContent());
     }

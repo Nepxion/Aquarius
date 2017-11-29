@@ -32,8 +32,8 @@ import org.apache.zookeeper.data.Stat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.nepxion.aquarius.common.constant.AquariusConstant;
 import com.nepxion.aquarius.common.curator.constant.CuratorConstant;
-import com.nepxion.aquarius.common.property.AquariusContent;
 import com.nepxion.aquarius.common.property.AquariusProperties;
 
 public class CuratorHandler {
@@ -62,9 +62,7 @@ public class CuratorHandler {
     public static AquariusProperties createPropertyConfig(String propertyConfigPath) throws IOException {
         LOG.info("Start to read {}...", propertyConfigPath);
 
-        AquariusContent content = new AquariusContent(propertyConfigPath);
-
-        return new AquariusProperties(content.getContent());
+        return new AquariusProperties(propertyConfigPath, AquariusConstant.ENCODING_UTF_8);
     }
 
     // 创建Curator

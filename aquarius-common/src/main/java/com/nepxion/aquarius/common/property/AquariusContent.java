@@ -18,14 +18,8 @@ import java.io.InputStream;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
-import com.nepxion.aquarius.common.constant.AquariusConstant;
-
 public class AquariusContent {
     private String content;
-
-    public AquariusContent(String path) throws IOException {
-        this(path, AquariusConstant.ENCODING_UTF_8);
-    }
 
     public AquariusContent(String path, String encoding) throws IOException {
         InputStream inputStream = null;
@@ -42,10 +36,6 @@ public class AquariusContent {
                 IOUtils.closeQuietly(inputStream);
             }
         }
-    }
-
-    public AquariusContent(File file) throws IOException {
-        this(file, AquariusConstant.ENCODING_UTF_8);
     }
 
     public AquariusContent(File file, String encoding) throws IOException {
