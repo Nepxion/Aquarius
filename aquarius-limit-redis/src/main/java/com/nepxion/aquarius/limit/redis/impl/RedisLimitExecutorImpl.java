@@ -83,16 +83,16 @@ public class RedisLimitExecutorImpl implements LimitExecutor {
         StringBuilder lua = new StringBuilder();
         lua.append("local c");
         lua.append("\nc = redis.call('get',KEYS[1])");
-        lua.append("\nif c and tonumber(c) > tonumber(ARGV[1]) then");
+        lua.append("\nif c and tonumber(c) > tonumber(ARGV[1]) then"); // 调用不超过最大值，则直接返回
         lua.append("\nreturn c;");
         lua.append("\nend");
-        lua.append("\nc = redis.call('incr',KEYS[1])");
+        lua.append("\nc = redis.call('incr',KEYS[1])"); // 执行计算器自加
         lua.append("\nif tonumber(c) == 1 then");
-        lua.append("\nredis.call('expire',KEYS[1],ARGV[2])");
+        lua.append("\nredis.call('expire',KEYS[1],ARGV[2])"); // 从第一次调用开始限流，设置对应键值的过期
         lua.append("\nend");
         if (limitLockEnabled) {
             lua.append("\nif tonumber(c) > tonumber(ARGV[3]) then");
-            lua.append("\nredis.call('expire',KEYS[1],ARGV[4])");
+            lua.append("\nredis.call('expire',KEYS[1],ARGV[4])"); // 超过设置的锁定值(次数)，设置对应键值的过期(会绕晕，不建议用)
             lua.append("\nend");
         }
         lua.append("\nreturn c;");
