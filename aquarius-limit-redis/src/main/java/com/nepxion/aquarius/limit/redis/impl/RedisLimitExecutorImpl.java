@@ -60,17 +60,13 @@ public class RedisLimitExecutorImpl implements LimitExecutor {
             throw new AquariusException("Composite key is null or empty");
         }
 
-        return tryAccess(compositeKey, limitPeriod, limitCount, 0, 0, false);
-    }
-
-    private boolean tryAccess(String compositeKey, int limitPeriod, int limitCount, int lockPeriod, int lockCount, boolean limitLockEnabled) {
         List<String> keys = new ArrayList<String>();
         keys.add(compositeKey);
 
-        String luaScript = buildLuaScript(limitLockEnabled);
+        String luaScript = buildLuaScript();
 
         RedisScript<Number> redisScript = new DefaultRedisScript<Number>(luaScript, Number.class);
-        Number count = redisTemplate.execute(redisScript, keys, Math.max(limitCount, lockCount), limitPeriod, lockCount, lockPeriod);
+        Number count = redisTemplate.execute(redisScript, keys, limitCount, limitPeriod);
 
         if (frequentLogPrint) {
             LOG.info("Access try count is {} for key={}", count, compositeKey);
@@ -79,7 +75,7 @@ public class RedisLimitExecutorImpl implements LimitExecutor {
         return count.intValue() <= limitCount;
     }
 
-    private String buildLuaScript(boolean limitLockEnabled) {
+    private String buildLuaScript() {
         StringBuilder lua = new StringBuilder();
         lua.append("local c");
         lua.append("\nc = redis.call('get',KEYS[1])");
@@ -90,11 +86,6 @@ public class RedisLimitExecutorImpl implements LimitExecutor {
         lua.append("\nif tonumber(c) == 1 then");
         lua.append("\nredis.call('expire',KEYS[1],ARGV[2])"); // 从第一次调用开始限流，设置对应键值的过期
         lua.append("\nend");
-        if (limitLockEnabled) {
-            lua.append("\nif tonumber(c) > tonumber(ARGV[3]) then");
-            lua.append("\nredis.call('expire',KEYS[1],ARGV[4])"); // 超过设置的锁定值(次数)，设置对应键值的过期(会绕晕，不建议用)
-            lua.append("\nend");
-        }
         lua.append("\nreturn c;");
 
         return lua.toString();
