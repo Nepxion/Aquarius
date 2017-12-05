@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <artifactId>aquarius-assembly-all</artifactId>
+    <name>Nepxion Aquarius Assembly For All</name>
+    <packaging>jar</packaging>
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>nepxion</groupId>
+        <artifactId>aquarius</artifactId>
+        <version>1.0.0</version>
+    </parent>
+
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>aquarius-common</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>aquarius-common-redis</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>aquarius-common-zookeeper</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>aquarius-lock-aop</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>aquarius-lock-redis</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>aquarius-lock-zookeeper</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>aquarius-lock-local</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>aquarius-cache-aop</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>aquarius-cache-redis</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>aquarius-id-generator-redis</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>aquarius-id-generator-zookeeper</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>aquarius-limit-aop</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>aquarius-limit-redis</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <finalName>nepxion-aquarius-assembly-all-${project.version}</finalName>
+                            <createSourcesJar>false</createSourcesJar>
+                            <promoteTransitiveDependencies>true</promoteTransitiveDependencies>
+                            <artifactSet>
+                                <includes>
+                                    <include>nepxion:matrix-aop</include>
+                                    <include>nepxion:aquarius-common</include>
+                                    <include>nepxion:aquarius-common-redis</include>
+                                    <include>nepxion:aquarius-common-zookeeper</include>
+                                    <include>nepxion:aquarius-lock-aop</include>
+                                    <include>nepxion:aquarius-lock-redis</include>
+                                    <include>nepxion:aquarius-lock-zookeeper</include>
+                                    <include>nepxion:aquarius-lock-local</include>
+                                    <include>nepxion:aquarius-cache-aop</include>
+                                    <include>nepxion:aquarius-cache-redis</include>
+                                    <include>nepxion:aquarius-id-generator-redis</include>
+                                    <include>nepxion:aquarius-id-generator-zookeeper</include>
+                                    <include>nepxion:aquarius-limit-aop</include>
+                                    <include>nepxion:aquarius-limit-redis</include>
+                                </includes>
+                            </artifactSet>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
