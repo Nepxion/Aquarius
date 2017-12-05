@@ -65,6 +65,7 @@
                             <promoteTransitiveDependencies>true</promoteTransitiveDependencies>
                             <artifactSet>
                                 <includes>
+                                    <include>nepxion:matrix-aop</include>
                                     <include>nepxion:aquarius-common</include>
                                     <include>nepxion:aquarius-common-redis</include>
                                     <include>nepxion:aquarius-common-zookeeper</include>
