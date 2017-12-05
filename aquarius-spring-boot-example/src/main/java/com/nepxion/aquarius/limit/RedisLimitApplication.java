@@ -22,7 +22,7 @@ import org.springframework.context.annotation.ComponentScan;
 import com.nepxion.aquarius.common.context.AquariusContextAware;
 
 @EnableAutoConfiguration
-@ComponentScan(basePackages = { "com.nepxion.aquarius.limit.redis" })
+@ComponentScan(basePackages = { "com.nepxion.aquarius.limit" })
 public class RedisLimitApplication {
     private static final Logger LOG = LoggerFactory.getLogger(RedisLimitApplication.class);
 
