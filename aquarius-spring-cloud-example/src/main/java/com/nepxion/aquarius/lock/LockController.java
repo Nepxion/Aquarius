@@ -10,6 +10,10 @@ package com.nepxion.aquarius.lock;
  * @version 1.0
  */
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+
 import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
@@ -23,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.nepxion.aquarius.lock.entity.LockType;
 
 @RestController
+@Api(value = "分布式锁操作")
 public class LockController {
     private static final Logger LOG = LoggerFactory.getLogger(LockController.class);
 
@@ -32,7 +37,15 @@ public class LockController {
 
     @SuppressWarnings("unchecked")
     @RequestMapping(value = "/tryLock", method = RequestMethod.GET)
-    public String tryLock(@RequestParam String lockType, @RequestParam String name, @RequestParam String key, @RequestParam long leaseTime, @RequestParam long waitTime, @RequestParam boolean async, @RequestParam boolean fair) {
+    @ApiOperation(value = "获取分布式锁", notes = "尝试获取锁，如果获取到锁，则返回锁对象，如果未获取到锁，则返回空", response = String.class, httpMethod = "GET")
+    public String tryLock(
+            @RequestParam @ApiParam(value = "锁的类型", required = true, allowableValues = "Lock, ReadLock, WriteLock", defaultValue = "Lock") String lockType,
+            @RequestParam @ApiParam(value = "锁的名字", required = true) String name,
+            @RequestParam @ApiParam(value = "锁的Key", required = true) String key,
+            @RequestParam @ApiParam(value = "持锁时间(单位毫秒)", required = true, defaultValue = "5000") long leaseTime,
+            @RequestParam @ApiParam(value = "没有获取到锁时，等待时间(单位毫秒)", required = true, defaultValue = "60000") long waitTime,
+            @RequestParam @ApiParam(value = "是否采用锁的异步执行方式", required = true, defaultValue = "false") boolean async,
+            @RequestParam @ApiParam(value = "是否采用公平锁", required = true, defaultValue = "false") boolean fair) {
         Object lock = null;
         try {
             lock = lockExecutor.tryLock(LockType.fromString(lockType), name, key, leaseTime, waitTime, async, fair);

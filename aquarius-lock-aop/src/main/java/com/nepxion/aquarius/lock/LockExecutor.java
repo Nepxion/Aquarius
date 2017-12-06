@@ -18,8 +18,8 @@ public interface LockExecutor<T> {
      * @param lockType 锁的类型，包括LOCK(普通锁)，WRITE_LOCK(写锁)，READ_LOCK(读锁)
      * @param name 锁的名字
      * @param key 锁的Key
-     * @param leaseTime 持锁时间，持锁超过此时间则自动丢弃锁，单位毫秒，默认5秒
-     * @param waitTime 没有获取到锁时，等待时间，单位毫秒，默认60秒
+     * @param leaseTime 持锁时间，持锁超过此时间则自动丢弃锁(单位毫秒)
+     * @param waitTime 没有获取到锁时，等待时间(单位毫秒)
      * @param async 是否采用锁的异步执行方式
      * @param fair 是否采用公平锁
      * @return
