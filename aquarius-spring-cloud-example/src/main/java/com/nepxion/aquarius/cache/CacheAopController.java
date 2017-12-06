@@ -10,6 +10,8 @@ package com.nepxion.aquarius.cache;
  * @version 1.0
  */
 
+import io.swagger.annotations.Api;
+
 import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
@@ -23,6 +25,7 @@ import com.nepxion.aquarius.cache.annotation.CachePut;
 import com.nepxion.aquarius.cache.annotation.Cacheable;
 
 @RestController
+@Api(tags = { "分布式缓存注解接口" })
 public class CacheAopController {
     private static final Logger LOG = LoggerFactory.getLogger(CacheAopController.class);
 

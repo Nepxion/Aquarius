@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.nepxion.aquarius.lock.entity.LockType;
 
 @RestController
-@Api(value = "分布式锁操作")
+@Api(tags = { "分布式锁接口" })
 public class LockController {
     private static final Logger LOG = LoggerFactory.getLogger(LockController.class);
 

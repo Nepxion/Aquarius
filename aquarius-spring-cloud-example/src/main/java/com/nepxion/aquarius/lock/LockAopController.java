@@ -10,6 +10,8 @@ package com.nepxion.aquarius.lock;
  * @version 1.0
  */
 
+import io.swagger.annotations.Api;
+
 import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
@@ -24,6 +26,7 @@ import com.nepxion.aquarius.lock.annotation.ReadLock;
 import com.nepxion.aquarius.lock.annotation.WriteLock;
 
 @RestController
+@Api(tags = { "分布式锁注解接口" })
 public class LockAopController {
     private static final Logger LOG = LoggerFactory.getLogger(LockAopController.class);
 

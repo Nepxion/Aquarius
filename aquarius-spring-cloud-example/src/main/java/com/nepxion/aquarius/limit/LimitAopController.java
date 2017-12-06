@@ -10,6 +10,8 @@ package com.nepxion.aquarius.limit;
  * @version 1.0
  */
 
+import io.swagger.annotations.Api;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.nepxion.aquarius.limit.annotation.Limit;
 
 @RestController
+@Api(tags = { "分布式限流注解接口" })
 public class LimitAopController {
     private static final Logger LOG = LoggerFactory.getLogger(LimitAopController.class);
 
