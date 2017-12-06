@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@Api(value = "分布式限流操作")
+@Api(tags = { "分布式限流接口" })
 public class LimitController {
     @Autowired
     private LimitExecutor limitExecutor;

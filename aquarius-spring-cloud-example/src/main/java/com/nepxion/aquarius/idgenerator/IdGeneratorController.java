@@ -24,7 +24,7 @@ import com.nepxion.aquarius.idgenerator.redis.RedisIdGenerator;
 import com.nepxion.aquarius.idgenerator.zookeeper.ZookeeperIdGenerator;
 
 @RestController
-@Api(value = "分布式ID和序号生成器操作")
+@Api(tags = { "分布式ID和序号生成器接口" })
 public class IdGeneratorController {
     @Autowired
     private RedisIdGenerator redisIdGenerator;
