@@ -8,6 +8,7 @@
     4 Nepxion Aquarius Limit 分布式限速限流(支持Redis)
 
     上述4大组件同时支持SpringBoot和SpringCloud部署，分别参考aquarius-spring-boot-example和aquarius-spring-cloud-example工程，文档只以aquarius-spring-boot-example为例来阐述使用方法
+    支持Swagger，打开http://localhost:2222/swagger-ui.html访问
 
 ## Nepxion Aquarius Lock
 基于Redisson(Redis)、Curator(Zookeeper)分布式锁和本地锁，构建于Nepxion Matrix AOP framework，你可以在这三个锁组件中选择一个移植入你的应用中
