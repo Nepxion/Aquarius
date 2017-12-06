@@ -10,6 +10,10 @@ package com.nepxion.aquarius.limit;
  * @version 1.0
  */
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,12 +21,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@Api(value = "分布式限流操作")
 public class LimitController {
     @Autowired
     private LimitExecutor limitExecutor;
 
     @RequestMapping(value = "/tryAccess", method = RequestMethod.GET)
-    public boolean tryAccess(@RequestParam String name, @RequestParam String key, @RequestParam int limitPeriod, @RequestParam int limitCount) {
+    @ApiOperation(value = "请求分布式限流许可", notes = "在给定的时间段里最多的访问限制次数(超出次数返回false)；等下个时间段开始，才允许再次被访问(返回true)，周而复始", response = Boolean.class, httpMethod = "GET")
+    public boolean tryAccess(
+            @RequestParam @ApiParam(value = "资源名字", required = true) String name,
+            @RequestParam @ApiParam(value = "资源Key", required = true) String key,
+            @RequestParam @ApiParam(value = "给定的时间段(单位秒)", required = true, defaultValue = "10") int limitPeriod,
+            @RequestParam @ApiParam(value = "最多的访问限制次数", required = true, defaultValue = "5") int limitCount) {
         return limitExecutor.tryAccess(name, key, limitPeriod, limitCount);
     }
 }

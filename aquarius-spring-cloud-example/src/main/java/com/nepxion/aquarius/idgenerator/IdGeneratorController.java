@@ -10,6 +10,10 @@ package com.nepxion.aquarius.idgenerator;
  * @version 1.0
  */
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,6 +24,7 @@ import com.nepxion.aquarius.idgenerator.redis.RedisIdGenerator;
 import com.nepxion.aquarius.idgenerator.zookeeper.ZookeeperIdGenerator;
 
 @RestController
+@Api(value = "分布式ID和序号生成器操作")
 public class IdGeneratorController {
     @Autowired
     private RedisIdGenerator redisIdGenerator;
@@ -28,12 +33,20 @@ public class IdGeneratorController {
     private ZookeeperIdGenerator zookeeperIdGenerator;
 
     @RequestMapping(value = "/nextUniqueId", method = RequestMethod.GET)
-    public String nextUniqueId(@RequestParam String name, @RequestParam String key, @RequestParam int step, @RequestParam int length) {
+    @ApiOperation(value = "获取全局唯一ID", notes = "获取分布式全局唯一ID", response = String.class, httpMethod = "GET")
+    public String nextUniqueId(
+            @RequestParam @ApiParam(value = "资源名字", required = true) String name,
+            @RequestParam @ApiParam(value = "资源Key", required = true) String key,
+            @RequestParam @ApiParam(value = "递增值", required = true) int step,
+            @RequestParam @ApiParam(value = "长度", required = true) int length) {
         return redisIdGenerator.nextUniqueId(name, key, step, length);
     }
 
     @RequestMapping(value = "/nextSequenceId", method = RequestMethod.GET)
-    public int nextSequenceId(@RequestParam String name, @RequestParam String key) {
+    @ApiOperation(value = "获取全局唯一序号", notes = "获取分布式全局唯一序号", response = Integer.class, httpMethod = "GET")
+    public int nextSequenceId(
+            @RequestParam @ApiParam(value = "资源名字", required = true) String name,
+            @RequestParam @ApiParam(value = "资源Key", required = true) String key) {
         try {
             return zookeeperIdGenerator.nextSequenceId(name, key);
         } catch (Exception e) {

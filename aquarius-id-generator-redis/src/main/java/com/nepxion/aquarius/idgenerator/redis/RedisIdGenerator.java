@@ -19,7 +19,7 @@ public interface RedisIdGenerator {
      *    例如Redis对应Value为1234，length为8，那么ID的后半部分为00001234；length为2，那么ID的后半部分为34
      * @param name 资源名字
      * @param key 资源Key
-     * @param step id递增值
+     * @param step 递增值
      * @param length 长度
      * @return
      * @throws Exception
