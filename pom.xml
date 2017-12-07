@@ -26,6 +26,7 @@
         <module>aquarius-cache-redis</module>
         <module>aquarius-id-generator-redis</module>
         <module>aquarius-id-generator-zookeeper</module>
+        <module>aquarius-id-generator-local</module>
         <module>aquarius-limit-aop</module>
         <module>aquarius-limit-redis</module>
         <module>aquarius-spring-boot-example</module>
@@ -143,6 +144,12 @@
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>aquarius-id-generator-zookeeper</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>aquarius-id-generator-local</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

@@ -36,6 +36,11 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>aquarius-id-generator-zookeeper</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>aquarius-id-generator-local</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -61,6 +66,7 @@
                                     <include>nepxion:aquarius-common-zookeeper</include>
                                     <include>nepxion:aquarius-id-generator-redis</include>
                                     <include>nepxion:aquarius-id-generator-zookeeper</include>
+                                    <include>nepxion:aquarius-id-generator-local</include>
                                 </includes>
                             </artifactSet>
                         </configuration>

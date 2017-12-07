@@ -56,7 +56,7 @@
 
         <dependency>
             <groupId>nepxion</groupId>
-            <artifactId>aquarius-all</artifactId>
+            <artifactId>aquarius-assembly-all</artifactId>
             <version>${aquarius.version}</version>
         </dependency>
     </dependencies>
