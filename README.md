@@ -4,7 +4,7 @@
 ## 分布式应用组件集合，包含
     1 Nepxion Aquarius Lock 分布式锁(支持Redis、Zookeeper、ReentrantLock本地锁)
     2 Nepxion Aquarius Cache 分布式缓存(支持Redis)
-    3 Nepxion Aquarius ID Generator 分布式全局唯一ID(支持Redis)、序号生成(支持Zookeeper)
+    3 Nepxion Aquarius ID Generator 分布式全局唯一ID(支持Redis)、全局唯一序号生成(支持Zookeeper、Twitter雪花ID算法的支持)
     4 Nepxion Aquarius Limit 分布式限速限流(支持Redis)
 
     上述4大组件同时支持SpringBoot和SpringCloud部署，分别参考aquarius-spring-boot-example和aquarius-spring-cloud-example工程，文档只以aquarius-spring-boot-example为例来阐述使用方法
@@ -698,6 +698,9 @@ public class CacheAopApplication {
         ID的前半部分为yyyyMMddHHmmssSSS格式的17位数字
         ID的后半部分为由length(最大为8位，如果length > 8，则取8)决定，取值Redis对应Value，如果小于length所对应的数位，如果不足该数位，前面补足0
         例如Redis对应Value为1234，length为8，那么ID的后半部分为00001234；length为2，那么ID的后半部分为34
+    3 支持根据Twitter雪花ID本地算法，模拟分布式ID产生
+      SnowFlake算法用来生成64位的ID，刚好可以用long整型存储，能够用于分布式系统中生产唯一的ID， 并且生成的ID有大致的顺序。 在这次实现中，生成的64位ID可以分成5个部分：
+      0 - 41位时间戳 - 5位数据中心标识 - 5位机器标识 - 12位序列号
 ### 使用ID Generator示例如下，更多细节见aquarius-spring-boot-example工程下com.nepxion.aquarius.idgenerator
 ```java
 package com.nepxion.aquarius.idgenerator;
@@ -851,6 +854,80 @@ public class ZookeeperIdGeneratorApplication {
 
             }
         }, 0L, 500L);
+    }
+}
+```
+
+```java
+package com.nepxion.aquarius.idgenerator;
+
+/**
+ * <p>Title: Nepxion Aquarius</p>
+ * <p>Description: Nepxion Aquarius</p>
+ * <p>Copyright: Copyright (c) 2017</p>
+ * <p>Company: Nepxion</p>
+ * @author Haojun Ren
+ * @email 1394997@qq.com
+ * @version 1.0
+ */
+
+import java.util.Timer;
+import java.util.TimerTask;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.context.annotation.ComponentScan;
+
+import com.nepxion.aquarius.common.context.AquariusContextAware;
+import com.nepxion.aquarius.idgenerator.local.LocalIdGenerator;
+
+@EnableAutoConfiguration
+@ComponentScan(basePackages = { "com.nepxion.aquarius.idgenerator.local" })
+public class LocalIdGeneratorApplication {
+    private static final Logger LOG = LoggerFactory.getLogger(LocalIdGeneratorApplication.class);
+
+    public static void main(String[] args) throws Exception {
+        SpringApplication.run(LocalIdGeneratorApplication.class, args);
+
+        LocalIdGenerator localIdGenerator = AquariusContextAware.getBean(LocalIdGenerator.class);
+
+        Timer timer1 = new Timer();
+        timer1.scheduleAtFixedRate(new TimerTask() {
+            public void run() {
+                for (int i = 0; i < 3; i++) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                LOG.info("Timer1 - Unique id={}", localIdGenerator.nextUniqueId(2, 3));
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }).start();
+                }
+            }
+        }, 0L, 1000L);
+
+        Timer timer2 = new Timer();
+        timer2.scheduleAtFixedRate(new TimerTask() {
+            public void run() {
+                for (int i = 0; i < 3; i++) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                LOG.info("Timer2 - Unique id={}", localIdGenerator.nextUniqueId(2, 3));
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }).start();
+                }
+            }
+        }, 0L, 1500L);
     }
 }
 ```
@@ -1091,4 +1168,7 @@ http://localhost:2222/nextUniqueId?name=idgenerater&key=X-Y&step=1&length=8
 
 # 直接调用方式(Zookeeper)
 http://localhost:2222/nextSequenceId?name=idgenerater&key=X-Y
+
+# 直接调用方式(雪花算法)
+http://localhost:2222/nextLocalUniqueId?dataCenterId=2&workerId=3
 ```
