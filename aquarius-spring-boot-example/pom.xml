@@ -48,6 +48,11 @@
 
         <dependency>
             <groupId>${project.groupId}</groupId>
+            <artifactId>aquarius-id-generator-local</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
             <artifactId>aquarius-limit-redis</artifactId>
         </dependency>
 
