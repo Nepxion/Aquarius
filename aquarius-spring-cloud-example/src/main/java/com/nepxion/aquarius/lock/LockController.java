@@ -40,8 +40,8 @@ public class LockController {
     @ApiOperation(value = "获取分布式锁", notes = "尝试获取锁，如果获取到锁，则返回锁对象，如果未获取到锁，则返回空", response = String.class, httpMethod = "GET")
     public String tryLock(
             @RequestParam @ApiParam(value = "锁的类型", required = true, allowableValues = "Lock, ReadLock, WriteLock", defaultValue = "Lock") String lockType,
-            @RequestParam @ApiParam(value = "锁的名字", required = true) String name,
-            @RequestParam @ApiParam(value = "锁的Key", required = true) String key,
+            @RequestParam @ApiParam(value = "锁的名字", required = true, defaultValue = "lock") String name,
+            @RequestParam @ApiParam(value = "锁的Key", required = true, defaultValue = "x-y") String key,
             @RequestParam @ApiParam(value = "持锁时间(单位毫秒)", required = true, defaultValue = "5000") long leaseTime,
             @RequestParam @ApiParam(value = "没有获取到锁时，等待时间(单位毫秒)", required = true, defaultValue = "60000") long waitTime,
             @RequestParam @ApiParam(value = "是否采用锁的异步执行方式", required = true, defaultValue = "false") boolean async,

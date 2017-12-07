@@ -29,8 +29,8 @@ public class LimitController {
     @RequestMapping(value = "/tryAccess", method = RequestMethod.GET)
     @ApiOperation(value = "请求分布式限流许可", notes = "在给定的时间段里最多的访问限制次数(超出次数返回false)；等下个时间段开始，才允许再次被访问(返回true)，周而复始", response = Boolean.class, httpMethod = "GET")
     public boolean tryAccess(
-            @RequestParam @ApiParam(value = "资源名字", required = true) String name,
-            @RequestParam @ApiParam(value = "资源Key", required = true) String key,
+            @RequestParam @ApiParam(value = "资源名字", required = true, defaultValue = "limit") String name,
+            @RequestParam @ApiParam(value = "资源Key", required = true, defaultValue = "X-Y") String key,
             @RequestParam @ApiParam(value = "给定的时间段(单位秒)", required = true, defaultValue = "10") int limitPeriod,
             @RequestParam @ApiParam(value = "最多的访问限制次数", required = true, defaultValue = "5") int limitCount) {
         return limitExecutor.tryAccess(name, key, limitPeriod, limitCount);

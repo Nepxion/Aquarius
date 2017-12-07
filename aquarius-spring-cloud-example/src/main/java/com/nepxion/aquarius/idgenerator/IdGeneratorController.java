@@ -35,18 +35,18 @@ public class IdGeneratorController {
     @RequestMapping(value = "/nextUniqueId", method = RequestMethod.GET)
     @ApiOperation(value = "获取全局唯一ID", notes = "获取分布式全局唯一ID", response = String.class, httpMethod = "GET")
     public String nextUniqueId(
-            @RequestParam @ApiParam(value = "资源名字", required = true) String name,
-            @RequestParam @ApiParam(value = "资源Key", required = true) String key,
-            @RequestParam @ApiParam(value = "递增值", required = true) int step,
-            @RequestParam @ApiParam(value = "长度", required = true) int length) {
+            @RequestParam @ApiParam(value = "资源名字", required = true, defaultValue = "idgenerater") String name,
+            @RequestParam @ApiParam(value = "资源Key", required = true, defaultValue = "X-Y") String key,
+            @RequestParam @ApiParam(value = "递增值", required = true, defaultValue = "1") int step,
+            @RequestParam @ApiParam(value = "长度", required = true, defaultValue = "8") int length) {
         return redisIdGenerator.nextUniqueId(name, key, step, length);
     }
 
     @RequestMapping(value = "/nextSequenceId", method = RequestMethod.GET)
     @ApiOperation(value = "获取全局唯一序号", notes = "获取分布式全局唯一序号", response = Integer.class, httpMethod = "GET")
     public int nextSequenceId(
-            @RequestParam @ApiParam(value = "资源名字", required = true) String name,
-            @RequestParam @ApiParam(value = "资源Key", required = true) String key) {
+            @RequestParam @ApiParam(value = "资源名字", required = true, defaultValue = "idgenerater") String name,
+            @RequestParam @ApiParam(value = "资源Key", required = true, defaultValue = "X-Y") String key) {
         try {
             return zookeeperIdGenerator.nextSequenceId(name, key);
         } catch (Exception e) {
