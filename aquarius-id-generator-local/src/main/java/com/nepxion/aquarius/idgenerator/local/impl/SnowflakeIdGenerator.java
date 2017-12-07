@@ -34,9 +34,9 @@ package com.nepxion.aquarius.idgenerator.local.impl;
 public class SnowflakeIdGenerator {
     // ==============================Fields===========================================
     /**
-     * 开始时间戳 (2015-01-01)
+     * 数据标识id所占的位数
      */
-    private final long twepoch = 1420041600000L;
+    private final long dataCenterIdBits = 5L;
 
     /**
      * 机器id所占的位数
@@ -44,19 +44,14 @@ public class SnowflakeIdGenerator {
     private final long workerIdBits = 5L;
 
     /**
-     * 数据标识id所占的位数
+     * 支持的最大数据标识id, 结果是31
      */
-    private final long dataCenterIdBits = 5L;
+    private final long maxDataCenterId = -1L ^ (-1L << dataCenterIdBits);
 
     /**
      * 支持的最大机器id, 结果是31 (这个移位算法可以很快的计算出几位二进制数所能表示的最大十进制数)
      */
     private final long maxWorkerId = -1L ^ (-1L << workerIdBits);
-
-    /**
-     * 支持的最大数据标识id, 结果是31
-     */
-    private final long maxDataCenterId = -1L ^ (-1L << dataCenterIdBits);
 
     /**
      * 序列在id中占的位数
@@ -84,14 +79,14 @@ public class SnowflakeIdGenerator {
     private final long sequenceMask = -1L ^ (-1L << sequenceBits);
 
     /**
-     * 工作机器ID(0~31)
-     */
-    private long workerId;
-
-    /**
      * 数据中心ID(0~31)
      */
     private long dataCenterId;
+
+    /**
+     * 工作机器ID(0~31)
+     */
+    private long workerId;
 
     /**
      * 毫秒内序列(0~4095)
@@ -99,28 +94,39 @@ public class SnowflakeIdGenerator {
     private long sequence = 0L;
 
     /**
+     * 开始时间戳
+     */
+    private long startTimestamp = -1L;
+
+    /**
      * 上次生成ID的时间戳
      */
     private long lastTimestamp = -1L;
 
     //==============================Constructors=====================================
-
     /**
      * 构造函数
-     * @param workerId 工作ID (0~31)
+     * @param startTimestamp 开始时间戳
      * @param dataCenterId 数据中心ID (0~31)
+     * @param workerId 工作ID (0~31)
      */
-    public SnowflakeIdGenerator(long workerId, long dataCenterId) {
-        if (workerId > maxWorkerId || workerId < 0) {
-            throw new IllegalArgumentException(String.format("Worker Id can't be greater than %d or less than 0", maxWorkerId));
+    public SnowflakeIdGenerator(long startTimestamp, long dataCenterId, long workerId) {
+        long timestamp = timeGen();
+        if (startTimestamp > timestamp) {
+            throw new IllegalArgumentException(String.format("Start Timestamp can't be greater than %d", timestamp));
         }
 
         if (dataCenterId > maxDataCenterId || dataCenterId < 0) {
             throw new IllegalArgumentException(String.format("Data Center Id can't be greater than %d or less than 0", maxDataCenterId));
         }
 
-        this.workerId = workerId;
+        if (workerId > maxWorkerId || workerId < 0) {
+            throw new IllegalArgumentException(String.format("Worker Id can't be greater than %d or less than 0", maxWorkerId));
+        }
+
+        this.startTimestamp = (startTimestamp == timestamp ? startTimestamp - 1 : startTimestamp);
         this.dataCenterId = dataCenterId;
+        this.workerId = workerId;
     }
 
     // ==============================Methods==========================================
@@ -155,7 +161,7 @@ public class SnowflakeIdGenerator {
         lastTimestamp = timestamp;
 
         //移位并通过或运算拼到一起组成64位的ID
-        return ((timestamp - twepoch) << timestampLeftShift) //
+        return ((timestamp - startTimestamp) << timestampLeftShift) //
                 | (dataCenterId << dataCenterIdShift) //
                 | (workerId << workerIdShift) //
                 | sequence;

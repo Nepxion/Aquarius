@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.nepxion.aquarius.idgenerator.local.LocalIdGenerator;
 import com.nepxion.aquarius.idgenerator.redis.RedisIdGenerator;
 import com.nepxion.aquarius.idgenerator.zookeeper.ZookeeperIdGenerator;
 
@@ -32,6 +33,9 @@ public class IdGeneratorController {
     @Autowired
     private ZookeeperIdGenerator zookeeperIdGenerator;
 
+    @Autowired
+    private LocalIdGenerator localIdGenerator;
+
     @RequestMapping(value = "/nextUniqueId", method = RequestMethod.GET)
     @ApiOperation(value = "获取全局唯一ID", notes = "获取分布式全局唯一ID", response = String.class, httpMethod = "GET")
     public String nextUniqueId(
@@ -40,6 +44,14 @@ public class IdGeneratorController {
             @RequestParam @ApiParam(value = "递增值", required = true, defaultValue = "1") int step,
             @RequestParam @ApiParam(value = "长度", required = true, defaultValue = "8") int length) {
         return redisIdGenerator.nextUniqueId(name, key, step, length);
+    }
+
+    @RequestMapping(value = "/nextLocalUniqueId", method = RequestMethod.GET)
+    @ApiOperation(value = "获取全局唯一ID", notes = "获取分布式全局唯一ID，根据Twitter雪花ID本地算法，模拟分布式ID产生", response = Long.class, httpMethod = "GET")
+    public long nextLocalUniqueId(
+            @RequestParam @ApiParam(value = "数据中心ID", required = true, defaultValue = "2") long dataCenterId,
+            @RequestParam @ApiParam(value = "机器ID", required = true, defaultValue = "3") long workerId) {
+        return localIdGenerator.nextUniqueId(dataCenterId, workerId);
     }
 
     @RequestMapping(value = "/nextSequenceId", method = RequestMethod.GET)

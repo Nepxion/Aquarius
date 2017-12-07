@@ -35,6 +35,8 @@ import com.nepxion.aquarius.idgenerator.redis.RedisIdGenerator;
 public class RedisIdGeneratorImpl implements RedisIdGenerator {
     private static final Logger LOG = LoggerFactory.getLogger(RedisIdGeneratorImpl.class);
 
+    private static final String DATE_FORMAT = "yyyyMMddHHmmssSSS";
+
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 
@@ -81,7 +83,7 @@ public class RedisIdGeneratorImpl implements RedisIdGenerator {
         Date date = new Date(Long.parseLong(String.valueOf(value1)) * 1000 + Long.parseLong(String.valueOf(value2)) / 1000);
 
         StringBuilder builder = new StringBuilder();
-        builder.append(DateUtil.formatDate(date, DateUtil.DATE_FMT_YMDHMSSSSS));
+        builder.append(DateUtil.formatDate(date, DATE_FORMAT));
         builder.append(StringUtil.subString((long) value3, length));
 
         String nextUniqueId = builder.toString();

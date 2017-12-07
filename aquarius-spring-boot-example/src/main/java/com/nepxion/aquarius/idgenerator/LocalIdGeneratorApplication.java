@@ -40,7 +40,7 @@ public class LocalIdGeneratorApplication {
                         @Override
                         public void run() {
                             try {
-                                LOG.info("Timer1 - Unique id={}", localIdGenerator.nextUniqueId(8, 16));
+                                LOG.info("Timer1 - Unique id={}", localIdGenerator.nextUniqueId(2, 3));
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -58,7 +58,7 @@ public class LocalIdGeneratorApplication {
                         @Override
                         public void run() {
                             try {
-                                LOG.info("Timer2 - Unique id={}", localIdGenerator.nextUniqueId(8, 16));
+                                LOG.info("Timer2 - Unique id={}", localIdGenerator.nextUniqueId(2, 3));
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
