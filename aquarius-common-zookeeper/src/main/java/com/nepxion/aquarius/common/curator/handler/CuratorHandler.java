@@ -34,6 +34,7 @@ import org.slf4j.LoggerFactory;
 
 import com.nepxion.aquarius.common.constant.AquariusConstant;
 import com.nepxion.aquarius.common.curator.constant.CuratorConstant;
+import com.nepxion.aquarius.common.exception.AquariusException;
 import com.nepxion.aquarius.common.property.AquariusProperties;
 
 public class CuratorHandler {
@@ -90,7 +91,7 @@ public class CuratorHandler {
             int sleepMsBetweenRetries = properties.getInteger(retryType + "-" + CuratorConstant.PARAMETER_NAME_SLEEP_MS_BETWEEN_RETRIES);
             retryPolicy = createRetryUntilElapsed(maxElapsedTimeMs, sleepMsBetweenRetries);
         } else {
-            throw new IllegalArgumentException("Invalid config value for retryType=" + retryType);
+            throw new AquariusException("Invalid config value for retryType=" + retryType);
         }
 
         String connectString = properties.getString(CuratorConstant.CONNECT_STRING);

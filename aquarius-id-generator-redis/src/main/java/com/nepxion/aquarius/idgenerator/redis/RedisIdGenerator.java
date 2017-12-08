@@ -27,4 +27,8 @@ public interface RedisIdGenerator {
     String nextUniqueId(String name, String key, int step, int length);
 
     String nextUniqueId(String compositeKey, int step, int length);
+
+    String[] nextUniqueIds(String name, String key, int step, int length, int count);
+
+    String[] nextUniqueIds(String compositeKey, int step, int length, int count);
 }

@@ -20,6 +20,7 @@ import org.springframework.stereotype.Component;
 
 import com.nepxion.aquarius.common.constant.AquariusConstant;
 import com.nepxion.aquarius.common.util.DateUtil;
+import com.nepxion.aquarius.common.util.StringUtil;
 import com.nepxion.aquarius.idgenerator.local.LocalIdGenerator;
 
 @Component("localIdGeneratorImpl")
@@ -35,24 +36,45 @@ public class LocalIdGeneratorImpl implements LocalIdGenerator {
     private Boolean frequentLogPrint;
 
     @Override
-    public long nextUniqueId(long dataCenterId, long machineId) {
+    public String nextUniqueId(long dataCenterId, long machineId) {
         return nextUniqueId(DEFAULT_START_TIMESTAMP, dataCenterId, machineId);
     }
 
     @Override
-    public long nextUniqueId(String startTimestamp, long dataCenterId, long machineId) throws Exception {
+    public String nextUniqueId(String startTimestamp, long dataCenterId, long machineId) throws Exception {
         return nextUniqueId(DateUtil.parseDate(startTimestamp, DATE_FORMAT).getTime(), dataCenterId, machineId);
     }
 
     @Override
-    public long nextUniqueId(long startTimestamp, long dataCenterId, long machineId) {
-        long nextUniqueId = getIdGenerator(startTimestamp, dataCenterId, machineId).nextId();
+    public String nextUniqueId(long startTimestamp, long dataCenterId, long machineId) {
+        String nextUniqueId = getIdGenerator(startTimestamp, dataCenterId, machineId).nextId();
 
         if (frequentLogPrint) {
             LOG.info("Next unique id is {} for startTimestamp={}, dataCenterId={}, machineId={}", nextUniqueId, startTimestamp, dataCenterId, machineId);
         }
 
         return nextUniqueId;
+    }
+
+    @Override
+    public String[] nextUniqueIds(long dataCenterId, long machineId, int count) {
+        return nextUniqueIds(DEFAULT_START_TIMESTAMP, dataCenterId, machineId, count);
+    }
+
+    @Override
+    public String[] nextUniqueIds(String startTimestamp, long dataCenterId, long machineId, int count) throws Exception {
+        return nextUniqueIds(DateUtil.parseDate(startTimestamp, DATE_FORMAT).getTime(), dataCenterId, machineId, count);
+    }
+
+    @Override
+    public String[] nextUniqueIds(long startTimestamp, long dataCenterId, long machineId, int count) {
+        String[] nextUniqueIds = getIdGenerator(startTimestamp, dataCenterId, machineId).nextIds(count);
+
+        if (frequentLogPrint) {
+            LOG.info("Next unique ids is {} for startTimestamp={}, dataCenterId={}, machineId={}, count={}", StringUtil.convert(nextUniqueIds), startTimestamp, dataCenterId, machineId, count);
+        }
+
+        return nextUniqueIds;
     }
 
     private SnowflakeIdGenerator getIdGenerator(long startTimestamp, long dataCenterId, long machineId) {

@@ -67,5 +67,26 @@ public class RedisIdGeneratorApplication {
                 }
             }
         }, 0L, 1500L);
+
+        Timer timer3 = new Timer();
+        timer3.scheduleAtFixedRate(new TimerTask() {
+            public void run() {
+                for (int i = 0; i < 3; i++) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                String[] ids = redisIdGenerator.nextUniqueIds("idgenerater", "X-Y", 1, 8, 10);
+                                for (String id : ids) {
+                                    LOG.info("Timer3 - Unique id={}", id);
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }).start();
+                }
+            }
+        }, 0L, 3000L);
     }
 }
