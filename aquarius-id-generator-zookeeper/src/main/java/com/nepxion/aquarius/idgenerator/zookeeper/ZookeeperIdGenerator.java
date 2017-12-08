@@ -18,7 +18,7 @@ public interface ZookeeperIdGenerator {
      * @return
      * @throws Exception
      */
-    int nextSequenceId(String name, String key) throws Exception;
+    String nextSequenceId(String name, String key) throws Exception;
 
-    int nextSequenceId(String compositeKey) throws Exception;
+    String nextSequenceId(String compositeKey) throws Exception;
 }

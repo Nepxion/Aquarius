@@ -39,7 +39,7 @@ public class ZookeeperIdGeneratorImpl implements ZookeeperIdGenerator {
     private Boolean frequentLogPrint;
 
     @Override
-    public int nextSequenceId(String name, String key) throws Exception {
+    public String nextSequenceId(String name, String key) throws Exception {
         if (StringUtils.isEmpty(name)) {
             throw new AquariusException("name is null or empty");
         }
@@ -54,7 +54,7 @@ public class ZookeeperIdGeneratorImpl implements ZookeeperIdGenerator {
     }
 
     @Override
-    public int nextSequenceId(String compositeKey) throws Exception {
+    public String nextSequenceId(String compositeKey) throws Exception {
         if (StringUtils.isEmpty(compositeKey)) {
             throw new AquariusException("Composite key is null or empty");
         }
@@ -80,6 +80,6 @@ public class ZookeeperIdGeneratorImpl implements ZookeeperIdGenerator {
             LOG.info("Next sequenceId id is {} for key={}", nextSequenceId, compositeKey);
         }
 
-        return nextSequenceId;
+        return String.valueOf(nextSequenceId);
     }
 }

@@ -54,6 +54,11 @@ public class SnowflakeIdGenerator {
     private final static long TIMESTAMP_SHIFT = SEQUENCE_BITS + MACHINE_ID_BITS + DATA_CENTER_ID_BITS; // 时间戳向左移22位(5+5+12)
 
     /**
+     * 批量获取的最大数目(10万)
+     */
+    private final int MAX_BATCH_COUNT = 100_000;
+
+    /**
      * 变量部分
      */
     private long dataCenterId; // 数据中心标识ID(0~31)
@@ -89,10 +94,28 @@ public class SnowflakeIdGenerator {
     }
 
     /**
-     * 获得下一个ID (该方法是线程安全的)
-     * @return SnowflakeId long
+     * 批量获取下一组ID
+     * @param count 批量条数
+     * @return
      */
-    public synchronized long nextId() {
+    public String[] nextIds(int count) {
+        if (count <= 0 || count > MAX_BATCH_COUNT) {
+            throw new IllegalArgumentException(String.format("Count can't be greater than %d or less than 0", MAX_BATCH_COUNT));
+        }
+
+        String[] ids = new String[count];
+        for (int i = 0; i < count; i++) {
+            ids[i] = nextId();
+        }
+
+        return ids;
+    }
+
+    /**
+     * 获得下一个ID (该方法是线程安全的)
+     * @return
+     */
+    public synchronized String nextId() {
         long currentTimestamp = getCurrentTimestamp();
 
         // 如果当前时间小于上一次ID生成的时间戳, 说明系统时钟回退过这个时候应当抛出异常
@@ -118,10 +141,12 @@ public class SnowflakeIdGenerator {
         lastTimestamp = currentTimestamp;
 
         // 移位并通过或运算拼到一起组成64位的ID
-        return ((currentTimestamp - startTimestamp) << TIMESTAMP_SHIFT) // 时间戳部分
+        long id = ((currentTimestamp - startTimestamp) << TIMESTAMP_SHIFT) // 时间戳部分
                 | (dataCenterId << DATA_CENTER_ID_SHIFT) // 数据中心标识ID部分
                 | (machineId << MACHINE_ID_SHIFT) // 机器标识ID部分
                 | sequence; // 序列号部分
+
+        return String.valueOf(id);
     }
 
     /**
