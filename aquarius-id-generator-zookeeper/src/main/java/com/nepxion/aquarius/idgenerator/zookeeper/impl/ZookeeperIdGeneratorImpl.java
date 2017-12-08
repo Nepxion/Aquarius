@@ -29,6 +29,8 @@ import com.nepxion.aquarius.idgenerator.zookeeper.ZookeeperIdGenerator;
 public class ZookeeperIdGeneratorImpl implements ZookeeperIdGenerator {
     private static final Logger LOG = LoggerFactory.getLogger(ZookeeperIdGeneratorImpl.class);
 
+    private final int MAX_BATCH_COUNT = 1000;
+
     @Autowired
     private CuratorFramework curator;
 
@@ -81,5 +83,33 @@ public class ZookeeperIdGeneratorImpl implements ZookeeperIdGenerator {
         }
 
         return String.valueOf(nextSequenceId);
+    }
+
+    @Override
+    public String[] nextSequenceIds(String name, String key, int count) throws Exception {
+        if (count <= 0 || count > MAX_BATCH_COUNT) {
+            throw new IllegalArgumentException(String.format("Count can't be greater than %d or less than 0", MAX_BATCH_COUNT));
+        }
+
+        String[] nextSequenceIds = new String[count];
+        for (int i = 0; i < count; i++) {
+            nextSequenceIds[i] = nextSequenceId(name, key);
+        }
+
+        return nextSequenceIds;
+    }
+
+    @Override
+    public String[] nextSequenceIds(String compositeKey, int count) throws Exception {
+        if (count <= 0 || count > MAX_BATCH_COUNT) {
+            throw new AquariusException(String.format("Count can't be greater than %d or less than 0", MAX_BATCH_COUNT));
+        }
+
+        String[] nextSequenceIds = new String[count];
+        for (int i = 0; i < count; i++) {
+            nextSequenceIds[i] = nextSequenceId(compositeKey);
+        }
+
+        return nextSequenceIds;
     }
 }

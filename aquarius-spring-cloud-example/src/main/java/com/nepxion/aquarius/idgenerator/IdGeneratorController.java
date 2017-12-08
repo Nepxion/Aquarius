@@ -74,4 +74,17 @@ public class IdGeneratorController {
             throw new IllegalArgumentException(e);
         }
     }
+
+    @RequestMapping(value = "/nextSequenceIds", method = RequestMethod.GET)
+    @ApiOperation(value = "批量获取全局唯一序号", notes = "批量获取分布式全局唯一序号, 最大不能超过1000", response = String[].class, httpMethod = "GET")
+    public String[] nextSequenceIds(
+            @RequestParam @ApiParam(value = "资源名字", required = true, defaultValue = "idgenerater") String name,
+            @RequestParam @ApiParam(value = "资源Key", required = true, defaultValue = "X-Y") String key,
+            @RequestParam @ApiParam(value = "批量条数", required = true, defaultValue = "10") int count) {
+        try {
+            return zookeeperIdGenerator.nextSequenceIds(name, key, count);
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e);
+        }
+    }
 }

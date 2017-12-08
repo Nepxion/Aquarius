@@ -10,6 +10,8 @@ package com.nepxion.aquarius.idgenerator.local.impl;
  * @version 1.0
  */
 
+import com.nepxion.aquarius.common.exception.AquariusException;
+
 /**
  * The class Snowflake id generator. Created by paascloud.net@gmail.com
  * Twitter雪花ID算法
@@ -76,15 +78,15 @@ public class SnowflakeIdGenerator {
     public SnowflakeIdGenerator(long startTimestamp, long dataCenterId, long machineId) {
         long currentTimestamp = getCurrentTimestamp();
         if (startTimestamp > currentTimestamp) {
-            throw new IllegalArgumentException(String.format("Start Timestamp can't be greater than %d", currentTimestamp));
+            throw new AquariusException(String.format("Start timestamp can't be greater than %d", currentTimestamp));
         }
 
         if (dataCenterId > MAX_DATA_CENTER_ID || dataCenterId < 0) {
-            throw new IllegalArgumentException(String.format("Data Center Id can't be greater than %d or less than 0", MAX_DATA_CENTER_ID));
+            throw new AquariusException(String.format("Data center id can't be greater than %d or less than 0", MAX_DATA_CENTER_ID));
         }
 
         if (machineId > MAX_MACHINE_ID || machineId < 0) {
-            throw new IllegalArgumentException(String.format("Machine Id can't be greater than %d or less than 0", MAX_MACHINE_ID));
+            throw new AquariusException(String.format("Machine id can't be greater than %d or less than 0", MAX_MACHINE_ID));
         }
 
         // 当初始时间跟当前时间相等，减1毫秒，否则会导致溢出
@@ -100,7 +102,7 @@ public class SnowflakeIdGenerator {
      */
     public String[] nextIds(int count) {
         if (count <= 0 || count > MAX_BATCH_COUNT) {
-            throw new IllegalArgumentException(String.format("Count can't be greater than %d or less than 0", MAX_BATCH_COUNT));
+            throw new AquariusException(String.format("Count can't be greater than %d or less than 0", MAX_BATCH_COUNT));
         }
 
         String[] ids = new String[count];
