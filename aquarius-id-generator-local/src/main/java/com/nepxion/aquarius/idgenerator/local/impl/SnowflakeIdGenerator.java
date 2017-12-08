@@ -130,12 +130,12 @@ public class SnowflakeIdGenerator {
      * @return 当前时间戳
      */
     private long getNextTimestamp(long lastTimestamp) {
-        long timestamp = getCurrentTimestamp();
-        while (timestamp <= lastTimestamp) {
-            timestamp = getCurrentTimestamp();
+        long currentTimestamp = getCurrentTimestamp();
+        while (currentTimestamp <= lastTimestamp) {
+            currentTimestamp = getCurrentTimestamp();
         }
 
-        return timestamp;
+        return currentTimestamp;
     }
 
     /**
