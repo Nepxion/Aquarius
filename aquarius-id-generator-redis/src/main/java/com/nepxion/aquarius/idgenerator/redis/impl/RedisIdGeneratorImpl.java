@@ -36,6 +36,7 @@ public class RedisIdGeneratorImpl implements RedisIdGenerator {
     private static final Logger LOG = LoggerFactory.getLogger(RedisIdGeneratorImpl.class);
 
     private static final String DATE_FORMAT = "yyyyMMddHHmmssSSS";
+    private static final String DECIMAL_FORMAT = "00000000";
 
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
@@ -84,7 +85,7 @@ public class RedisIdGeneratorImpl implements RedisIdGenerator {
 
         StringBuilder builder = new StringBuilder();
         builder.append(DateUtil.formatDate(date, DATE_FORMAT));
-        builder.append(StringUtil.subString((long) value3, length));
+        builder.append(StringUtil.formatString((long) value3, length, DECIMAL_FORMAT));
 
         String nextUniqueId = builder.toString();
 
