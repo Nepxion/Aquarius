@@ -49,9 +49,9 @@ public class IdGeneratorController {
     @RequestMapping(value = "/nextLocalUniqueId", method = RequestMethod.GET)
     @ApiOperation(value = "获取全局唯一ID", notes = "获取分布式全局唯一ID，根据Twitter雪花ID本地算法，模拟分布式ID产生", response = Long.class, httpMethod = "GET")
     public long nextLocalUniqueId(
-            @RequestParam @ApiParam(value = "数据中心ID", required = true, defaultValue = "2") long dataCenterId,
-            @RequestParam @ApiParam(value = "机器ID", required = true, defaultValue = "3") long workerId) {
-        return localIdGenerator.nextUniqueId(dataCenterId, workerId);
+            @RequestParam @ApiParam(value = "数据中心标识ID", required = true, defaultValue = "2") long dataCenterId,
+            @RequestParam @ApiParam(value = "机器标识ID", required = true, defaultValue = "3") long machineId) {
+        return localIdGenerator.nextUniqueId(dataCenterId, machineId);
     }
 
     @RequestMapping(value = "/nextSequenceId", method = RequestMethod.GET)

@@ -35,32 +35,32 @@ public class LocalIdGeneratorImpl implements LocalIdGenerator {
     private Boolean frequentLogPrint;
 
     @Override
-    public long nextUniqueId(long dataCenterId, long workerId) {
-        return nextUniqueId(DEFAULT_START_TIMESTAMP, dataCenterId, workerId);
+    public long nextUniqueId(long dataCenterId, long machineId) {
+        return nextUniqueId(DEFAULT_START_TIMESTAMP, dataCenterId, machineId);
     }
 
     @Override
-    public long nextUniqueId(String startTimestamp, long dataCenterId, long workerId) throws Exception {
-        return nextUniqueId(DateUtil.parseDate(startTimestamp, DATE_FORMAT).getTime(), dataCenterId, workerId);
+    public long nextUniqueId(String startTimestamp, long dataCenterId, long machineId) throws Exception {
+        return nextUniqueId(DateUtil.parseDate(startTimestamp, DATE_FORMAT).getTime(), dataCenterId, machineId);
     }
 
     @Override
-    public long nextUniqueId(long startTimestamp, long dataCenterId, long workerId) {
-        long nextUniqueId = getIdGenerator(startTimestamp, dataCenterId, workerId).nextId();
+    public long nextUniqueId(long startTimestamp, long dataCenterId, long machineId) {
+        long nextUniqueId = getIdGenerator(startTimestamp, dataCenterId, machineId).nextId();
 
         if (frequentLogPrint) {
-            LOG.info("Next unique id is {} for startTimestamp={}, dataCenterId={}, workerId={}", nextUniqueId, startTimestamp, dataCenterId, workerId);
+            LOG.info("Next unique id is {} for startTimestamp={}, dataCenterId={}, machineId={}", nextUniqueId, startTimestamp, dataCenterId, machineId);
         }
 
         return nextUniqueId;
     }
 
-    private SnowflakeIdGenerator getIdGenerator(long startTimestamp, long dataCenterId, long workerId) {
-        String key = dataCenterId + "-" + workerId;
+    private SnowflakeIdGenerator getIdGenerator(long startTimestamp, long dataCenterId, long machineId) {
+        String key = dataCenterId + "-" + machineId;
 
         SnowflakeIdGenerator idGenerator = idGeneratorMap.get(key);
         if (idGenerator == null) {
-            SnowflakeIdGenerator newIdGnerator = new SnowflakeIdGenerator(startTimestamp, dataCenterId, workerId);
+            SnowflakeIdGenerator newIdGnerator = new SnowflakeIdGenerator(startTimestamp, dataCenterId, machineId);
             idGenerator = idGeneratorMap.putIfAbsent(key, newIdGnerator);
             if (idGenerator == null) {
                 idGenerator = newIdGnerator;

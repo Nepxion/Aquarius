@@ -1170,5 +1170,5 @@ http://localhost:2222/nextUniqueId?name=idgenerater&key=X-Y&step=1&length=8
 http://localhost:2222/nextSequenceId?name=idgenerater&key=X-Y
 
 # 直接调用方式(雪花算法)
-http://localhost:2222/nextLocalUniqueId?dataCenterId=2&workerId=3
+http://localhost:2222/nextLocalUniqueId?dataCenterId=2&machineId=3
 ```
