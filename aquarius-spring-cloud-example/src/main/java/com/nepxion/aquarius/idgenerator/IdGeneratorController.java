@@ -64,7 +64,7 @@ public class IdGeneratorController {
     }
 
     @RequestMapping(value = "/nextSequenceId", method = RequestMethod.GET)
-    @ApiOperation(value = "获取全局唯一序号", notes = "获取分布式全局唯一序号", response = Integer.class, httpMethod = "GET")
+    @ApiOperation(value = "获取全局唯一序号", notes = "获取分布式全局唯一序号", response = String.class, httpMethod = "GET")
     public String nextSequenceId(
             @RequestParam @ApiParam(value = "资源名字", required = true, defaultValue = "idgenerater") String name,
             @RequestParam @ApiParam(value = "资源Key", required = true, defaultValue = "X-Y") String key) {

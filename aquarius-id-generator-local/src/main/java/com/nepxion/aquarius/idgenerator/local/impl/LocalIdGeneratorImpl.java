@@ -20,6 +20,7 @@ import org.springframework.stereotype.Component;
 
 import com.nepxion.aquarius.common.constant.AquariusConstant;
 import com.nepxion.aquarius.common.util.DateUtil;
+import com.nepxion.aquarius.common.util.StringUtil;
 import com.nepxion.aquarius.idgenerator.local.LocalIdGenerator;
 
 @Component("localIdGeneratorImpl")
@@ -70,7 +71,7 @@ public class LocalIdGeneratorImpl implements LocalIdGenerator {
         String[] nextUniqueIds = getIdGenerator(startTimestamp, dataCenterId, machineId).nextIds(count);
 
         if (frequentLogPrint) {
-            LOG.info("Next unique ids is got for startTimestamp={}, dataCenterId={}, machineId={}, count={}", startTimestamp, dataCenterId, machineId, count);
+            LOG.info("Next unique ids is {} for startTimestamp={}, dataCenterId={}, machineId={}, count={}", StringUtil.convert(nextUniqueIds), startTimestamp, dataCenterId, machineId, count);
         }
 
         return nextUniqueIds;

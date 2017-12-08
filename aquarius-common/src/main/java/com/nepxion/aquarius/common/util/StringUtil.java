@@ -12,6 +12,8 @@ package com.nepxion.aquarius.common.util;
 
 import java.text.DecimalFormat;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 public class StringUtil {
     public static DecimalFormat format = new DecimalFormat("00000000");
 
@@ -22,5 +24,21 @@ public class StringUtil {
         } else {
             return value.substring(value.length() - length, value.length());
         }
+    }
+
+    public static String convert(String[] arrays) {
+        if (ArrayUtils.isEmpty(arrays)) {
+            return null;
+        }
+
+        StringBuilder builder = new StringBuilder();
+        for (String array : arrays) {
+            builder.append(array).append(",");
+        }
+
+        String result = builder.toString();
+        result = result.substring(0, result.length() - 1);
+
+        return result;
     }
 }
