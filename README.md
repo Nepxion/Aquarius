@@ -4,7 +4,7 @@
 ## 分布式应用组件集合，包含
     1 Nepxion Aquarius Lock 分布式锁(支持Redis、Zookeeper、ReentrantLock本地锁)
     2 Nepxion Aquarius Cache 分布式缓存(支持Redis)
-    3 Nepxion Aquarius ID Generator 分布式全局唯一ID(支持Redis)、全局唯一序号生成(支持Zookeeper、Twitter雪花ID算法的支持)
+    3 Nepxion Aquarius ID Generator 分布式全局唯一ID(支持Redis)、全局唯一序号生成(支持Zookeeper、Twitter雪花ID算法的支持)，支持单个和批量获取
     4 Nepxion Aquarius Limit 分布式限速限流(支持Redis)
 
     上述4大组件同时支持SpringBoot和SpringCloud部署，分别参考aquarius-spring-boot-example和aquarius-spring-cloud-example工程，文档只以aquarius-spring-boot-example为例来阐述使用方法
@@ -750,12 +750,10 @@ public class RedisIdGeneratorApplication {
                                 e.printStackTrace();
                             }
                         }
-
                     }).start();
                 }
-
             }
-        }, 0L, 100L);
+        }, 0L, 1000L);
 
         Timer timer2 = new Timer();
         timer2.scheduleAtFixedRate(new TimerTask() {
@@ -770,12 +768,31 @@ public class RedisIdGeneratorApplication {
                                 e.printStackTrace();
                             }
                         }
-
                     }).start();
                 }
-
             }
-        }, 0L, 500L);
+        }, 0L, 1500L);
+
+        Timer timer3 = new Timer();
+        timer3.scheduleAtFixedRate(new TimerTask() {
+            public void run() {
+                for (int i = 0; i < 3; i++) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                String[] ids = redisIdGenerator.nextUniqueIds("idgenerater", "X-Y", 1, 8, 10);
+                                for (String id : ids) {
+                                    LOG.info("Timer3 - Unique id={}", id);
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }).start();
+                }
+            }
+        }, 0L, 3000L);
     }
 }
 ```
@@ -828,12 +845,10 @@ public class ZookeeperIdGeneratorApplication {
                                 e.printStackTrace();
                             }
                         }
-
                     }).start();
                 }
-
             }
-        }, 0L, 100L);
+        }, 0L, 1000L);
 
         Timer timer2 = new Timer();
         timer2.scheduleAtFixedRate(new TimerTask() {
@@ -848,12 +863,31 @@ public class ZookeeperIdGeneratorApplication {
                                 e.printStackTrace();
                             }
                         }
-
                     }).start();
                 }
-
             }
-        }, 0L, 500L);
+        }, 0L, 1500L);
+
+        Timer timer3 = new Timer();
+        timer3.scheduleAtFixedRate(new TimerTask() {
+            public void run() {
+                for (int i = 0; i < 3; i++) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                String[] ids = zookeeperIdGenerator.nextSequenceIds("idgenerater", "X-Y", 10);
+                                for (String id : ids) {
+                                    LOG.info("Timer3 - Sequence id={}", id);
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }).start();
+                }
+            }
+        }, 0L, 3000L);
     }
 }
 ```
@@ -928,6 +962,27 @@ public class LocalIdGeneratorApplication {
                 }
             }
         }, 0L, 1500L);
+
+        Timer timer3 = new Timer();
+        timer3.scheduleAtFixedRate(new TimerTask() {
+            public void run() {
+                for (int i = 0; i < 3; i++) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                String[] ids = localIdGenerator.nextUniqueIds(2, 3, 10);
+                                for (String id : ids) {
+                                    LOG.info("Timer3 - Unique id={}", id);
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }).start();
+                }
+            }
+        }, 0L, 3000L);
     }
 }
 ```
@@ -1145,6 +1200,7 @@ public class RedisLimitApplication {
       eureka.client.serviceUrl.defaultZone=http://cluster-1:1111/eureka/,http://cluster-2:1112/eureka/,http://cluster-3:1113/eureka/
     2 启动AquariusApplication
     3 打开Postman，或者浏览器，执行Get操作，参考下面的URL
+    4 支持Swagger，打开http://localhost:2222/swagger-ui.html访问
 ```java
 Lock
 # 注解方式
