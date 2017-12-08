@@ -46,6 +46,17 @@ public class IdGeneratorController {
         return redisIdGenerator.nextUniqueId(name, key, step, length);
     }
 
+    @RequestMapping(value = "/nextUniqueIds", method = RequestMethod.GET)
+    @ApiOperation(value = "获取全局唯一ID", notes = "获取分布式全局唯一ID", response = String[].class, httpMethod = "GET")
+    public String[] nextUniqueIds(
+            @RequestParam @ApiParam(value = "资源名字", required = true, defaultValue = "idgenerater") String name,
+            @RequestParam @ApiParam(value = "资源Key", required = true, defaultValue = "X-Y") String key,
+            @RequestParam @ApiParam(value = "递增值", required = true, defaultValue = "1") int step,
+            @RequestParam @ApiParam(value = "长度", required = true, defaultValue = "8") int length,
+            @RequestParam @ApiParam(value = "批量条数", required = true, defaultValue = "10") int count) {
+        return redisIdGenerator.nextUniqueIds(name, key, step, length, count);
+    }
+
     @RequestMapping(value = "/nextLocalUniqueId", method = RequestMethod.GET)
     @ApiOperation(value = "获取全局唯一ID", notes = "获取分布式全局唯一ID，根据Twitter雪花ID本地算法，模拟分布式ID产生", response = String.class, httpMethod = "GET")
     public String nextLocalUniqueId(

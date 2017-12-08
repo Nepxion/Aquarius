@@ -58,7 +58,7 @@ public class SnowflakeIdGenerator {
     /**
      * 批量获取的最大数目(10万)
      */
-    private final int MAX_BATCH_COUNT = 100_000;
+    private final static int MAX_BATCH_COUNT = 100_000;
 
     /**
      * 变量部分
