@@ -11,12 +11,13 @@ package com.nepxion.aquarius.common.property;
  */
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+
+import com.nepxion.aquarius.common.util.IOUtil;
 
 public class AquariusContent {
     private String content;
@@ -24,12 +25,7 @@ public class AquariusContent {
     public AquariusContent(String path, String encoding) throws IOException {
         InputStream inputStream = null;
         try {
-            // 从Resource路径获取
-            inputStream = AquariusContent.class.getClassLoader().getResourceAsStream(path);
-            if (inputStream == null) {
-                // 从文件路径获取
-                inputStream = new FileInputStream(path);
-            }
+            inputStream = IOUtil.getInputStream(path);
             this.content = IOUtils.toString(inputStream, encoding);
         } finally {
             if (inputStream != null) {
