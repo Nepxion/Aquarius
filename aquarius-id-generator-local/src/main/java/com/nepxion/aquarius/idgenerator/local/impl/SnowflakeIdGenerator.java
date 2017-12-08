@@ -32,139 +32,96 @@ package com.nepxion.aquarius.idgenerator.local.impl;
  *   或许我们不一定都需要像上面那样使用5位作为数据中心标识，5位作为机器标识，可以根据我们业务的需要，灵活分配节点部分，如：若不需要数据中心，完全可以使用全部10位作为机器标识；若数据中心不多，也可以只使用3位作为数据中心，7位作为机器标识
  */
 public class SnowflakeIdGenerator {
-    // ==============================Fields===========================================
     /**
-     * 数据标识id所占的位数
+     * 每一部分占用的位数
      */
-    private final long dataCenterIdBits = 5L;
+    private final static long DATA_CENTER_ID_BITS = 5L; // 数据中心标识在ID中占用的位数
+    private final static long MACHINE_ID_BITS = 5L; // 机器标识在ID中占用的位数
+    private final static long SEQUENCE_BITS = 12L; // 序列号在ID中占用的位数
 
     /**
-     * 机器id所占的位数
+     * 每一部分的最大值
      */
-    private final long workerIdBits = 5L;
+    private final static long MAX_DATA_CENTER_ID = -1L ^ (-1L << DATA_CENTER_ID_BITS); // 支持的最大数据中心标识ID为31
+    private final static long MAX_MACHINE_ID = -1L ^ (-1L << MACHINE_ID_BITS); // 支持的最大机器标识ID为31(这个移位算法可以很快的计算出几位二进制数所能表示的最大十进制数)
+    private final static long MAX_SEQUENCE = -1L ^ (-1L << SEQUENCE_BITS); // 支持的最大序列(掩码), 这里为4095 (0b111111111111=0xfff=4095)
 
     /**
-     * 支持的最大数据标识id, 结果是31
+     * 每一部分向左的位移
      */
-    private final long maxDataCenterId = -1L ^ (-1L << dataCenterIdBits);
+    private final static long DATA_CENTER_ID_SHIFT = SEQUENCE_BITS + MACHINE_ID_BITS; // 数据中心标识ID向左移17位(12+5)
+    private final static long MACHINE_ID_SHIFT = SEQUENCE_BITS; // 机器标识ID向左移12位
+    private final static long TIMESTAMP_SHIFT = SEQUENCE_BITS + MACHINE_ID_BITS + DATA_CENTER_ID_BITS; // 时间戳向左移22位(5+5+12)
 
     /**
-     * 支持的最大机器id, 结果是31 (这个移位算法可以很快的计算出几位二进制数所能表示的最大十进制数)
+     * 变量部分
      */
-    private final long maxWorkerId = -1L ^ (-1L << workerIdBits);
+    private long dataCenterId; // 数据中心标识ID(0~31)
+    private long machineId; // 机器标识ID(0~31)
+    private long sequence = 0L; // 毫秒内序列(0~4095)
+    private long startTimestamp = -1L; // 开始时间戳
+    private long lastTimestamp = -1L; // 上次生成ID的时间戳
 
     /**
-     * 序列在id中占的位数
+     * 构造方法
+     * @param startTimestamp 开始时间戳，不可大于当前时间
+     * @param dataCenterId 数据中心标识ID(0~31)
+     * @param machineId 机器标识ID(0~31)
      */
-    private final long sequenceBits = 12L;
-
-    /**
-     * 机器ID向左移12位
-     */
-    private final long workerIdShift = sequenceBits;
-
-    /**
-     * 数据标识id向左移17位(12+5)
-     */
-    private final long dataCenterIdShift = sequenceBits + workerIdBits;
-
-    /**
-     * 时间戳向左移22位(5+5+12)
-     */
-    private final long timestampLeftShift = sequenceBits + workerIdBits + dataCenterIdBits;
-
-    /**
-     * 生成序列的掩码, 这里为4095 (0b111111111111=0xfff=4095)
-     */
-    private final long sequenceMask = -1L ^ (-1L << sequenceBits);
-
-    /**
-     * 数据中心ID(0~31)
-     */
-    private long dataCenterId;
-
-    /**
-     * 工作机器ID(0~31)
-     */
-    private long workerId;
-
-    /**
-     * 毫秒内序列(0~4095)
-     */
-    private long sequence = 0L;
-
-    /**
-     * 开始时间戳
-     */
-    private long startTimestamp = -1L;
-
-    /**
-     * 上次生成ID的时间戳
-     */
-    private long lastTimestamp = -1L;
-
-    //==============================Constructors=====================================
-    /**
-     * 构造函数
-     * @param startTimestamp 开始时间戳
-     * @param dataCenterId 数据中心ID (0~31)
-     * @param workerId 工作ID (0~31)
-     */
-    public SnowflakeIdGenerator(long startTimestamp, long dataCenterId, long workerId) {
-        long timestamp = timeGen();
-        if (startTimestamp > timestamp) {
-            throw new IllegalArgumentException(String.format("Start Timestamp can't be greater than %d", timestamp));
+    public SnowflakeIdGenerator(long startTimestamp, long dataCenterId, long machineId) {
+        long currentTimestamp = getCurrentTimestamp();
+        if (startTimestamp > currentTimestamp) {
+            throw new IllegalArgumentException(String.format("Start Timestamp can't be greater than %d", currentTimestamp));
         }
 
-        if (dataCenterId > maxDataCenterId || dataCenterId < 0) {
-            throw new IllegalArgumentException(String.format("Data Center Id can't be greater than %d or less than 0", maxDataCenterId));
+        if (dataCenterId > MAX_DATA_CENTER_ID || dataCenterId < 0) {
+            throw new IllegalArgumentException(String.format("Data Center Id can't be greater than %d or less than 0", MAX_DATA_CENTER_ID));
         }
 
-        if (workerId > maxWorkerId || workerId < 0) {
-            throw new IllegalArgumentException(String.format("Worker Id can't be greater than %d or less than 0", maxWorkerId));
+        if (machineId > MAX_MACHINE_ID || machineId < 0) {
+            throw new IllegalArgumentException(String.format("Machine Id can't be greater than %d or less than 0", MAX_MACHINE_ID));
         }
 
-        this.startTimestamp = (startTimestamp == timestamp ? startTimestamp - 1 : startTimestamp);
+        // 当初始时间跟当前时间相等，减1毫秒，否则会导致溢出
+        this.startTimestamp = (startTimestamp == currentTimestamp ? startTimestamp - 1 : startTimestamp);
         this.dataCenterId = dataCenterId;
-        this.workerId = workerId;
+        this.machineId = machineId;
     }
-
-    // ==============================Methods==========================================
 
     /**
      * 获得下一个ID (该方法是线程安全的)
      * @return SnowflakeId long
      */
     public synchronized long nextId() {
-        long timestamp = timeGen();
+        long currentTimestamp = getCurrentTimestamp();
 
-        //如果当前时间小于上一次ID生成的时间戳, 说明系统时钟回退过这个时候应当抛出异常
-        if (timestamp < lastTimestamp) {
-            throw new RuntimeException(String.format("Clock moved backwards. Refusing to generate id for %d milliseconds", lastTimestamp - timestamp));
+        // 如果当前时间小于上一次ID生成的时间戳, 说明系统时钟回退过这个时候应当抛出异常
+        if (currentTimestamp < lastTimestamp) {
+            throw new RuntimeException(String.format("Clock moved backwards. Refusing to generate id for %d milliseconds", lastTimestamp - currentTimestamp));
         }
 
-        //如果是同一时间生成的, 则进行毫秒内序列
-        if (lastTimestamp == timestamp) {
-            sequence = (sequence + 1) & sequenceMask;
-            //毫秒内序列溢出
+        // 如果是同一时间生成的, 则进行毫秒内序列自增
+        if (lastTimestamp == currentTimestamp) {
+            // 相同毫秒内，序列号自增
+            sequence = (sequence + 1) & MAX_SEQUENCE;
+            // 同一毫秒的序列数已经达到最大，则毫秒内序列溢出
             if (sequence == 0) {
-                //阻塞到下一个毫秒,获得新的时间戳
-                timestamp = tilNextMillis(lastTimestamp);
+                // 阻塞到下一个毫秒，获得新的时间戳
+                currentTimestamp = getNextTimestamp(lastTimestamp);
             }
-        }
-        //时间戳改变, 毫秒内序列重置
-        else {
+        } else {
+            // 不同毫秒内，序列号置为0
             sequence = 0L;
         }
 
-        //上次生成ID的时间戳
-        lastTimestamp = timestamp;
+        // 上次生成ID的时间戳
+        lastTimestamp = currentTimestamp;
 
-        //移位并通过或运算拼到一起组成64位的ID
-        return ((timestamp - startTimestamp) << timestampLeftShift) //
-                | (dataCenterId << dataCenterIdShift) //
-                | (workerId << workerIdShift) //
-                | sequence;
+        // 移位并通过或运算拼到一起组成64位的ID
+        return ((currentTimestamp - startTimestamp) << TIMESTAMP_SHIFT) // 时间戳部分
+                | (dataCenterId << DATA_CENTER_ID_SHIFT) // 数据中心标识ID部分
+                | (machineId << MACHINE_ID_SHIFT) // 机器标识ID部分
+                | sequence; // 序列号部分
     }
 
     /**
@@ -172,10 +129,10 @@ public class SnowflakeIdGenerator {
      * @param lastTimestamp 上次生成ID的时间戳
      * @return 当前时间戳
      */
-    private long tilNextMillis(long lastTimestamp) {
-        long timestamp = timeGen();
+    private long getNextTimestamp(long lastTimestamp) {
+        long timestamp = getCurrentTimestamp();
         while (timestamp <= lastTimestamp) {
-            timestamp = timeGen();
+            timestamp = getCurrentTimestamp();
         }
 
         return timestamp;
@@ -185,7 +142,15 @@ public class SnowflakeIdGenerator {
      * 返回以毫秒为单位的当前时间
      * @return 当前时间(毫秒)
      */
-    private long timeGen() {
+    private long getCurrentTimestamp() {
         return System.currentTimeMillis();
+    }
+
+    public static void main(String[] args) {
+        SnowflakeIdGenerator generator = new SnowflakeIdGenerator(1483200000000L, 2, 3);
+
+        for (int i = 0; i < (1 << 12); i++) {
+            System.out.println(generator.nextId());
+        }
     }
 }
