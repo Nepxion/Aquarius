@@ -6,7 +6,7 @@
     <packaging>jar</packaging>
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>nepxion</groupId>
+        <groupId>com.nepxion</groupId>
         <artifactId>aquarius</artifactId>
         <version>1.0.0</version>
     </parent>
@@ -100,21 +100,21 @@
                             <promoteTransitiveDependencies>true</promoteTransitiveDependencies>
                             <artifactSet>
                                 <includes>
-                                    <include>nepxion:matrix-aop</include>
-                                    <include>nepxion:aquarius-common</include>
-                                    <include>nepxion:aquarius-common-redis</include>
-                                    <include>nepxion:aquarius-common-zookeeper</include>
-                                    <include>nepxion:aquarius-lock-aop</include>
-                                    <include>nepxion:aquarius-lock-redis</include>
-                                    <include>nepxion:aquarius-lock-zookeeper</include>
-                                    <include>nepxion:aquarius-lock-local</include>
-                                    <include>nepxion:aquarius-cache-aop</include>
-                                    <include>nepxion:aquarius-cache-redis</include>
-                                    <include>nepxion:aquarius-id-generator-redis</include>
-                                    <include>nepxion:aquarius-id-generator-zookeeper</include>
-                                    <include>nepxion:aquarius-id-generator-local</include>
-                                    <include>nepxion:aquarius-limit-aop</include>
-                                    <include>nepxion:aquarius-limit-redis</include>
+                                    <include>com.nepxion:matrix-aop</include>
+                                    <include>com.nepxion:aquarius-common</include>
+                                    <include>com.nepxion:aquarius-common-redis</include>
+                                    <include>com.nepxion:aquarius-common-zookeeper</include>
+                                    <include>com.nepxion:aquarius-lock-aop</include>
+                                    <include>com.nepxion:aquarius-lock-redis</include>
+                                    <include>com.nepxion:aquarius-lock-zookeeper</include>
+                                    <include>com.nepxion:aquarius-lock-local</include>
+                                    <include>com.nepxion:aquarius-cache-aop</include>
+                                    <include>com.nepxion:aquarius-cache-redis</include>
+                                    <include>com.nepxion:aquarius-id-generator-redis</include>
+                                    <include>com.nepxion:aquarius-id-generator-zookeeper</include>
+                                    <include>com.nepxion:aquarius-id-generator-local</include>
+                                    <include>com.nepxion:aquarius-limit-aop</include>
+                                    <include>com.nepxion:aquarius-limit-redis</include>
                                 </includes>
                             </artifactSet>
                         </configuration>

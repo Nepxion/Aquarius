@@ -6,7 +6,7 @@
     <packaging>jar</packaging>
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>nepxion</groupId>
+        <groupId>com.nepxion</groupId>
         <artifactId>aquarius</artifactId>
         <version>1.0.0</version>
     </parent>
@@ -50,11 +50,11 @@
                             <promoteTransitiveDependencies>true</promoteTransitiveDependencies>
                             <artifactSet>
                                 <includes>
-                                    <include>nepxion:matrix-aop</include>
-                                    <include>nepxion:aquarius-common</include>
-                                    <include>nepxion:aquarius-common-redis</include>
-                                    <include>nepxion:aquarius-cache-aop</include>
-                                    <include>nepxion:aquarius-cache-redis</include>
+                                    <include>com.nepxion:matrix-aop</include>
+                                    <include>com.nepxion:aquarius-common</include>
+                                    <include>com.nepxion:aquarius-common-redis</include>
+                                    <include>com.nepxion:aquarius-cache-aop</include>
+                                    <include>com.nepxion:aquarius-cache-redis</include>
                                 </includes>
                             </artifactSet>
                         </configuration>
