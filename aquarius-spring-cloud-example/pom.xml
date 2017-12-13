@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <groupId>nepxion</groupId>
+    <groupId>com.nepxion</groupId>
     <artifactId>aquarius-spring-cloud-example</artifactId>
     <name>Nepxion Aquarius Spring Cloud Example</name>
     <packaging>jar</packaging>
@@ -38,7 +38,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>nepxion</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>aquarius-assembly-all</artifactId>
             <version>${aquarius.version}</version>
         </dependency>
