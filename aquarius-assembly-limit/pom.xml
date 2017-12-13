@@ -50,7 +50,6 @@
                             <promoteTransitiveDependencies>true</promoteTransitiveDependencies>
                             <artifactSet>
                                 <includes>
-                                    <include>com.nepxion:matrix-aop</include>
                                     <include>com.nepxion:aquarius-common</include>
                                     <include>com.nepxion:aquarius-common-redis</include>
                                     <include>com.nepxion:aquarius-limit-aop</include>
