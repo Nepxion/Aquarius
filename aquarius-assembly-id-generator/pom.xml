@@ -60,12 +60,12 @@
                             <promoteTransitiveDependencies>true</promoteTransitiveDependencies>
                             <artifactSet>
                                 <includes>
-                                    <include>com.nepxion:aquarius-common</include>
-                                    <include>com.nepxion:aquarius-common-redis</include>
-                                    <include>com.nepxion:aquarius-common-zookeeper</include>
-                                    <include>com.nepxion:aquarius-id-generator-redis</include>
-                                    <include>com.nepxion:aquarius-id-generator-zookeeper</include>
-                                    <include>com.nepxion:aquarius-id-generator-local</include>
+                                    <include>${project.groupId}:aquarius-common</include>
+                                    <include>${project.groupId}:aquarius-common-redis</include>
+                                    <include>${project.groupId}:aquarius-common-zookeeper</include>
+                                    <include>${project.groupId}:aquarius-id-generator-redis</include>
+                                    <include>${project.groupId}:aquarius-id-generator-zookeeper</include>
+                                    <include>${project.groupId}:aquarius-id-generator-local</include>
                                 </includes>
                             </artifactSet>
                         </configuration>

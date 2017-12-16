@@ -100,20 +100,20 @@
                             <promoteTransitiveDependencies>true</promoteTransitiveDependencies>
                             <artifactSet>
                                 <includes>
-                                    <include>com.nepxion:aquarius-common</include>
-                                    <include>com.nepxion:aquarius-common-redis</include>
-                                    <include>com.nepxion:aquarius-common-zookeeper</include>
-                                    <include>com.nepxion:aquarius-lock-aop</include>
-                                    <include>com.nepxion:aquarius-lock-redis</include>
-                                    <include>com.nepxion:aquarius-lock-zookeeper</include>
-                                    <include>com.nepxion:aquarius-lock-local</include>
-                                    <include>com.nepxion:aquarius-cache-aop</include>
-                                    <include>com.nepxion:aquarius-cache-redis</include>
-                                    <include>com.nepxion:aquarius-id-generator-redis</include>
-                                    <include>com.nepxion:aquarius-id-generator-zookeeper</include>
-                                    <include>com.nepxion:aquarius-id-generator-local</include>
-                                    <include>com.nepxion:aquarius-limit-aop</include>
-                                    <include>com.nepxion:aquarius-limit-redis</include>
+                                    <include>${project.groupId}:aquarius-common</include>
+                                    <include>${project.groupId}:aquarius-common-redis</include>
+                                    <include>${project.groupId}:aquarius-common-zookeeper</include>
+                                    <include>${project.groupId}:aquarius-lock-aop</include>
+                                    <include>${project.groupId}:aquarius-lock-redis</include>
+                                    <include>${project.groupId}:aquarius-lock-zookeeper</include>
+                                    <include>${project.groupId}:aquarius-lock-local</include>
+                                    <include>${project.groupId}:aquarius-cache-aop</include>
+                                    <include>${project.groupId}:aquarius-cache-redis</include>
+                                    <include>${project.groupId}:aquarius-id-generator-redis</include>
+                                    <include>${project.groupId}:aquarius-id-generator-zookeeper</include>
+                                    <include>${project.groupId}:aquarius-id-generator-local</include>
+                                    <include>${project.groupId}:aquarius-limit-aop</include>
+                                    <include>${project.groupId}:aquarius-limit-redis</include>
                                 </includes>
                             </artifactSet>
                         </configuration>

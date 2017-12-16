@@ -65,13 +65,13 @@
                             <promoteTransitiveDependencies>true</promoteTransitiveDependencies>
                             <artifactSet>
                                 <includes>
-                                    <include>com.nepxion:aquarius-common</include>
-                                    <include>com.nepxion:aquarius-common-redis</include>
-                                    <include>com.nepxion:aquarius-common-zookeeper</include>
-                                    <include>com.nepxion:aquarius-lock-aop</include>
-                                    <include>com.nepxion:aquarius-lock-redis</include>
-                                    <include>com.nepxion:aquarius-lock-zookeeper</include>
-                                    <include>com.nepxion:aquarius-lock-local</include>
+                                    <include>${project.groupId}:aquarius-common</include>
+                                    <include>${project.groupId}:aquarius-common-redis</include>
+                                    <include>${project.groupId}:aquarius-common-zookeeper</include>
+                                    <include>${project.groupId}:aquarius-lock-aop</include>
+                                    <include>${project.groupId}:aquarius-lock-redis</include>
+                                    <include>${project.groupId}:aquarius-lock-zookeeper</include>
+                                    <include>${project.groupId}:aquarius-lock-local</include>
                                 </includes>
                             </artifactSet>
                         </configuration>

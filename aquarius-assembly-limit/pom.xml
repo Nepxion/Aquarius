@@ -50,10 +50,10 @@
                             <promoteTransitiveDependencies>true</promoteTransitiveDependencies>
                             <artifactSet>
                                 <includes>
-                                    <include>com.nepxion:aquarius-common</include>
-                                    <include>com.nepxion:aquarius-common-redis</include>
-                                    <include>com.nepxion:aquarius-limit-aop</include>
-                                    <include>com.nepxion:aquarius-limit-redis</include>
+                                    <include>${project.groupId}:aquarius-common</include>
+                                    <include>${project.groupId}:aquarius-common-redis</include>
+                                    <include>${project.groupId}:aquarius-limit-aop</include>
+                                    <include>${project.groupId}:aquarius-limit-redis</include>
                                 </includes>
                             </artifactSet>
                         </configuration>
