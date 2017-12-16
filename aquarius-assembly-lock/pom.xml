@@ -60,7 +60,7 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
-                            <finalName>nepxion-aquarius-assembly-lock-${project.version}</finalName>
+                            <finalName>aquarius-lock-${project.version}</finalName>
                             <createSourcesJar>false</createSourcesJar>
                             <promoteTransitiveDependencies>true</promoteTransitiveDependencies>
                             <artifactSet>

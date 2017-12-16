@@ -45,7 +45,7 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
-                            <finalName>nepxion-aquarius-assembly-limit-${project.version}</finalName>
+                            <finalName>aquarius-limit-${project.version}</finalName>
                             <createSourcesJar>false</createSourcesJar>
                             <promoteTransitiveDependencies>true</promoteTransitiveDependencies>
                             <artifactSet>

@@ -55,7 +55,7 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
-                            <finalName>nepxion-aquarius-assembly-id-generator-${project.version}</finalName>
+                            <finalName>aquarius-id-generator-${project.version}</finalName>
                             <createSourcesJar>false</createSourcesJar>
                             <promoteTransitiveDependencies>true</promoteTransitiveDependencies>
                             <artifactSet>
