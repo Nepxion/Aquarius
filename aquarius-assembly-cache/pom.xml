@@ -45,15 +45,15 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
-                            <finalName>nepxion-aquarius-assembly-cache-${project.version}</finalName>
+                            <finalName>aquarius-cache-${project.version}</finalName>
                             <createSourcesJar>false</createSourcesJar>
                             <promoteTransitiveDependencies>true</promoteTransitiveDependencies>
                             <artifactSet>
                                 <includes>
-                                    <include>com.nepxion:aquarius-common</include>
-                                    <include>com.nepxion:aquarius-common-redis</include>
-                                    <include>com.nepxion:aquarius-cache-aop</include>
-                                    <include>com.nepxion:aquarius-cache-redis</include>
+                                    <include>${project.groupId}:aquarius-common</include>
+                                    <include>${project.groupId}:aquarius-common-redis</include>
+                                    <include>${project.groupId}:aquarius-cache-aop</include>
+                                    <include>${project.groupId}:aquarius-cache-redis</include>
                                 </includes>
                             </artifactSet>
                         </configuration>
