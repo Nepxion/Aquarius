@@ -30,14 +30,22 @@ public class AquariusProperties implements Serializable {
 
     private final Map<String, String> map = new LinkedHashMap<String, String>();
 
+    private String content;
+
     public AquariusProperties(String path, String encoding) throws IOException {
         this(new StringBuilder(new AquariusContent(path, encoding).getContent()), encoding);
     }
 
+    public AquariusProperties(byte[] bytes, String encoding) throws IOException {
+        this(new StringBuilder(new String(bytes, encoding)), encoding);
+    }
+
     public AquariusProperties(StringBuilder stringBuilder, String encoding) throws IOException {
+        content = stringBuilder.toString();
+
         InputStream inputStream = null;
         try {
-            inputStream = IOUtils.toInputStream(stringBuilder.toString(), encoding);
+            inputStream = IOUtils.toInputStream(content, encoding);
             Properties properties = new Properties();
             properties.load(inputStream);
             for (Iterator<Object> iterator = properties.keySet().iterator(); iterator.hasNext();) {
@@ -50,6 +58,10 @@ public class AquariusProperties implements Serializable {
                 IOUtils.closeQuietly(inputStream);
             }
         }
+    }
+
+    public String getContent() {
+        return content;
     }
 
     public void put(String key, String value) {

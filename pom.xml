@@ -167,18 +167,6 @@
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>aquarius-spring-boot-example</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>aquarius-spring-cloud-example</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>${project.groupId}</groupId>
                 <artifactId>matrix-aop</artifactId>
                 <version>${matrix.version}</version>
             </dependency>
