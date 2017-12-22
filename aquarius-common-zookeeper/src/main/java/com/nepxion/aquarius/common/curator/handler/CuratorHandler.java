@@ -203,7 +203,7 @@ public class CuratorHandler {
         }
 
         if (!isStarted(curator)) {
-            throw new CuratorException("Curator isn't started");
+            throw new CuratorException("Curator is closed");
         }
     }
 
