@@ -34,7 +34,6 @@ import org.slf4j.LoggerFactory;
 
 import com.nepxion.aquarius.common.constant.AquariusConstant;
 import com.nepxion.aquarius.common.curator.constant.CuratorConstant;
-import com.nepxion.aquarius.common.exception.AquariusException;
 import com.nepxion.aquarius.common.property.AquariusProperties;
 
 public class CuratorHandler {
@@ -91,7 +90,7 @@ public class CuratorHandler {
             int sleepMsBetweenRetries = properties.getInteger(retryType + "-" + CuratorConstant.PARAMETER_NAME_SLEEP_MS_BETWEEN_RETRIES);
             retryPolicy = createRetryUntilElapsed(maxElapsedTimeMs, sleepMsBetweenRetries);
         } else {
-            throw new AquariusException("Invalid config value for retryType=" + retryType);
+            throw new IllegalArgumentException("Invalid config value for retryType=" + retryType);
         }
 
         String connectString = properties.getString(CuratorConstant.CONNECT_STRING);
@@ -184,6 +183,17 @@ public class CuratorHandler {
         return curator.getState() == CuratorFrameworkState.STARTED;
     }
 
+    // 检查ZooKeeper启动状态
+    public static void validateStatus(CuratorFramework curator) throws Exception {
+        if (curator == null) {
+            throw new IllegalArgumentException("Curator isn't initialized");
+        }
+
+        if (!CuratorHandler.isStarted(curator)) {
+            throw new IllegalArgumentException("Curator isn't started");
+        }
+    }
+
     // 判断路径是否存在
     public static boolean pathExist(CuratorFramework curator, String path) throws Exception {
         return getPathStat(curator, path) != null;
@@ -191,6 +201,7 @@ public class CuratorHandler {
 
     // 判断stat是否存在
     public static Stat getPathStat(CuratorFramework curator, String path) throws Exception {
+        validateStatus(curator);
         PathUtils.validatePath(path);
 
         ExistsBuilder builder = curator.checkExists();
@@ -205,6 +216,7 @@ public class CuratorHandler {
 
     // 创建路径
     public static void createPath(CuratorFramework curator, String path) throws Exception {
+        validateStatus(curator);
         PathUtils.validatePath(path);
 
         curator.create().creatingParentsIfNeeded().forPath(path, null);
@@ -212,6 +224,7 @@ public class CuratorHandler {
 
     // 创建路径，并写入数据
     public static void createPath(CuratorFramework curator, String path, byte[] data) throws Exception {
+        validateStatus(curator);
         PathUtils.validatePath(path);
 
         curator.create().creatingParentsIfNeeded().forPath(path, data);
@@ -219,6 +232,7 @@ public class CuratorHandler {
 
     // 创建路径
     public static void createPath(CuratorFramework curator, String path, CreateMode mode) throws Exception {
+        validateStatus(curator);
         PathUtils.validatePath(path);
 
         curator.create().creatingParentsIfNeeded().withMode(mode).forPath(path, null);
@@ -226,6 +240,7 @@ public class CuratorHandler {
 
     // 创建路径，并写入数据
     public static void createPath(CuratorFramework curator, String path, byte[] data, CreateMode mode) throws Exception {
+        validateStatus(curator);
         PathUtils.validatePath(path);
 
         curator.create().creatingParentsIfNeeded().withMode(mode).forPath(path, data);
@@ -233,6 +248,7 @@ public class CuratorHandler {
 
     // 删除路径
     public static void deletePath(CuratorFramework curator, String path) throws Exception {
+        validateStatus(curator);
         PathUtils.validatePath(path);
 
         curator.delete().deletingChildrenIfNeeded().forPath(path);
@@ -240,6 +256,7 @@ public class CuratorHandler {
 
     // 获取子节点名称列表
     public static List<String> getChildNameList(CuratorFramework curator, String path) throws Exception {
+        validateStatus(curator);
         PathUtils.validatePath(path);
 
         return curator.getChildren().forPath(path);
