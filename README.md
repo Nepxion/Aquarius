@@ -54,9 +54,8 @@
 aquarius-spring-boot-example\src\main\resources\application.properties，切换lockType即可
 ```java
 # Lock config
+# redisLock, zookeeperLock, localLock
 lockType=redisLock
-# lockType=zookeeperLock
-# lockType=localLock
 # 指定你使用相关注解所在的接口或者类的目录
 # 扫描目录，如果不指定，则扫描全局。两种方式运行结果没区别，只是指定扫描目录加快扫描速度，同时可以减少缓存量
 lockScanPackages=com.nepxion.aquarius.lock

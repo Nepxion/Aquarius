@@ -44,7 +44,11 @@ public class ZookeeperLockExecutorImpl implements LockExecutor<InterProcessMutex
 
     @PreDestroy
     public void destroy() {
-        CuratorHandler.closeCurator(curator);
+        try {
+            CuratorHandler.closeCurator(curator);
+        } catch (Exception e) {
+            throw new AquariusException("Close curator failed", e);
+        }
     }
 
     @Override
@@ -64,7 +68,7 @@ public class ZookeeperLockExecutorImpl implements LockExecutor<InterProcessMutex
 
     @Override
     public InterProcessMutex tryLock(LockType lockType, String compositeKey, long leaseTime, long waitTime, boolean async, boolean fair) throws Exception {
-        CuratorHandler.validateStatus(curator);
+        CuratorHandler.validateStartedStatus(curator);
 
         if (StringUtils.isEmpty(compositeKey)) {
             throw new AquariusException("Composite key is null or empty");
