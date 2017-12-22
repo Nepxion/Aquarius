@@ -64,13 +64,7 @@ public class ZookeeperLockExecutorImpl implements LockExecutor<InterProcessMutex
 
     @Override
     public InterProcessMutex tryLock(LockType lockType, String compositeKey, long leaseTime, long waitTime, boolean async, boolean fair) throws Exception {
-        if (curator == null) {
-            throw new AquariusException("Curator isn't initialized");
-        }
-
-        if (!CuratorHandler.isStarted(curator)) {
-            throw new AquariusException("Curator isn't started");
-        }
+        CuratorHandler.validateStatus(curator);
 
         if (StringUtils.isEmpty(compositeKey)) {
             throw new AquariusException("Composite key is null or empty");
