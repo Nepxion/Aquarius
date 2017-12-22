@@ -90,7 +90,7 @@ public class CuratorHandler {
             int sleepMsBetweenRetries = properties.getInteger(retryType + "-" + CuratorConstant.PARAMETER_NAME_SLEEP_MS_BETWEEN_RETRIES);
             retryPolicy = createRetryUntilElapsed(maxElapsedTimeMs, sleepMsBetweenRetries);
         } else {
-            throw new IllegalArgumentException("Invalid config value for retryType=" + retryType);
+            throw new CuratorException("Invalid config value for retryType=" + retryType);
         }
 
         String connectString = properties.getString(CuratorConstant.CONNECT_STRING);
@@ -186,11 +186,11 @@ public class CuratorHandler {
     // 检查ZooKeeper启动状态
     public static void validateStatus(CuratorFramework curator) throws Exception {
         if (curator == null) {
-            throw new IllegalArgumentException("Curator isn't initialized");
+            throw new CuratorException("Curator isn't initialized");
         }
 
         if (!isStarted(curator)) {
-            throw new IllegalArgumentException("Curator isn't started");
+            throw new CuratorException("Curator isn't started");
         }
     }
 
