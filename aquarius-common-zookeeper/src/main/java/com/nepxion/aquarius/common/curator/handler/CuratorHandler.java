@@ -42,12 +42,12 @@ public class CuratorHandler {
     // 创建默认Curator，并初始化根节点
     public static CuratorFramework createDefaultCurator(String prefix) {
         try {
-            AquariusProperties config = CuratorHandler.createPropertyConfig(CuratorConstant.CONFIG_FILE);
-            CuratorFramework curator = CuratorHandler.createCurator(config);
+            AquariusProperties config = createPropertyConfig(CuratorConstant.CONFIG_FILE);
+            CuratorFramework curator = createCurator(config);
 
-            String rootPath = CuratorHandler.getRootPath(prefix);
-            if (!CuratorHandler.pathExist(curator, rootPath)) {
-                CuratorHandler.createPath(curator, rootPath, CreateMode.PERSISTENT);
+            String rootPath = getRootPath(prefix);
+            if (!pathExist(curator, rootPath)) {
+                createPath(curator, rootPath, CreateMode.PERSISTENT);
             }
 
             return curator;
@@ -189,7 +189,7 @@ public class CuratorHandler {
             throw new IllegalArgumentException("Curator isn't initialized");
         }
 
-        if (!CuratorHandler.isStarted(curator)) {
+        if (!isStarted(curator)) {
             throw new IllegalArgumentException("Curator isn't started");
         }
     }
