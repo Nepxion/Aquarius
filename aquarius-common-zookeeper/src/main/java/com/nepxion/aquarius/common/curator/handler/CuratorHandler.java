@@ -149,31 +149,39 @@ public class CuratorHandler {
     }
 
     // 启动ZooKeeper客户端
-    public static void startCurator(CuratorFramework curator) {
+    public static void startCurator(CuratorFramework curator) throws Exception {
         LOG.info("Start Curator...");
+
+        validateClosedStatus(curator);
 
         curator.start();
     }
 
     // 启动ZooKeeper客户端，直到第一次连接成功
-    public static void startAndBlockCurator(CuratorFramework curator) throws InterruptedException {
+    public static void startAndBlockCurator(CuratorFramework curator) throws Exception {
         LOG.info("start and block Curator...");
+
+        validateClosedStatus(curator);
 
         curator.start();
         curator.blockUntilConnected();
     }
 
     // 启动ZooKeeper客户端，直到第一次连接成功，为每一次连接配置超时
-    public static void startAndBlockCurator(CuratorFramework curator, int maxWaitTime, TimeUnit units) throws InterruptedException {
+    public static void startAndBlockCurator(CuratorFramework curator, int maxWaitTime, TimeUnit units) throws Exception {
         LOG.info("start and block Curator...");
+
+        validateClosedStatus(curator);
 
         curator.start();
         curator.blockUntilConnected(maxWaitTime, units);
     }
 
     // 关闭ZooKeeper客户端连接
-    public static void closeCurator(CuratorFramework curator) {
+    public static void closeCurator(CuratorFramework curator) throws Exception {
         LOG.info("Start to close Curator...");
+
+        validateStartedStatus(curator);
 
         curator.close();
     }
@@ -183,14 +191,25 @@ public class CuratorHandler {
         return curator.getState() == CuratorFrameworkState.STARTED;
     }
 
-    // 检查ZooKeeper启动状态
-    public static void validateStatus(CuratorFramework curator) throws Exception {
+    // 检查ZooKeeper是否是启动状态
+    public static void validateStartedStatus(CuratorFramework curator) throws Exception {
         if (curator == null) {
-            throw new CuratorException("Curator isn't initialized");
+            throw new CuratorException("Curator is null");
         }
 
         if (!isStarted(curator)) {
             throw new CuratorException("Curator isn't started");
+        }
+    }
+
+    // 检查ZooKeeper是否是关闭状态
+    public static void validateClosedStatus(CuratorFramework curator) throws Exception {
+        if (curator == null) {
+            throw new CuratorException("Curator is null");
+        }
+
+        if (isStarted(curator)) {
+            throw new CuratorException("Curator is started");
         }
     }
 
@@ -201,7 +220,7 @@ public class CuratorHandler {
 
     // 判断stat是否存在
     public static Stat getPathStat(CuratorFramework curator, String path) throws Exception {
-        validateStatus(curator);
+        validateStartedStatus(curator);
         PathUtils.validatePath(path);
 
         ExistsBuilder builder = curator.checkExists();
@@ -216,7 +235,7 @@ public class CuratorHandler {
 
     // 创建路径
     public static void createPath(CuratorFramework curator, String path) throws Exception {
-        validateStatus(curator);
+        validateStartedStatus(curator);
         PathUtils.validatePath(path);
 
         curator.create().creatingParentsIfNeeded().forPath(path, null);
@@ -224,7 +243,7 @@ public class CuratorHandler {
 
     // 创建路径，并写入数据
     public static void createPath(CuratorFramework curator, String path, byte[] data) throws Exception {
-        validateStatus(curator);
+        validateStartedStatus(curator);
         PathUtils.validatePath(path);
 
         curator.create().creatingParentsIfNeeded().forPath(path, data);
@@ -232,7 +251,7 @@ public class CuratorHandler {
 
     // 创建路径
     public static void createPath(CuratorFramework curator, String path, CreateMode mode) throws Exception {
-        validateStatus(curator);
+        validateStartedStatus(curator);
         PathUtils.validatePath(path);
 
         curator.create().creatingParentsIfNeeded().withMode(mode).forPath(path, null);
@@ -240,7 +259,7 @@ public class CuratorHandler {
 
     // 创建路径，并写入数据
     public static void createPath(CuratorFramework curator, String path, byte[] data, CreateMode mode) throws Exception {
-        validateStatus(curator);
+        validateStartedStatus(curator);
         PathUtils.validatePath(path);
 
         curator.create().creatingParentsIfNeeded().withMode(mode).forPath(path, data);
@@ -248,7 +267,7 @@ public class CuratorHandler {
 
     // 删除路径
     public static void deletePath(CuratorFramework curator, String path) throws Exception {
-        validateStatus(curator);
+        validateStartedStatus(curator);
         PathUtils.validatePath(path);
 
         curator.delete().deletingChildrenIfNeeded().forPath(path);
@@ -256,7 +275,7 @@ public class CuratorHandler {
 
     // 获取子节点名称列表
     public static List<String> getChildNameList(CuratorFramework curator, String path) throws Exception {
-        validateStatus(curator);
+        validateStartedStatus(curator);
         PathUtils.validatePath(path);
 
         return curator.getChildren().forPath(path);
