@@ -186,6 +186,11 @@ public class CuratorHandler {
         curator.close();
     }
 
+    // 获取ZooKeeper客户端是否初始化
+    public static boolean isInitialized(CuratorFramework curator) {
+        return curator != null;
+    }
+
     // 获取ZooKeeper客户端连接是否正常
     public static boolean isStarted(CuratorFramework curator) {
         return curator.getState() == CuratorFrameworkState.STARTED;
