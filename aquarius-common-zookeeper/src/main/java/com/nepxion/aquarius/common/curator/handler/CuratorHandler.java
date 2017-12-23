@@ -62,7 +62,7 @@ public class CuratorHandler {
     public static AquariusProperties createPropertyConfig(String propertyConfigPath) throws IOException {
         LOG.info("Start to read {}...", propertyConfigPath);
 
-        return new AquariusProperties(propertyConfigPath, AquariusConstant.ENCODING_UTF_8);
+        return new AquariusProperties(propertyConfigPath, AquariusConstant.ENCODING_GBK, AquariusConstant.ENCODING_UTF_8);
     }
 
     // 创建Curator
