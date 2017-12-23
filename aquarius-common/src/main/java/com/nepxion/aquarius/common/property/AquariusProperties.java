@@ -12,6 +12,8 @@ package com.nepxion.aquarius.common.property;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -31,28 +33,38 @@ public class AquariusProperties implements Serializable {
 
     private String content;
 
-    public AquariusProperties(String path, String encoding) throws IOException {
-        this(new StringBuilder(new AquariusContent(path, encoding).getContent()), encoding);
+    // 配置文件含中文，stringEncoding必须为GBK，readerEncoding必须为UTF-8，文本文件编码必须为ANSI
+    public AquariusProperties(String path, String stringEncoding, String readerEncoding) throws IOException {
+        this(new AquariusContent(path, stringEncoding).getContent(), readerEncoding);
     }
 
-    public AquariusProperties(byte[] bytes, String encoding) throws IOException {
-        this(new StringBuilder(new String(bytes, encoding)), encoding);
+    // 配置文件含中文，stringEncoding必须为UTF-8，readerEncoding必须为UTF-8
+    public AquariusProperties(byte[] bytes, String stringEncoding, String readerEncoding) throws IOException {
+        this(new String(bytes, stringEncoding), readerEncoding);
     }
 
-    public AquariusProperties(StringBuilder stringBuilder, String encoding) throws IOException {
-        content = stringBuilder.toString();
+    // 配置文件含中文，encoding必须为UTF-8
+    public AquariusProperties(String content, String encoding) throws IOException {
+        this.content = content;
 
         InputStream inputStream = null;
+        Reader reader = null;
         try {
             inputStream = IOUtils.toInputStream(content, encoding);
+            reader = new InputStreamReader(inputStream, encoding);
+
             Properties properties = new Properties();
-            properties.load(inputStream);
+            properties.load(reader);
             for (Iterator<Object> iterator = properties.keySet().iterator(); iterator.hasNext();) {
                 String key = iterator.next().toString();
                 String value = properties.getProperty(key);
                 put(key, value);
             }
         } finally {
+            if (reader != null) {
+                IOUtils.closeQuietly(reader);
+            }
+
             if (inputStream != null) {
                 IOUtils.closeQuietly(inputStream);
             }
