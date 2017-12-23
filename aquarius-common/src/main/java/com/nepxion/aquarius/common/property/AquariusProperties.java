@@ -38,7 +38,7 @@ public class AquariusProperties implements Serializable {
         this(new AquariusContent(path, stringEncoding).getContent(), readerEncoding);
     }
 
-    // 配置文件含中文，stringEncoding必须为GBK，readerEncoding必须为UTF-8
+    // 配置文件含中文，stringEncoding必须为UTF-8，readerEncoding必须为UTF-8
     public AquariusProperties(byte[] bytes, String stringEncoding, String readerEncoding) throws IOException {
         this(new String(bytes, stringEncoding), readerEncoding);
     }
