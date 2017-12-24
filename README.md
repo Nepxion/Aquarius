@@ -1,7 +1,11 @@
 # Nepxion Aquarius
 [![Apache License 2](https://img.shields.io/badge/license-ASF2-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-## 分布式应用组件集合，包含
+Nepxion Aquarius是一款基于Redis + Zookeeper的分布式应用组件集合，包含分布式锁，缓存，ID生成器，限速限流器。它采用Nepxion Matrix AOP框架进行切面架构，提供注解调用方式，同时也提供API调用方式
+
+## 简介
+分布式应用组件集合，包含
+
     1 Nepxion Aquarius Lock 分布式锁(支持Redis、Zookeeper、ReentrantLock本地锁)
     2 Nepxion Aquarius Cache 分布式缓存(支持Redis)
     3 Nepxion Aquarius ID Generator 分布式全局唯一ID(支持Redis)、全局唯一序号生成(支持Zookeeper、Twitter雪花ID算法的支持)，支持单个和批量获取
@@ -15,7 +19,7 @@
 ## Nepxion Aquarius Lock
 基于Redisson(Redis)、Curator(Zookeeper)分布式锁和本地锁，构建于Nepxion Matrix AOP framework，你可以在这三个锁组件中选择一个移植入你的应用中
 
-### 特别提示
+### 提示
     注解的Key支持Java8下的SPEL语义拼装。但SPEL语义对于接口代理的方式，需要打开编译参数项
     参照Nepxion Marix文档里的说明，需要在IDE和Maven里设置"-parameters"的Compiler Argument。具体参考如下：
     1)Eclipse加"-parameters"参数：https://www.concretepage.com/java/jdk-8/java-8-reflection-access-to-parameter-names-of-method-and-constructor-with-maven-gradle-and-eclipse-using-parameters-compiler-argument
@@ -50,7 +54,7 @@
        8.2 实现对Curator的多种重试机制(例如exponentialBackoffRetry, boundedExponentialBackoffRetry, retryNTimes, retryForever, retryUntilElapsed)，可在配置文件里面切换
     9 锁支持两种调用方式，注解方式和直接调用方式
 
-### 快速切换分布式锁组件
+### 切换锁类型
 aquarius-spring-boot-example\src\main\resources\application.properties，切换lockType即可
 ```java
 # Lock config
@@ -61,7 +65,9 @@ lockType=redisLock
 lockScanPackages=com.nepxion.aquarius.lock
 ```
 
-### 使用分布式锁示例如下，更多细节见aquarius-spring-boot-example工程下com.nepxion.aquarius.lock
+### 示例
+使用分布式锁示例如下，更多细节见aquarius-spring-boot-example工程下com.nepxion.aquarius.lock
+
 普通分布式锁的使用
 
 注解方式
@@ -535,7 +541,8 @@ public class ReadWriteLockApplication {
     2 缓存的Key在config-redis.xml中有个RedisCacheEntity的prefix(前缀)全局配置项目，它和name，key组成一个SPEL语义，即[prefix]_[name]_[key]，该值将作为Redis的Key存储，对应的Redis的Value就是缓存
     3 对于方法返回的值为null的时候，不做任何缓存相关操作；对于方法执行过程中抛出异常后，不做任何缓存相关操作
 
-### 使用分布式缓存示例如下，更多细节见aquarius-spring-boot-example工程下com.nepxion.aquarius.cache
+### 示例
+使用分布式缓存示例如下，更多细节见aquarius-spring-boot-example工程下com.nepxion.aquarius.cache
 ```java
 package com.nepxion.aquarius.cache.service;
 
@@ -700,7 +707,9 @@ public class CacheAopApplication {
     3 支持根据Twitter雪花ID本地算法，模拟分布式ID产生
       SnowFlake算法用来生成64位的ID，刚好可以用long整型存储，能够用于分布式系统中生产唯一的ID， 并且生成的ID有大致的顺序。 在这次实现中，生成的64位ID可以分成5个部分：
       0 - 41位时间戳 - 5位数据中心标识 - 5位机器标识 - 12位序列号
-### 使用ID Generator示例如下，更多细节见aquarius-spring-boot-example工程下com.nepxion.aquarius.idgenerator
+
+### 示例
+使用ID Generator示例如下，更多细节见aquarius-spring-boot-example工程下com.nepxion.aquarius.idgenerator
 ```java
 package com.nepxion.aquarius.idgenerator;
 
@@ -996,7 +1005,8 @@ public class LocalIdGeneratorApplication {
       3)limitPeriod 给定的时间段(单位为秒)
       4)limitCount 最多的访问限制次数
 
-### 使用Limit示例如下，更多细节见aquarius-spring-boot-example工程下com.nepxion.aquarius.limit
+### 示例
+使用Limit示例如下，更多细节见aquarius-spring-boot-example工程下com.nepxion.aquarius.limit
 
 注解方式
 ```java
@@ -1200,6 +1210,7 @@ public class RedisLimitApplication {
     2 启动AquariusApplication
     3 打开Postman，或者浏览器，执行Get操作，参考下面的URL
     4 支持Swagger，打开http://localhost:2222/swagger-ui.html访问
+
 ```java
 Lock
 # 注解方式
