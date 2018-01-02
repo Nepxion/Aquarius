@@ -10,6 +10,8 @@ package com.nepxion.aquarius.idgenerator.zookeeper.impl;
  * @version 1.0
  */
 
+import javax.annotation.PreDestroy;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.zookeeper.CreateMode;
@@ -32,13 +34,22 @@ public class ZookeeperIdGeneratorImpl implements ZookeeperIdGenerator {
     private static final int MAX_BATCH_COUNT = 1000;
 
     @Autowired
-    private CuratorFramework curator;
+    private CuratorHandler curatorHandler;
 
     @Value("${" + AquariusConstant.PREFIX + "}")
     private String prefix;
 
     @Value("${" + AquariusConstant.FREQUENT_LOG_PRINT + "}")
     private Boolean frequentLogPrint;
+
+    @PreDestroy
+    public void destroy() {
+        try {
+            curatorHandler.close();
+        } catch (Exception e) {
+            throw new AquariusException("Close curator failed", e);
+        }
+    }
 
     @Override
     public String nextSequenceId(String name, String key) throws Exception {
@@ -61,21 +72,22 @@ public class ZookeeperIdGeneratorImpl implements ZookeeperIdGenerator {
             throw new AquariusException("Composite key is null or empty");
         }
 
-        if (!CuratorHandler.isStarted(curator)) {
+        if (!curatorHandler.isStarted()) {
             throw new AquariusException("Curator isn't started");
         }
 
-        String path = CuratorHandler.getPath(prefix, compositeKey);
+        String path = curatorHandler.getPath(prefix, compositeKey);
 
         // 并发过快，这里会抛“节点已经存在”的错误，当节点存在时候，就不会创建，所以不必打印异常
         try {
-            if (!CuratorHandler.pathExist(curator, path)) {
-                CuratorHandler.createPath(curator, path, CreateMode.PERSISTENT);
+            if (!curatorHandler.pathExist(path)) {
+                curatorHandler.createPath(path, CreateMode.PERSISTENT);
             }
         } catch (Exception e) {
 
         }
 
+        CuratorFramework curator = curatorHandler.getCurator();
         int nextSequenceId = curator.setData().withVersion(-1).forPath(path, "".getBytes()).getVersion();
 
         if (frequentLogPrint) {

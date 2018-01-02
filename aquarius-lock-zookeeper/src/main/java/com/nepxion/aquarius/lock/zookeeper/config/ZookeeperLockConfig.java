@@ -10,7 +10,6 @@ package com.nepxion.aquarius.lock.zookeeper.config;
  * @version 1.0
  */
 
-import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.recipes.locks.InterProcessMutex;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -44,9 +43,9 @@ public class ZookeeperLockConfig {
         return new ZookeeperLockExecutorImpl();
     }
 
-    @Bean(name = "curator")
+    @Bean(name = "curatorHandler")
     @Conditional(ZookeeperLockCondition.class)
-    public CuratorFramework curator() {
-        return CuratorHandler.createDefaultCurator(prefix);
+    public CuratorHandler curatorHandler() {
+        return new CuratorHandler(prefix);
     }
 }
