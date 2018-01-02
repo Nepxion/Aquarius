@@ -1,4 +1,4 @@
-package com.nepxion.aquarius.common.curator.handler;
+package com.nepxion.aquarius.common.curator.exception;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
