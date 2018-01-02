@@ -140,6 +140,10 @@ public class CuratorHandler {
     public void create(String connectString, int sessionTimeoutMs, int connectionTimeoutMs, RetryPolicy retryPolicy) {
         LOG.info("Start to initialize Curator..");
 
+        if (curator != null) {
+            throw new CuratorException("Curator isn't null, it has been initialized already");
+        }
+
         curator = CuratorFrameworkFactory.newClient(connectString, sessionTimeoutMs, connectionTimeoutMs, retryPolicy);
     }
 

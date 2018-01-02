@@ -72,9 +72,7 @@ public class ZookeeperIdGeneratorImpl implements ZookeeperIdGenerator {
             throw new AquariusException("Composite key is null or empty");
         }
 
-        if (!curatorHandler.isStarted()) {
-            throw new AquariusException("Curator isn't started");
-        }
+        curatorHandler.validateStartedStatus();
 
         String path = curatorHandler.getPath(prefix, compositeKey);
 

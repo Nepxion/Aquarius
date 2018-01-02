@@ -61,6 +61,10 @@ public class RedissonHandler {
     public void create(Config config) throws Exception {
         LOG.info("Start to initialize Redisson...");
 
+        if (redisson != null) {
+            throw new RedissonException("Redisson isn't null, it has been initialized already");
+        }
+
         redisson = Redisson.create(config);
     }
 
