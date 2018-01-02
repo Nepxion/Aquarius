@@ -99,7 +99,7 @@ public class CuratorHandler {
 
         CuratorFramework curator = createCurator(connectString, sessionTimeoutMs, connectionTimeoutMs, retryPolicy);
 
-        startCurator(curator);
+        startAndBlockCurator(curator);
 
         return curator;
     }
