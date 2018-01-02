@@ -46,7 +46,7 @@ public class CuratorHandler {
     public CuratorHandler(String prefix) {
         try {
             AquariusProperties config = createPropertyConfig(CuratorConstant.CONFIG_FILE);
-            createCurator(config);
+            create(config);
 
             String rootPath = getRootPath(prefix);
             if (!pathExist(rootPath)) {
@@ -65,7 +65,7 @@ public class CuratorHandler {
     }
 
     // 创建Curator
-    public void createCurator(AquariusProperties properties) throws Exception {
+    public void create(AquariusProperties properties) throws Exception {
         String retryType = properties.getString(CuratorConstant.RETRY_TYPE);
         RetryPolicy retryPolicy = null;
         if (StringUtils.equals(retryType, CuratorConstant.RETRY_TYPE_EXPONENTIAL_BACKOFF_RETRY)) {

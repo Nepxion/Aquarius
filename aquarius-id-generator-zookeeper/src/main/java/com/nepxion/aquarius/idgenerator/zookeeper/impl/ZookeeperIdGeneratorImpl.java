@@ -47,7 +47,7 @@ public class ZookeeperIdGeneratorImpl implements ZookeeperIdGenerator {
         try {
             curatorHandler.close();
         } catch (Exception e) {
-            throw new AquariusException("Close curator failed", e);
+            throw new AquariusException("Close Curator failed", e);
         }
     }
 

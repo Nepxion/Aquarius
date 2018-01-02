@@ -28,7 +28,7 @@ public class RedisHandler {
         try {
             ApplicationContext applicationContext = createApplicationContext(RedisConstant.CONFIG_FILE);
 
-            createRedisTemplate(applicationContext);
+            create(applicationContext);
         } catch (Exception e) {
             LOG.error("Initialize Redis failed", e);
         }
@@ -50,7 +50,7 @@ public class RedisHandler {
 
     // 创建RedisTemplate
     @SuppressWarnings({ "unchecked" })
-    public void createRedisTemplate(ApplicationContext applicationContext) {
+    public void create(ApplicationContext applicationContext) {
         LOG.info("Start to initialize Redis...");
 
         redisTemplate = (RedisTemplate<String, Object>) applicationContext.getBean("aquariusRedisTemplate");

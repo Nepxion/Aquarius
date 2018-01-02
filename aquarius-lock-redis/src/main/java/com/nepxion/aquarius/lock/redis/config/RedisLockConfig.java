@@ -11,7 +11,6 @@ package com.nepxion.aquarius.lock.redis.config;
  */
 
 import org.redisson.api.RLock;
-import org.redisson.api.RedissonClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
@@ -39,9 +38,9 @@ public class RedisLockConfig {
         return new RedisLockExecutorImpl();
     }
 
-    @Bean(name = "redisson")
+    @Bean(name = "redissonHandler")
     @Conditional(RedisLockCondition.class)
-    public RedissonClient redisson() {
-        return RedissonHandler.createDefaultRedisson();
+    public RedissonHandler redissonHandler() {
+        return new RedissonHandler();
     }
 }

@@ -47,7 +47,7 @@ public class ZookeeperLockExecutorImpl implements LockExecutor<InterProcessMutex
         try {
             curatorHandler.close();
         } catch (Exception e) {
-            throw new AquariusException("Close curator failed", e);
+            throw new AquariusException("Close Curator failed", e);
         }
     }
 
