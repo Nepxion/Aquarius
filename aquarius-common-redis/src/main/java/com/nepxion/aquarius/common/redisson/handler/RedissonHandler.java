@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import com.nepxion.aquarius.common.constant.AquariusConstant;
 import com.nepxion.aquarius.common.property.AquariusContent;
 import com.nepxion.aquarius.common.redisson.constant.RedissonConstant;
+import com.nepxion.aquarius.common.redisson.exception.RedissonException;
 
 public class RedissonHandler {
     private static final Logger LOG = LoggerFactory.getLogger(RedissonHandler.class);
@@ -72,8 +73,35 @@ public class RedissonHandler {
         redisson.shutdown();
     }
 
-    // Redisson客户端连接是否正常
+    // 获取Redisson客户端是否初始化
+    public static boolean isInitialized(RedissonClient redisson) {
+        return redisson != null;
+    }
+
+    // 获取Redisson客户端连接是否正常
     public static boolean isStarted(RedissonClient redisson) {
         return !redisson.isShutdown() && !redisson.isShuttingDown();
+    }
+
+    // 检查Redisson是否是启动状态
+    public static void validateStartedStatus(RedissonClient redisson) throws Exception {
+        if (redisson == null) {
+            throw new RedissonException("Redisson is null");
+        }
+
+        if (!isStarted(redisson)) {
+            throw new RedissonException("Redisson is closed");
+        }
+    }
+
+    // 检查Redisson是否是关闭状态
+    public static void validateClosedStatus(RedissonClient redisson) throws Exception {
+        if (redisson == null) {
+            throw new RedissonException("Redisson is null");
+        }
+
+        if (isStarted(redisson)) {
+            throw new RedissonException("Redisson is started");
+        }
     }
 }

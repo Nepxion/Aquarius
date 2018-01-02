@@ -34,6 +34,7 @@ import org.slf4j.LoggerFactory;
 
 import com.nepxion.aquarius.common.constant.AquariusConstant;
 import com.nepxion.aquarius.common.curator.constant.CuratorConstant;
+import com.nepxion.aquarius.common.curator.exception.CuratorException;
 import com.nepxion.aquarius.common.property.AquariusProperties;
 
 public class CuratorHandler {
