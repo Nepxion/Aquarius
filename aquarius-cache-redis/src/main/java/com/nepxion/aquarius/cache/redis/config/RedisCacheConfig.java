@@ -14,7 +14,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.redis.core.RedisTemplate;
 
 import com.nepxion.aquarius.cache.CacheDelegate;
 import com.nepxion.aquarius.cache.redis.condition.RedisCacheCondition;
@@ -30,9 +29,9 @@ public class RedisCacheConfig {
         return new RedisCacheDelegateImpl();
     }
 
-    @Bean(name = "redisTemplate")
+    @Bean(name = "redisHandler")
     @Conditional(RedisCacheCondition.class)
-    public RedisTemplate<String, Object> redisTemplate() {
-        return RedisHandler.createDefaultRedisTemplate();
+    public RedisHandler redisHandler() {
+        return new RedisHandler();
     }
 }

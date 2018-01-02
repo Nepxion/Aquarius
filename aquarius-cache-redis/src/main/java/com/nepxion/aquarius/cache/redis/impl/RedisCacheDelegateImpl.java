@@ -23,13 +23,14 @@ import org.springframework.data.redis.core.ValueOperations;
 
 import com.nepxion.aquarius.cache.CacheDelegate;
 import com.nepxion.aquarius.common.constant.AquariusConstant;
+import com.nepxion.aquarius.common.redis.handler.RedisHandler;
 import com.nepxion.aquarius.common.util.KeyUtil;
 
 public class RedisCacheDelegateImpl implements CacheDelegate {
     private static final Logger LOG = LoggerFactory.getLogger(RedisCacheDelegateImpl.class);
 
     @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
+    private RedisHandler redisHandler;
 
     @Value("${" + AquariusConstant.PREFIX + "}")
     private String prefix;
@@ -39,6 +40,7 @@ public class RedisCacheDelegateImpl implements CacheDelegate {
 
     @Override
     public Object invokeCacheable(MethodInvocation invocation, String key, long expire) throws Throwable {
+        RedisTemplate<String, Object> redisTemplate = redisHandler.getRedisTemplate();
         ValueOperations<String, Object> valueOperations = redisTemplate.opsForValue();
 
         // 空值不缓存
@@ -80,6 +82,7 @@ public class RedisCacheDelegateImpl implements CacheDelegate {
 
     @Override
     public Object invokeCachePut(MethodInvocation invocation, String key, long expire) throws Throwable {
+        RedisTemplate<String, Object> redisTemplate = redisHandler.getRedisTemplate();
         ValueOperations<String, Object> valueOperations = redisTemplate.opsForValue();
 
         // 空值不缓存
@@ -142,6 +145,7 @@ public class RedisCacheDelegateImpl implements CacheDelegate {
             compositeWildcardKey = KeyUtil.getCompositeWildcardKey(key);
         }
 
+        RedisTemplate<String, Object> redisTemplate = redisHandler.getRedisTemplate();
         Set<String> keys = redisTemplate.keys(compositeWildcardKey);
         for (String k : keys) {
             redisTemplate.delete(k);

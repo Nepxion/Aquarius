@@ -24,6 +24,7 @@ import org.springframework.data.redis.core.script.RedisScript;
 
 import com.nepxion.aquarius.common.constant.AquariusConstant;
 import com.nepxion.aquarius.common.exception.AquariusException;
+import com.nepxion.aquarius.common.redis.handler.RedisHandler;
 import com.nepxion.aquarius.common.util.KeyUtil;
 import com.nepxion.aquarius.limit.LimitExecutor;
 
@@ -31,7 +32,7 @@ public class RedisLimitExecutorImpl implements LimitExecutor {
     private static final Logger LOG = LoggerFactory.getLogger(RedisLimitExecutorImpl.class);
 
     @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
+    private RedisHandler redisHandler;
 
     @Value("${" + AquariusConstant.PREFIX + "}")
     private String prefix;
@@ -66,6 +67,7 @@ public class RedisLimitExecutorImpl implements LimitExecutor {
         String luaScript = buildLuaScript();
 
         RedisScript<Number> redisScript = new DefaultRedisScript<Number>(luaScript, Number.class);
+        RedisTemplate<String, Object> redisTemplate = redisHandler.getRedisTemplate();
         Number count = redisTemplate.execute(redisScript, keys, limitCount, limitPeriod);
 
         if (frequentLogPrint) {
