@@ -28,6 +28,7 @@ import org.springframework.stereotype.Component;
 
 import com.nepxion.aquarius.common.constant.AquariusConstant;
 import com.nepxion.aquarius.common.exception.AquariusException;
+import com.nepxion.aquarius.common.redis.handler.RedisHandler;
 import com.nepxion.aquarius.common.util.DateUtil;
 import com.nepxion.aquarius.common.util.KeyUtil;
 import com.nepxion.aquarius.common.util.StringUtil;
@@ -42,7 +43,7 @@ public class RedisIdGeneratorImpl implements RedisIdGenerator {
     private static final int MAX_BATCH_COUNT = 1000;
 
     @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
+    private RedisHandler redisHandler;
 
     @Value("${" + AquariusConstant.PREFIX + "}")
     private String prefix;
@@ -95,6 +96,7 @@ public class RedisIdGeneratorImpl implements RedisIdGenerator {
         List<String> keys = new ArrayList<String>();
         keys.add(compositeKey);
 
+        RedisTemplate<String, Object> redisTemplate = redisHandler.getRedisTemplate();
         List<Object> result = redisTemplate.execute(redisScript, keys, step);
 
         Object value1 = result.get(0);

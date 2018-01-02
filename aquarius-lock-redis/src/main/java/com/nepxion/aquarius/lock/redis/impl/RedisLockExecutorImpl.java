@@ -32,7 +32,7 @@ import com.nepxion.aquarius.lock.entity.LockType;
 
 public class RedisLockExecutorImpl implements LockExecutor<RLock> {
     @Autowired
-    private RedissonClient redisson;
+    private RedissonHandler redissonHandler;
 
     @Value("${" + AquariusConstant.PREFIX + "}")
     private String prefix;
@@ -44,7 +44,11 @@ public class RedisLockExecutorImpl implements LockExecutor<RLock> {
 
     @PreDestroy
     public void destroy() {
-        RedissonHandler.closeRedisson(redisson);
+        try {
+            redissonHandler.close();
+        } catch (Exception e) {
+            throw new AquariusException("Close Redisson failed", e);
+        }
     }
 
     @Override
@@ -64,14 +68,6 @@ public class RedisLockExecutorImpl implements LockExecutor<RLock> {
 
     @Override
     public RLock tryLock(LockType lockType, String compositeKey, long leaseTime, long waitTime, boolean async, boolean fair) throws Exception {
-        if (redisson == null) {
-            throw new AquariusException("Redisson isn't initialized");
-        }
-
-        if (!RedissonHandler.isStarted(redisson)) {
-            throw new AquariusException("Redisson isn't started");
-        }
-
         if (StringUtils.isEmpty(compositeKey)) {
             throw new AquariusException("Composite key is null or empty");
         }
@@ -79,6 +75,8 @@ public class RedisLockExecutorImpl implements LockExecutor<RLock> {
         if (lockType != LockType.LOCK && fair) {
             throw new AquariusException("Fair lock of Redis isn't support for " + lockType);
         }
+
+        redissonHandler.validateStartedStatus();
 
         if (async) {
             return invokeLockAsync(lockType, compositeKey, leaseTime, waitTime, fair);
@@ -89,7 +87,7 @@ public class RedisLockExecutorImpl implements LockExecutor<RLock> {
 
     @Override
     public void unlock(RLock lock) throws Exception {
-        if (RedissonHandler.isStarted(redisson)) {
+        if (redissonHandler.isStarted()) {
             if (lock != null && lock.isLocked()) {
                 lock.unlock();
             }
@@ -119,6 +117,7 @@ public class RedisLockExecutorImpl implements LockExecutor<RLock> {
     }
 
     private RLock getNewLock(LockType lockType, String key, boolean fair) {
+        RedissonClient redisson = redissonHandler.getRedisson();
         switch (lockType) {
             case LOCK:
                 if (fair) {
@@ -157,6 +156,7 @@ public class RedisLockExecutorImpl implements LockExecutor<RLock> {
 
         RReadWriteLock readWriteLock = readWriteLockMap.get(newKey);
         if (readWriteLock == null) {
+            RedissonClient redisson = redissonHandler.getRedisson();
             RReadWriteLock newReadWriteLock = redisson.getReadWriteLock(key);
             readWriteLock = readWriteLockMap.putIfAbsent(newKey, newReadWriteLock);
             if (readWriteLock == null) {

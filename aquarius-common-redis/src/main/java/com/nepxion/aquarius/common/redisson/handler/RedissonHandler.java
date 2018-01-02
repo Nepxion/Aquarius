@@ -26,21 +26,21 @@ import com.nepxion.aquarius.common.redisson.exception.RedissonException;
 public class RedissonHandler {
     private static final Logger LOG = LoggerFactory.getLogger(RedissonHandler.class);
 
-    // 创建默认Redisson
-    public static RedissonClient createDefaultRedisson() {
-        try {
-            Config config = RedissonHandler.createYamlConfig(RedissonConstant.CONFIG_FILE);
+    private RedissonClient redisson;
 
-            return RedissonHandler.createRedisson(config);
-        } catch (IOException e) {
+    // 创建默认Redisson
+    public RedissonHandler() {
+        try {
+            Config config = createYamlConfig(RedissonConstant.CONFIG_FILE);
+
+            create(config);
+        } catch (Exception e) {
             LOG.error("Initialize Redisson failed", e);
         }
-
-        return null;
     }
 
     // 创建Yaml格式的配置文件
-    public static Config createYamlConfig(String yamlConfigPath) throws IOException {
+    public Config createYamlConfig(String yamlConfigPath) throws IOException {
         LOG.info("Start to read {}...", yamlConfigPath);
 
         AquariusContent content = new AquariusContent(yamlConfigPath, AquariusConstant.ENCODING_UTF_8);
@@ -49,7 +49,7 @@ public class RedissonHandler {
     }
 
     // 创建Json格式的配置文件
-    public static Config createJsonConfig(String jsonConfigPath) throws IOException {
+    public Config createJsonConfig(String jsonConfigPath) throws IOException {
         LOG.info("Start to read {}...", jsonConfigPath);
 
         AquariusContent content = new AquariusContent(jsonConfigPath, AquariusConstant.ENCODING_UTF_8);
@@ -58,50 +58,59 @@ public class RedissonHandler {
     }
 
     // 使用config创建Redisson
-    public static RedissonClient createRedisson(Config config) {
+    public void create(Config config) throws Exception {
         LOG.info("Start to initialize Redisson...");
 
-        RedissonClient redisson = Redisson.create(config);
+        if (redisson != null) {
+            throw new RedissonException("Redisson isn't null, it has been initialized already");
+        }
 
-        return redisson;
+        redisson = Redisson.create(config);
     }
 
     // 关闭Redisson客户端连接
-    public static void closeRedisson(RedissonClient redisson) {
+    public void close() throws Exception {
         LOG.info("Start to close Redisson...");
+
+        validateStartedStatus();
 
         redisson.shutdown();
     }
 
     // 获取Redisson客户端是否初始化
-    public static boolean isInitialized(RedissonClient redisson) {
+    public boolean isInitialized() {
         return redisson != null;
     }
 
     // 获取Redisson客户端连接是否正常
-    public static boolean isStarted(RedissonClient redisson) {
+    public boolean isStarted() {
         return !redisson.isShutdown() && !redisson.isShuttingDown();
     }
 
     // 检查Redisson是否是启动状态
-    public static void validateStartedStatus(RedissonClient redisson) throws Exception {
+    public void validateStartedStatus() throws Exception {
         if (redisson == null) {
             throw new RedissonException("Redisson is null");
         }
 
-        if (!isStarted(redisson)) {
+        if (!isStarted()) {
             throw new RedissonException("Redisson is closed");
         }
     }
 
     // 检查Redisson是否是关闭状态
-    public static void validateClosedStatus(RedissonClient redisson) throws Exception {
+    public void validateClosedStatus() throws Exception {
         if (redisson == null) {
             throw new RedissonException("Redisson is null");
         }
 
-        if (isStarted(redisson)) {
+        if (isStarted()) {
             throw new RedissonException("Redisson is started");
         }
+    }
+
+    // 获取Redisson客户端
+    public RedissonClient getRedisson() {
+        return redisson;
     }
 }

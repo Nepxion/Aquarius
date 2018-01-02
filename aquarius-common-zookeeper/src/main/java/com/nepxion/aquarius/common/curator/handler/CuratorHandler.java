@@ -40,34 +40,32 @@ import com.nepxion.aquarius.common.property.AquariusProperties;
 public class CuratorHandler {
     private static final Logger LOG = LoggerFactory.getLogger(CuratorHandler.class);
 
+    private CuratorFramework curator;
+
     // 创建默认Curator，并初始化根节点
-    public static CuratorFramework createDefaultCurator(String prefix) {
+    public CuratorHandler(String prefix) {
         try {
             AquariusProperties config = createPropertyConfig(CuratorConstant.CONFIG_FILE);
-            CuratorFramework curator = createCurator(config);
+            create(config);
 
             String rootPath = getRootPath(prefix);
-            if (!pathExist(curator, rootPath)) {
-                createPath(curator, rootPath, CreateMode.PERSISTENT);
+            if (!pathExist(rootPath)) {
+                createPath(rootPath, CreateMode.PERSISTENT);
             }
-
-            return curator;
         } catch (Exception e) {
             LOG.error("Initialize Curator failed", e);
         }
-
-        return null;
     }
 
     // 创建Property格式的配置文件
-    public static AquariusProperties createPropertyConfig(String propertyConfigPath) throws IOException {
+    public AquariusProperties createPropertyConfig(String propertyConfigPath) throws IOException {
         LOG.info("Start to read {}...", propertyConfigPath);
 
         return new AquariusProperties(propertyConfigPath, AquariusConstant.ENCODING_GBK, AquariusConstant.ENCODING_UTF_8);
     }
 
     // 创建Curator
-    public static CuratorFramework createCurator(AquariusProperties properties) throws Exception {
+    public void create(AquariusProperties properties) throws Exception {
         String retryType = properties.getString(CuratorConstant.RETRY_TYPE);
         RetryPolicy retryPolicy = null;
         if (StringUtils.equals(retryType, CuratorConstant.RETRY_TYPE_EXPONENTIAL_BACKOFF_RETRY)) {
@@ -98,135 +96,140 @@ public class CuratorHandler {
         int sessionTimeoutMs = properties.getInteger(CuratorConstant.SESSION_TIMEOUT_MS);
         int connectionTimeoutMs = properties.getInteger(CuratorConstant.CONNECTION_TIMEOUT_MS);
 
-        CuratorFramework curator = createCurator(connectString, sessionTimeoutMs, connectionTimeoutMs, retryPolicy);
+        create(connectString, sessionTimeoutMs, connectionTimeoutMs, retryPolicy);
 
-        startAndBlockCurator(curator);
-
-        return curator;
+        startAndBlock();
     }
 
     // 重试指定的次数, 且每一次重试之间停顿的时间逐渐增加
-    public static RetryPolicy createExponentialBackoffRetry(int baseSleepTimeMs, int maxRetries) {
+    public RetryPolicy createExponentialBackoffRetry(int baseSleepTimeMs, int maxRetries) {
         RetryPolicy retryPolicy = new ExponentialBackoffRetry(baseSleepTimeMs, maxRetries);
 
         return retryPolicy;
     }
 
     // 重试指定的次数, 且每一次重试之间停顿的时间逐渐增加，增加了最大重试次数的控制
-    public static RetryPolicy createBoundedExponentialBackoffRetry(int baseSleepTimeMs, int maxSleepTimeMs, int maxRetries) {
+    public RetryPolicy createBoundedExponentialBackoffRetry(int baseSleepTimeMs, int maxSleepTimeMs, int maxRetries) {
         RetryPolicy retryPolicy = new BoundedExponentialBackoffRetry(baseSleepTimeMs, maxSleepTimeMs, maxRetries);
 
         return retryPolicy;
     }
 
     // 指定最大重试次数的重试
-    public static RetryPolicy createRetryNTimes(int count, int sleepMsBetweenRetries) {
+    public RetryPolicy createRetryNTimes(int count, int sleepMsBetweenRetries) {
         RetryPolicy retryPolicy = new RetryNTimes(count, sleepMsBetweenRetries);
 
         return retryPolicy;
     }
 
     // 永远重试
-    public static RetryPolicy createRetryForever(int retryIntervalMs) {
+    public RetryPolicy createRetryForever(int retryIntervalMs) {
         RetryPolicy retryPolicy = new RetryForever(retryIntervalMs);
 
         return retryPolicy;
     }
 
     // 一直重试，直到达到规定的时间 
-    public static RetryPolicy createRetryUntilElapsed(int maxElapsedTimeMs, int sleepMsBetweenRetries) {
+    public RetryPolicy createRetryUntilElapsed(int maxElapsedTimeMs, int sleepMsBetweenRetries) {
         RetryPolicy retryPolicy = new RetryUntilElapsed(maxElapsedTimeMs, sleepMsBetweenRetries);
 
         return retryPolicy;
     }
 
     // 创建ZooKeeper客户端实例
-    public static CuratorFramework createCurator(String connectString, int sessionTimeoutMs, int connectionTimeoutMs, RetryPolicy retryPolicy) {
+    public void create(String connectString, int sessionTimeoutMs, int connectionTimeoutMs, RetryPolicy retryPolicy) {
         LOG.info("Start to initialize Curator..");
 
-        CuratorFramework curator = CuratorFrameworkFactory.newClient(connectString, sessionTimeoutMs, connectionTimeoutMs, retryPolicy);
+        if (curator != null) {
+            throw new CuratorException("Curator isn't null, it has been initialized already");
+        }
 
-        return curator;
+        curator = CuratorFrameworkFactory.newClient(connectString, sessionTimeoutMs, connectionTimeoutMs, retryPolicy);
     }
 
     // 启动ZooKeeper客户端
-    public static void startCurator(CuratorFramework curator) throws Exception {
+    public void start() throws Exception {
         LOG.info("Start Curator...");
 
-        validateClosedStatus(curator);
+        validateClosedStatus();
 
         curator.start();
     }
 
     // 启动ZooKeeper客户端，直到第一次连接成功
-    public static void startAndBlockCurator(CuratorFramework curator) throws Exception {
+    public void startAndBlock() throws Exception {
         LOG.info("start and block Curator...");
 
-        validateClosedStatus(curator);
+        validateClosedStatus();
 
         curator.start();
         curator.blockUntilConnected();
     }
 
     // 启动ZooKeeper客户端，直到第一次连接成功，为每一次连接配置超时
-    public static void startAndBlockCurator(CuratorFramework curator, int maxWaitTime, TimeUnit units) throws Exception {
+    public void startAndBlock(int maxWaitTime, TimeUnit units) throws Exception {
         LOG.info("start and block Curator...");
 
-        validateClosedStatus(curator);
+        validateClosedStatus();
 
         curator.start();
         curator.blockUntilConnected(maxWaitTime, units);
     }
 
     // 关闭ZooKeeper客户端连接
-    public static void closeCurator(CuratorFramework curator) throws Exception {
+    public void close() throws Exception {
         LOG.info("Start to close Curator...");
 
-        validateStartedStatus(curator);
+        validateStartedStatus();
 
         curator.close();
     }
 
     // 获取ZooKeeper客户端是否初始化
-    public static boolean isInitialized(CuratorFramework curator) {
+    public boolean isInitialized() {
         return curator != null;
     }
 
     // 获取ZooKeeper客户端连接是否正常
-    public static boolean isStarted(CuratorFramework curator) {
+    public boolean isStarted() {
         return curator.getState() == CuratorFrameworkState.STARTED;
     }
 
     // 检查ZooKeeper是否是启动状态
-    public static void validateStartedStatus(CuratorFramework curator) throws Exception {
+    public void validateStartedStatus() throws Exception {
         if (curator == null) {
             throw new CuratorException("Curator is null");
         }
 
-        if (!isStarted(curator)) {
+        if (!isStarted()) {
             throw new CuratorException("Curator is closed");
         }
     }
 
     // 检查ZooKeeper是否是关闭状态
-    public static void validateClosedStatus(CuratorFramework curator) throws Exception {
+    public void validateClosedStatus() throws Exception {
         if (curator == null) {
             throw new CuratorException("Curator is null");
         }
 
-        if (isStarted(curator)) {
+        if (isStarted()) {
             throw new CuratorException("Curator is started");
         }
     }
 
+    // 获取ZooKeeper客户端
+    public CuratorFramework getCurator() {
+        return curator;
+    }
+
     // 判断路径是否存在
-    public static boolean pathExist(CuratorFramework curator, String path) throws Exception {
-        return getPathStat(curator, path) != null;
+    public boolean pathExist(String path) throws Exception {
+        return getPathStat(path) != null;
     }
 
     // 判断stat是否存在
-    public static Stat getPathStat(CuratorFramework curator, String path) throws Exception {
-        validateStartedStatus(curator);
+    public Stat getPathStat(String path) throws Exception {
+        validateStartedStatus();
         PathUtils.validatePath(path);
 
         ExistsBuilder builder = curator.checkExists();
@@ -240,56 +243,56 @@ public class CuratorHandler {
     }
 
     // 创建路径
-    public static void createPath(CuratorFramework curator, String path) throws Exception {
-        validateStartedStatus(curator);
+    public void createPath(String path) throws Exception {
+        validateStartedStatus();
         PathUtils.validatePath(path);
 
         curator.create().creatingParentsIfNeeded().forPath(path, null);
     }
 
     // 创建路径，并写入数据
-    public static void createPath(CuratorFramework curator, String path, byte[] data) throws Exception {
-        validateStartedStatus(curator);
+    public void createPath(String path, byte[] data) throws Exception {
+        validateStartedStatus();
         PathUtils.validatePath(path);
 
         curator.create().creatingParentsIfNeeded().forPath(path, data);
     }
 
     // 创建路径
-    public static void createPath(CuratorFramework curator, String path, CreateMode mode) throws Exception {
-        validateStartedStatus(curator);
+    public void createPath(String path, CreateMode mode) throws Exception {
+        validateStartedStatus();
         PathUtils.validatePath(path);
 
         curator.create().creatingParentsIfNeeded().withMode(mode).forPath(path, null);
     }
 
     // 创建路径，并写入数据
-    public static void createPath(CuratorFramework curator, String path, byte[] data, CreateMode mode) throws Exception {
-        validateStartedStatus(curator);
+    public void createPath(String path, byte[] data, CreateMode mode) throws Exception {
+        validateStartedStatus();
         PathUtils.validatePath(path);
 
         curator.create().creatingParentsIfNeeded().withMode(mode).forPath(path, data);
     }
 
     // 删除路径
-    public static void deletePath(CuratorFramework curator, String path) throws Exception {
-        validateStartedStatus(curator);
+    public void deletePath(String path) throws Exception {
+        validateStartedStatus();
         PathUtils.validatePath(path);
 
         curator.delete().deletingChildrenIfNeeded().forPath(path);
     }
 
     // 获取子节点名称列表
-    public static List<String> getChildNameList(CuratorFramework curator, String path) throws Exception {
-        validateStartedStatus(curator);
+    public List<String> getChildNameList(String path) throws Exception {
+        validateStartedStatus();
         PathUtils.validatePath(path);
 
         return curator.getChildren().forPath(path);
     }
 
     // 获取子节点路径列表
-    public static List<String> getChildPathList(CuratorFramework curator, String path) throws Exception {
-        List<String> childNameList = getChildNameList(curator, path);
+    public List<String> getChildPathList(String path) throws Exception {
+        List<String> childNameList = getChildNameList(path);
 
         List<String> childPathList = new ArrayList<String>();
         for (String childName : childNameList) {
@@ -301,12 +304,12 @@ public class CuratorHandler {
     }
 
     // 组装根节点路径
-    public static String getRootPath(String prefix) {
+    public String getRootPath(String prefix) {
         return "/" + prefix;
     }
 
     // 组装节点路径
-    public static String getPath(String prefix, String key) {
+    public String getPath(String prefix, String key) {
         return "/" + prefix + "/" + key;
     }
 }

@@ -32,7 +32,7 @@ import com.nepxion.aquarius.lock.entity.LockType;
 
 public class ZookeeperLockExecutorImpl implements LockExecutor<InterProcessMutex> {
     @Autowired
-    private CuratorFramework curator;
+    private CuratorHandler curatorHandler;
 
     @Value("${" + AquariusConstant.PREFIX + "}")
     private String prefix;
@@ -45,9 +45,9 @@ public class ZookeeperLockExecutorImpl implements LockExecutor<InterProcessMutex
     @PreDestroy
     public void destroy() {
         try {
-            CuratorHandler.closeCurator(curator);
+            curatorHandler.close();
         } catch (Exception e) {
-            throw new AquariusException("Close curator failed", e);
+            throw new AquariusException("Close Curator failed", e);
         }
     }
 
@@ -68,8 +68,6 @@ public class ZookeeperLockExecutorImpl implements LockExecutor<InterProcessMutex
 
     @Override
     public InterProcessMutex tryLock(LockType lockType, String compositeKey, long leaseTime, long waitTime, boolean async, boolean fair) throws Exception {
-        CuratorHandler.validateStartedStatus(curator);
-
         if (StringUtils.isEmpty(compositeKey)) {
             throw new AquariusException("Composite key is null or empty");
         }
@@ -82,6 +80,8 @@ public class ZookeeperLockExecutorImpl implements LockExecutor<InterProcessMutex
             throw new AquariusException("Async lock of Zookeeper isn't support for " + lockType);
         }
 
+        curatorHandler.validateStartedStatus();
+
         InterProcessMutex interProcessMutex = getLock(lockType, compositeKey);
         boolean acquired = interProcessMutex.acquire(waitTime, TimeUnit.MILLISECONDS);
 
@@ -90,7 +90,7 @@ public class ZookeeperLockExecutorImpl implements LockExecutor<InterProcessMutex
 
     @Override
     public void unlock(InterProcessMutex interProcessMutex) throws Exception {
-        if (CuratorHandler.isStarted(curator)) {
+        if (curatorHandler.isStarted()) {
             if (interProcessMutex != null && interProcessMutex.isAcquiredInThisProcess()) {
                 interProcessMutex.release();
             }
@@ -106,7 +106,8 @@ public class ZookeeperLockExecutorImpl implements LockExecutor<InterProcessMutex
     }
 
     private InterProcessMutex getNewLock(LockType lockType, String key) {
-        String path = CuratorHandler.getPath(prefix, key);
+        String path = curatorHandler.getPath(prefix, key);
+        CuratorFramework curator = curatorHandler.getCurator();
         switch (lockType) {
             case LOCK:
                 return new InterProcessMutex(curator, path);
@@ -122,7 +123,7 @@ public class ZookeeperLockExecutorImpl implements LockExecutor<InterProcessMutex
     }
 
     private InterProcessMutex getCachedLock(LockType lockType, String key) {
-        String path = CuratorHandler.getPath(prefix, key);
+        String path = curatorHandler.getPath(prefix, key);
         String newKey = path + "-" + lockType;
 
         InterProcessMutex lock = lockMap.get(newKey);
@@ -138,11 +139,12 @@ public class ZookeeperLockExecutorImpl implements LockExecutor<InterProcessMutex
     }
 
     private InterProcessReadWriteLock getCachedReadWriteLock(LockType lockType, String key) {
-        String path = CuratorHandler.getPath(prefix, key);
+        String path = curatorHandler.getPath(prefix, key);
         String newKey = path;
 
         InterProcessReadWriteLock readWriteLock = readWriteLockMap.get(newKey);
         if (readWriteLock == null) {
+            CuratorFramework curator = curatorHandler.getCurator();
             InterProcessReadWriteLock newReadWriteLock = new InterProcessReadWriteLock(curator, path);
             readWriteLock = readWriteLockMap.putIfAbsent(newKey, newReadWriteLock);
             if (readWriteLock == null) {

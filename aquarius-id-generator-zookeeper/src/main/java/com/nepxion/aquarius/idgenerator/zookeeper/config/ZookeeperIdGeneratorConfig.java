@@ -10,7 +10,6 @@ package com.nepxion.aquarius.idgenerator.zookeeper.config;
  * @version 1.0
  */
 
-import org.apache.curator.framework.CuratorFramework;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,8 +24,8 @@ public class ZookeeperIdGeneratorConfig {
     @Value("${" + AquariusConstant.PREFIX + "}")
     private String prefix;
 
-    @Bean(name = "curator")
-    public CuratorFramework curator() {
-        return CuratorHandler.createDefaultCurator(prefix);
+    @Bean(name = "curatorHandler")
+    public CuratorHandler curatorHandler() {
+        return new CuratorHandler(prefix);
     }
 }
