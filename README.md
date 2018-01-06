@@ -14,7 +14,7 @@ Nepxion Aquarius是一款基于Redis + Zookeeper的分布式应用组件集合�
     上述4大组件同时支持SpringBoot和SpringCloud部署，分别参考aquarius-spring-boot-example和aquarius-spring-cloud-example工程，文档只以aquarius-spring-boot-example为例来阐述使用方法
     支持Swagger，打开http://localhost:2222/swagger-ui.html访问
 
-![Alt text](https://github.com/Nepxion/Aquarius/blob/master/Swagger.jpg)
+![Alt text](https://github.com/Nepxion/Aquarius/blob/master/aquarius-doc/Swagger.jpg)
 
 ## Nepxion Aquarius Lock
 基于Redisson(Redis)、Curator(Zookeeper)分布式锁和本地锁，构建于Nepxion Matrix AOP framework，你可以在这三个锁组件中选择一个移植入你的应用中
