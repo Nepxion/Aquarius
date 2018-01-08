@@ -29,6 +29,7 @@
         <module>aquarius-id-generator-local</module>
         <module>aquarius-limit-aop</module>
         <module>aquarius-limit-redis</module>
+        <module>aquarius-limit-local</module>		
         <module>aquarius-spring-boot-example</module>
         <module>aquarius-spring-cloud-example</module>
     </modules>
@@ -165,6 +166,12 @@
                 <version>${project.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>aquarius-limit-local</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+			
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>matrix-aop</artifactId>
