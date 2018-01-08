@@ -997,13 +997,22 @@ public class LocalIdGeneratorApplication {
 
 ## Nepxion Aquarius Limit
 ### 介绍
-    1 支持若干个分布式系统对同一资源在给定的时间段里最多的访问限制次数(超出次数返回false)；等下个时间段开始，才允许再次被访问(返回true)，周而复始
+    1 支持若干个分布式系统对同一资源在给定的时间段里最多的访问限制次数(超出次数返回false)；等下个时间段开始，才允许再次被访问(返回true)，周而复始；也支持本地多线程访问的限流
     2 支持两种调用方式，注解方式和直接调用
     3 参数说明
       1)name 资源的名字
       2)key  资源Key。资源Key的完整路径是prefix + "_" + name + "_" + key，prefix为config.propertie里的namespace值
       3)limitPeriod 给定的时间段(单位为秒)
       4)limitCount 最多的访问限制次数
+
+### 切换锁类型
+aquarius-spring-boot-example\src\main\resources\application.properties，切换limitType即可
+```java
+# Limit config
+# redisLimit, localLimit
+limitType=redisLimit
+limitScanPackages=com.nepxion.aquarius.limit
+```
 
 ### 示例
 使用Limit示例如下，更多细节见aquarius-spring-boot-example工程下com.nepxion.aquarius.limit

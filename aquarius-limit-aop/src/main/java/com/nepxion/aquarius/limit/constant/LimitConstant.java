@@ -14,6 +14,8 @@ public class LimitConstant {
     public static final String LIMIT_TYPE = "limitType";
 
     public static final String LIMIT_TYPE_REDIS = "redisLimit";
+    
+    public static final String LIMIT_TYPE_LOCAL = "localLimit";
 
     public static final String LIMIT_SCAN_PACKAGES = "limitScanPackages";
 }

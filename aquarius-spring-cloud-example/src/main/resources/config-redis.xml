@@ -12,7 +12,7 @@
         <property name="testOnCreate" value="true" /> <!-- 当调用create Object方法时，是否进行有效性检查 -->
         <property name="testOnBorrow" value="true" /> <!-- 当调用borrow Object方法时，是否进行有效性检查 -->
         <property name="testOnReturn" value="true" /> <!-- 当调用return Object方法时，是否进行有效性检查 -->
-         <property name="testWhileIdle" value="true"/> <!-- 当调用test idle方法时，是否进行有效性检查 -->
+        <property name="testWhileIdle" value="true"/> <!-- 当调用test idle方法时，是否进行有效性检查 -->
     </bean>
 
     <bean id="aquariusJedisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
