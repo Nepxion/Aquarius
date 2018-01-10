@@ -30,7 +30,7 @@
         <module>aquarius-id-generator-local</module>
         <module>aquarius-limit-aop</module>
         <module>aquarius-limit-redis</module>
-        <module>aquarius-limit-local</module>		
+        <module>aquarius-limit-local</module>
         <module>aquarius-spring-boot-example</module>
         <module>aquarius-spring-cloud-example</module>
     </modules>
