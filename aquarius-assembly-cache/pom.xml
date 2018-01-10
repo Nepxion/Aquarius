@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <artifactId>aquarius-limit</artifactId>
-    <name>Nepxion Aquarius Limit</name>
+    <artifactId>aquarius-assembly-cache</artifactId>
+    <name>Nepxion Aquarius Assembly For Cache</name>
     <packaging>jar</packaging>
     <modelVersion>4.0.0</modelVersion>
     <parent>
@@ -24,17 +24,12 @@
 
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>aquarius-limit-aop</artifactId>
+            <artifactId>aquarius-cache-aop</artifactId>
         </dependency>
 
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>aquarius-limit-redis</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>aquarius-limit-local</artifactId>
+            <artifactId>aquarius-cache-redis</artifactId>
         </dependency>
     </dependencies>
 
@@ -59,9 +54,8 @@
                                 <includes>
                                     <include>${project.groupId}:aquarius-common</include>
                                     <include>${project.groupId}:aquarius-common-redis</include>
-                                    <include>${project.groupId}:aquarius-limit-aop</include>
-                                    <include>${project.groupId}:aquarius-limit-redis</include>
-                                    <include>${project.groupId}:aquarius-limit-local</include>
+                                    <include>${project.groupId}:aquarius-cache-aop</include>
+                                    <include>${project.groupId}:aquarius-cache-redis</include>
                                 </includes>
                             </artifactSet>
                         </configuration>
@@ -76,9 +70,8 @@
                     <dependencySourceIncludes>
                         <dependencySourceInclude>${project.groupId}:aquarius-common</dependencySourceInclude>
                         <dependencySourceInclude>${project.groupId}:aquarius-common-redis</dependencySourceInclude>
-                        <dependencySourceInclude>${project.groupId}:aquarius-limit-aop</dependencySourceInclude>
-                        <dependencySourceInclude>${project.groupId}:aquarius-limit-redis</dependencySourceInclude>
-                        <dependencySourceInclude>${project.groupId}:aquarius-limit-local</dependencySourceInclude>
+                        <dependencySourceInclude>${project.groupId}:aquarius-cache-aop</dependencySourceInclude>
+                        <dependencySourceInclude>${project.groupId}:aquarius-cache-redis</dependencySourceInclude>
                     </dependencySourceIncludes>
                 </configuration>
             </plugin>
