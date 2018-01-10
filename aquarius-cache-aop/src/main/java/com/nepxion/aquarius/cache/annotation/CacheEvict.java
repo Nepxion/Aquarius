@@ -23,21 +23,25 @@ import java.lang.annotation.Target;
 public @interface CacheEvict {
     /**
      * 缓存名字
+     * @return String
      */
     String name() default "";
 
     /**
      * 缓存Key
+     * @return String
      */
     String key() default "";
 
     /**
      * 是否全部清除缓存内容
+     * @return boolean
      */
     boolean allEntries() default false;
 
     /**
      * 缓存清理是在方法调用前还是调用后
+     * @return boolean
      */
     boolean beforeInvocation() default false;
 }

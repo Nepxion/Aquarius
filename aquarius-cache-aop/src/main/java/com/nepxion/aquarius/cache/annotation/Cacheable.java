@@ -23,17 +23,20 @@ import java.lang.annotation.Target;
 public @interface Cacheable {
     /**
      * 缓存名字
+     * @return String
      */
     String name() default "";
 
     /**
      * 缓存Key
+     * @return String
      */
     String key() default "";
 
     /**
      * 过期时间
      * 单位毫秒，默认60秒
+     * @return long
      */
     long expire() default 60000L;
 }
