@@ -35,7 +35,7 @@ Nepxion Aquarius是一款基于Redis + Zookeeper的分布式应用组件集合�
   <version>1.0.0</version>
 </dependency>
 
-分布式全局唯一ID(
+分布式全局唯一ID
 <dependency>
   <groupId>com.nepxion</groupId>
   <artifactId>aquarius-assembly-id-generator</artifactId>
@@ -49,7 +49,7 @@ Nepxion Aquarius是一款基于Redis + Zookeeper的分布式应用组件集合�
   <version>1.0.0</version>
 </dependency>
 
-四个组件全集包
+四个组件全集
 <dependency>
   <groupId>com.nepxion</groupId>
   <artifactId>aquarius-assembly-all</artifactId>
