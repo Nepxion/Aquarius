@@ -14,8 +14,8 @@ public interface ZookeeperIdGenerator {
      * 获取全局唯一序号
      * @param name 资源名字
      * @param key 资源Key
-     * @return
-     * @throws Exception
+     * @return String
+     * @throws Exception 异常
      */
     String nextSequenceId(String name, String key) throws Exception;
 

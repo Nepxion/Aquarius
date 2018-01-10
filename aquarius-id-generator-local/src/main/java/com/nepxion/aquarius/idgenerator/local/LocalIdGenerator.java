@@ -21,7 +21,7 @@ public interface LocalIdGenerator {
      * @param startTimestamp 起始计算时间戳(默认2017-01-01)
      * @param dataCenterId 数据中心标识ID
      * @param machineId 机器标识ID
-     * @return
+     * @return String
      */
     String nextUniqueId(long startTimestamp, long dataCenterId, long machineId);
 
