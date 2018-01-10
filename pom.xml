@@ -7,6 +7,7 @@
     <packaging>pom</packaging>
     <modelVersion>4.0.0</modelVersion>
     <version>1.0.0</version>
+    <description>Nepxion Aquarius is a list of distribution components based on Redis + Zookeeper with Nepxion Matrix AOP framework</description>
     <url>https://github.com/Nepxion/</url>
 
     <modules>
