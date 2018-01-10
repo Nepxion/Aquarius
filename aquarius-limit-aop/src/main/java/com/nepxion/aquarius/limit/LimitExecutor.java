@@ -16,7 +16,7 @@ public interface LimitExecutor {
      * @param key 资源Key
      * @param limitPeriod 给定的时间段(单位秒)
      * @param limitCount 最多的访问限制次数
-     * @return
+     * @return boolean
      */
     boolean tryAccess(String name, String key, int limitPeriod, int limitCount);
 
