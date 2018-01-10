@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <artifactId>aquarius-assembly-lock</artifactId>
-    <name>Nepxion Aquarius Assembly For Lock</name>
+    <artifactId>aquarius-lock</artifactId>
+    <name>Nepxion Aquarius For Lock</name>
     <packaging>jar</packaging>
     <modelVersion>4.0.0</modelVersion>
     <parent>
@@ -60,9 +60,11 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
-                            <finalName>aquarius-lock-${project.version}</finalName>
-                            <createSourcesJar>false</createSourcesJar>
-                            <promoteTransitiveDependencies>true</promoteTransitiveDependencies>
+                            <shadeTestJar>false</shadeTestJar>
+                            <createSourcesJar>true</createSourcesJar>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+                            </transformers>
                             <artifactSet>
                                 <includes>
                                     <include>${project.groupId}:aquarius-common</include>
@@ -77,6 +79,22 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                    <includeDependencySources>true</includeDependencySources>
+                    <dependencySourceIncludes>
+                        <dependencySourceInclude>${project.groupId}:aquarius-common</dependencySourceInclude>
+                        <dependencySourceInclude>${project.groupId}:aquarius-common-redis</dependencySourceInclude>
+                        <dependencySourceInclude>${project.groupId}:aquarius-common-zookeeper</dependencySourceInclude>
+                        <dependencySourceInclude>${project.groupId}:aquarius-lock-aop</dependencySourceInclude>
+                        <dependencySourceInclude>${project.groupId}:aquarius-lock-redis</dependencySourceInclude>
+                        <dependencySourceInclude>${project.groupId}:aquarius-lock-zookeeper</dependencySourceInclude>
+                        <dependencySourceInclude>${project.groupId}:aquarius-lock-local</dependencySourceInclude>
+                    </dependencySourceIncludes>
+                </configuration>
             </plugin>
         </plugins>
     </build>

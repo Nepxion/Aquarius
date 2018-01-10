@@ -11,11 +11,11 @@
     <url>https://github.com/Nepxion/</url>
 
     <modules>
-        <module>aquarius-assembly-all</module>
-        <module>aquarius-assembly-cache</module>
-        <module>aquarius-assembly-id-generator</module>
-        <module>aquarius-assembly-limit</module>
-        <module>aquarius-assembly-lock</module>
+        <module>aquarius-all</module>
+        <module>aquarius-cache</module>
+        <module>aquarius-id-generator</module>
+        <module>aquarius-limit</module>
+        <module>aquarius-lock</module>
         <module>aquarius-common</module>
         <module>aquarius-common-redis</module>
         <module>aquarius-common-zookeeper</module>
@@ -55,31 +55,31 @@
         <dependencies>
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>aquarius-assembly-all</artifactId>
+                <artifactId>aquarius-all</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>aquarius-assembly-cache</artifactId>
+                <artifactId>aquarius-cache</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>aquarius-assembly-id-generator</artifactId>
+                <artifactId>aquarius-id-generator</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>aquarius-assembly-limit</artifactId>
+                <artifactId>aquarius-limit</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>aquarius-assembly-lock</artifactId>
+                <artifactId>aquarius-lock</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
