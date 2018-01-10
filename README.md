@@ -25,35 +25,35 @@ Nepxion Aquarius是一款基于Redis + Zookeeper的分布式应用组件集合�
 <dependency>
   <groupId>com.nepxion</groupId>
   <artifactId>aquarius-assembly-lock</artifactId>
-  <version>1.0.0</version>
+  <version>${aquarius.version}</version>
 </dependency>
 
 分布式缓存
 <dependency>
   <groupId>com.nepxion</groupId>
   <artifactId>aquarius-assembly-cache</artifactId>
-  <version>1.0.0</version>
+  <version>${aquarius.version}</version>
 </dependency>
 
 分布式全局唯一ID
 <dependency>
   <groupId>com.nepxion</groupId>
   <artifactId>aquarius-assembly-id-generator</artifactId>
-  <version>1.0.0</version>
+  <version>${aquarius.version}</version>
 </dependency>
 
 分布式限速限流
 <dependency>
   <groupId>com.nepxion</groupId>
   <artifactId>aquarius-assembly-limit</artifactId>
-  <version>1.0.0</version>
+  <version>${aquarius.version}</version>
 </dependency>
 
 四个组件全集
 <dependency>
   <groupId>com.nepxion</groupId>
   <artifactId>aquarius-assembly-all</artifactId>
-  <version>1.0.0</version>
+  <version>${aquarius.version}</version>
 </dependency>
 ```
 
