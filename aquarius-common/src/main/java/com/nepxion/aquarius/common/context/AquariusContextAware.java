@@ -17,7 +17,7 @@ import org.springframework.core.ResolvableType;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
-@Component("contextAware")
+@Component
 public class AquariusContextAware implements ApplicationContextAware {
     private static ApplicationContext applicationContext;
 
@@ -31,7 +31,7 @@ public class AquariusContextAware implements ApplicationContextAware {
         System.out.println("╚╝─╚╩═╗╠══╩╝╚╩╝╚╩══╩══╝");
         System.out.println("      ║║");
         System.out.println("      ╚╝");
-        System.out.println("Nepxion Aquarius  v1.0.0.RELEASE");
+        System.out.println("Nepxion Aquarius  v1.0.2.RELEASE");
         System.out.println("");
     }
 
