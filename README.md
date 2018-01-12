@@ -198,7 +198,6 @@ package com.nepxion.aquarius.lock.service;
  * <p>Copyright: Copyright (c) 2017</p>
  * <p>Company: Nepxion</p>
  * @author Haojun Ren
- * @email 1394997@qq.com
  * @version 1.0
  */
 
@@ -221,7 +220,6 @@ package com.nepxion.aquarius.lock.service;
  * <p>Copyright: Copyright (c) 2017</p>
  * <p>Company: Nepxion</p>
  * @author Haojun Ren
- * @email 1394997@qq.com
  * @version 1.0
  */
 
@@ -267,7 +265,6 @@ package com.nepxion.aquarius.lock;
  * <p>Copyright: Copyright (c) 2017</p>
  * <p>Company: Nepxion</p>
  * @author Haojun Ren
- * @email 1394997@qq.com
  * @version 1.0
  */
 
@@ -321,7 +318,6 @@ package com.nepxion.aquarius.lock;
  * <p>Copyright: Copyright (c) 2017</p>
  * <p>Company: Nepxion</p>
  * @author Haojun Ren
- * @email 1394997@qq.com
  * @version 1.0
  */
 
@@ -419,7 +415,6 @@ package com.nepxion.aquarius.lock.service;
  * <p>Copyright: Copyright (c) 2017</p>
  * <p>Company: Nepxion</p>
  * @author Haojun Ren
- * @email 1394997@qq.com
  * @version 1.0
  */
 
@@ -440,7 +435,6 @@ package com.nepxion.aquarius.lock.service;
  * <p>Copyright: Copyright (c) 2017</p>
  * <p>Company: Nepxion</p>
  * @author Haojun Ren
- * @email 1394997@qq.com
  * @version 1.0
  */
 
@@ -480,7 +474,6 @@ package com.nepxion.aquarius.lock;
  * <p>Copyright: Copyright (c) 2017</p>
  * <p>Company: Nepxion</p>
  * @author Haojun Ren
- * @email 1394997@qq.com
  * @version 1.0
  */
 
@@ -546,7 +539,6 @@ package com.nepxion.aquarius.lock;
  * <p>Copyright: Copyright (c) 2017</p>
  * <p>Company: Nepxion</p>
  * @author Haojun Ren
- * @email 1394997@qq.com
  * @version 1.0
  */
 
@@ -670,7 +662,6 @@ package com.nepxion.aquarius.cache.service;
  * <p>Copyright: Copyright (c) 2017</p>
  * <p>Company: Nepxion</p>
  * @author Haojun Ren
- * @email 1394997@qq.com
  * @version 1.0
  */
 
@@ -699,7 +690,6 @@ package com.nepxion.aquarius.cache.service;
  * <p>Copyright: Copyright (c) 2017</p>
  * <p>Company: Nepxion</p>
  * @author Haojun Ren
- * @email 1394997@qq.com
  * @version 1.0
  */
 
@@ -767,7 +757,6 @@ package com.nepxion.aquarius.cache;
  * <p>Copyright: Copyright (c) 2017</p>
  * <p>Company: Nepxion</p>
  * @author Haojun Ren
- * @email 1394997@qq.com
  * @version 1.0
  */
 
@@ -861,7 +850,6 @@ package com.nepxion.aquarius.idgenerator;
  * <p>Copyright: Copyright (c) 2017</p>
  * <p>Company: Nepxion</p>
  * @author Haojun Ren
- * @email 1394997@qq.com
  * @version 1.0
  */
 
@@ -956,7 +944,6 @@ package com.nepxion.aquarius.idgenerator;
  * <p>Copyright: Copyright (c) 2017</p>
  * <p>Company: Nepxion</p>
  * @author Haojun Ren
- * @email 1394997@qq.com
  * @version 1.0
  */
 
@@ -1051,7 +1038,6 @@ package com.nepxion.aquarius.idgenerator;
  * <p>Copyright: Copyright (c) 2017</p>
  * <p>Company: Nepxion</p>
  * @author Haojun Ren
- * @email 1394997@qq.com
  * @version 1.0
  */
 
@@ -1169,7 +1155,6 @@ package com.nepxion.aquarius.limit.service;
  * <p>Copyright: Copyright (c) 2017</p>
  * <p>Company: Nepxion</p>
  * @author Haojun Ren
- * @email 1394997@qq.com
  * @version 1.0
  */
 
@@ -1190,7 +1175,6 @@ package com.nepxion.aquarius.limit.service;
  * <p>Copyright: Copyright (c) 2017</p>
  * <p>Company: Nepxion</p>
  * @author Haojun Ren
- * @email 1394997@qq.com
  * @version 1.0
  */
 
@@ -1222,7 +1206,6 @@ package com.nepxion.aquarius.limit;
  * <p>Copyright: Copyright (c) 2017</p>
  * <p>Company: Nepxion</p>
  * @author Haojun Ren
- * @email 1394997@qq.com
  * @version 1.0
  */
 
@@ -1284,7 +1267,6 @@ package com.nepxion.aquarius.limit;
  * <p>Copyright: Copyright (c) 2017</p>
  * <p>Company: Nepxion</p>
  * @author Haojun Ren
- * @email 1394997@qq.com
  * @version 1.0
  */
 
