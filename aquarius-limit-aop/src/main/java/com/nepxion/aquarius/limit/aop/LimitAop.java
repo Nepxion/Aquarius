@@ -17,7 +17,7 @@ import com.nepxion.aquarius.limit.constant.LimitConstant;
 
 @Component("limitAop")
 public class LimitAop {
-    @Value("${" + LimitConstant.LIMIT_SCAN_PACKAGES + ":com.nepxion.aquarius.limit}")
+    @Value("${" + LimitConstant.LIMIT_SCAN_PACKAGES + "}")
     private String scanPackages;
 
     @Bean("limitAutoScanProxy")

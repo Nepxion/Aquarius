@@ -17,7 +17,7 @@ import com.nepxion.aquarius.lock.constant.LockConstant;
 
 @Component("lockAop")
 public class LockAop {
-    @Value("${" + LockConstant.LOCK_SCAN_PACKAGES + ":com.nepxion.aquarius.lock}")
+    @Value("${" + LockConstant.LOCK_SCAN_PACKAGES + "}")
     private String scanPackages;
 
     @Bean("lockAutoScanProxy")
