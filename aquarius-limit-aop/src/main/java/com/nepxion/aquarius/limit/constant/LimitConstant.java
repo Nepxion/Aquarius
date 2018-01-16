@@ -10,11 +10,11 @@ package com.nepxion.aquarius.limit.constant;
  */
 
 public class LimitConstant {
-    public static final String LIMIT_TYPE = "limitType";
+    public static final String LIMIT_TYPE = "limit.type";
 
     public static final String LIMIT_TYPE_REDIS = "redisLimit";
     
     public static final String LIMIT_TYPE_LOCAL = "localLimit";
 
-    public static final String LIMIT_SCAN_PACKAGES = "limitScanPackages";
+    public static final String LIMIT_SCAN_PACKAGES = "limit.scan.packages";
 }

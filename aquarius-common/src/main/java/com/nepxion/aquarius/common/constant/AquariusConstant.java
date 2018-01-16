@@ -16,5 +16,5 @@ public class AquariusConstant {
 
     public static final String PREFIX = "prefix";
 
-    public static final String FREQUENT_LOG_PRINT = "frequentLogPrint";
+    public static final String FREQUENT_LOG_PRINT = "frequent.log.print";
 }
