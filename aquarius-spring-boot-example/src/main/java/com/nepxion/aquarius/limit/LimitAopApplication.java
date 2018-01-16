@@ -22,9 +22,9 @@ import com.nepxion.aquarius.limit.service.MyService8Impl;
 
 @EnableAutoConfiguration
 @ComponentScan(basePackages = { "com.nepxion.aquarius.limit" })
-public class RedisLimitAopApplication {
+public class LimitAopApplication {
     public static void main(String[] args) throws Exception {
-        SpringApplication.run(RedisLimitAopApplication.class, args);
+        SpringApplication.run(LimitAopApplication.class, args);
 
         MyService7 myService7 = AquariusContextAware.getBean(MyService7.class);
         Timer timer1 = new Timer();
