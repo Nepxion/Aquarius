@@ -179,7 +179,6 @@ aquarius-spring-boot-example\src\main\resources\application.properties，切换l
 # redisLock, zookeeperLock, localLock
 lock.type=redisLock
 # 指定你使用相关注解所在的接口或者类的目录
-# 扫描目录，如果不指定，则扫描全局。两种方式运行结果没区别，只是指定扫描目录加快扫描速度，同时可以减少缓存量
 lock.scan.packages=com.nepxion.aquarius.lock
 ```
 
