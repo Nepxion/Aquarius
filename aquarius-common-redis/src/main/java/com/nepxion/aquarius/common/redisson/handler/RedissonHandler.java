@@ -83,6 +83,10 @@ public class RedissonHandler {
 
     // 获取Redisson客户端连接是否正常
     public boolean isStarted() {
+        if (redisson == null) {
+            throw new RedissonException("Redisson is null");
+        }
+
         return !redisson.isShutdown() && !redisson.isShuttingDown();
     }
 
