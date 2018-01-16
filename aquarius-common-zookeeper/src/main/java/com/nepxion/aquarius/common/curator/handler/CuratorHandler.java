@@ -68,24 +68,24 @@ public class CuratorHandler {
         String retryType = properties.getString(CuratorConstant.RETRY_TYPE);
         RetryPolicy retryPolicy = null;
         if (StringUtils.equals(retryType, CuratorConstant.RETRY_TYPE_EXPONENTIAL_BACKOFF_RETRY)) {
-            int baseSleepTimeMs = properties.getInteger(retryType + "-" + CuratorConstant.PARAMETER_NAME_BASE_SLEEP_TIME_MS);
-            int maxRetries = properties.getInteger(retryType + "-" + CuratorConstant.PARAMETER_NAME_MAX_RETRIES);
+            int baseSleepTimeMs = properties.getInteger(retryType + "." + CuratorConstant.PARAMETER_NAME_BASE_SLEEP_TIME_MS);
+            int maxRetries = properties.getInteger(retryType + "." + CuratorConstant.PARAMETER_NAME_MAX_RETRIES);
             retryPolicy = createExponentialBackoffRetry(baseSleepTimeMs, maxRetries);
         } else if (StringUtils.equals(retryType, CuratorConstant.RETRY_TYPE_BOUNDED_EXPONENTIAL_BACKOFF_RETRY)) {
-            int baseSleepTimeMs = properties.getInteger(retryType + "-" + CuratorConstant.PARAMETER_NAME_BASE_SLEEP_TIME_MS);
-            int maxSleepTimeMs = properties.getInteger(retryType + "-" + CuratorConstant.PARAMETER_NAME_MAX_SLEEP_TIME_MS);
-            int maxRetries = properties.getInteger(retryType + "-" + CuratorConstant.PARAMETER_NAME_MAX_RETRIES);
+            int baseSleepTimeMs = properties.getInteger(retryType + "." + CuratorConstant.PARAMETER_NAME_BASE_SLEEP_TIME_MS);
+            int maxSleepTimeMs = properties.getInteger(retryType + "." + CuratorConstant.PARAMETER_NAME_MAX_SLEEP_TIME_MS);
+            int maxRetries = properties.getInteger(retryType + "." + CuratorConstant.PARAMETER_NAME_MAX_RETRIES);
             retryPolicy = createBoundedExponentialBackoffRetry(baseSleepTimeMs, maxSleepTimeMs, maxRetries);
         } else if (StringUtils.equals(retryType, CuratorConstant.RETRY_TYPE_RETRY_NTIMES)) {
-            int count = properties.getInteger(retryType + "-" + CuratorConstant.PARAMETER_NAME_COUNT);
-            int sleepMsBetweenRetries = properties.getInteger(retryType + "-" + CuratorConstant.PARAMETER_NAME_SLEEP_MS_BETWEEN_RETRIES);
+            int count = properties.getInteger(retryType + "." + CuratorConstant.PARAMETER_NAME_COUNT);
+            int sleepMsBetweenRetries = properties.getInteger(retryType + "." + CuratorConstant.PARAMETER_NAME_SLEEP_MS_BETWEEN_RETRIES);
             retryPolicy = createRetryNTimes(count, sleepMsBetweenRetries);
         } else if (StringUtils.equals(retryType, CuratorConstant.RETRY_TYPE_RETRY_FOREVER)) {
-            int retryIntervalMs = properties.getInteger(retryType + "-" + CuratorConstant.PARAMETER_NAME_RETRY_INTERVAL_MS);
+            int retryIntervalMs = properties.getInteger(retryType + "." + CuratorConstant.PARAMETER_NAME_RETRY_INTERVAL_MS);
             retryPolicy = createRetryForever(retryIntervalMs);
         } else if (StringUtils.equals(retryType, CuratorConstant.RETRY_TYPE_RETRY_UNTIL_ELAPSED)) {
-            int maxElapsedTimeMs = properties.getInteger(retryType + "-" + CuratorConstant.PARAMETER_NAME_MAX_ELAPSED_TIME_MS);
-            int sleepMsBetweenRetries = properties.getInteger(retryType + "-" + CuratorConstant.PARAMETER_NAME_SLEEP_MS_BETWEEN_RETRIES);
+            int maxElapsedTimeMs = properties.getInteger(retryType + "." + CuratorConstant.PARAMETER_NAME_MAX_ELAPSED_TIME_MS);
+            int sleepMsBetweenRetries = properties.getInteger(retryType + "." + CuratorConstant.PARAMETER_NAME_SLEEP_MS_BETWEEN_RETRIES);
             retryPolicy = createRetryUntilElapsed(maxElapsedTimeMs, sleepMsBetweenRetries);
         } else {
             throw new CuratorException("Invalid config value for retryType=" + retryType);
