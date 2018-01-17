@@ -104,7 +104,7 @@ public class ReadWriteLockApplication {
     @Bean
     public EmbeddedServletContainerFactory createEmbeddedServletContainerFactory() {
         TomcatEmbeddedServletContainerFactory tomcatFactory = new TomcatEmbeddedServletContainerFactory();
-        tomcatFactory.setPort(8081);
+        tomcatFactory.setPort(8090);
 
         return tomcatFactory;
     }

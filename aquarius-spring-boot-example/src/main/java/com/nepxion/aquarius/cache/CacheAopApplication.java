@@ -11,6 +11,9 @@ package com.nepxion.aquarius.cache;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
+import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
 import com.nepxion.aquarius.cache.service.MyService5;
@@ -45,5 +48,13 @@ public class CacheAopApplication {
 
         // 清除缓存Key为X-Y到Redis
         // myService6.doF("X", "Y");
+    }
+
+    @Bean
+    public EmbeddedServletContainerFactory createEmbeddedServletContainerFactory() {
+        TomcatEmbeddedServletContainerFactory tomcatFactory = new TomcatEmbeddedServletContainerFactory();
+        tomcatFactory.setPort(8081);
+
+        return tomcatFactory;
     }
 }
