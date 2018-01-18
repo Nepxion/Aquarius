@@ -21,15 +21,6 @@ Nepxion Aquarius是一款基于Redis + Zookeeper的分布式应用组件集合�
 
 ### 依赖
 
-Aop框架引用(如果用到Aop框架，必须引入此包)
-```xml
-<dependency>
-  <groupId>com.nepxion</groupId>
-  <artifactId>matrix-aop</artifactId>
-  <version>${matrix.version}</version>
-</dependency>
-```
-
 笼统化引用
 ```xml
 分布式锁
