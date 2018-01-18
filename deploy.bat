@@ -5,8 +5,8 @@
 @echo $                                                           $
 @echo $                                                           $
 @echo $                                                           $
-@echo $  Nepxion Technologies All Right Reserved                  $
-@echo $  Copyright(C) 2017                                        $
+@echo $  Nepxion Studio All Right Reserved                        $
+@echo $  Copyright (C) 2017-2050                                  $
 @echo $                                                           $
 @echo =============================================================
 @echo.
