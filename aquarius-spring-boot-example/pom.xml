@@ -11,7 +11,7 @@
     <parent>
         <groupId>com.nepxion</groupId>
         <artifactId>aquarius</artifactId>
-        <version>1.0.7</version>
+        <version>1.0.8</version>
     </parent>
 
     <properties>
@@ -62,11 +62,6 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>aquarius-limit-local</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>matrix-aop</artifactId>
         </dependency>
 
         <dependency>

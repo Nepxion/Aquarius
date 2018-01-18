@@ -31,7 +31,7 @@ public class AquariusContextAware implements ApplicationContextAware {
         System.out.println("╚╝ ╚╩═╗╠══╩╝╚╩╝╚╩══╩══╝");
         System.out.println("      ║║");
         System.out.println("      ╚╝");
-        System.out.println("Nepxion Aquarius  v1.0.7");
+        System.out.println("Nepxion Aquarius  v1.0.8");
         System.out.println("");
     }
 
