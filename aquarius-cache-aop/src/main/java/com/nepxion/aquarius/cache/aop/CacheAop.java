@@ -17,7 +17,7 @@ import com.nepxion.aquarius.cache.constant.CacheConstant;
 
 @Component("cacheAop")
 public class CacheAop {
-    @Value("${" + CacheConstant.CACHE_SCAN_PACKAGES + "}")
+    @Value("${" + CacheConstant.CACHE_SCAN_PACKAGES + ":}")
     private String scanPackages;
 
     @Bean("cacheAutoScanProxy")
