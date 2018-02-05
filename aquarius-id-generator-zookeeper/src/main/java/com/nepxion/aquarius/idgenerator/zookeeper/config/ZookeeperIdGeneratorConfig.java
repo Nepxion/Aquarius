@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Import;
 
 import com.nepxion.aquarius.common.constant.AquariusConstant;
 import com.nepxion.aquarius.common.curator.handler.CuratorHandler;
+import com.nepxion.aquarius.common.curator.handler.CuratorHandlerImpl;
 
 @Configuration
 @Import({ com.nepxion.aquarius.common.config.AquariusConfig.class })
@@ -25,6 +26,6 @@ public class ZookeeperIdGeneratorConfig {
 
     @Bean(name = "curatorHandler")
     public CuratorHandler curatorHandler() {
-        return new CuratorHandler(prefix);
+        return new CuratorHandlerImpl(prefix);
     }
 }

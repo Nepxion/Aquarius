@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import com.nepxion.aquarius.common.redisson.handler.RedissonHandler;
+import com.nepxion.aquarius.common.redisson.handler.RedissonHandlerImpl;
 import com.nepxion.aquarius.lock.LockDelegate;
 import com.nepxion.aquarius.lock.LockExecutor;
 import com.nepxion.aquarius.lock.redis.condition.RedisLockCondition;
@@ -40,6 +41,6 @@ public class RedisLockConfig {
     @Bean(name = "redissonHandler")
     @Conditional(RedisLockCondition.class)
     public RedissonHandler redissonHandler() {
-        return new RedissonHandler();
+        return new RedissonHandlerImpl();
     }
 }

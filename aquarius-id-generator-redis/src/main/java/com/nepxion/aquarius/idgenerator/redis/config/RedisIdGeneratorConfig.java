@@ -14,12 +14,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import com.nepxion.aquarius.common.redis.handler.RedisHandler;
+import com.nepxion.aquarius.common.redis.handler.RedisHandlerImpl;
 
 @Configuration
 @Import({ com.nepxion.aquarius.common.config.AquariusConfig.class })
 public class RedisIdGeneratorConfig {
     @Bean(name = "redisHandler")
     public RedisHandler redisHandler() {
-        return new RedisHandler();
+        return new RedisHandlerImpl();
     }
 }

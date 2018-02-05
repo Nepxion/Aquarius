@@ -18,6 +18,7 @@ import org.springframework.context.annotation.Import;
 
 import com.nepxion.aquarius.common.constant.AquariusConstant;
 import com.nepxion.aquarius.common.curator.handler.CuratorHandler;
+import com.nepxion.aquarius.common.curator.handler.CuratorHandlerImpl;
 import com.nepxion.aquarius.lock.LockDelegate;
 import com.nepxion.aquarius.lock.LockExecutor;
 import com.nepxion.aquarius.lock.zookeeper.condition.ZookeeperLockCondition;
@@ -45,6 +46,6 @@ public class ZookeeperLockConfig {
     @Bean(name = "curatorHandler")
     @Conditional(ZookeeperLockCondition.class)
     public CuratorHandler curatorHandler() {
-        return new CuratorHandler(prefix);
+        return new CuratorHandlerImpl(prefix);
     }
 }
