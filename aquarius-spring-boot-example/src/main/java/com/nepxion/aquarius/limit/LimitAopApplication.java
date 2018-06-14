@@ -13,7 +13,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.context.annotation.Bean;
@@ -23,7 +23,7 @@ import com.nepxion.aquarius.common.context.AquariusContextAware;
 import com.nepxion.aquarius.limit.service.MyService7;
 import com.nepxion.aquarius.limit.service.MyService8Impl;
 
-@EnableAutoConfiguration
+@SpringBootApplication
 @ComponentScan(basePackages = { "com.nepxion.aquarius.limit" })
 public class LimitAopApplication {
     public static void main(String[] args) throws Exception {

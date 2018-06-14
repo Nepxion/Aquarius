@@ -9,13 +9,11 @@ package com.nepxion.aquarius;
  * @version 1.0
  */
 
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 
 @SpringBootApplication
 // @EnableDiscoveryClient
-@EnableAutoConfiguration
 public class AquariusApplication {
     public static void main(String[] args) {
         new SpringApplicationBuilder(AquariusApplication.class).web(true).run(args);

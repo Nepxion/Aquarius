@@ -14,9 +14,9 @@ import java.lang.annotation.Annotation;
 import org.aopalliance.intercept.MethodInterceptor;
 
 import com.nepxion.aquarius.limit.annotation.Limit;
-import com.nepxion.matrix.aop.DefaultAutoScanProxy;
-import com.nepxion.matrix.mode.ProxyMode;
-import com.nepxion.matrix.mode.ScanMode;
+import com.nepxion.matrix.proxy.aop.DefaultAutoScanProxy;
+import com.nepxion.matrix.proxy.mode.ProxyMode;
+import com.nepxion.matrix.proxy.mode.ScanMode;
 
 // 通过全局拦截器实现对类头部注解的扫描和代理
 public class LimitAutoScanProxy extends DefaultAutoScanProxy {

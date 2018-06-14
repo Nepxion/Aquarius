@@ -10,7 +10,7 @@ package com.nepxion.aquarius.lock;
  */
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.context.annotation.Bean;
@@ -20,7 +20,7 @@ import com.nepxion.aquarius.common.context.AquariusContextAware;
 import com.nepxion.aquarius.lock.service.MyService1;
 import com.nepxion.aquarius.lock.service.MyService2Impl;
 
-@EnableAutoConfiguration
+@SpringBootApplication
 @ComponentScan(basePackages = { "com.nepxion.aquarius.lock" })
 public class LockAopApplication {
     public static void main(String[] args) throws Exception {

@@ -28,7 +28,7 @@ import com.nepxion.aquarius.lock.annotation.Lock;
 import com.nepxion.aquarius.lock.annotation.ReadLock;
 import com.nepxion.aquarius.lock.annotation.WriteLock;
 import com.nepxion.aquarius.lock.entity.LockType;
-import com.nepxion.matrix.aop.AbstractInterceptor;
+import com.nepxion.matrix.proxy.aop.AbstractInterceptor;
 
 @Component("lockInterceptor")
 public class LockInterceptor extends AbstractInterceptor {

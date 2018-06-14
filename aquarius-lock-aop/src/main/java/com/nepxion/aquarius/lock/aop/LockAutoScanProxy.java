@@ -16,9 +16,9 @@ import org.aopalliance.intercept.MethodInterceptor;
 import com.nepxion.aquarius.lock.annotation.Lock;
 import com.nepxion.aquarius.lock.annotation.ReadLock;
 import com.nepxion.aquarius.lock.annotation.WriteLock;
-import com.nepxion.matrix.aop.DefaultAutoScanProxy;
-import com.nepxion.matrix.mode.ProxyMode;
-import com.nepxion.matrix.mode.ScanMode;
+import com.nepxion.matrix.proxy.aop.DefaultAutoScanProxy;
+import com.nepxion.matrix.proxy.mode.ProxyMode;
+import com.nepxion.matrix.proxy.mode.ScanMode;
 
 // 通过全局拦截器实现对类头部注解的扫描和代理
 public class LockAutoScanProxy extends DefaultAutoScanProxy {

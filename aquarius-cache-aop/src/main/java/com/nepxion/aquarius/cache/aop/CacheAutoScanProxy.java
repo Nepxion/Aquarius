@@ -16,9 +16,9 @@ import org.aopalliance.intercept.MethodInterceptor;
 import com.nepxion.aquarius.cache.annotation.CacheEvict;
 import com.nepxion.aquarius.cache.annotation.CachePut;
 import com.nepxion.aquarius.cache.annotation.Cacheable;
-import com.nepxion.matrix.aop.DefaultAutoScanProxy;
-import com.nepxion.matrix.mode.ProxyMode;
-import com.nepxion.matrix.mode.ScanMode;
+import com.nepxion.matrix.proxy.aop.DefaultAutoScanProxy;
+import com.nepxion.matrix.proxy.mode.ProxyMode;
+import com.nepxion.matrix.proxy.mode.ScanMode;
 
 // 通过全局拦截器实现对类头部注解的扫描和代理
 public class CacheAutoScanProxy extends DefaultAutoScanProxy {

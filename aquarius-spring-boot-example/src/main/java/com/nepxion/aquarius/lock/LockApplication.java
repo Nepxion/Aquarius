@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.context.annotation.Bean;
@@ -23,7 +23,7 @@ import org.springframework.context.annotation.ComponentScan;
 import com.nepxion.aquarius.common.context.AquariusContextAware;
 import com.nepxion.aquarius.lock.entity.LockType;
 
-@EnableAutoConfiguration
+@SpringBootApplication
 @ComponentScan(basePackages = { "com.nepxion.aquarius.lock" })
 public class LockApplication {
     private static final Logger LOG = LoggerFactory.getLogger(LockApplication.class);

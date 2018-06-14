@@ -259,14 +259,14 @@ package com.nepxion.aquarius.lock;
  */
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 import com.nepxion.aquarius.common.context.AquariusContextAware;
 import com.nepxion.aquarius.lock.service.MyService1;
 import com.nepxion.aquarius.lock.service.MyService2Impl;
 
-@EnableAutoConfiguration
+@SpringBootApplication
 @ComponentScan(basePackages = { "com.nepxion.aquarius.lock" })
 public class LockAopApplication {
     public static void main(String[] args) throws Exception {
@@ -316,13 +316,13 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 import com.nepxion.aquarius.common.context.AquariusContextAware;
 import com.nepxion.aquarius.lock.entity.LockType;
 
-@EnableAutoConfiguration
+@SpringBootApplication
 @ComponentScan(basePackages = { "com.nepxion.aquarius.lock" })
 public class LockApplication {
     private static final Logger LOG = LoggerFactory.getLogger(LockApplication.class);
@@ -473,14 +473,14 @@ import java.util.TimerTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 import com.nepxion.aquarius.common.context.AquariusContextAware;
 import com.nepxion.aquarius.lock.service.MyService3;
 import com.nepxion.aquarius.lock.service.MyService4Impl;
 
-@EnableAutoConfiguration
+@SpringBootApplication
 @ComponentScan(basePackages = { "com.nepxion.aquarius.lock" })
 public class ReadWriteLockAopApplication {
     private static final Logger LOG = LoggerFactory.getLogger(ReadWriteLockAopApplication.class);
@@ -539,13 +539,13 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 import com.nepxion.aquarius.common.context.AquariusContextAware;
 import com.nepxion.aquarius.lock.entity.LockType;
 
-@EnableAutoConfiguration
+@SpringBootApplication
 @ComponentScan(basePackages = { "com.nepxion.aquarius.lock" })
 public class ReadWriteLockApplication {
     private static final Logger LOG = LoggerFactory.getLogger(ReadWriteLockApplication.class);
@@ -759,14 +759,14 @@ package com.nepxion.aquarius.cache;
  */
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 import com.nepxion.aquarius.cache.service.MyService5;
 import com.nepxion.aquarius.cache.service.MyService6Impl;
 import com.nepxion.aquarius.common.context.AquariusContextAware;
 
-@EnableAutoConfiguration
+@SpringBootApplication
 @ComponentScan(basePackages = { "com.nepxion.aquarius.cache" })
 public class CacheAopApplication {
     public static void main(String[] args) throws Exception {
@@ -857,13 +857,13 @@ import java.util.TimerTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 import com.nepxion.aquarius.common.context.AquariusContextAware;
 import com.nepxion.aquarius.idgenerator.redis.RedisIdGenerator;
 
-@EnableAutoConfiguration
+@SpringBootApplication
 @ComponentScan(basePackages = { "com.nepxion.aquarius.idgenerator.redis" })
 public class RedisIdGeneratorApplication {
     private static final Logger LOG = LoggerFactory.getLogger(RedisIdGeneratorApplication.class);
@@ -951,13 +951,13 @@ import java.util.TimerTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 import com.nepxion.aquarius.common.context.AquariusContextAware;
 import com.nepxion.aquarius.idgenerator.zookeeper.ZookeeperIdGenerator;
 
-@EnableAutoConfiguration
+@SpringBootApplication
 @ComponentScan(basePackages = { "com.nepxion.aquarius.idgenerator.zookeeper" })
 public class ZookeeperIdGeneratorApplication {
     private static final Logger LOG = LoggerFactory.getLogger(ZookeeperIdGeneratorApplication.class);
@@ -1045,13 +1045,13 @@ import java.util.TimerTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 import com.nepxion.aquarius.common.context.AquariusContextAware;
 import com.nepxion.aquarius.idgenerator.local.LocalIdGenerator;
 
-@EnableAutoConfiguration
+@SpringBootApplication
 @ComponentScan(basePackages = { "com.nepxion.aquarius.idgenerator.local" })
 public class LocalIdGeneratorApplication {
     private static final Logger LOG = LoggerFactory.getLogger(LocalIdGeneratorApplication.class);
@@ -1212,14 +1212,14 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 import com.nepxion.aquarius.common.context.AquariusContextAware;
 import com.nepxion.aquarius.limit.service.MyService7;
 import com.nepxion.aquarius.limit.service.MyService8Impl;
 
-@EnableAutoConfiguration
+@SpringBootApplication
 @ComponentScan(basePackages = { "com.nepxion.aquarius.limit" })
 public class RedisLimitAopApplication {
     public static void main(String[] args) throws Exception {
@@ -1275,13 +1275,13 @@ import java.util.TimerTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 import com.nepxion.aquarius.common.context.AquariusContextAware;
 import com.nepxion.aquarius.limit.redis.RedisLimit;
 
-@EnableAutoConfiguration
+@SpringBootApplication
 @ComponentScan(basePackages = { "com.nepxion.aquarius.limit.redis" })
 public class RedisLimitApplication {
     private static final Logger LOG = LoggerFactory.getLogger(RedisLimitApplication.class);

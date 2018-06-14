@@ -26,7 +26,7 @@ import com.nepxion.aquarius.cache.annotation.Cacheable;
 import com.nepxion.aquarius.common.constant.AquariusConstant;
 import com.nepxion.aquarius.common.exception.AquariusException;
 import com.nepxion.aquarius.common.util.KeyUtil;
-import com.nepxion.matrix.aop.AbstractInterceptor;
+import com.nepxion.matrix.proxy.aop.AbstractInterceptor;
 
 @Component("cacheInterceptor")
 public class CacheInterceptor extends AbstractInterceptor {

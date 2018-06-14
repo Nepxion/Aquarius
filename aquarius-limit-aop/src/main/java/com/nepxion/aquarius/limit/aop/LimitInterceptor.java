@@ -25,7 +25,7 @@ import com.nepxion.aquarius.common.exception.AquariusException;
 import com.nepxion.aquarius.common.util.KeyUtil;
 import com.nepxion.aquarius.limit.LimitDelegate;
 import com.nepxion.aquarius.limit.annotation.Limit;
-import com.nepxion.matrix.aop.AbstractInterceptor;
+import com.nepxion.matrix.proxy.aop.AbstractInterceptor;
 
 @Component("limitInterceptor")
 public class LimitInterceptor extends AbstractInterceptor {
