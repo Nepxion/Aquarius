@@ -645,7 +645,7 @@ public class ReadWriteLockApplication {
 ```java
 # Cache config
 cache.type=redisCache
-# 扫描含有@Cacheable，@CacheEvict，CachePut等注解的接口或者类所在目录（可以不配置，但如果不配置，则扫描全局，会稍微降低性能）
+# 扫描含有@Cacheable，@CacheEvict，@CachePut等注解的接口或者类所在目录（可以不配置，但如果不配置，则扫描全局，会稍微降低性能）
 cache.scan.packages=com.nepxion.aquarius.cache
 ```
 
