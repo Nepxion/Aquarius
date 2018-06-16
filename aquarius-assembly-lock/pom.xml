@@ -49,6 +49,11 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>aquarius-lock-local</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>aquarius-lock-starter</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -77,6 +82,7 @@
                                     <include>${project.groupId}:aquarius-lock-redis</include>
                                     <include>${project.groupId}:aquarius-lock-zookeeper</include>
                                     <include>${project.groupId}:aquarius-lock-local</include>
+                                    <include>${project.groupId}:aquarius-lock-starter</include>
                                 </includes>
                             </artifactSet>
                         </configuration>
@@ -96,6 +102,7 @@
                         <dependencySourceInclude>${project.groupId}:aquarius-lock-redis</dependencySourceInclude>
                         <dependencySourceInclude>${project.groupId}:aquarius-lock-zookeeper</dependencySourceInclude>
                         <dependencySourceInclude>${project.groupId}:aquarius-lock-local</dependencySourceInclude>
+                        <dependencySourceInclude>${project.groupId}:aquarius-lock-starter</dependencySourceInclude>
                     </dependencySourceIncludes>
                 </configuration>
             </plugin>

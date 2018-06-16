@@ -1,8 +1,8 @@
 com.nepxion.aquarius.idgenerator.annotation.EnableLocalIdGenerator=\
-com.nepxion.aquarius.idgenerator.config.LocalIdGeneratorConfig
+com.nepxion.aquarius.idgenerator.config.LocalIdGeneratorConfiguration
 
 com.nepxion.aquarius.idgenerator.annotation.EnableRedisIdGenerator=\
-com.nepxion.aquarius.idgenerator.config.RedisIdGeneratorConfig
+com.nepxion.aquarius.idgenerator.config.RedisIdGeneratorConfiguration
 
 com.nepxion.aquarius.idgenerator.annotation.EnableZookeeperIdGenerator=\
-com.nepxion.aquarius.idgenerator.config.ZookeeperIdGeneratorConfig
+com.nepxion.aquarius.idgenerator.config.ZookeeperIdGeneratorConfiguration

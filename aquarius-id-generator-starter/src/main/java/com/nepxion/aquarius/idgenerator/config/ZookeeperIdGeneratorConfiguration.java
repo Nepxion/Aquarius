@@ -14,6 +14,6 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @ComponentScan(basePackages = { "com.nepxion.aquarius.idgenerator.zookeeper" })
-public class ZookeeperIdGeneratorConfig {
+public class ZookeeperIdGeneratorConfiguration {
 
 }

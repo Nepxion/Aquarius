@@ -13,7 +13,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ComponentScan(basePackages = { "com.nepxion.aquarius.idgenerator.redis" })
-public class RedisIdGeneratorConfig {
+@ComponentScan(basePackages = { "com.nepxion.aquarius.idgenerator.local" })
+public class LocalIdGeneratorConfiguration {
 
 }

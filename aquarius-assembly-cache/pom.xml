@@ -34,6 +34,11 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>aquarius-cache-redis</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>aquarius-cache-starter</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -59,6 +64,7 @@
                                     <include>${project.groupId}:aquarius-common-redis</include>
                                     <include>${project.groupId}:aquarius-cache-aop</include>
                                     <include>${project.groupId}:aquarius-cache-redis</include>
+                                    <include>${project.groupId}:aquarius-cache-starter</include>
                                 </includes>
                             </artifactSet>
                         </configuration>
@@ -75,6 +81,7 @@
                         <dependencySourceInclude>${project.groupId}:aquarius-common-redis</dependencySourceInclude>
                         <dependencySourceInclude>${project.groupId}:aquarius-cache-aop</dependencySourceInclude>
                         <dependencySourceInclude>${project.groupId}:aquarius-cache-redis</dependencySourceInclude>
+                        <dependencySourceInclude>${project.groupId}:aquarius-cache-starter</dependencySourceInclude>
                     </dependencySourceIncludes>
                 </configuration>
             </plugin>

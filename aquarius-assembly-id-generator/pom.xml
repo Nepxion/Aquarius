@@ -44,6 +44,11 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>aquarius-id-generator-local</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>aquarius-id-generator-starter</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -71,6 +76,7 @@
                                     <include>${project.groupId}:aquarius-id-generator-redis</include>
                                     <include>${project.groupId}:aquarius-id-generator-zookeeper</include>
                                     <include>${project.groupId}:aquarius-id-generator-local</include>
+                                    <include>${project.groupId}:aquarius-id-generator-starter</include>
                                 </includes>
                             </artifactSet>
                         </configuration>
@@ -89,6 +95,7 @@
                         <dependencySourceInclude>${project.groupId}:aquarius-id-generator-redis</dependencySourceInclude>
                         <dependencySourceInclude>${project.groupId}:aquarius-id-generator-zookeeper</dependencySourceInclude>
                         <dependencySourceInclude>${project.groupId}:aquarius-id-generator-local</dependencySourceInclude>
+                        <dependencySourceInclude>${project.groupId}:aquarius-id-generator-starter</dependencySourceInclude>
                     </dependencySourceIncludes>
                 </configuration>
             </plugin>

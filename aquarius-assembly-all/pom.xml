@@ -52,6 +52,11 @@
 
         <dependency>
             <groupId>${project.groupId}</groupId>
+            <artifactId>aquarius-lock-starter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
             <artifactId>aquarius-cache-aop</artifactId>
         </dependency>
 
@@ -62,17 +67,12 @@
 
         <dependency>
             <groupId>${project.groupId}</groupId>
+            <artifactId>aquarius-cache-starter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
             <artifactId>aquarius-id-generator-redis</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>aquarius-id-generator-zookeeper</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>aquarius-id-generator-local</artifactId>
         </dependency>
 
         <dependency>
@@ -88,6 +88,26 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>aquarius-limit-local</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>aquarius-limit-starter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>aquarius-id-generator-zookeeper</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>aquarius-id-generator-local</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>aquarius-id-generator-starter</artifactId>
         </dependency>
     </dependencies>
 
@@ -117,14 +137,18 @@
                                     <include>${project.groupId}:aquarius-lock-redis</include>
                                     <include>${project.groupId}:aquarius-lock-zookeeper</include>
                                     <include>${project.groupId}:aquarius-lock-local</include>
+                                    <include>${project.groupId}:aquarius-lock-starter</include>
                                     <include>${project.groupId}:aquarius-cache-aop</include>
                                     <include>${project.groupId}:aquarius-cache-redis</include>
-                                    <include>${project.groupId}:aquarius-id-generator-redis</include>
-                                    <include>${project.groupId}:aquarius-id-generator-zookeeper</include>
-                                    <include>${project.groupId}:aquarius-id-generator-local</include>
+                                    <include>${project.groupId}:aquarius-cache-starter</include>
                                     <include>${project.groupId}:aquarius-limit-aop</include>
                                     <include>${project.groupId}:aquarius-limit-redis</include>
                                     <include>${project.groupId}:aquarius-limit-local</include>
+                                    <include>${project.groupId}:aquarius-limit-starter</include>
+                                    <include>${project.groupId}:aquarius-id-generator-redis</include>
+                                    <include>${project.groupId}:aquarius-id-generator-zookeeper</include>
+                                    <include>${project.groupId}:aquarius-id-generator-local</include>
+                                    <include>${project.groupId}:aquarius-id-generator-starter</include>
                                 </includes>
                             </artifactSet>
                         </configuration>
@@ -144,14 +168,18 @@
                         <dependencySourceInclude>${project.groupId}:aquarius-lock-redis</dependencySourceInclude>
                         <dependencySourceInclude>${project.groupId}:aquarius-lock-zookeeper</dependencySourceInclude>
                         <dependencySourceInclude>${project.groupId}:aquarius-lock-local</dependencySourceInclude>
+                        <dependencySourceInclude>${project.groupId}:aquarius-lock-starter</dependencySourceInclude>
                         <dependencySourceInclude>${project.groupId}:aquarius-cache-aop</dependencySourceInclude>
                         <dependencySourceInclude>${project.groupId}:aquarius-cache-redis</dependencySourceInclude>
-                        <dependencySourceInclude>${project.groupId}:aquarius-id-generator-redis</dependencySourceInclude>
-                        <dependencySourceInclude>${project.groupId}:aquarius-id-generator-zookeeper</dependencySourceInclude>
-                        <dependencySourceInclude>${project.groupId}:aquarius-id-generator-local</dependencySourceInclude>
+                        <dependencySourceInclude>${project.groupId}:aquarius-cache-starter</dependencySourceInclude>
                         <dependencySourceInclude>${project.groupId}:aquarius-limit-aop</dependencySourceInclude>
                         <dependencySourceInclude>${project.groupId}:aquarius-limit-redis</dependencySourceInclude>
                         <dependencySourceInclude>${project.groupId}:aquarius-limit-local</dependencySourceInclude>
+                        <dependencySourceInclude>${project.groupId}:aquarius-limit-starter</dependencySourceInclude>
+                        <dependencySourceInclude>${project.groupId}:aquarius-id-generator-redis</dependencySourceInclude>
+                        <dependencySourceInclude>${project.groupId}:aquarius-id-generator-zookeeper</dependencySourceInclude>
+                        <dependencySourceInclude>${project.groupId}:aquarius-id-generator-local</dependencySourceInclude>
+                        <dependencySourceInclude>${project.groupId}:aquarius-id-generator-starter</dependencySourceInclude>
                     </dependencySourceIncludes>
                 </configuration>
             </plugin>
