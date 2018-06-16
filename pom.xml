@@ -12,10 +12,10 @@
 
     <modules>
         <module>aquarius-assembly-all</module>
-        <module>aquarius-assembly-cache</module>
-        <module>aquarius-assembly-id-generator</module>
-        <module>aquarius-assembly-limit</module>
         <module>aquarius-assembly-lock</module>
+        <module>aquarius-assembly-cache</module>
+        <module>aquarius-assembly-limit</module>
+        <module>aquarius-assembly-id-generator</module>
         <module>aquarius-common</module>
         <module>aquarius-common-redis</module>
         <module>aquarius-common-zookeeper</module>
@@ -27,14 +27,14 @@
         <module>aquarius-cache-aop</module>
         <module>aquarius-cache-redis</module>
         <module>aquarius-cache-starter</module>
-        <module>aquarius-id-generator-redis</module>
-        <module>aquarius-id-generator-zookeeper</module>
-        <module>aquarius-id-generator-local</module>
-        <module>aquarius-id-generator-starter</module>
         <module>aquarius-limit-aop</module>
         <module>aquarius-limit-redis</module>
         <module>aquarius-limit-local</module>
         <module>aquarius-limit-starter</module>
+        <module>aquarius-id-generator-redis</module>
+        <module>aquarius-id-generator-zookeeper</module>
+        <module>aquarius-id-generator-local</module>
+        <module>aquarius-id-generator-starter</module>
         <module>aquarius-spring-boot-example</module>
         <module>aquarius-spring-cloud-example</module>
     </modules>
@@ -66,13 +66,13 @@
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>aquarius-assembly-cache</artifactId>
+                <artifactId>aquarius-assembly-lock</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>aquarius-assembly-id-generator</artifactId>
+                <artifactId>aquarius-assembly-cache</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
@@ -84,7 +84,7 @@
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>aquarius-assembly-lock</artifactId>
+                <artifactId>aquarius-assembly-id-generator</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
@@ -156,30 +156,6 @@
 
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>aquarius-id-generator-redis</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>aquarius-id-generator-zookeeper</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>aquarius-id-generator-local</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>aquarius-id-generator-starter</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>${project.groupId}</groupId>
                 <artifactId>aquarius-limit-aop</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -199,6 +175,30 @@
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>aquarius-limit-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>aquarius-id-generator-redis</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>aquarius-id-generator-zookeeper</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>aquarius-id-generator-local</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>aquarius-id-generator-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
