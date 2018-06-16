@@ -829,14 +829,14 @@ public class CacheAopApplication {
 ```
 
 ### 示例
-使用ID Generator示例如下，更多细节见aquarius-spring-boot-example工程下com.nepxion.aquarius.idgenerator
+使用ID Generator示例如下，更多细节见aquarius-spring-boot-example工程下com.nepxion.aquarius.example.idgenerator
 ```java
-package com.nepxion.aquarius.idgenerator;
+package com.nepxion.aquarius.example.idgenerator.app2;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
  * <p>Description: Nepxion Aquarius</p>
- * <p>Copyright: Copyright (c) 2017</p>
+ * <p>Copyright: Copyright (c) 2017-2050</p>
  * <p>Company: Nepxion</p>
  * @author Haojun Ren
  * @version 1.0
@@ -849,20 +849,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
+import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Bean;
 
-import com.nepxion.aquarius.common.context.AquariusContextAware;
+import com.nepxion.aquarius.idgenerator.annotation.EnableRedisIdGenerator;
 import com.nepxion.aquarius.idgenerator.redis.RedisIdGenerator;
 
 @SpringBootApplication
-@ComponentScan(basePackages = { "com.nepxion.aquarius.idgenerator.redis" })
+@EnableRedisIdGenerator
 public class RedisIdGeneratorApplication {
     private static final Logger LOG = LoggerFactory.getLogger(RedisIdGeneratorApplication.class);
 
     public static void main(String[] args) throws Exception {
-        SpringApplication.run(RedisIdGeneratorApplication.class, args);
+        ConfigurableApplicationContext applicationContext = SpringApplication.run(RedisIdGeneratorApplication.class, args);
 
-        RedisIdGenerator redisIdGenerator = AquariusContextAware.getBean(RedisIdGenerator.class);
+        RedisIdGenerator redisIdGenerator = applicationContext.getBean(RedisIdGenerator.class);
 
         Timer timer1 = new Timer();
         timer1.scheduleAtFixedRate(new TimerTask() {
@@ -921,16 +924,24 @@ public class RedisIdGeneratorApplication {
             }
         }, 0L, 3000L);
     }
+
+    @Bean
+    public EmbeddedServletContainerFactory createEmbeddedServletContainerFactory() {
+        TomcatEmbeddedServletContainerFactory tomcatFactory = new TomcatEmbeddedServletContainerFactory();
+        tomcatFactory.setPort(8083);
+
+        return tomcatFactory;
+    }
 }
 ```
 
 ```java
-package com.nepxion.aquarius.idgenerator;
+package com.nepxion.aquarius.example.idgenerator.app3;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
  * <p>Description: Nepxion Aquarius</p>
- * <p>Copyright: Copyright (c) 2017</p>
+ * <p>Copyright: Copyright (c) 2017-2050</p>
  * <p>Company: Nepxion</p>
  * @author Haojun Ren
  * @version 1.0
@@ -943,20 +954,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
+import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Bean;
 
-import com.nepxion.aquarius.common.context.AquariusContextAware;
+import com.nepxion.aquarius.idgenerator.annotation.EnableZookeeperIdGenerator;
 import com.nepxion.aquarius.idgenerator.zookeeper.ZookeeperIdGenerator;
 
 @SpringBootApplication
-@ComponentScan(basePackages = { "com.nepxion.aquarius.idgenerator.zookeeper" })
+@EnableZookeeperIdGenerator
 public class ZookeeperIdGeneratorApplication {
     private static final Logger LOG = LoggerFactory.getLogger(ZookeeperIdGeneratorApplication.class);
 
     public static void main(String[] args) throws Exception {
-        SpringApplication.run(ZookeeperIdGeneratorApplication.class, args);
+        ConfigurableApplicationContext applicationContext = SpringApplication.run(ZookeeperIdGeneratorApplication.class, args);
 
-        ZookeeperIdGenerator zookeeperIdGenerator = AquariusContextAware.getBean(ZookeeperIdGenerator.class);
+        ZookeeperIdGenerator zookeeperIdGenerator = applicationContext.getBean(ZookeeperIdGenerator.class);
 
         Timer timer1 = new Timer();
         timer1.scheduleAtFixedRate(new TimerTask() {
@@ -1015,16 +1029,24 @@ public class ZookeeperIdGeneratorApplication {
             }
         }, 0L, 3000L);
     }
+
+    @Bean
+    public EmbeddedServletContainerFactory createEmbeddedServletContainerFactory() {
+        TomcatEmbeddedServletContainerFactory tomcatFactory = new TomcatEmbeddedServletContainerFactory();
+        tomcatFactory.setPort(8084);
+
+        return tomcatFactory;
+    }
 }
 ```
 
 ```java
-package com.nepxion.aquarius.idgenerator;
+package com.nepxion.aquarius.example.idgenerator.app1;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
  * <p>Description: Nepxion Aquarius</p>
- * <p>Copyright: Copyright (c) 2017</p>
+ * <p>Copyright: Copyright (c) 2017-2050</p>
  * <p>Company: Nepxion</p>
  * @author Haojun Ren
  * @version 1.0
@@ -1037,20 +1059,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
+import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Bean;
 
-import com.nepxion.aquarius.common.context.AquariusContextAware;
+import com.nepxion.aquarius.idgenerator.annotation.EnableLocalIdGenerator;
 import com.nepxion.aquarius.idgenerator.local.LocalIdGenerator;
 
 @SpringBootApplication
-@ComponentScan(basePackages = { "com.nepxion.aquarius.idgenerator.local" })
+@EnableLocalIdGenerator
 public class LocalIdGeneratorApplication {
     private static final Logger LOG = LoggerFactory.getLogger(LocalIdGeneratorApplication.class);
 
     public static void main(String[] args) throws Exception {
-        SpringApplication.run(LocalIdGeneratorApplication.class, args);
+        ConfigurableApplicationContext applicationContext = SpringApplication.run(LocalIdGeneratorApplication.class, args);
 
-        LocalIdGenerator localIdGenerator = AquariusContextAware.getBean(LocalIdGenerator.class);
+        LocalIdGenerator localIdGenerator = applicationContext.getBean(LocalIdGenerator.class);
 
         Timer timer1 = new Timer();
         timer1.scheduleAtFixedRate(new TimerTask() {
@@ -1109,6 +1134,14 @@ public class LocalIdGeneratorApplication {
             }
         }, 0L, 3000L);
     }
+
+    @Bean
+    public EmbeddedServletContainerFactory createEmbeddedServletContainerFactory() {
+        TomcatEmbeddedServletContainerFactory tomcatFactory = new TomcatEmbeddedServletContainerFactory();
+        tomcatFactory.setPort(8082);
+
+        return tomcatFactory;
+    }
 }
 ```
 
@@ -1133,16 +1166,16 @@ limit.scan.packages=com.nepxion.aquarius.limit
 ```
 
 ### 示例
-使用Limit示例如下，更多细节见aquarius-spring-boot-example工程下com.nepxion.aquarius.limit
+使用Limit示例如下，更多细节见aquarius-spring-boot-example工程下com.nepxion.aquarius.example.limit
 
 注解方式
 ```java
-package com.nepxion.aquarius.limit.service;
+package com.nepxion.aquarius.example.limit.service;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
  * <p>Description: Nepxion Aquarius</p>
- * <p>Copyright: Copyright (c) 2017</p>
+ * <p>Copyright: Copyright (c) 2017-2050</p>
  * <p>Company: Nepxion</p>
  * @author Haojun Ren
  * @version 1.0
@@ -1157,12 +1190,12 @@ public interface MyService7 {
 ```
 
 ```java
-package com.nepxion.aquarius.limit.service;
+package com.nepxion.aquarius.example.limit.service;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
  * <p>Description: Nepxion Aquarius</p>
- * <p>Copyright: Copyright (c) 2017</p>
+ * <p>Copyright: Copyright (c) 2017-2050</p>
  * <p>Company: Nepxion</p>
  * @author Haojun Ren
  * @version 1.0
@@ -1188,12 +1221,12 @@ public class MyService8Impl {
 ```
 
 ```java
-package com.nepxion.aquarius.limit;
+package com.nepxion.aquarius.example.limit.app1;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
  * <p>Description: Nepxion Aquarius</p>
- * <p>Copyright: Copyright (c) 2017</p>
+ * <p>Copyright: Copyright (c) 2017-2050</p>
  * <p>Company: Nepxion</p>
  * @author Haojun Ren
  * @version 1.0
@@ -1204,19 +1237,24 @@ import java.util.TimerTask;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
+import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
-import com.nepxion.aquarius.common.context.AquariusContextAware;
-import com.nepxion.aquarius.limit.service.MyService7;
-import com.nepxion.aquarius.limit.service.MyService8Impl;
+import com.nepxion.aquarius.example.limit.service.MyService7;
+import com.nepxion.aquarius.example.limit.service.MyService8Impl;
+import com.nepxion.aquarius.limit.annotation.EnableLimit;
 
 @SpringBootApplication
-@ComponentScan(basePackages = { "com.nepxion.aquarius.limit" })
-public class RedisLimitAopApplication {
+@EnableLimit
+@ComponentScan(basePackages = { "com.nepxion.aquarius.example.limit.service" })
+public class LimitAopApplication {
     public static void main(String[] args) throws Exception {
-        SpringApplication.run(RedisLimitAopApplication.class, args);
+        ConfigurableApplicationContext applicationContext = SpringApplication.run(LimitAopApplication.class, args);
 
-        MyService7 myService7 = AquariusContextAware.getBean(MyService7.class);
+        MyService7 myService7 = applicationContext.getBean(MyService7.class);
         Timer timer1 = new Timer();
         timer1.scheduleAtFixedRate(new TimerTask() {
             public void run() {
@@ -1230,7 +1268,7 @@ public class RedisLimitAopApplication {
             }
         }, 0L, 3000L);
 
-        MyService8Impl myService8 = AquariusContextAware.getBean(MyService8Impl.class);
+        MyService8Impl myService8 = applicationContext.getBean(MyService8Impl.class);
         Timer timer2 = new Timer();
         timer2.scheduleAtFixedRate(new TimerTask() {
             public void run() {
@@ -1244,17 +1282,25 @@ public class RedisLimitAopApplication {
             }
         }, 0L, 4000L);
     }
+
+    @Bean
+    public EmbeddedServletContainerFactory createEmbeddedServletContainerFactory() {
+        TomcatEmbeddedServletContainerFactory tomcatFactory = new TomcatEmbeddedServletContainerFactory();
+        tomcatFactory.setPort(8085);
+
+        return tomcatFactory;
+    }
 }
 ```
 
 直接调用方式
 ```java
-package com.nepxion.aquarius.limit;
+package com.nepxion.aquarius.example.limit.app2;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
  * <p>Description: Nepxion Aquarius</p>
- * <p>Copyright: Copyright (c) 2017</p>
+ * <p>Copyright: Copyright (c) 2017-2050</p>
  * <p>Company: Nepxion</p>
  * @author Haojun Ren
  * @version 1.0
@@ -1267,22 +1313,27 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
+import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
-import com.nepxion.aquarius.common.context.AquariusContextAware;
-import com.nepxion.aquarius.limit.redis.RedisLimit;
+import com.nepxion.aquarius.limit.LimitExecutor;
+import com.nepxion.aquarius.limit.annotation.EnableLimit;
 
 @SpringBootApplication
-@ComponentScan(basePackages = { "com.nepxion.aquarius.limit.redis" })
-public class RedisLimitApplication {
-    private static final Logger LOG = LoggerFactory.getLogger(RedisLimitApplication.class);
+@EnableLimit
+@ComponentScan(basePackages = { "com.nepxion.aquarius.example.limit.service" })
+public class LimitApplication {
+    private static final Logger LOG = LoggerFactory.getLogger(LimitApplication.class);
 
     public static void main(String[] args) throws Exception {
-        SpringApplication.run(RedisLimitApplication.class, args);
+        ConfigurableApplicationContext applicationContext = SpringApplication.run(LimitApplication.class, args);
 
         // 在给定的10秒里最多访问5次(超出次数返回false)；等下个10秒开始，才允许再次被访问(返回true)，周而复始
-        RedisLimit redisLimit = AquariusContextAware.getBean(RedisLimit.class);
-        
+        LimitExecutor limitExecutor = applicationContext.getBean(LimitExecutor.class);
+
         Timer timer1 = new Timer();
         timer1.scheduleAtFixedRate(new TimerTask() {
             public void run() {
@@ -1291,15 +1342,13 @@ public class RedisLimitApplication {
                         @Override
                         public void run() {
                             try {
-                                LOG.info("Timer1 - Limit={}", redisLimit.tryAccess("limit", "A-B", 10, 5));
+                                LOG.info("Timer1 - Limit={}", limitExecutor.tryAccess("limit", "X-Y", 10, 5));
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
                         }
-
                     }).start();
                 }
-
             }
         }, 0L, 1000L);
 
@@ -1311,17 +1360,23 @@ public class RedisLimitApplication {
                         @Override
                         public void run() {
                             try {
-                                LOG.info("Timer1 - Limit={}", redisLimit.tryAccess("limit", "A-B", 10, 5));
+                                LOG.info("Timer1 - Limit={}", limitExecutor.tryAccess("limit", "X-Y", 10, 5));
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
                         }
-
                     }).start();
                 }
-
             }
         }, 0L, 1500L);
+    }
+
+    @Bean
+    public EmbeddedServletContainerFactory createEmbeddedServletContainerFactory() {
+        TomcatEmbeddedServletContainerFactory tomcatFactory = new TomcatEmbeddedServletContainerFactory();
+        tomcatFactory.setPort(8086);
+
+        return tomcatFactory;
     }
 }
 ```
