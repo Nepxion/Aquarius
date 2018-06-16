@@ -1,4 +1,4 @@
-package com.nepxion.aquarius.lock;
+package com.nepxion.aquarius.example.lock;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.nepxion.aquarius.lock.LockExecutor;
 import com.nepxion.aquarius.lock.entity.LockType;
 
 @RestController

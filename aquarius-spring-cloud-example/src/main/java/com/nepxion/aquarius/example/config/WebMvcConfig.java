@@ -1,4 +1,4 @@
-package com.nepxion.aquarius.config;
+package com.nepxion.aquarius.example.config;
 
 /**
  * <p>Title: Nepxion Aquarius</p>

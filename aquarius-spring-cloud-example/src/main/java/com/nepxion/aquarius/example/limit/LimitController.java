@@ -1,4 +1,4 @@
-package com.nepxion.aquarius.limit;
+package com.nepxion.aquarius.example.limit;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.nepxion.aquarius.limit.LimitExecutor;
 
 @RestController
 @Api(tags = { "分布式限流接口" })

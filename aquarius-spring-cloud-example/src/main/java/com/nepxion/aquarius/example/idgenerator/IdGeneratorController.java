@@ -1,4 +1,4 @@
-package com.nepxion.aquarius.idgenerator;
+package com.nepxion.aquarius.example.idgenerator;
 
 /**
  * <p>Title: Nepxion Aquarius</p>

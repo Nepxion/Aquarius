@@ -1,4 +1,4 @@
-package com.nepxion.aquarius;
+package com.nepxion.aquarius.example;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
@@ -11,9 +11,11 @@ package com.nepxion.aquarius;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 // @EnableDiscoveryClient
+@ComponentScan(basePackages = { "com.nepxion.aquarius" })
 public class AquariusApplication {
     public static void main(String[] args) {
         new SpringApplicationBuilder(AquariusApplication.class).web(true).run(args);

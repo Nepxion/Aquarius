@@ -1,4 +1,4 @@
-package com.nepxion.aquarius.limit;
+package com.nepxion.aquarius.example.limit;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
