@@ -1,4 +1,4 @@
-package com.nepxion.aquarius.idgenerator;
+package com.nepxion.aquarius.example.limit;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
@@ -21,18 +21,19 @@ import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletCon
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 
-import com.nepxion.aquarius.idgenerator.annotation.EnableIdGenerator;
-import com.nepxion.aquarius.idgenerator.zookeeper.ZookeeperIdGenerator;
+import com.nepxion.aquarius.limit.LimitExecutor;
+import com.nepxion.aquarius.limit.annotation.EnableLimit;
 
 @SpringBootApplication
-@EnableIdGenerator
-public class ZookeeperIdGeneratorApplication {
-    private static final Logger LOG = LoggerFactory.getLogger(ZookeeperIdGeneratorApplication.class);
+@EnableLimit
+public class LimitApplication {
+    private static final Logger LOG = LoggerFactory.getLogger(LimitApplication.class);
 
     public static void main(String[] args) throws Exception {
-        ConfigurableApplicationContext applicationContext = SpringApplication.run(ZookeeperIdGeneratorApplication.class, args);
+        ConfigurableApplicationContext applicationContext = SpringApplication.run(LimitApplication.class, args);
 
-        ZookeeperIdGenerator zookeeperIdGenerator = applicationContext.getBean(ZookeeperIdGenerator.class);
+        // 在给定的10秒里最多访问5次(超出次数返回false)；等下个10秒开始，才允许再次被访问(返回true)，周而复始
+        LimitExecutor limitExecutor = applicationContext.getBean(LimitExecutor.class);
 
         Timer timer1 = new Timer();
         timer1.scheduleAtFixedRate(new TimerTask() {
@@ -42,7 +43,7 @@ public class ZookeeperIdGeneratorApplication {
                         @Override
                         public void run() {
                             try {
-                                LOG.info("Timer1 - Sequence id={}", zookeeperIdGenerator.nextSequenceId("idgenerater", "X-Y"));
+                                LOG.info("Timer1 - Limit={}", limitExecutor.tryAccess("limit", "X-Y", 10, 5));
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -60,7 +61,7 @@ public class ZookeeperIdGeneratorApplication {
                         @Override
                         public void run() {
                             try {
-                                LOG.info("Timer2 - Sequence id={}", zookeeperIdGenerator.nextSequenceId("idgenerater", "X-Y"));
+                                LOG.info("Timer1 - Limit={}", limitExecutor.tryAccess("limit", "X-Y", 10, 5));
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -69,33 +70,12 @@ public class ZookeeperIdGeneratorApplication {
                 }
             }
         }, 0L, 1500L);
-
-        Timer timer3 = new Timer();
-        timer3.scheduleAtFixedRate(new TimerTask() {
-            public void run() {
-                for (int i = 0; i < 3; i++) {
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                String[] ids = zookeeperIdGenerator.nextSequenceIds("idgenerater", "X-Y", 10);
-                                for (String id : ids) {
-                                    LOG.info("Timer3 - Sequence id={}", id);
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }).start();
-                }
-            }
-        }, 0L, 3000L);
     }
 
     @Bean
     public EmbeddedServletContainerFactory createEmbeddedServletContainerFactory() {
         TomcatEmbeddedServletContainerFactory tomcatFactory = new TomcatEmbeddedServletContainerFactory();
-        tomcatFactory.setPort(8084);
+        tomcatFactory.setPort(8086);
 
         return tomcatFactory;
     }

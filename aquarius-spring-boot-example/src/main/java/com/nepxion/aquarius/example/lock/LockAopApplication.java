@@ -1,4 +1,4 @@
-package com.nepxion.aquarius.lock;
+package com.nepxion.aquarius.example.lock;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
@@ -16,9 +16,9 @@ import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletCon
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 
+import com.nepxion.aquarius.example.lock.service.MyService1;
+import com.nepxion.aquarius.example.lock.service.MyService2Impl;
 import com.nepxion.aquarius.lock.annotation.EnableLock;
-import com.nepxion.aquarius.lock.service.MyService1;
-import com.nepxion.aquarius.lock.service.MyService2Impl;
 
 @SpringBootApplication
 @EnableLock

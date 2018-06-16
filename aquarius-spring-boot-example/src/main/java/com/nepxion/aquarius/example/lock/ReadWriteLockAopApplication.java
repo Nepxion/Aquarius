@@ -1,4 +1,4 @@
-package com.nepxion.aquarius.limit;
+package com.nepxion.aquarius.example.lock;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
@@ -21,60 +21,51 @@ import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletCon
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 
-import com.nepxion.aquarius.limit.annotation.EnableLimit;
+import com.nepxion.aquarius.example.lock.service.MyService3;
+import com.nepxion.aquarius.example.lock.service.MyService4Impl;
+import com.nepxion.aquarius.lock.annotation.EnableLock;
 
 @SpringBootApplication
-@EnableLimit
-public class LimitApplication {
-    private static final Logger LOG = LoggerFactory.getLogger(LimitApplication.class);
+@EnableLock
+public class ReadWriteLockAopApplication {
+    private static final Logger LOG = LoggerFactory.getLogger(ReadWriteLockAopApplication.class);
 
     public static void main(String[] args) throws Exception {
-        ConfigurableApplicationContext applicationContext = SpringApplication.run(LimitApplication.class, args);
+        ConfigurableApplicationContext applicationContext = SpringApplication.run(ReadWriteLockAopApplication.class, args);
 
-        // 在给定的10秒里最多访问5次(超出次数返回false)；等下个10秒开始，才允许再次被访问(返回true)，周而复始
-        LimitExecutor limitExecutor = applicationContext.getBean(LimitExecutor.class);
-
+        // 执行效果是先打印doW，即拿到写锁，再打印若干个doR，即可以同时拿到若干个读锁
+        MyService4Impl myService4 = applicationContext.getBean(MyService4Impl.class);
         Timer timer1 = new Timer();
         timer1.scheduleAtFixedRate(new TimerTask() {
             public void run() {
-                for (int i = 0; i < 3; i++) {
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                LOG.info("Timer1 - Limit={}", limitExecutor.tryAccess("limit", "X-Y", 10, 5));
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }).start();
-                }
+                LOG.info("Start to get write lock...");
+                // 写锁逻辑，最高持锁15秒，睡眠10秒，10秒后释放读锁
+                myService4.doW("X", "Y");
             }
-        }, 0L, 1000L);
+        }, 0L, 600000L);
 
+        MyService3 myService3 = applicationContext.getBean(MyService3.class);
         Timer timer2 = new Timer();
         timer2.scheduleAtFixedRate(new TimerTask() {
             public void run() {
+                LOG.info("Start to get read lock...");
                 for (int i = 0; i < 3; i++) {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            try {
-                                LOG.info("Timer1 - Limit={}", limitExecutor.tryAccess("limit", "X-Y", 10, 5));
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
+                            // 读锁逻辑，最高持锁5秒，睡眠2秒，2秒后释放读锁
+                            myService3.doR("X", "Y");
                         }
                     }).start();
                 }
             }
-        }, 0L, 1500L);
+        }, 2000L, 2000L);
     }
 
     @Bean
     public EmbeddedServletContainerFactory createEmbeddedServletContainerFactory() {
         TomcatEmbeddedServletContainerFactory tomcatFactory = new TomcatEmbeddedServletContainerFactory();
-        tomcatFactory.setPort(8086);
+        tomcatFactory.setPort(8089);
 
         return tomcatFactory;
     }

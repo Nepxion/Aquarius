@@ -1,4 +1,4 @@
-package com.nepxion.aquarius.cache;
+package com.nepxion.aquarius.example.cache;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
@@ -17,8 +17,8 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 
 import com.nepxion.aquarius.cache.annotation.EnableCache;
-import com.nepxion.aquarius.cache.service.MyService5;
-import com.nepxion.aquarius.cache.service.MyService6Impl;
+import com.nepxion.aquarius.example.cache.service.MyService5;
+import com.nepxion.aquarius.example.cache.service.MyService6Impl;
 
 @SpringBootApplication
 @EnableCache

@@ -1,4 +1,4 @@
-package com.nepxion.aquarius.cache.service;
+package com.nepxion.aquarius.example.cache.service;
 
 /**
  * <p>Title: Nepxion Aquarius</p>

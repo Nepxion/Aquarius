@@ -1,4 +1,4 @@
-package com.nepxion.aquarius.limit.service;
+package com.nepxion.aquarius.example.limit.service;
 
 /**
  * <p>Title: Nepxion Aquarius</p>

@@ -1,4 +1,4 @@
-package com.nepxion.aquarius.lock.service;
+package com.nepxion.aquarius.example.lock.service;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
