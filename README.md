@@ -14,6 +14,8 @@ Nepxion Aquarius是一款基于Redis + Zookeeper的分布式应用组件集合�
     3 Nepxion Aquarius ID Generator 分布式全局唯一ID(支持Redis)、全局唯一序号生成(支持Zookeeper、Twitter雪花ID算法的支持)，支持单个和批量获取
     4 Nepxion Aquarius Limit 分布式限速限流(支持Redis、本地限速限流)
 
+    提供Start模式，在类头部加注解@EnableXXX，同时结合配置文件xxx.enabled=true/false进行相关Aop功能的关闭和开启
+
     上述4大组件同时支持SpringBoot和SpringCloud部署，分别参考aquarius-spring-boot-example和aquarius-spring-cloud-example工程，文档只以aquarius-spring-boot-example为例来阐述使用方法
     支持Swagger，打开http://localhost:2222/swagger-ui.html访问
 
@@ -93,10 +95,11 @@ Nepxion Aquarius是一款基于Redis + Zookeeper的分布式应用组件集合�
 aquarius-spring-boot-example\src\main\resources\application.properties，切换lockType即可
 ```java
 # Lock config
+lock.enabled=true
 # redisLock, zookeeperLock, localLock
 lock.type=redisLock
 # 扫描含有@Lock，@ReadLock，@WriteLock等注解的接口或者类所在目录（可以不配置，但如果不配置，则扫描全局，会稍微降低性能）
-lock.scan.packages=com.nepxion.aquarius.lock
+lock.scan.packages=com.nepxion.aquarius.example.lock.service
 ```
 
 ### 示例
@@ -622,9 +625,10 @@ public class ReadWriteLockApplication {
 ### 切换缓存类型
 ```java
 # Cache config
+cache.enabled=true
 cache.type=redisCache
 # 扫描含有@Cacheable，@CacheEvict，@CachePut等注解的接口或者类所在目录（可以不配置，但如果不配置，则扫描全局，会稍微降低性能）
-cache.scan.packages=com.nepxion.aquarius.cache
+cache.scan.packages=com.nepxion.aquarius.example.cache.service
 ```
 
 ### 示例
@@ -1159,10 +1163,11 @@ public class LocalIdGeneratorApplication {
 aquarius-spring-boot-example\src\main\resources\application.properties，切换limitType即可
 ```java
 # Limit config
+limit.enabled=true
 # redisLimit, localLimit
 limit.type=redisLimit
 # 扫描含有@Limit等注解的接口或者类所在目录（可以不配置，但如果不配置，则扫描全局，会稍微降低性能）
-limit.scan.packages=com.nepxion.aquarius.limit
+limit.scan.packages=com.nepxion.aquarius.example.limit.service
 ```
 
 ### 示例
