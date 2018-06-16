@@ -13,11 +13,11 @@ import org.springframework.boot.bind.RelaxedPropertyResolver;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 
-import com.nepxion.aquarius.idgenerator.annotation.EnableIdGenerator;
+import com.nepxion.aquarius.idgenerator.annotation.EnableZookeeperIdGenerator;
 import com.nepxion.matrix.selector.AbstractImportSelector;
 
 @Order(Ordered.LOWEST_PRECEDENCE - 100)
-public class IdGeneratorImportSelector extends AbstractImportSelector<EnableIdGenerator> {
+public class ZookeeperIdGeneratorImportSelector extends AbstractImportSelector<EnableZookeeperIdGenerator> {
     @Override
     protected boolean isEnabled() {
         return new RelaxedPropertyResolver(getEnvironment()).getProperty("idgenerator.enabled", Boolean.class, Boolean.TRUE);

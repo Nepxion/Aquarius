@@ -1,4 +1,4 @@
-package com.nepxion.aquarius.example.idgenerator;
+package com.nepxion.aquarius.example.idgenerator.app1;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
@@ -21,11 +21,11 @@ import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletCon
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 
-import com.nepxion.aquarius.idgenerator.annotation.EnableIdGenerator;
+import com.nepxion.aquarius.idgenerator.annotation.EnableLocalIdGenerator;
 import com.nepxion.aquarius.idgenerator.local.LocalIdGenerator;
 
 @SpringBootApplication
-@EnableIdGenerator
+@EnableLocalIdGenerator
 public class LocalIdGeneratorApplication {
     private static final Logger LOG = LoggerFactory.getLogger(LocalIdGeneratorApplication.class);
 

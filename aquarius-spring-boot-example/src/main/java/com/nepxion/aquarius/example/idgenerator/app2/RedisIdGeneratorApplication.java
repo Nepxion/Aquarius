@@ -1,4 +1,4 @@
-package com.nepxion.aquarius.example.idgenerator;
+package com.nepxion.aquarius.example.idgenerator.app2;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
@@ -21,18 +21,18 @@ import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletCon
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 
-import com.nepxion.aquarius.idgenerator.annotation.EnableIdGenerator;
-import com.nepxion.aquarius.idgenerator.zookeeper.ZookeeperIdGenerator;
+import com.nepxion.aquarius.idgenerator.annotation.EnableRedisIdGenerator;
+import com.nepxion.aquarius.idgenerator.redis.RedisIdGenerator;
 
 @SpringBootApplication
-@EnableIdGenerator
-public class ZookeeperIdGeneratorApplication {
-    private static final Logger LOG = LoggerFactory.getLogger(ZookeeperIdGeneratorApplication.class);
+@EnableRedisIdGenerator
+public class RedisIdGeneratorApplication {
+    private static final Logger LOG = LoggerFactory.getLogger(RedisIdGeneratorApplication.class);
 
     public static void main(String[] args) throws Exception {
-        ConfigurableApplicationContext applicationContext = SpringApplication.run(ZookeeperIdGeneratorApplication.class, args);
+        ConfigurableApplicationContext applicationContext = SpringApplication.run(RedisIdGeneratorApplication.class, args);
 
-        ZookeeperIdGenerator zookeeperIdGenerator = applicationContext.getBean(ZookeeperIdGenerator.class);
+        RedisIdGenerator redisIdGenerator = applicationContext.getBean(RedisIdGenerator.class);
 
         Timer timer1 = new Timer();
         timer1.scheduleAtFixedRate(new TimerTask() {
@@ -42,7 +42,7 @@ public class ZookeeperIdGeneratorApplication {
                         @Override
                         public void run() {
                             try {
-                                LOG.info("Timer1 - Sequence id={}", zookeeperIdGenerator.nextSequenceId("idgenerater", "X-Y"));
+                                LOG.info("Timer1 - Unique id={}", redisIdGenerator.nextUniqueId("idgenerater", "X-Y", 1, 8));
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -60,7 +60,7 @@ public class ZookeeperIdGeneratorApplication {
                         @Override
                         public void run() {
                             try {
-                                LOG.info("Timer2 - Sequence id={}", zookeeperIdGenerator.nextSequenceId("idgenerater", "X-Y"));
+                                LOG.info("Timer2 - Unique id={}", redisIdGenerator.nextUniqueId("idgenerater", "X-Y", 1, 8));
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -78,9 +78,9 @@ public class ZookeeperIdGeneratorApplication {
                         @Override
                         public void run() {
                             try {
-                                String[] ids = zookeeperIdGenerator.nextSequenceIds("idgenerater", "X-Y", 10);
+                                String[] ids = redisIdGenerator.nextUniqueIds("idgenerater", "X-Y", 1, 8, 10);
                                 for (String id : ids) {
-                                    LOG.info("Timer3 - Sequence id={}", id);
+                                    LOG.info("Timer3 - Unique id={}", id);
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -95,7 +95,7 @@ public class ZookeeperIdGeneratorApplication {
     @Bean
     public EmbeddedServletContainerFactory createEmbeddedServletContainerFactory() {
         TomcatEmbeddedServletContainerFactory tomcatFactory = new TomcatEmbeddedServletContainerFactory();
-        tomcatFactory.setPort(8084);
+        tomcatFactory.setPort(8083);
 
         return tomcatFactory;
     }

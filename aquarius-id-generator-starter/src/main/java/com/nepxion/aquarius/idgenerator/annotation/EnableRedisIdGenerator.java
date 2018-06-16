@@ -18,13 +18,13 @@ import java.lang.annotation.Target;
 
 import org.springframework.context.annotation.Import;
 
-import com.nepxion.aquarius.idgenerator.aop.IdGeneratorImportSelector;
+import com.nepxion.aquarius.idgenerator.aop.RedisIdGeneratorImportSelector;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Inherited
-@Import(IdGeneratorImportSelector.class)
-public @interface EnableIdGenerator {
+@Import(RedisIdGeneratorImportSelector.class)
+public @interface EnableRedisIdGenerator {
 
 }
