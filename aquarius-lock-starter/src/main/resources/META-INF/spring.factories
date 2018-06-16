@@ -1,0 +1,2 @@
+com.nepxion.aquarius.lock.annotation.EnableLock=\
+com.nepxion.aquarius.lock.config.LockConfig
