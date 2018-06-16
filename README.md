@@ -21,106 +21,32 @@ Nepxion Aquarius是一款基于Redis + Zookeeper的分布式应用组件集合�
 
 ### 依赖
 
-笼统化引用
 ```xml
 分布式锁
 <dependency>
   <groupId>com.nepxion</groupId>
-  <artifactId>aquarius-assembly-lock</artifactId>
+  <artifactId>aquarius-lock-starter</artifactId>
   <version>${aquarius.version}</version>
 </dependency>
 
 分布式缓存
 <dependency>
   <groupId>com.nepxion</groupId>
-  <artifactId>aquarius-assembly-cache</artifactId>
+  <artifactId>aquarius-cache-starter</artifactId>
   <version>${aquarius.version}</version>
 </dependency>
 
 分布式全局唯一ID
 <dependency>
   <groupId>com.nepxion</groupId>
-  <artifactId>aquarius-assembly-id-generator</artifactId>
+  <artifactId>aquarius-id-generator-starter</artifactId>
   <version>${aquarius.version}</version>
 </dependency>
 
 分布式限速限流
 <dependency>
   <groupId>com.nepxion</groupId>
-  <artifactId>aquarius-assembly-limit</artifactId>
-  <version>${aquarius.version}</version>
-</dependency>
-
-四个组件全集
-<dependency>
-  <groupId>com.nepxion</groupId>
-  <artifactId>aquarius-assembly-all</artifactId>
-  <version>${aquarius.version}</version>
-</dependency>
-```
-
-精细化引用(只挑选跟自己感兴趣的组件)
-```xml
-Redis分布式锁
-<dependency>
-  <groupId>${project.groupId}</groupId>
-  <artifactId>aquarius-lock-redis</artifactId>
-  <version>${aquarius.version}</version>
-</dependency>
-
-Zookeeper分布式锁
-<dependency>
-  <groupId>${project.groupId}</groupId>
-  <artifactId>aquarius-lock-zookeeper</artifactId>
-  <version>${aquarius.version}</version>
-</dependency>
-
-本地锁
-<dependency>
-  <groupId>${project.groupId}</groupId>
-  <artifactId>aquarius-lock-local</artifactId>
-  <version>${aquarius.version}</version>
-</dependency>
-
-Redis分布式缓存
-<dependency>
-  <groupId>${project.groupId}</groupId>
-  <artifactId>aquarius-cache-redis</artifactId>
-  <version>${aquarius.version}</version>
-</dependency>
-
-Redis唯一ID产生器
-<dependency>
-  <groupId>${project.groupId}</groupId>
-  <artifactId>aquarius-id-generator-redis</artifactId>
-  <version>${aquarius.version}</version>
-</dependency>
-
-Zookeeper唯一序号产生器
-<dependency>
-  <groupId>${project.groupId}</groupId>
-  <artifactId>aquarius-id-generator-zookeeper</artifactId>
-  <version>${aquarius.version}</version>
-</dependency>
-
-本地唯一ID产生器
-<dependency>
-  <groupId>${project.groupId}</groupId>
-  <artifactId>aquarius-id-generator-local</artifactId>
-  <version>${aquarius.version}</version>
-</dependency>
-
-Redis限速限流
-<dependency>
-  <groupId>${project.groupId}</groupId>
-  <artifactId>aquarius-limit-redis</artifactId>
-  <version>${aquarius.version}</version>
-</dependency>
-
-本地限速限流
-<dependency>
-  <groupId>${project.groupId}</groupId>
-  <artifactId>aquarius-limit-local</artifactId>
+  <artifactId>aquarius-limit-starter</artifactId>
   <version>${aquarius.version}</version>
 </dependency>
 ```
@@ -174,18 +100,18 @@ lock.scan.packages=com.nepxion.aquarius.lock
 ```
 
 ### 示例
-使用分布式锁示例如下，更多细节见aquarius-spring-boot-example工程下com.nepxion.aquarius.lock
+使用分布式锁示例如下，更多细节见aquarius-spring-boot-example工程下com.nepxion.aquarius.example.lock
 
 普通分布式锁的使用
 
 注解方式
 ```java
-package com.nepxion.aquarius.lock.service;
+package com.nepxion.aquarius.example.lock.service;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
  * <p>Description: Nepxion Aquarius</p>
- * <p>Copyright: Copyright (c) 2017</p>
+ * <p>Copyright: Copyright (c) 2017-2050</p>
  * <p>Company: Nepxion</p>
  * @author Haojun Ren
  * @version 1.0
@@ -202,12 +128,12 @@ public interface MyService1 {
 ```
 
 ```java
-package com.nepxion.aquarius.lock.service;
+package com.nepxion.aquarius.example.lock.service;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
  * <p>Description: Nepxion Aquarius</p>
- * <p>Copyright: Copyright (c) 2017</p>
+ * <p>Copyright: Copyright (c) 2017-2050</p>
  * <p>Company: Nepxion</p>
  * @author Haojun Ren
  * @version 1.0
@@ -247,12 +173,12 @@ public class MyService2Impl {
 ```
 
 ```java
-package com.nepxion.aquarius.lock;
+package com.nepxion.aquarius.example.lock.app1;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
  * <p>Description: Nepxion Aquarius</p>
- * <p>Copyright: Copyright (c) 2017</p>
+ * <p>Copyright: Copyright (c) 2017-2050</p>
  * <p>Company: Nepxion</p>
  * @author Haojun Ren
  * @version 1.0
@@ -260,52 +186,63 @@ package com.nepxion.aquarius.lock;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
+import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
-import com.nepxion.aquarius.common.context.AquariusContextAware;
-import com.nepxion.aquarius.lock.service.MyService1;
-import com.nepxion.aquarius.lock.service.MyService2Impl;
+import com.nepxion.aquarius.example.lock.service.MyService1;
+import com.nepxion.aquarius.example.lock.service.MyService2Impl;
+import com.nepxion.aquarius.lock.annotation.EnableLock;
 
 @SpringBootApplication
-@ComponentScan(basePackages = { "com.nepxion.aquarius.lock" })
+@EnableLock
+@ComponentScan(basePackages = { "com.nepxion.aquarius.example.lock.service" })
 public class LockAopApplication {
     public static void main(String[] args) throws Exception {
-        SpringApplication.run(LockAopApplication.class, args);
+        ConfigurableApplicationContext applicationContext = SpringApplication.run(LockAopApplication.class, args);
 
         // 执行效果是doA和doC无序打印，即谁拿到锁谁先运行
-        MyService1 myService1 = AquariusContextAware.getBean(MyService1.class);
+        MyService1 myService1 = applicationContext.getBean(MyService1.class);
         for (int i = 0; i < 5; i++) {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     myService1.doA("X", "Y");
                 }
-
             }).start();
         }
 
-        MyService2Impl myService2 = AquariusContextAware.getBean(MyService2Impl.class);
+        MyService2Impl myService2 = applicationContext.getBean(MyService2Impl.class);
         for (int i = 0; i < 5; i++) {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     myService2.doC("X", "Y");
                 }
-
             }).start();
         }
+    }
+
+    @Bean
+    public EmbeddedServletContainerFactory createEmbeddedServletContainerFactory() {
+        TomcatEmbeddedServletContainerFactory tomcatFactory = new TomcatEmbeddedServletContainerFactory();
+        tomcatFactory.setPort(8087);
+
+        return tomcatFactory;
     }
 }
 ```
 
 直接调用方式
 ```java
-package com.nepxion.aquarius.lock;
+package com.nepxion.aquarius.example.lock.app2;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
  * <p>Description: Nepxion Aquarius</p>
- * <p>Copyright: Copyright (c) 2017</p>
+ * <p>Copyright: Copyright (c) 2017-2050</p>
  * <p>Company: Nepxion</p>
  * @author Haojun Ren
  * @version 1.0
@@ -317,21 +254,27 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
+import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
-import com.nepxion.aquarius.common.context.AquariusContextAware;
+import com.nepxion.aquarius.lock.LockExecutor;
+import com.nepxion.aquarius.lock.annotation.EnableLock;
 import com.nepxion.aquarius.lock.entity.LockType;
 
 @SpringBootApplication
-@ComponentScan(basePackages = { "com.nepxion.aquarius.lock" })
+@EnableLock
+@ComponentScan(basePackages = { "com.nepxion.aquarius.example.lock.service" })
 public class LockApplication {
     private static final Logger LOG = LoggerFactory.getLogger(LockApplication.class);
 
     @SuppressWarnings("unchecked")
     public static void main(String[] args) throws Exception {
-        SpringApplication.run(LockApplication.class, args);
+        ConfigurableApplicationContext applicationContext = SpringApplication.run(LockApplication.class, args);
 
-        LockExecutor<Object> lockExecutor = AquariusContextAware.getBean(LockExecutor.class);
+        LockExecutor<Object> lockExecutor = applicationContext.getBean(LockExecutor.class);
         for (int i = 0; i < 5; i++) {
             new Thread(new Runnable() {
                 @Override
@@ -390,6 +333,14 @@ public class LockApplication {
             }).start();
         }
     }
+
+    @Bean
+    public EmbeddedServletContainerFactory createEmbeddedServletContainerFactory() {
+        TomcatEmbeddedServletContainerFactory tomcatFactory = new TomcatEmbeddedServletContainerFactory();
+        tomcatFactory.setPort(8088);
+
+        return tomcatFactory;
+    }
 }
 ```
 
@@ -397,12 +348,12 @@ public class LockApplication {
 
 注解方式
 ```java
-package com.nepxion.aquarius.lock.service;
+package com.nepxion.aquarius.example.lock.service;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
  * <p>Description: Nepxion Aquarius</p>
- * <p>Copyright: Copyright (c) 2017</p>
+ * <p>Copyright: Copyright (c) 2017-2050</p>
  * <p>Company: Nepxion</p>
  * @author Haojun Ren
  * @version 1.0
@@ -417,12 +368,12 @@ public interface MyService3 {
 ```
 
 ```java
-package com.nepxion.aquarius.lock.service;
+package com.nepxion.aquarius.example.lock.service;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
  * <p>Description: Nepxion Aquarius</p>
- * <p>Copyright: Copyright (c) 2017</p>
+ * <p>Copyright: Copyright (c) 2017-2050</p>
  * <p>Company: Nepxion</p>
  * @author Haojun Ren
  * @version 1.0
@@ -456,12 +407,12 @@ public class MyService4Impl {
 ```
 
 ```java
-package com.nepxion.aquarius.lock;
+package com.nepxion.aquarius.example.lock.app3;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
  * <p>Description: Nepxion Aquarius</p>
- * <p>Copyright: Copyright (c) 2017</p>
+ * <p>Copyright: Copyright (c) 2017-2050</p>
  * <p>Company: Nepxion</p>
  * @author Haojun Ren
  * @version 1.0
@@ -474,22 +425,27 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
+import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
-import com.nepxion.aquarius.common.context.AquariusContextAware;
-import com.nepxion.aquarius.lock.service.MyService3;
-import com.nepxion.aquarius.lock.service.MyService4Impl;
+import com.nepxion.aquarius.example.lock.service.MyService3;
+import com.nepxion.aquarius.example.lock.service.MyService4Impl;
+import com.nepxion.aquarius.lock.annotation.EnableLock;
 
 @SpringBootApplication
-@ComponentScan(basePackages = { "com.nepxion.aquarius.lock" })
+@EnableLock
+@ComponentScan(basePackages = { "com.nepxion.aquarius.example.lock.service" })
 public class ReadWriteLockAopApplication {
     private static final Logger LOG = LoggerFactory.getLogger(ReadWriteLockAopApplication.class);
 
     public static void main(String[] args) throws Exception {
-        SpringApplication.run(ReadWriteLockAopApplication.class, args);
+        ConfigurableApplicationContext applicationContext = SpringApplication.run(ReadWriteLockAopApplication.class, args);
 
         // 执行效果是先打印doW，即拿到写锁，再打印若干个doR，即可以同时拿到若干个读锁
-        MyService4Impl myService4 = AquariusContextAware.getBean(MyService4Impl.class);
+        MyService4Impl myService4 = applicationContext.getBean(MyService4Impl.class);
         Timer timer1 = new Timer();
         timer1.scheduleAtFixedRate(new TimerTask() {
             public void run() {
@@ -499,7 +455,7 @@ public class ReadWriteLockAopApplication {
             }
         }, 0L, 600000L);
 
-        MyService3 myService3 = AquariusContextAware.getBean(MyService3.class);
+        MyService3 myService3 = applicationContext.getBean(MyService3.class);
         Timer timer2 = new Timer();
         timer2.scheduleAtFixedRate(new TimerTask() {
             public void run() {
@@ -516,17 +472,25 @@ public class ReadWriteLockAopApplication {
             }
         }, 2000L, 2000L);
     }
+
+    @Bean
+    public EmbeddedServletContainerFactory createEmbeddedServletContainerFactory() {
+        TomcatEmbeddedServletContainerFactory tomcatFactory = new TomcatEmbeddedServletContainerFactory();
+        tomcatFactory.setPort(8089);
+
+        return tomcatFactory;
+    }
 }
 ```
 
 直接调用方式
 ```java
-package com.nepxion.aquarius.lock;
+package com.nepxion.aquarius.example.lock.app4;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
  * <p>Description: Nepxion Aquarius</p>
- * <p>Copyright: Copyright (c) 2017</p>
+ * <p>Copyright: Copyright (c) 2017-2050</p>
  * <p>Company: Nepxion</p>
  * @author Haojun Ren
  * @version 1.0
@@ -540,21 +504,27 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
+import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
-import com.nepxion.aquarius.common.context.AquariusContextAware;
+import com.nepxion.aquarius.lock.LockExecutor;
+import com.nepxion.aquarius.lock.annotation.EnableLock;
 import com.nepxion.aquarius.lock.entity.LockType;
 
 @SpringBootApplication
-@ComponentScan(basePackages = { "com.nepxion.aquarius.lock" })
+@EnableLock
+@ComponentScan(basePackages = { "com.nepxion.aquarius.example.lock.service" })
 public class ReadWriteLockApplication {
     private static final Logger LOG = LoggerFactory.getLogger(ReadWriteLockApplication.class);
 
     @SuppressWarnings("unchecked")
     public static void main(String[] args) throws Exception {
-        SpringApplication.run(ReadWriteLockApplication.class, args);
+        ConfigurableApplicationContext applicationContext = SpringApplication.run(ReadWriteLockApplication.class, args);
 
-        LockExecutor<Object> lockExecutor = AquariusContextAware.getBean(LockExecutor.class);
+        LockExecutor<Object> lockExecutor = applicationContext.getBean(LockExecutor.class);
         Timer timer1 = new Timer();
         timer1.scheduleAtFixedRate(new TimerTask() {
             public void run() {
@@ -620,6 +590,14 @@ public class ReadWriteLockApplication {
             }
         }, 2000L, 2000L);
     }
+
+    @Bean
+    public EmbeddedServletContainerFactory createEmbeddedServletContainerFactory() {
+        TomcatEmbeddedServletContainerFactory tomcatFactory = new TomcatEmbeddedServletContainerFactory();
+        tomcatFactory.setPort(8090);
+
+        return tomcatFactory;
+    }
 }
 ```
 
@@ -650,14 +628,14 @@ cache.scan.packages=com.nepxion.aquarius.cache
 ```
 
 ### 示例
-使用分布式缓存示例如下，更多细节见aquarius-spring-boot-example工程下com.nepxion.aquarius.cache
+使用分布式缓存示例如下，更多细节见aquarius-spring-boot-example工程下com.nepxion.aquarius.example.cache
 ```java
-package com.nepxion.aquarius.cache.service;
+package com.nepxion.aquarius.example.cache.service;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
  * <p>Description: Nepxion Aquarius</p>
- * <p>Copyright: Copyright (c) 2017</p>
+ * <p>Copyright: Copyright (c) 2017-2050</p>
  * <p>Company: Nepxion</p>
  * @author Haojun Ren
  * @version 1.0
@@ -680,12 +658,12 @@ public interface MyService5 {
 ```
 
 ```java
-package com.nepxion.aquarius.cache.service;
+package com.nepxion.aquarius.example.cache.service;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
  * <p>Description: Nepxion Aquarius</p>
- * <p>Copyright: Copyright (c) 2017</p>
+ * <p>Copyright: Copyright (c) 2017-2050</p>
  * <p>Company: Nepxion</p>
  * @author Haojun Ren
  * @version 1.0
@@ -747,12 +725,12 @@ public class MyService6Impl {
 ```
 
 ```java
-package com.nepxion.aquarius.cache;
+package com.nepxion.aquarius.example.cache.app1;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
  * <p>Description: Nepxion Aquarius</p>
- * <p>Copyright: Copyright (c) 2017</p>
+ * <p>Copyright: Copyright (c) 2017-2050</p>
  * <p>Company: Nepxion</p>
  * @author Haojun Ren
  * @version 1.0
@@ -760,20 +738,25 @@ package com.nepxion.aquarius.cache;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
+import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
-import com.nepxion.aquarius.cache.service.MyService5;
-import com.nepxion.aquarius.cache.service.MyService6Impl;
-import com.nepxion.aquarius.common.context.AquariusContextAware;
+import com.nepxion.aquarius.cache.annotation.EnableCache;
+import com.nepxion.aquarius.example.cache.service.MyService5;
+import com.nepxion.aquarius.example.cache.service.MyService6Impl;
 
 @SpringBootApplication
-@ComponentScan(basePackages = { "com.nepxion.aquarius.cache" })
+@EnableCache
+@ComponentScan(basePackages = { "com.nepxion.aquarius.example.cache.service" })
 public class CacheAopApplication {
     public static void main(String[] args) throws Exception {
-        SpringApplication.run(CacheAopApplication.class, args);
+        ConfigurableApplicationContext applicationContext = SpringApplication.run(CacheAopApplication.class, args);
 
         // 下面步骤请一步步操作，然后结合Redis Desktop Manager等工具查看效果
-        MyService5 myService5 = AquariusContextAware.getBean(MyService5.class);
+        MyService5 myService5 = applicationContext.getBean(MyService5.class);
 
         // 新增缓存Key为M-N，Value为A到Redis
         myService5.doA("M", "N");
@@ -784,7 +767,7 @@ public class CacheAopApplication {
         // 清除缓存Key为M-N到Redis
         // myService5.doC("M", "N");
 
-        MyService6Impl myService6 = AquariusContextAware.getBean(MyService6Impl.class);
+        MyService6Impl myService6 = applicationContext.getBean(MyService6Impl.class);
 
         // 新增缓存Key为X-Y，Value为D到Redis
         myService6.doD("X", "Y");
@@ -794,6 +777,14 @@ public class CacheAopApplication {
 
         // 清除缓存Key为X-Y到Redis
         // myService6.doF("X", "Y");
+    }
+
+    @Bean
+    public EmbeddedServletContainerFactory createEmbeddedServletContainerFactory() {
+        TomcatEmbeddedServletContainerFactory tomcatFactory = new TomcatEmbeddedServletContainerFactory();
+        tomcatFactory.setPort(8081);
+
+        return tomcatFactory;
     }
 }
 ```
