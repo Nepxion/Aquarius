@@ -1,4 +1,4 @@
-package com.nepxion.aquarius.example.lock;
+package com.nepxion.aquarius.example.lock.app3;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
@@ -20,6 +20,7 @@ import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 
 import com.nepxion.aquarius.example.lock.service.MyService3;
 import com.nepxion.aquarius.example.lock.service.MyService4Impl;
@@ -27,6 +28,7 @@ import com.nepxion.aquarius.lock.annotation.EnableLock;
 
 @SpringBootApplication
 @EnableLock
+@ComponentScan(basePackages = { "com.nepxion.aquarius.example.lock.service" })
 public class ReadWriteLockAopApplication {
     private static final Logger LOG = LoggerFactory.getLogger(ReadWriteLockAopApplication.class);
 
