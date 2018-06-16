@@ -13,21 +13,21 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 
-import com.nepxion.aquarius.common.context.AquariusContextAware;
+import com.nepxion.aquarius.lock.annotation.EnableLock;
 import com.nepxion.aquarius.lock.service.MyService1;
 import com.nepxion.aquarius.lock.service.MyService2Impl;
 
 @SpringBootApplication
-@ComponentScan(basePackages = { "com.nepxion.aquarius.lock" })
+@EnableLock
 public class LockAopApplication {
     public static void main(String[] args) throws Exception {
-        SpringApplication.run(LockAopApplication.class, args);
+        ConfigurableApplicationContext applicationContext = SpringApplication.run(LockAopApplication.class, args);
 
         // 执行效果是doA和doC无序打印，即谁拿到锁谁先运行
-        MyService1 myService1 = AquariusContextAware.getBean(MyService1.class);
+        MyService1 myService1 = applicationContext.getBean(MyService1.class);
         for (int i = 0; i < 5; i++) {
             new Thread(new Runnable() {
                 @Override
@@ -37,7 +37,7 @@ public class LockAopApplication {
             }).start();
         }
 
-        MyService2Impl myService2 = AquariusContextAware.getBean(MyService2Impl.class);
+        MyService2Impl myService2 = applicationContext.getBean(MyService2Impl.class);
         for (int i = 0; i < 5; i++) {
             new Thread(new Runnable() {
                 @Override

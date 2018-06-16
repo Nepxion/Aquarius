@@ -16,20 +16,20 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 
-import com.nepxion.aquarius.common.context.AquariusContextAware;
+import com.nepxion.aquarius.limit.annotation.EnableLimit;
 import com.nepxion.aquarius.limit.service.MyService7;
 import com.nepxion.aquarius.limit.service.MyService8Impl;
 
 @SpringBootApplication
-@ComponentScan(basePackages = { "com.nepxion.aquarius.limit" })
+@EnableLimit
 public class LimitAopApplication {
     public static void main(String[] args) throws Exception {
-        SpringApplication.run(LimitAopApplication.class, args);
+        ConfigurableApplicationContext applicationContext = SpringApplication.run(LimitAopApplication.class, args);
 
-        MyService7 myService7 = AquariusContextAware.getBean(MyService7.class);
+        MyService7 myService7 = applicationContext.getBean(MyService7.class);
         Timer timer1 = new Timer();
         timer1.scheduleAtFixedRate(new TimerTask() {
             public void run() {
@@ -43,7 +43,7 @@ public class LimitAopApplication {
             }
         }, 0L, 3000L);
 
-        MyService8Impl myService8 = AquariusContextAware.getBean(MyService8Impl.class);
+        MyService8Impl myService8 = applicationContext.getBean(MyService8Impl.class);
         Timer timer2 = new Timer();
         timer2.scheduleAtFixedRate(new TimerTask() {
             public void run() {

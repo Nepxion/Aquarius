@@ -18,21 +18,21 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 
-import com.nepxion.aquarius.common.context.AquariusContextAware;
+import com.nepxion.aquarius.limit.annotation.EnableLimit;
 
 @SpringBootApplication
-@ComponentScan(basePackages = { "com.nepxion.aquarius.limit" })
+@EnableLimit
 public class LimitApplication {
     private static final Logger LOG = LoggerFactory.getLogger(LimitApplication.class);
 
     public static void main(String[] args) throws Exception {
-        SpringApplication.run(LimitApplication.class, args);
+        ConfigurableApplicationContext applicationContext = SpringApplication.run(LimitApplication.class, args);
 
         // 在给定的10秒里最多访问5次(超出次数返回false)；等下个10秒开始，才允许再次被访问(返回true)，周而复始
-        LimitExecutor limitExecutor = AquariusContextAware.getBean(LimitExecutor.class);
+        LimitExecutor limitExecutor = applicationContext.getBean(LimitExecutor.class);
 
         Timer timer1 = new Timer();
         timer1.scheduleAtFixedRate(new TimerTask() {

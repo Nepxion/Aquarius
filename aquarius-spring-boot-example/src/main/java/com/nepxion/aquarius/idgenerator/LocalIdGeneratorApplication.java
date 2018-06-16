@@ -18,21 +18,21 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 
-import com.nepxion.aquarius.common.context.AquariusContextAware;
+import com.nepxion.aquarius.idgenerator.annotation.EnableIdGenerator;
 import com.nepxion.aquarius.idgenerator.local.LocalIdGenerator;
 
 @SpringBootApplication
-@ComponentScan(basePackages = { "com.nepxion.aquarius.idgenerator.local" })
+@EnableIdGenerator
 public class LocalIdGeneratorApplication {
     private static final Logger LOG = LoggerFactory.getLogger(LocalIdGeneratorApplication.class);
 
     public static void main(String[] args) throws Exception {
-        SpringApplication.run(LocalIdGeneratorApplication.class, args);
+        ConfigurableApplicationContext applicationContext = SpringApplication.run(LocalIdGeneratorApplication.class, args);
 
-        LocalIdGenerator localIdGenerator = AquariusContextAware.getBean(LocalIdGenerator.class);
+        LocalIdGenerator localIdGenerator = applicationContext.getBean(LocalIdGenerator.class);
 
         Timer timer1 = new Timer();
         timer1.scheduleAtFixedRate(new TimerTask() {

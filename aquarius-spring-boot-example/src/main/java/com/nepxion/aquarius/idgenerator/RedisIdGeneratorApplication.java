@@ -18,21 +18,21 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 
-import com.nepxion.aquarius.common.context.AquariusContextAware;
+import com.nepxion.aquarius.idgenerator.annotation.EnableIdGenerator;
 import com.nepxion.aquarius.idgenerator.redis.RedisIdGenerator;
 
 @SpringBootApplication
-@ComponentScan(basePackages = { "com.nepxion.aquarius.idgenerator.redis" })
+@EnableIdGenerator
 public class RedisIdGeneratorApplication {
     private static final Logger LOG = LoggerFactory.getLogger(RedisIdGeneratorApplication.class);
 
     public static void main(String[] args) throws Exception {
-        SpringApplication.run(RedisIdGeneratorApplication.class, args);
+        ConfigurableApplicationContext applicationContext = SpringApplication.run(RedisIdGeneratorApplication.class, args);
 
-        RedisIdGenerator redisIdGenerator = AquariusContextAware.getBean(RedisIdGenerator.class);
+        RedisIdGenerator redisIdGenerator = applicationContext.getBean(RedisIdGenerator.class);
 
         Timer timer1 = new Timer();
         timer1.scheduleAtFixedRate(new TimerTask() {

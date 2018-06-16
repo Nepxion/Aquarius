@@ -18,21 +18,21 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 
-import com.nepxion.aquarius.common.context.AquariusContextAware;
+import com.nepxion.aquarius.idgenerator.annotation.EnableIdGenerator;
 import com.nepxion.aquarius.idgenerator.zookeeper.ZookeeperIdGenerator;
 
 @SpringBootApplication
-@ComponentScan(basePackages = { "com.nepxion.aquarius.idgenerator.zookeeper" })
+@EnableIdGenerator
 public class ZookeeperIdGeneratorApplication {
     private static final Logger LOG = LoggerFactory.getLogger(ZookeeperIdGeneratorApplication.class);
 
     public static void main(String[] args) throws Exception {
-        SpringApplication.run(ZookeeperIdGeneratorApplication.class, args);
+        ConfigurableApplicationContext applicationContext = SpringApplication.run(ZookeeperIdGeneratorApplication.class, args);
 
-        ZookeeperIdGenerator zookeeperIdGenerator = AquariusContextAware.getBean(ZookeeperIdGenerator.class);
+        ZookeeperIdGenerator zookeeperIdGenerator = applicationContext.getBean(ZookeeperIdGenerator.class);
 
         Timer timer1 = new Timer();
         timer1.scheduleAtFixedRate(new TimerTask() {

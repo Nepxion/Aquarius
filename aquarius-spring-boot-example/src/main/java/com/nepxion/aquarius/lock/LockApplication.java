@@ -17,22 +17,22 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 
-import com.nepxion.aquarius.common.context.AquariusContextAware;
+import com.nepxion.aquarius.lock.annotation.EnableLock;
 import com.nepxion.aquarius.lock.entity.LockType;
 
 @SpringBootApplication
-@ComponentScan(basePackages = { "com.nepxion.aquarius.lock" })
+@EnableLock
 public class LockApplication {
     private static final Logger LOG = LoggerFactory.getLogger(LockApplication.class);
 
     @SuppressWarnings("unchecked")
     public static void main(String[] args) throws Exception {
-        SpringApplication.run(LockApplication.class, args);
+        ConfigurableApplicationContext applicationContext = SpringApplication.run(LockApplication.class, args);
 
-        LockExecutor<Object> lockExecutor = AquariusContextAware.getBean(LockExecutor.class);
+        LockExecutor<Object> lockExecutor = applicationContext.getBean(LockExecutor.class);
         for (int i = 0; i < 5; i++) {
             new Thread(new Runnable() {
                 @Override
