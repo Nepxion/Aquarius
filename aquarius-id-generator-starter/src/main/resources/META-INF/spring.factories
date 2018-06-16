@@ -1,0 +1,2 @@
+com.nepxion.aquarius.idgenerator.annotation.EnableIdGenerator=\
+com.nepxion.aquarius.idgenerator.config.IdGeneratorConfig
