@@ -1,4 +1,4 @@
-package com.nepxion.aquarius.example.cache;
+package com.nepxion.aquarius.example.cache.app1;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
@@ -15,6 +15,7 @@ import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 
 import com.nepxion.aquarius.cache.annotation.EnableCache;
 import com.nepxion.aquarius.example.cache.service.MyService5;
@@ -22,6 +23,7 @@ import com.nepxion.aquarius.example.cache.service.MyService6Impl;
 
 @SpringBootApplication
 @EnableCache
+@ComponentScan(basePackages = { "com.nepxion.aquarius.example.cache.service" })
 public class CacheAopApplication {
     public static void main(String[] args) throws Exception {
         ConfigurableApplicationContext applicationContext = SpringApplication.run(CacheAopApplication.class, args);

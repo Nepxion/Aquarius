@@ -1,4 +1,4 @@
-package com.nepxion.aquarius.example.limit;
+package com.nepxion.aquarius.example.limit.app1;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
@@ -18,6 +18,7 @@ import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 
 import com.nepxion.aquarius.example.limit.service.MyService7;
 import com.nepxion.aquarius.example.limit.service.MyService8Impl;
@@ -25,6 +26,7 @@ import com.nepxion.aquarius.limit.annotation.EnableLimit;
 
 @SpringBootApplication
 @EnableLimit
+@ComponentScan(basePackages = { "com.nepxion.aquarius.example.limit.service" })
 public class LimitAopApplication {
     public static void main(String[] args) throws Exception {
         ConfigurableApplicationContext applicationContext = SpringApplication.run(LimitAopApplication.class, args);
