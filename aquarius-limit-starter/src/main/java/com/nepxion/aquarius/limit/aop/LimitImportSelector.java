@@ -9,12 +9,12 @@ package com.nepxion.aquarius.limit.aop;
  * @version 1.0
  */
 
-import org.springframework.boot.bind.RelaxedPropertyResolver;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 
 import com.nepxion.aquarius.limit.annotation.EnableLimit;
 import com.nepxion.matrix.selector.AbstractImportSelector;
+import com.nepxion.matrix.selector.RelaxedPropertyResolver;
 
 @Order(Ordered.LOWEST_PRECEDENCE - 100)
 public class LimitImportSelector extends AbstractImportSelector<EnableLimit> {
