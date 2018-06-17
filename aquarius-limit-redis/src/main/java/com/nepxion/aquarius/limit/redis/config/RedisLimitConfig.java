@@ -25,19 +25,19 @@ import com.nepxion.aquarius.limit.redis.impl.RedisLimitExecutorImpl;
 @Configuration
 @Import({ com.nepxion.aquarius.common.config.AquariusConfig.class })
 public class RedisLimitConfig {
-    @Bean(name = "redisLimitDelegate")
+    @Bean
     @Conditional(RedisLimitCondition.class)
     public LimitDelegate redisLimitDelegate() {
         return new RedisLimitDelegateImpl();
     }
 
-    @Bean(name = "redisLimitExecutor")
+    @Bean
     @Conditional(RedisLimitCondition.class)
     public LimitExecutor redisLimitExecutor() {
         return new RedisLimitExecutorImpl();
     }
 
-    @Bean(name = "redisHandler")
+    @Bean
     @Conditional(RedisLimitCondition.class)
     public RedisHandler redisHandler() {
         return new RedisHandlerImpl();

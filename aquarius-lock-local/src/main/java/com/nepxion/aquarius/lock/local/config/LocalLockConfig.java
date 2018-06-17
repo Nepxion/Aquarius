@@ -25,13 +25,13 @@ import com.nepxion.aquarius.lock.local.impl.LocalLockExecutorImpl;
 @Configuration
 @Import({ com.nepxion.aquarius.common.config.AquariusConfig.class })
 public class LocalLockConfig {
-    @Bean(name = "localLockDelegate")
+    @Bean
     @Conditional(LocalLockCondition.class)
     public LockDelegate localLockDelegate() {
         return new LocalLockDelegateImpl();
     }
 
-    @Bean(name = "localLockExecutor")
+    @Bean
     @Conditional(LocalLockCondition.class)
     public LockExecutor<Lock> localLockExecutor() {
         return new LocalLockExecutorImpl();

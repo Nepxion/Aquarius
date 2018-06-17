@@ -24,7 +24,7 @@ public class ZookeeperIdGeneratorConfig {
     @Value("${" + AquariusConstant.PREFIX + "}")
     private String prefix;
 
-    @Bean(name = "curatorHandler")
+    @Bean
     public CuratorHandler curatorHandler() {
         return new CuratorHandlerImpl(prefix);
     }

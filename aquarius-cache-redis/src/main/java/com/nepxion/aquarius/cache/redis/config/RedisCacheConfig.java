@@ -23,13 +23,13 @@ import com.nepxion.aquarius.common.redis.handler.RedisHandlerImpl;
 @Configuration
 @Import({ com.nepxion.aquarius.common.config.AquariusConfig.class })
 public class RedisCacheConfig {
-    @Bean(name = "redisCacheDelegate")
+    @Bean
     @Conditional(RedisCacheCondition.class)
     public CacheDelegate redisCacheDelegate() {
         return new RedisCacheDelegateImpl();
     }
 
-    @Bean(name = "redisHandler")
+    @Bean
     @Conditional(RedisCacheCondition.class)
     public RedisHandler redisHandler() {
         return new RedisHandlerImpl();

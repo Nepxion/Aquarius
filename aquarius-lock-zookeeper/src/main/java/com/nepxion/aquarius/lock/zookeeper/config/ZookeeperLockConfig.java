@@ -31,19 +31,19 @@ public class ZookeeperLockConfig {
     @Value("${" + AquariusConstant.PREFIX + "}")
     private String prefix;
 
-    @Bean(name = "zookeeperLockDelegate")
+    @Bean
     @Conditional(ZookeeperLockCondition.class)
     public LockDelegate zookeeperLockDelegate() {
         return new ZookeeperLockDelegateImpl();
     }
 
-    @Bean(name = "zookeeperLockExecutor")
+    @Bean
     @Conditional(ZookeeperLockCondition.class)
     public LockExecutor<InterProcessMutex> zookeeperLockExecutor() {
         return new ZookeeperLockExecutorImpl();
     }
 
-    @Bean(name = "curatorHandler")
+    @Bean
     @Conditional(ZookeeperLockCondition.class)
     public CuratorHandler curatorHandler() {
         return new CuratorHandlerImpl(prefix);

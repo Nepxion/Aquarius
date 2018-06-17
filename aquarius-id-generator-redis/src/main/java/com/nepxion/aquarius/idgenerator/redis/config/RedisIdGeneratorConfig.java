@@ -19,7 +19,7 @@ import com.nepxion.aquarius.common.redis.handler.RedisHandlerImpl;
 @Configuration
 @Import({ com.nepxion.aquarius.common.config.AquariusConfig.class })
 public class RedisIdGeneratorConfig {
-    @Bean(name = "redisHandler")
+    @Bean
     public RedisHandler redisHandler() {
         return new RedisHandlerImpl();
     }

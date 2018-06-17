@@ -23,13 +23,13 @@ import com.nepxion.aquarius.limit.local.impl.LocalLimitExecutorImpl;
 @Configuration
 @Import({ com.nepxion.aquarius.common.config.AquariusConfig.class })
 public class LocalLimitConfig {
-    @Bean(name = "localLimitDelegate")
+    @Bean
     @Conditional(LocalLimitCondition.class)
     public LimitDelegate localLimitDelegate() {
         return new LocalLimitDelegateImpl();
     }
 
-    @Bean(name = "localLimitExecutor")
+    @Bean
     @Conditional(LocalLimitCondition.class)
     public LimitExecutor localLimitExecutor() {
         return new LocalLimitExecutorImpl();
