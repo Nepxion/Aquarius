@@ -20,7 +20,7 @@ public class LimitAop {
     @Value("${" + LimitConstant.LIMIT_SCAN_PACKAGES + ":}")
     private String scanPackages;
 
-    @Bean("limitAutoScanProxy")
+    @Bean
     public LimitAutoScanProxy limitAutoScanProxy() {
         return new LimitAutoScanProxy(scanPackages);
     }

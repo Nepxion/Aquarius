@@ -20,7 +20,7 @@ public class LockAop {
     @Value("${" + LockConstant.LOCK_SCAN_PACKAGES + ":}")
     private String scanPackages;
 
-    @Bean("lockAutoScanProxy")
+    @Bean
     public LockAutoScanProxy lockAutoScanProxy() {
         return new LockAutoScanProxy(scanPackages);
     }

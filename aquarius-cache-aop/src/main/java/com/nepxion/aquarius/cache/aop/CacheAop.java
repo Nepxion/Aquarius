@@ -20,7 +20,7 @@ public class CacheAop {
     @Value("${" + CacheConstant.CACHE_SCAN_PACKAGES + ":}")
     private String scanPackages;
 
-    @Bean("cacheAutoScanProxy")
+    @Bean
     public CacheAutoScanProxy cacheAutoScanProxy() {
         return new CacheAutoScanProxy(scanPackages);
     }
