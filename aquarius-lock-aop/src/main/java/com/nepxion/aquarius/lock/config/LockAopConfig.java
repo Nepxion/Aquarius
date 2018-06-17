@@ -1,4 +1,4 @@
-package com.nepxion.aquarius.lock.aop;
+package com.nepxion.aquarius.lock.config;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
@@ -11,17 +11,24 @@ package com.nepxion.aquarius.lock.aop;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Configuration;
 
+import com.nepxion.aquarius.lock.aop.LockAutoScanProxy;
+import com.nepxion.aquarius.lock.aop.LockInterceptor;
 import com.nepxion.aquarius.lock.constant.LockConstant;
 
-@Component("lockAop")
-public class LockAop {
+@Configuration
+public class LockAopConfig {
     @Value("${" + LockConstant.LOCK_SCAN_PACKAGES + ":}")
     private String scanPackages;
 
     @Bean
     public LockAutoScanProxy lockAutoScanProxy() {
         return new LockAutoScanProxy(scanPackages);
+    }
+
+    @Bean
+    public LockInterceptor lockInterceptor() {
+        return new LockInterceptor();
     }
 }

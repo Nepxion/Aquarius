@@ -9,11 +9,15 @@ package com.nepxion.aquarius.limit.config;
  * @version 1.0
  */
 
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
+import com.nepxion.aquarius.common.config.AquariusConfig;
+import com.nepxion.aquarius.limit.local.config.LocalLimitConfig;
+import com.nepxion.aquarius.limit.redis.config.RedisLimitConfig;
 
 @Configuration
-@ComponentScan(basePackages = { "com.nepxion.aquarius.limit" })
+@Import({ AquariusConfig.class, LimitAopConfig.class, RedisLimitConfig.class, LocalLimitConfig.class })
 public class LimitConfig {
 
 }

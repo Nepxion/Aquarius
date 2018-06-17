@@ -18,7 +18,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 import com.nepxion.aquarius.common.constant.AquariusConstant;
 import com.nepxion.aquarius.common.exception.AquariusException;
@@ -30,7 +29,6 @@ import com.nepxion.aquarius.lock.annotation.WriteLock;
 import com.nepxion.aquarius.lock.entity.LockType;
 import com.nepxion.matrix.proxy.aop.AbstractInterceptor;
 
-@Component("lockInterceptor")
 public class LockInterceptor extends AbstractInterceptor {
     private static final Logger LOG = LoggerFactory.getLogger(LockInterceptor.class);
 

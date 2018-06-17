@@ -9,11 +9,16 @@ package com.nepxion.aquarius.lock.config;
  * @version 1.0
  */
 
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
+import com.nepxion.aquarius.common.config.AquariusConfig;
+import com.nepxion.aquarius.lock.local.config.LocalLockConfig;
+import com.nepxion.aquarius.lock.redis.config.RedisLockConfig;
+import com.nepxion.aquarius.lock.zookeeper.config.ZookeeperLockConfig;
 
 @Configuration
-@ComponentScan(basePackages = { "com.nepxion.aquarius.lock" })
+@Import({ AquariusConfig.class, LockAopConfig.class, RedisLockConfig.class, ZookeeperLockConfig.class, LocalLockConfig.class })
 public class LockConfig {
 
 }

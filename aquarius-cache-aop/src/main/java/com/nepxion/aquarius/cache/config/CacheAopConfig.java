@@ -1,4 +1,4 @@
-package com.nepxion.aquarius.cache.aop;
+package com.nepxion.aquarius.cache.config;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
@@ -11,17 +11,24 @@ package com.nepxion.aquarius.cache.aop;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Configuration;
 
+import com.nepxion.aquarius.cache.aop.CacheAutoScanProxy;
+import com.nepxion.aquarius.cache.aop.CacheInterceptor;
 import com.nepxion.aquarius.cache.constant.CacheConstant;
 
-@Component("cacheAop")
-public class CacheAop {
+@Configuration
+public class CacheAopConfig {
     @Value("${" + CacheConstant.CACHE_SCAN_PACKAGES + ":}")
     private String scanPackages;
 
     @Bean
     public CacheAutoScanProxy cacheAutoScanProxy() {
         return new CacheAutoScanProxy(scanPackages);
+    }
+
+    @Bean
+    public CacheInterceptor cacheInterceptor() {
+        return new CacheInterceptor();
     }
 }

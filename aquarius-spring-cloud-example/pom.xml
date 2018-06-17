@@ -38,33 +38,27 @@
     </dependencyManagement>
 
     <dependencies>
-        <!-- <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>aquarius-assembly-all</artifactId>
-            <version>${aquarius.version}</version>
-        </dependency> -->
-
         <dependency>
             <groupId>com.nepxion</groupId>
-            <artifactId>aquarius-assembly-lock</artifactId>
+            <artifactId>aquarius-lock-starter</artifactId>
             <version>${aquarius.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.nepxion</groupId>
-            <artifactId>aquarius-assembly-cache</artifactId>
+            <artifactId>aquarius-cache-starter</artifactId>
             <version>${aquarius.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.nepxion</groupId>
-            <artifactId>aquarius-assembly-id-generator</artifactId>
+            <artifactId>aquarius-limit-starter</artifactId>
             <version>${aquarius.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.nepxion</groupId>
-            <artifactId>aquarius-assembly-limit</artifactId>
+            <artifactId>aquarius-id-generator-starter</artifactId>
             <version>${aquarius.version}</version>
         </dependency>
 

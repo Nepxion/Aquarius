@@ -9,11 +9,14 @@ package com.nepxion.aquarius.cache.config;
  * @version 1.0
  */
 
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
+import com.nepxion.aquarius.cache.redis.config.RedisCacheConfig;
+import com.nepxion.aquarius.common.config.AquariusConfig;
 
 @Configuration
-@ComponentScan(basePackages = { "com.nepxion.aquarius.cache" })
+@Import({ AquariusConfig.class, CacheAopConfig.class, RedisCacheConfig.class })
 public class CacheConfig {
 
 }

@@ -15,14 +15,12 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 import com.nepxion.aquarius.common.constant.AquariusConstant;
 import com.nepxion.aquarius.common.util.DateUtil;
 import com.nepxion.aquarius.common.util.StringUtil;
 import com.nepxion.aquarius.idgenerator.local.LocalIdGenerator;
 
-@Component("localIdGeneratorImpl")
 public class LocalIdGeneratorImpl implements LocalIdGenerator {
     private static final Logger LOG = LoggerFactory.getLogger(LocalIdGeneratorImpl.class);
 

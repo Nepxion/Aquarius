@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 import com.nepxion.aquarius.common.constant.AquariusConstant;
 import com.nepxion.aquarius.common.curator.handler.CuratorHandler;
@@ -26,7 +25,6 @@ import com.nepxion.aquarius.lock.zookeeper.impl.ZookeeperLockDelegateImpl;
 import com.nepxion.aquarius.lock.zookeeper.impl.ZookeeperLockExecutorImpl;
 
 @Configuration
-@Import({ com.nepxion.aquarius.common.config.AquariusConfig.class })
 public class ZookeeperLockConfig {
     @Value("${" + AquariusConstant.PREFIX + "}")
     private String prefix;

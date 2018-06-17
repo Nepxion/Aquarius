@@ -11,11 +11,21 @@ package com.nepxion.aquarius.example;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.context.annotation.ComponentScan;
+
+import com.nepxion.aquarius.cache.annotation.EnableCache;
+import com.nepxion.aquarius.idgenerator.annotation.EnableLocalIdGenerator;
+import com.nepxion.aquarius.idgenerator.annotation.EnableRedisIdGenerator;
+import com.nepxion.aquarius.idgenerator.annotation.EnableZookeeperIdGenerator;
+import com.nepxion.aquarius.limit.annotation.EnableLimit;
+import com.nepxion.aquarius.lock.annotation.EnableLock;
 
 @SpringBootApplication
-// @EnableDiscoveryClient
-@ComponentScan(basePackages = { "com.nepxion.aquarius" })
+@EnableLock
+@EnableCache
+@EnableLimit
+@EnableLocalIdGenerator
+@EnableRedisIdGenerator
+@EnableZookeeperIdGenerator
 public class AquariusApplication {
     public static void main(String[] args) {
         new SpringApplicationBuilder(AquariusApplication.class).web(true).run(args);

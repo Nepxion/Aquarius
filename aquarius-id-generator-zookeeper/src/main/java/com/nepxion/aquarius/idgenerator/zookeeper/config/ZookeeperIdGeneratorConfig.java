@@ -12,17 +12,22 @@ package com.nepxion.aquarius.idgenerator.zookeeper.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 import com.nepxion.aquarius.common.constant.AquariusConstant;
 import com.nepxion.aquarius.common.curator.handler.CuratorHandler;
 import com.nepxion.aquarius.common.curator.handler.CuratorHandlerImpl;
+import com.nepxion.aquarius.idgenerator.zookeeper.ZookeeperIdGenerator;
+import com.nepxion.aquarius.idgenerator.zookeeper.impl.ZookeeperIdGeneratorImpl;
 
 @Configuration
-@Import({ com.nepxion.aquarius.common.config.AquariusConfig.class })
 public class ZookeeperIdGeneratorConfig {
     @Value("${" + AquariusConstant.PREFIX + "}")
     private String prefix;
+
+    @Bean
+    public ZookeeperIdGenerator zookeeperIdGenerator() {
+        return new ZookeeperIdGeneratorImpl();
+    }
 
     @Bean
     public CuratorHandler curatorHandler() {

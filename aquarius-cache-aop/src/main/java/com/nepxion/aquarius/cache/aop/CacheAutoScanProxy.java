@@ -11,8 +11,6 @@ package com.nepxion.aquarius.cache.aop;
 
 import java.lang.annotation.Annotation;
 
-import org.aopalliance.intercept.MethodInterceptor;
-
 import com.nepxion.aquarius.cache.annotation.CacheEvict;
 import com.nepxion.aquarius.cache.annotation.CachePut;
 import com.nepxion.aquarius.cache.annotation.Cacheable;
@@ -20,12 +18,10 @@ import com.nepxion.matrix.proxy.aop.DefaultAutoScanProxy;
 import com.nepxion.matrix.proxy.mode.ProxyMode;
 import com.nepxion.matrix.proxy.mode.ScanMode;
 
-// 通过全局拦截器实现对类头部注解的扫描和代理
 public class CacheAutoScanProxy extends DefaultAutoScanProxy {
     private static final long serialVersionUID = 5099476398968133135L;
 
-    @SuppressWarnings("rawtypes")
-    private Class[] commonInterceptorClasses;
+    private String[] commonInterceptorNames;
 
     @SuppressWarnings("rawtypes")
     private Class[] methodAnnotations;
@@ -34,14 +30,13 @@ public class CacheAutoScanProxy extends DefaultAutoScanProxy {
         super(scanPackages, ProxyMode.BY_METHOD_ANNOTATION_ONLY, ScanMode.FOR_METHOD_ANNOTATION_ONLY);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    protected Class<? extends MethodInterceptor>[] getCommonInterceptors() {
-        if (commonInterceptorClasses == null) {
-            commonInterceptorClasses = new Class[] { CacheInterceptor.class };
+    protected String[] getCommonInterceptorNames() {
+        if (commonInterceptorNames == null) {
+            commonInterceptorNames = new String[] { "cacheInterceptor" };
         }
 
-        return commonInterceptorClasses;
+        return commonInterceptorNames;
     }
 
     @SuppressWarnings("unchecked")

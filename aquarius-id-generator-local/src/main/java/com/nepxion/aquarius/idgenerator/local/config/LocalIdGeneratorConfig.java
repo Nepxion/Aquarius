@@ -9,11 +9,16 @@ package com.nepxion.aquarius.idgenerator.local.config;
  * @version 1.0
  */
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+
+import com.nepxion.aquarius.idgenerator.local.LocalIdGenerator;
+import com.nepxion.aquarius.idgenerator.local.impl.LocalIdGeneratorImpl;
 
 @Configuration
-@Import({ com.nepxion.aquarius.common.config.AquariusConfig.class })
 public class LocalIdGeneratorConfig {
-
+    @Bean
+    public LocalIdGenerator localIdGenerator() {
+        return new LocalIdGeneratorImpl();
+    }
 }

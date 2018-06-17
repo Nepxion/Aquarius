@@ -11,8 +11,6 @@ package com.nepxion.aquarius.lock.aop;
 
 import java.lang.annotation.Annotation;
 
-import org.aopalliance.intercept.MethodInterceptor;
-
 import com.nepxion.aquarius.lock.annotation.Lock;
 import com.nepxion.aquarius.lock.annotation.ReadLock;
 import com.nepxion.aquarius.lock.annotation.WriteLock;
@@ -20,12 +18,10 @@ import com.nepxion.matrix.proxy.aop.DefaultAutoScanProxy;
 import com.nepxion.matrix.proxy.mode.ProxyMode;
 import com.nepxion.matrix.proxy.mode.ScanMode;
 
-// 通过全局拦截器实现对类头部注解的扫描和代理
 public class LockAutoScanProxy extends DefaultAutoScanProxy {
     private static final long serialVersionUID = -957037966342626931L;
 
-    @SuppressWarnings("rawtypes")
-    private Class[] commonInterceptorClasses;
+    private String[] commonInterceptorNames;
 
     @SuppressWarnings("rawtypes")
     private Class[] methodAnnotations;
@@ -34,14 +30,13 @@ public class LockAutoScanProxy extends DefaultAutoScanProxy {
         super(scanPackages, ProxyMode.BY_METHOD_ANNOTATION_ONLY, ScanMode.FOR_METHOD_ANNOTATION_ONLY);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    protected Class<? extends MethodInterceptor>[] getCommonInterceptors() {
-        if (commonInterceptorClasses == null) {
-            commonInterceptorClasses = new Class[] { LockInterceptor.class };
+    protected String[] getCommonInterceptorNames() {
+        if (commonInterceptorNames == null) {
+            commonInterceptorNames = new String[] { "lockInterceptor" };
         }
 
-        return commonInterceptorClasses;
+        return commonInterceptorNames;
     }
 
     @SuppressWarnings("unchecked")

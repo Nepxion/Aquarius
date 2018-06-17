@@ -14,7 +14,6 @@ import java.util.concurrent.locks.Lock;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 import com.nepxion.aquarius.lock.LockDelegate;
 import com.nepxion.aquarius.lock.LockExecutor;
@@ -23,7 +22,6 @@ import com.nepxion.aquarius.lock.local.impl.LocalLockDelegateImpl;
 import com.nepxion.aquarius.lock.local.impl.LocalLockExecutorImpl;
 
 @Configuration
-@Import({ com.nepxion.aquarius.common.config.AquariusConfig.class })
 public class LocalLockConfig {
     @Bean
     @Conditional(LocalLockCondition.class)

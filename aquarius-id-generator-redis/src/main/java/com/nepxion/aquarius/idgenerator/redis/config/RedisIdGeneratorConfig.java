@@ -11,14 +11,19 @@ package com.nepxion.aquarius.idgenerator.redis.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 import com.nepxion.aquarius.common.redis.handler.RedisHandler;
 import com.nepxion.aquarius.common.redis.handler.RedisHandlerImpl;
+import com.nepxion.aquarius.idgenerator.redis.RedisIdGenerator;
+import com.nepxion.aquarius.idgenerator.redis.impl.RedisIdGeneratorImpl;
 
 @Configuration
-@Import({ com.nepxion.aquarius.common.config.AquariusConfig.class })
 public class RedisIdGeneratorConfig {
+    @Bean
+    public RedisIdGenerator redisIdGenerator() {
+        return new RedisIdGeneratorImpl();
+    }
+
     @Bean
     public RedisHandler redisHandler() {
         return new RedisHandlerImpl();

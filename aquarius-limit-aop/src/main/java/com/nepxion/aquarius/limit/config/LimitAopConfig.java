@@ -1,4 +1,4 @@
-package com.nepxion.aquarius.limit.aop;
+package com.nepxion.aquarius.limit.config;
 
 /**
  * <p>Title: Nepxion Aquarius</p>
@@ -11,17 +11,24 @@ package com.nepxion.aquarius.limit.aop;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Configuration;
 
+import com.nepxion.aquarius.limit.aop.LimitAutoScanProxy;
+import com.nepxion.aquarius.limit.aop.LimitInterceptor;
 import com.nepxion.aquarius.limit.constant.LimitConstant;
 
-@Component("limitAop")
-public class LimitAop {
+@Configuration
+public class LimitAopConfig {
     @Value("${" + LimitConstant.LIMIT_SCAN_PACKAGES + ":}")
     private String scanPackages;
 
     @Bean
     public LimitAutoScanProxy limitAutoScanProxy() {
         return new LimitAutoScanProxy(scanPackages);
+    }
+
+    @Bean
+    public LimitInterceptor limitInterceptor() {
+        return new LimitInterceptor();
     }
 }

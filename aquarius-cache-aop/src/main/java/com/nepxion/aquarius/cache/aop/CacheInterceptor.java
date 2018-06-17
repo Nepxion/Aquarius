@@ -17,7 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 import com.nepxion.aquarius.cache.CacheDelegate;
 import com.nepxion.aquarius.cache.annotation.CacheEvict;
@@ -28,7 +27,6 @@ import com.nepxion.aquarius.common.exception.AquariusException;
 import com.nepxion.aquarius.common.util.KeyUtil;
 import com.nepxion.matrix.proxy.aop.AbstractInterceptor;
 
-@Component("cacheInterceptor")
 public class CacheInterceptor extends AbstractInterceptor {
     private static final Logger LOG = LoggerFactory.getLogger(CacheInterceptor.class);
 
