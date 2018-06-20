@@ -98,7 +98,7 @@ aquarius-spring-boot-example\src\main\resources\application.properties，切换l
 lock.enabled=true
 # redisLock, zookeeperLock, localLock
 lock.type=redisLock
-# 扫描含有@Lock，@ReadLock，@WriteLock等注解的接口或者类所在目录（可以不配置，但如果不配置，则扫描全局，会稍微降低性能）
+# 扫描含有@Lock，@ReadLock，@WriteLock等注解的接口或者类所在目录
 lock.scan.packages=com.nepxion.aquarius.example.lock.service
 ```
 
@@ -627,7 +627,7 @@ public class ReadWriteLockApplication {
 # Cache config
 cache.enabled=true
 cache.type=redisCache
-# 扫描含有@Cacheable，@CacheEvict，@CachePut等注解的接口或者类所在目录（可以不配置，但如果不配置，则扫描全局，会稍微降低性能）
+# 扫描含有@Cacheable，@CacheEvict，@CachePut等注解的接口或者类所在目录
 cache.scan.packages=com.nepxion.aquarius.example.cache.service
 ```
 
@@ -1166,7 +1166,7 @@ aquarius-spring-boot-example\src\main\resources\application.properties，切换l
 limit.enabled=true
 # redisLimit, localLimit
 limit.type=redisLimit
-# 扫描含有@Limit等注解的接口或者类所在目录（可以不配置，但如果不配置，则扫描全局，会稍微降低性能）
+# 扫描含有@Limit等注解的接口或者类所在目录
 limit.scan.packages=com.nepxion.aquarius.example.limit.service
 ```
 
