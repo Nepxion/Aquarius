@@ -24,7 +24,7 @@ import com.nepxion.aquarius.limit.annotation.Limit;
 public class LimitAopController {
     private static final Logger LOG = LoggerFactory.getLogger(LimitAopController.class);
 
-    @RequestMapping(value = "/doG", method = RequestMethod.GET)
+    @RequestMapping(path = "/doG", method = RequestMethod.GET)
     @Limit(name = "limit", key = "#id1 + \"-\" + #id2", limitPeriod = 10, limitCount = 5)
     public String doG(String id1, String id2) {
         LOG.info("doG");

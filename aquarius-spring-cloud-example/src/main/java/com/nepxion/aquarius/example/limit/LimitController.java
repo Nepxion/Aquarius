@@ -27,7 +27,7 @@ public class LimitController {
     @Autowired
     private LimitExecutor limitExecutor;
 
-    @RequestMapping(value = "/tryAccess", method = RequestMethod.GET)
+    @RequestMapping(path = "/tryAccess", method = RequestMethod.GET)
     @ApiOperation(value = "请求分布式限流许可", notes = "在给定的时间段里最多的访问限制次数(超出次数返回false)；等下个时间段开始，才允许再次被访问(返回true)，周而复始", response = Boolean.class, httpMethod = "GET")
     public boolean tryAccess(
             @RequestParam @ApiParam(value = "资源名字", required = true, defaultValue = "limit") String name,

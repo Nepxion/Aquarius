@@ -28,7 +28,7 @@ import com.nepxion.aquarius.cache.annotation.Cacheable;
 public class CacheAopController {
     private static final Logger LOG = LoggerFactory.getLogger(CacheAopController.class);
 
-    @RequestMapping(value = "/doD", method = RequestMethod.GET)
+    @RequestMapping(path = "/doD", method = RequestMethod.GET)
     @Cacheable(name = "cache", key = "#id1 + \"-\" + #id2", expire = 60000L)
     public String doD(String id1, String id2) {
         try {
@@ -42,7 +42,7 @@ public class CacheAopController {
         return "D";
     }
 
-    @RequestMapping(value = "/doE", method = RequestMethod.GET)
+    @RequestMapping(path = "/doE", method = RequestMethod.GET)
     @CachePut(name = "cache", key = "#id1 + \"-\" + #id2", expire = 60000L)
     public String doE(String id1, String id2) {
         try {
@@ -56,7 +56,7 @@ public class CacheAopController {
         return "E";
     }
 
-    @RequestMapping(value = "/doF", method = RequestMethod.GET)
+    @RequestMapping(path = "/doF", method = RequestMethod.GET)
     @CacheEvict(name = "cache", key = "#id1 + \"-\" + #id2", allEntries = false, beforeInvocation = false)
     public String doF(String id1, String id2) {
         try {

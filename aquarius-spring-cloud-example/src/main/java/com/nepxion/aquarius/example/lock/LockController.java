@@ -36,7 +36,7 @@ public class LockController {
     private LockExecutor lockExecutor;
 
     @SuppressWarnings("unchecked")
-    @RequestMapping(value = "/tryLock", method = RequestMethod.GET)
+    @RequestMapping(path = "/tryLock", method = RequestMethod.GET)
     @ApiOperation(value = "获取分布式锁", notes = "尝试获取锁，如果获取到锁，则返回锁对象，如果未获取到锁，则返回空", response = String.class, httpMethod = "GET")
     public String tryLock(
             @RequestParam @ApiParam(value = "锁的类型", required = true, allowableValues = "Lock, ReadLock, WriteLock", defaultValue = "Lock") String lockType,

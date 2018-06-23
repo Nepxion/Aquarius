@@ -35,7 +35,7 @@ public class IdGeneratorController {
     @Autowired
     private LocalIdGenerator localIdGenerator;
 
-    @RequestMapping(value = "/nextUniqueId", method = RequestMethod.GET)
+    @RequestMapping(path = "/nextUniqueId", method = RequestMethod.GET)
     @ApiOperation(value = "获取分布式全局唯一有序ID，基于Redis", notes = "获取分布式全局唯一ID，通过Redis产生有序ID", response = String.class, httpMethod = "GET")
     public String nextUniqueId(
             @RequestParam @ApiParam(value = "资源名字", required = true, defaultValue = "idgenerater") String name,
@@ -45,7 +45,7 @@ public class IdGeneratorController {
         return redisIdGenerator.nextUniqueId(name, key, step, length);
     }
 
-    @RequestMapping(value = "/nextUniqueIds", method = RequestMethod.GET)
+    @RequestMapping(path = "/nextUniqueIds", method = RequestMethod.GET)
     @ApiOperation(value = "批量获取分布式全局唯一有序ID，基于Redis", notes = "批量获取分布式全局唯一ID，通过Redis产生有序ID，最大不能超过1000", response = String[].class, httpMethod = "GET")
     public String[] nextUniqueIds(
             @RequestParam @ApiParam(value = "资源名字", required = true, defaultValue = "idgenerater") String name,
@@ -56,7 +56,7 @@ public class IdGeneratorController {
         return redisIdGenerator.nextUniqueIds(name, key, step, length, count);
     }
 
-    @RequestMapping(value = "/nextLocalUniqueId", method = RequestMethod.GET)
+    @RequestMapping(path = "/nextLocalUniqueId", method = RequestMethod.GET)
     @ApiOperation(value = "获取分布式全局唯一ID，基于Snowflake算法", notes = "获取分布式全局唯一ID，根据Twitter雪花ID本地算法，模拟分布式ID产生", response = String.class, httpMethod = "GET")
     public String nextLocalUniqueId(
             @RequestParam @ApiParam(value = "数据中心标识ID", required = true, defaultValue = "2") long dataCenterId,
@@ -64,7 +64,7 @@ public class IdGeneratorController {
         return localIdGenerator.nextUniqueId(dataCenterId, machineId);
     }
 
-    @RequestMapping(value = "/nextLocalUniqueIds", method = RequestMethod.GET)
+    @RequestMapping(path = "/nextLocalUniqueIds", method = RequestMethod.GET)
     @ApiOperation(value = "批量获取分布式全局唯一ID，基于Snowflake算法", notes = "批量获取分布式全局唯一ID，根据Twitter雪花ID本地算法，模拟分布式ID产生, 最大不能超过10万", response = String[].class, httpMethod = "GET")
     public String[] nextLocalUniqueIds(
             @RequestParam @ApiParam(value = "数据中心标识ID", required = true, defaultValue = "2") long dataCenterId,
@@ -73,7 +73,7 @@ public class IdGeneratorController {
         return localIdGenerator.nextUniqueIds(dataCenterId, machineId, count);
     }
 
-    @RequestMapping(value = "/nextSequenceId", method = RequestMethod.GET)
+    @RequestMapping(path = "/nextSequenceId", method = RequestMethod.GET)
     @ApiOperation(value = "获取分布式全局唯一有序序号，基于Zookeeper", notes = "获取分布式全局唯一序号，通过Zookeeper产生有序ID，最大不能超过1000", response = String.class, httpMethod = "GET")
     public String nextSequenceId(
             @RequestParam @ApiParam(value = "资源名字", required = true, defaultValue = "idgenerater") String name,
@@ -85,7 +85,7 @@ public class IdGeneratorController {
         }
     }
 
-    @RequestMapping(value = "/nextSequenceIds", method = RequestMethod.GET)
+    @RequestMapping(path = "/nextSequenceIds", method = RequestMethod.GET)
     @ApiOperation(value = "批量获取分布式全局唯一有序序号，基于Zookeeper", notes = "批量获取分布式全局唯一序号, ，通过Zookeeper产生有序ID，最大不能超过1000", response = String[].class, httpMethod = "GET")
     public String[] nextSequenceIds(
             @RequestParam @ApiParam(value = "资源名字", required = true, defaultValue = "idgenerater") String name,

@@ -29,7 +29,7 @@ import com.nepxion.aquarius.lock.annotation.WriteLock;
 public class LockAopController {
     private static final Logger LOG = LoggerFactory.getLogger(LockAopController.class);
 
-    @RequestMapping(value = "/doA", method = RequestMethod.GET)
+    @RequestMapping(path = "/doA", method = RequestMethod.GET)
     @Lock(name = "lock", key = "#id1 + \"-\" + #id2", leaseTime = 5000L, waitTime = 60000L, async = false, fair = false)
     public String doA(@RequestParam String id1, @RequestParam String id2) {
         try {
@@ -43,7 +43,7 @@ public class LockAopController {
         return "A";
     }
 
-    @RequestMapping(value = "/doB", method = RequestMethod.GET)
+    @RequestMapping(path = "/doB", method = RequestMethod.GET)
     @ReadLock(name = "lock", key = "#id1 + \"-\" + #id2", leaseTime = 5000L, waitTime = 60000L, async = false, fair = false)
     public String doB(@RequestParam String id1, @RequestParam String id2) {
         LOG.info("doB");
@@ -51,7 +51,7 @@ public class LockAopController {
         return "B";
     }
 
-    @RequestMapping(value = "/doC", method = RequestMethod.GET)
+    @RequestMapping(path = "/doC", method = RequestMethod.GET)
     @WriteLock(name = "lock", key = "#id1 + \"-\" + #id2", leaseTime = 5000L, waitTime = 60000L, async = false, fair = false)
     public String doC(@RequestParam String id1, @RequestParam String id2) {
         LOG.info("doC");
