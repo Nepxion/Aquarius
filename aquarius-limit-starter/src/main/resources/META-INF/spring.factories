@@ -1,2 +1,2 @@
 com.nepxion.aquarius.limit.annotation.EnableLimit=\
-com.nepxion.aquarius.limit.config.LimitConfig
+com.nepxion.aquarius.limit.configuration.LimitConfiguration

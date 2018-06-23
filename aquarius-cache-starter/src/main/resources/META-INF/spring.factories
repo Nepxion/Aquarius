@@ -1,2 +1,2 @@
 com.nepxion.aquarius.cache.annotation.EnableCache=\
-com.nepxion.aquarius.cache.config.CacheConfig
+com.nepxion.aquarius.cache.configuration.CacheConfiguration
