@@ -16,8 +16,8 @@ import org.springframework.context.annotation.Configuration;
 import com.nepxion.aquarius.limit.LimitDelegate;
 import com.nepxion.aquarius.limit.LimitExecutor;
 import com.nepxion.aquarius.limit.local.condition.LocalLimitCondition;
+import com.nepxion.aquarius.limit.local.impl.GuavaLocalLimitExecutorImpl;
 import com.nepxion.aquarius.limit.local.impl.LocalLimitDelegateImpl;
-import com.nepxion.aquarius.limit.local.impl.LocalLimitExecutorImpl;
 
 @Configuration
 public class LocalLimitConfiguration {
@@ -30,6 +30,8 @@ public class LocalLimitConfiguration {
     @Bean
     @Conditional(LocalLimitCondition.class)
     public LimitExecutor localLimitExecutor() {
-        return new LocalLimitExecutorImpl();
+        return new GuavaLocalLimitExecutorImpl();
+
+        // return new LocalLimitExecutorImpl();
     }
 }
