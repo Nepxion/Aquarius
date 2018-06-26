@@ -29,8 +29,8 @@ import com.nepxion.aquarius.common.exception.AquariusException;
 import com.nepxion.aquarius.common.util.KeyUtil;
 import com.nepxion.aquarius.limit.LimitExecutor;
 
-public class LocalLimitExecutorImpl implements LimitExecutor {
-    private static final Logger LOG = LoggerFactory.getLogger(LocalLimitExecutorImpl.class);
+public class JdkLimitExecutorImpl implements LimitExecutor {
+    private static final Logger LOG = LoggerFactory.getLogger(JdkLimitExecutorImpl.class);
 
     @Value("${" + AquariusConstant.PREFIX + "}")
     private String prefix;

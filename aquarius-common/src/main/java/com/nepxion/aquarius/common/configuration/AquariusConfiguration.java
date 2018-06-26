@@ -15,5 +15,17 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ComponentScan(basePackages = { "com.nepxion.aquarius.common.context" })
 public class AquariusConfiguration {
-
+    static {
+        System.out.println("");
+        System.out.println("╔═══╗");
+        System.out.println("║╔═╗║");
+        System.out.println("║║ ║╠══╦╗╔╦══╦═╦╦╗╔╦══╗");
+        System.out.println("║╚═╝║╔╗║║║║╔╗║╔╬╣║║║══╣");
+        System.out.println("║╔═╗║╚╝║╚╝║╔╗║║║║╚╝╠══║");
+        System.out.println("╚╝ ╚╩═╗╠══╩╝╚╩╝╚╩══╩══╝");
+        System.out.println("      ║║");
+        System.out.println("      ╚╝");
+        System.out.println("Nepxion Aquarius  v1.0.16");
+        System.out.println("");
+    }
 }

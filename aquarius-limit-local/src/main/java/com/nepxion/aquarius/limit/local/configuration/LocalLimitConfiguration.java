@@ -32,6 +32,6 @@ public class LocalLimitConfiguration {
     public LimitExecutor localLimitExecutor() {
         return new GuavaLocalLimitExecutorImpl();
 
-        // return new LocalLimitExecutorImpl();
+        // return new JdkLimitExecutorImpl();
     }
 }
