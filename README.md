@@ -12,7 +12,7 @@ Nepxion Aquarius是一款基于Redis + Zookeeper的分布式应用组件集合�
     1 Nepxion Aquarius Lock 分布式锁(支持Redis、Zookeeper、ReentrantLock本地锁)
     2 Nepxion Aquarius Cache 分布式缓存(支持Redis)
     3 Nepxion Aquarius ID Generator 分布式全局唯一ID(支持Redis)、全局唯一序号生成(支持Zookeeper、Twitter雪花ID算法的支持)，支持单个和批量获取
-    4 Nepxion Aquarius Limit 分布式限速限流(支持Redis、本地限速限流)
+    4 Nepxion Aquarius Limit 分布式限速限流(支持Redis、Guava本地限速限流)
 
     提供Start模式，在类头部加注解@EnableXXX，同时结合配置文件xxx.enabled=true/false进行相关Aop功能的关闭和开启
 
@@ -1157,7 +1157,7 @@ public class LocalIdGeneratorApplication {
       1)name 资源的名字
       2)key  资源Key。资源Key的完整路径是prefix + "_" + name + "_" + key，prefix为config.propertie里的namespace值
       3)limitPeriod 给定的时间段(单位为秒)
-      4)limitCount 最多的访问限制次数
+      4)limitCount 最多的访问限制次数（注意，如果是Guava方式本地限流，limitCount必须等于1，因为Guava的机制是设置每秒访问次数）
 
 ### 切换限流限速器类型
 aquarius-spring-boot-example\src\main\resources\application.properties，切换limitType即可
