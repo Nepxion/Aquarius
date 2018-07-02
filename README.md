@@ -8,16 +8,14 @@ Nepxion Aquarius是一款基于Redis + Zookeeper的分布式应用组件集合�
 
 ## 简介
 分布式应用组件集合，包含
+- Nepxion Aquarius Lock 分布式锁(支持Redis、Zookeeper、ReentrantLock本地锁)
+- Nepxion Aquarius Cache 分布式缓存(支持Redis)
+- Nepxion Aquarius ID Generator 分布式全局唯一ID(支持Redis)、全局唯一序号生成(支持Zookeeper、Twitter雪花ID算法的支持)，支持单个和批量获取
+- Nepxion Aquarius Limit 分布式限速限流(支持Redis、Guava本地限速限流)
+  提供Start模式，在类头部加注解@EnableXXX，同时结合配置文件xxx.enabled=true/false进行相关Aop功能的关闭和开启
 
-    1 Nepxion Aquarius Lock 分布式锁(支持Redis、Zookeeper、ReentrantLock本地锁)
-    2 Nepxion Aquarius Cache 分布式缓存(支持Redis)
-    3 Nepxion Aquarius ID Generator 分布式全局唯一ID(支持Redis)、全局唯一序号生成(支持Zookeeper、Twitter雪花ID算法的支持)，支持单个和批量获取
-    4 Nepxion Aquarius Limit 分布式限速限流(支持Redis、Guava本地限速限流)
-
-    提供Start模式，在类头部加注解@EnableXXX，同时结合配置文件xxx.enabled=true/false进行相关Aop功能的关闭和开启
-
-    上述4大组件同时支持SpringBoot和SpringCloud部署，分别参考aquarius-spring-boot-example和aquarius-spring-cloud-example工程，文档只以aquarius-spring-boot-example为例来阐述使用方法
-    支持Swagger，打开http://localhost:2222/swagger-ui.html访问
+  上述4大组件同时支持SpringBoot和SpringCloud部署，分别参考aquarius-spring-boot-example和aquarius-spring-cloud-example工程，文档只以aquarius-spring-boot-example为例来阐述使用方法
+  支持Swagger，打开http://localhost:2222/swagger-ui.html访问
 
 ![Alt text](https://github.com/Nepxion/Docs/blob/master/aquarius-doc/Swagger.jpg)
 
