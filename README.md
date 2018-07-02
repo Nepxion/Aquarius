@@ -55,39 +55,39 @@ Nepxion Aquarius是一款基于Redis + Zookeeper的分布式应用组件集合�
 基于Redisson(Redis)、Curator(Zookeeper)分布式锁和本地锁，构建于Nepxion Matrix AOP framework，你可以在这三个锁组件中选择一个移植入你的应用中
 
 ### 提示
-    注解的Key支持Java8下的SPEL语义拼装。但SPEL语义对于接口代理的方式，需要打开编译参数项
-    参照Nepxion Marix文档里的说明，需要在IDE和Maven里设置"-parameters"的Compiler Argument。具体参考如下：
-    1)Eclipse加"-parameters"参数：https://www.concretepage.com/java/jdk-8/java-8-reflection-access-to-parameter-names-of-method-and-constructor-with-maven-gradle-and-eclipse-using-parameters-compiler-argument
-    2)Idea加"-parameters"参数：http://blog.csdn.net/royal_lr/article/details/52279993
+- 注解的Key支持Java8下的SPEL语义拼装。但SPEL语义对于接口代理的方式，需要打开编译参数项
+- 参照Nepxion Marix文档里的说明，需要在IDE和Maven里设置"-parameters"的Compiler Argument。具体参考如下：
+  - Eclipse加"-parameters"参数：https://www.concretepage.com/java/jdk-8/java-8-reflection-access-to-parameter-names-of-method-and-constructor-with-maven-gradle-and-eclipse-using-parameters-compiler-argument
+  - Idea加"-parameters"参数：http://blog.csdn.net/royal_lr/article/details/52279993
 
 ### 介绍
-    1 锁既支持Redisson(基于Redis)和Curator(基于Zookeeper)机制的分布式锁，也支持ReentrantLock机制的本地锁
-    2 锁既支持普通可重入锁，也支持读/写可重入锁
-       2.1 普通可重入锁都是互斥的
-       2.2 读/写可重入锁必须配对使用，规则如下：
-       1)当写操作时，其他分布式进程/线程无法读取或写入数据；当读操作时，其他分布式进程/线程无法写入数据，但可以读取数据
-       2)允许同时有多个读锁，但是最多只能有一个写锁。多个读锁不互斥，读锁与写锁互斥
-    3 锁既支持公平锁，也支持非公平锁
-    4 锁既支持同步执行方式，也支持异步执行方式(异步拿锁，同步阻塞)
-    5 锁既支持持锁时间后丢弃，也支持持锁超时等待时间
-    6 锁注解既可以加在接口上，也可以加在实现类上，也可以加在没有接口只有类的情形下
-       6.1 注解说明
-       1)注解com.nepxion.aquarius.lock.annotation.Lock，普通可重入锁
-       2)注解com.nepxion.aquarius.lock.annotation.ReadLock，读可重入锁
-       3)注解com.nepxion.aquarius.lock.annotation.WriteLock，写可重入锁
-       6.2 参数说明
-       1)name 锁的名字
-       2)key 锁的Key。锁Key的完整路径是prefix + "_" + name + "_" + key，prefix为config.propertie里的namespace值
-       3)leaseTime 持锁时间，持锁超过此时间则自动丢弃锁(Redisson支持，Curator和本地锁不支持)
-       4)waitTime 没有获取到锁时，等待时间
-       5)async 是否采用锁的异步执行方式(默认都支持同步执行方式，Redisson三种锁都支持异步，Curator三种锁都不支持异步，本地锁三种锁都不支持异步)
-       6)fair 是否采用公平锁(默认都支持非公平锁，Redisson三种锁只有普通可重入锁支持公平锁，Curator三种锁都不支持公平锁，本地锁三种锁都支持公平锁)
-    7 锁由于是可重入锁，支持缓存和重用机制
-    8 锁组件采用通过改变Pom中对锁中间件类型的引用，达到快速切换分布式锁的目的
-       8.1 实现对redisson支持若干种部署方式(例如单机，集群，哨兵模式)，并支持json和yaml(默认)两种配置方式，要切换部署方式，只需要修改相应的config-redisson.yaml文件即可。具体参考如下：
-       https://github.com/redisson/redisson/wiki/2.-%E9%85%8D%E7%BD%AE%E6%96%B9%E6%B3%95
-       8.2 实现对Curator的多种重试机制(例如exponentialBackoffRetry, boundedExponentialBackoffRetry, retryNTimes, retryForever, retryUntilElapsed)，可在配置文件里面切换
-    9 锁支持两种调用方式，注解方式和直接调用方式
+- 锁既支持Redisson(基于Redis)和Curator(基于Zookeeper)机制的分布式锁，也支持ReentrantLock机制的本地锁
+- 锁既支持普通可重入锁，也支持读/写可重入锁
+  - 普通可重入锁都是互斥的
+  - 读/写可重入锁必须配对使用，规则如下：
+    - 当写操作时，其他分布式进程/线程无法读取或写入数据；当读操作时，其他分布式进程/线程无法写入数据，但可以读取数据
+    - 允许同时有多个读锁，但是最多只能有一个写锁。多个读锁不互斥，读锁与写锁互斥
+- 锁既支持公平锁，也支持非公平锁
+- 锁既支持同步执行方式，也支持异步执行方式(异步拿锁，同步阻塞)
+- 锁既支持持锁时间后丢弃，也支持持锁超时等待时间
+- 锁注解既可以加在接口上，也可以加在实现类上，也可以加在没有接口只有类的情形下
+  - 注解说明
+    - 注解com.nepxion.aquarius.lock.annotation.Lock，普通可重入锁
+    - 注解com.nepxion.aquarius.lock.annotation.ReadLock，读可重入锁
+    - 注解com.nepxion.aquarius.lock.annotation.WriteLock，写可重入锁
+  - 参数说明
+    - name 锁的名字
+    - key 锁的Key。锁Key的完整路径是prefix + "_" + name + "_" + key，prefix为config.propertie里的namespace值
+    - leaseTime 持锁时间，持锁超过此时间则自动丢弃锁(Redisson支持，Curator和本地锁不支持)
+    - waitTime 没有获取到锁时，等待时间
+    - async 是否采用锁的异步执行方式(默认都支持同步执行方式，Redisson三种锁都支持异步，Curator三种锁都不支持异步，本地锁三种锁都不支持异步)
+    - fair 是否采用公平锁(默认都支持非公平锁，Redisson三种锁只有普通可重入锁支持公平锁，Curator三种锁都不支持公平锁，本地锁三种锁都支持公平锁)
+- 锁由于是可重入锁，支持缓存和重用机制
+- 锁组件采用通过改变Pom中对锁中间件类型的引用，达到快速切换分布式锁的目的
+  - 实现对redisson支持若干种部署方式(例如单机，集群，哨兵模式)，并支持json和yaml(默认)两种配置方式，要切换部署方式，只需要修改相应的config-redisson.yaml文件即可。具体参考如下：
+    https://github.com/redisson/redisson/wiki/2.-%E9%85%8D%E7%BD%AE%E6%96%B9%E6%B3%95
+  - 实现对Curator的多种重试机制(例如exponentialBackoffRetry, boundedExponentialBackoffRetry, retryNTimes, retryForever, retryUntilElapsed)，可在配置文件里面切换
+- 锁支持两种调用方式，注解方式和直接调用方式
 
 ### 切换锁类型
 aquarius-spring-boot-example\src\main\resources\application.properties，切换lockType即可
