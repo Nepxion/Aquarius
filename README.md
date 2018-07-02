@@ -15,7 +15,7 @@ Nepxion Aquarius是一款基于Redis + Zookeeper的分布式应用组件集合�
   提供Start模式，在类头部加注解@EnableXXX，同时结合配置文件xxx.enabled=true/false进行相关Aop功能的关闭和开启
 
   上述4大组件同时支持SpringBoot和SpringCloud部署，分别参考aquarius-spring-boot-example和aquarius-spring-cloud-example工程，文档只以aquarius-spring-boot-example为例来阐述使用方法
-  支持Swagger，打开http://localhost:2222/swagger-ui.html访问
+  支持Swagger，打开[http://localhost:2222/swagger-ui.html](http://localhost:2222/swagger-ui.html)访问
 
 ![Alt text](https://github.com/Nepxion/Docs/blob/master/aquarius-doc/Swagger.jpg)
 
@@ -85,6 +85,7 @@ Nepxion Aquarius是一款基于Redis + Zookeeper的分布式应用组件集合�
 - 锁由于是可重入锁，支持缓存和重用机制
 - 锁组件采用通过改变Pom中对锁中间件类型的引用，达到快速切换分布式锁的目的
   - 实现对redisson支持若干种部署方式(例如单机，集群，哨兵模式)，并支持json和yaml(默认)两种配置方式，要切换部署方式，只需要修改相应的config-redisson.yaml文件即可。具体参考如下：
+
     https://github.com/redisson/redisson/wiki/2.-%E9%85%8D%E7%BD%AE%E6%96%B9%E6%B3%95
   - 实现对Curator的多种重试机制(例如exponentialBackoffRetry, boundedExponentialBackoffRetry, retryNTimes, retryForever, retryUntilElapsed)，可在配置文件里面切换
 - 锁支持两种调用方式，注解方式和直接调用方式
@@ -1389,7 +1390,7 @@ public class LimitApplication {
 - 配置好Euraka服务器，aquarius-spring-cloud-example/src/main/resources/application.properties里面，修改成你本地的Eureka环境
 - 启动AquariusApplication
 - 打开Postman，或者浏览器，执行Get操作，参考下面的URL
-- 支持Swagger，打开http://localhost:2222/swagger-ui.html访问
+- 支持Swagger，打开[http://localhost:2222/swagger-ui.html](http://localhost:2222/swagger-ui.html)访问
 
 ```java
 Lock
