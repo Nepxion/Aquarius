@@ -606,19 +606,19 @@ public class ReadWriteLockApplication {
 基于原生的RedisTemplate来实现(本采用Redisson的缓存模块，只在付费的Redisson PRO下才支持，故作罢)，构建于Nepxion Matrix AOP framework
 
 ### 介绍
-    1 缓存注解既可以加在接口上，也可以加在实现类上，也可以加在没有接口只有类的情形下
-       1.1 注解说明
-       1)注解com.nepxion.aquarius.cache.annotation.Cacheable，新增缓存
-       2)注解com.nepxion.aquarius.cache.annotation.CachePut，更新缓存
-       3)注解com.nepxion.aquarius.cache.annotation.CacheEvict，清除缓存
-       1.2 参数说明
-       1)name 缓存的名字
-       2)key 缓存Key。缓存Key的完整路径是prefix + "_" + name + "_" + key，prefix为config.propertie里的namespace值
-       3)expire 过期时间，一旦过期，缓存数据自动会从Redis删除（只用于Cacheable和CachePut）
-       4)allEntries 是否全部清除缓存内容（只用于CacheEvict）。如果为true，按照prefix + "_" + name + "*"方式去匹配删除Key；如果为false，则按照prefix + "_" + name + "_" + key + "*"
-       5)beforeInvocation 缓存清理是在方法调用前还是调用后（只用于CacheEvict）
-    2 缓存的Key在config-redis.xml中有个RedisCacheEntity的prefix(前缀)全局配置项目，它和name，key组成一个SPEL语义，即[prefix]_[name]_[key]，该值将作为Redis的Key存储，对应的Redis的Value就是缓存
-    3 对于方法返回的值为null的时候，不做任何缓存相关操作；对于方法执行过程中抛出异常后，不做任何缓存相关操作
+- 缓存注解既可以加在接口上，也可以加在实现类上，也可以加在没有接口只有类的情形下
+  - 注解说明
+    - 注解com.nepxion.aquarius.cache.annotation.Cacheable，新增缓存
+    - 注解com.nepxion.aquarius.cache.annotation.CachePut，更新缓存
+    - 注解com.nepxion.aquarius.cache.annotation.CacheEvict，清除缓存
+  - 参数说明
+    - name 缓存的名字
+    - key 缓存Key。缓存Key的完整路径是prefix + "_" + name + "_" + key，prefix为config.propertie里的namespace值
+    - expire 过期时间，一旦过期，缓存数据自动会从Redis删除（只用于Cacheable和CachePut）
+    - allEntries 是否全部清除缓存内容（只用于CacheEvict）。如果为true，按照prefix + "_" + name + "*"方式去匹配删除Key；如果为false，则按照prefix + "_" + name + "_" + key + "*"
+    - beforeInvocation 缓存清理是在方法调用前还是调用后（只用于CacheEvict）
+- 缓存的Key在config-redis.xml中有个RedisCacheEntity的prefix(前缀)全局配置项目，它和name，key组成一个SPEL语义，即[prefix]_[name]_[key]，该值将作为Redis的Key存储，对应的Redis的Value就是缓存
+- 对于方法返回的值为null的时候，不做任何缓存相关操作；对于方法执行过程中抛出异常后，不做任何缓存相关操作
 
 ### 切换缓存类型
 ```java
@@ -793,17 +793,17 @@ public class CacheAopApplication {
 
 ## Nepxion Aquarius ID Generator
 ### 介绍
-    1 支持序号在Zookeeper上分布式生成
-      1)计算对象在Zookeeper中的节点名为"/" + prefix + "/" + name + "_" + key
-      2)每个分布式系统拿到的ID都是全局不重复，加1
-    2 支持全局唯一ID在Redis上分布式生成
-      1)计算对象在Redis中的Key名为prefix + "_" + name + "_" + key
-      2)每个分布式系统拿到的ID都是全局不重复，ID规则：
-        ID的前半部分为yyyyMMddHHmmssSSS格式的17位数字
-        ID的后半部分为由length(最大为8位，如果length > 8，则取8)决定，取值Redis对应Value，如果小于length所对应的数位，如果不足该数位，前面补足0
-        例如Redis对应Value为1234，length为8，那么ID的后半部分为00001234；length为2，那么ID的后半部分为34
-    3 支持根据Twitter雪花ID本地算法，模拟分布式ID产生
-      SnowFlake算法用来生成64位的ID，刚好可以用long整型存储，能够用于分布式系统中生产唯一的ID， 并且生成的ID有大致的顺序。 在这次实现中，生成的64位ID可以分成5个部分：
+- 支持序号在Zookeeper上分布式生成
+  - 计算对象在Zookeeper中的节点名为"/" + prefix + "/" + name + "_" + key
+  - 每个分布式系统拿到的ID都是全局不重复，加1
+- 支持全局唯一ID在Redis上分布式生成
+  - 计算对象在Redis中的Key名为prefix + "_" + name + "_" + key
+  - 每个分布式系统拿到的ID都是全局不重复，ID规则：
+    - ID的前半部分为yyyyMMddHHmmssSSS格式的17位数字
+    - ID的后半部分为由length(最大为8位，如果length > 8，则取8)决定，取值Redis对应Value，如果小于length所对应的数位，如果不足该数位，前面补足0
+      例如Redis对应Value为1234，length为8，那么ID的后半部分为00001234；length为2，那么ID的后半部分为34
+- 支持根据Twitter雪花ID本地算法，模拟分布式ID产生
+    - SnowFlake算法用来生成64位的ID，刚好可以用long整型存储，能够用于分布式系统中生产唯一的ID， 并且生成的ID有大致的顺序。 在这次实现中，生成的64位ID可以分成5个部分：
       0 - 41位时间戳 - 5位数据中心标识 - 5位机器标识 - 12位序列号
 
 ```java
@@ -1149,13 +1149,13 @@ public class LocalIdGeneratorApplication {
 
 ## Nepxion Aquarius Limit
 ### 介绍
-    1 支持若干个分布式系统对同一资源在给定的时间段里最多的访问限制次数(超出次数返回false)；等下个时间段开始，才允许再次被访问(返回true)，周而复始；也支持本地多线程访问的限流
-    2 支持两种调用方式，注解方式和直接调用
-    3 参数说明
-      1)name 资源的名字
-      2)key  资源Key。资源Key的完整路径是prefix + "_" + name + "_" + key，prefix为config.propertie里的namespace值
-      3)limitPeriod 给定的时间段(单位为秒)
-      4)limitCount 最多的访问限制次数（注意，如果是Guava方式本地限流，limitCount必须等于1，因为Guava的机制是设置每秒访问次数）
+- 支持若干个分布式系统对同一资源在给定的时间段里最多的访问限制次数(超出次数返回false)；等下个时间段开始，才允许再次被访问(返回true)，周而复始；也支持本地多线程访问的限流
+- 支持两种调用方式，注解方式和直接调用
+- 参数说明
+  - name 资源的名字
+  - key  资源Key。资源Key的完整路径是prefix + "_" + name + "_" + key，prefix为config.propertie里的namespace值
+  - limitPeriod 给定的时间段(单位为秒)
+  - limitCount 最多的访问限制次数（注意，如果是Guava方式本地限流，limitCount必须等于1，因为Guava的机制是设置每秒访问次数）
 
 ### 切换限流限速器类型
 aquarius-spring-boot-example\src\main\resources\application.properties，切换limitType即可
@@ -1386,11 +1386,10 @@ public class LimitApplication {
 
 ## Nepxion Aquarius Spring Cloud的使用方式
 ### 介绍
-    1 配置好Euraka服务器，aquarius-spring-cloud-example/src/main/resources/application.properties里面，修改成你本地的Eureka环境
-      eureka.client.serviceUrl.defaultZone=http://cluster-1:1111/eureka/,http://cluster-2:1112/eureka/,http://cluster-3:1113/eureka/
-    2 启动AquariusApplication
-    3 打开Postman，或者浏览器，执行Get操作，参考下面的URL
-    4 支持Swagger，打开http://localhost:2222/swagger-ui.html访问
+- 配置好Euraka服务器，aquarius-spring-cloud-example/src/main/resources/application.properties里面，修改成你本地的Eureka环境
+- 启动AquariusApplication
+- 打开Postman，或者浏览器，执行Get操作，参考下面的URL
+- 支持Swagger，打开http://localhost:2222/swagger-ui.html访问
 
 ```java
 Lock
