@@ -22,7 +22,7 @@
 
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>matrix-aop</artifactId>
+            <artifactId>matrix-aop-starter</artifactId>
         </dependency>
     </dependencies>
 </project>
