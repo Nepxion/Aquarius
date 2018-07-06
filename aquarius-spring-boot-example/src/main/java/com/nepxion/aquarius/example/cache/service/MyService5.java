@@ -17,7 +17,7 @@ public interface MyService5 {
     @Cacheable(name = "cache", key = "#id1 + \"-\" + #id2", expire = -1L)
     String doA(String id1, String id2);
 
-    @CachePut(name = "cache", key = "#id1 + \"-\" + #id2", expire = -1L)
+    @CachePut(name = "cache", key = "#id1 + \"-\" + #id2", expire = 60000L)
     String doB(String id1, String id2);
 
     @CacheEvict(name = "cache", key = "#id1 + \"-\" + #id2", allEntries = false, beforeInvocation = false)

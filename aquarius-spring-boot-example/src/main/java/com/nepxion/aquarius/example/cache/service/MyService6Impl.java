@@ -23,7 +23,7 @@ import com.nepxion.aquarius.cache.annotation.Cacheable;
 public class MyService6Impl {
     private static final Logger LOG = LoggerFactory.getLogger(MyService6Impl.class);
 
-    @Cacheable(name = "cache", key = "#id1 + \"-\" + #id2", expire = 60000L)
+    @Cacheable(name = "cache", key = "#id1 + \"-\" + #id2", expire = -1L)
     public String doD(String id1, String id2) {
         try {
             TimeUnit.MILLISECONDS.sleep(2000L);

@@ -30,31 +30,31 @@ public class CacheAopApplication {
         // 下面步骤请一步步操作，然后结合Redis Desktop Manager等工具查看效果
         MyService5 myService5 = applicationContext.getBean(MyService5.class);
 
-        // 新增缓存Key为M-N，Value为A到Redis
+        // 新增缓存Key为M-N，Value为A到Redis，不过期
         myService5.doA("M", "N");
 
-        // 新增缓存Key为P-Q，Value为A到Redis
+        // 新增缓存Key为P-Q，Value为A到Redis，不过期
         myService5.doA("P", "Q");
 
-        // 更新缓存Key为M-N，Value为B到Redis
+        // 更新缓存Key为M-N，Value为B到Redis，过期时间1分钟
         myService5.doB("M", "N");
 
-        // 清除缓存Key为M-N到Redis，精确匹配，因为注解上allEntries = false
-        // myService5.doC("M", "N");
+        // 清除缓存Key为P-Q到Redis，精确匹配，因为注解上allEntries = false
+        myService5.doC("P", "Q");
 
         // MyService6Impl myService6 = applicationContext.getBean(MyService6Impl.class);
 
-        // 新增缓存Key为X-Y，Value为D到Redis
+        // 新增缓存Key为X-Y，Value为D到Redis，不过期
         // myService6.doD("X", "Y");
 
-        // 新增缓存Key为P-Q，Value为D到Redis
-        // myService6.doD("P", "Q");
+        // 新增缓存Key为S-T，Value为D到Redis，不过期
+        // myService6.doD("S", "T");
 
-        // 更新缓存Key为X-Y，Value为E到Redis
+        // 更新缓存Key为X-Y，Value为E到Redis，过期时间1分钟
         //myService6.doE("X", "Y");
 
-        // 清除缓存Key为X-Y到Redis，全局模糊匹配，因为注解上allEntries = true
-        // myService6.doF("X", "Y");
+        // 清除缓存Key为S-T到Redis，全局模糊匹配，因为注解上allEntries = true
+        // myService6.doF("S", "T");
     }
 
     @Bean
