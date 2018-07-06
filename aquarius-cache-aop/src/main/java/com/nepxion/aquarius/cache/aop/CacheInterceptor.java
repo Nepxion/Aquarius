@@ -39,6 +39,9 @@ public class CacheInterceptor extends AbstractInterceptor {
     @Value("${" + AquariusConstant.FREQUENT_LOG_PRINT + "}")
     private Boolean frequentLogPrint;
 
+    @Value("${cache.expire:-1}")
+    private long expiration;
+
     @Override
     public Object invoke(MethodInvocation invocation) throws Throwable {
         Cacheable cacheableAnnotation = getCacheableAnnotation(invocation);
@@ -46,6 +49,10 @@ public class CacheInterceptor extends AbstractInterceptor {
             String name = cacheableAnnotation.name();
             String key = cacheableAnnotation.key();
             long expire = cacheableAnnotation.expire();
+            // 如果局部变量没配置，取全局变量值
+            if (expire == -1234567890L) {
+                expire = expiration;
+            }
 
             return invokeCacheable(invocation, name, key, expire);
         }
@@ -55,6 +62,10 @@ public class CacheInterceptor extends AbstractInterceptor {
             String name = cachePutAnnotation.name();
             String key = cachePutAnnotation.key();
             long expire = cachePutAnnotation.expire();
+            // 如果局部变量没配置，取全局变量值
+            if (expire == -1234567890L) {
+                expire = expiration;
+            }
 
             return invokeCachePut(invocation, name, key, expire);
         }

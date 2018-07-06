@@ -35,8 +35,8 @@ public @interface Cacheable {
 
     /**
      * 过期时间
-     * 单位毫秒，默认60秒
+     * 单位毫秒
      * @return long
      */
-    long expire() default 60000L;
+    long expire() default -1234567890L;
 }
