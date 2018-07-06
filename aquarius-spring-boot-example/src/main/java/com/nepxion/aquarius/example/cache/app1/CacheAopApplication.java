@@ -39,7 +39,7 @@ public class CacheAopApplication {
         // 更新缓存Key为M-N，Value为B到Redis
         myService5.doB("M", "N");
 
-        // 清除缓存Key为M-N到Redis
+        // 清除缓存Key为M-N到Redis，精确匹配，因为注解上allEntries = false
         // myService5.doC("M", "N");
 
         // MyService6Impl myService6 = applicationContext.getBean(MyService6Impl.class);
@@ -53,7 +53,7 @@ public class CacheAopApplication {
         // 更新缓存Key为X-Y，Value为E到Redis
         //myService6.doE("X", "Y");
 
-        // 清除缓存Key为X-Y到Redis
+        // 清除缓存Key为X-Y到Redis，全局模糊匹配，因为注解上allEntries = true
         // myService6.doF("X", "Y");
     }
 

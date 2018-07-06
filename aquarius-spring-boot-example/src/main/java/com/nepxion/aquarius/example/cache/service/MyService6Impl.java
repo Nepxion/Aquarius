@@ -49,7 +49,7 @@ public class MyService6Impl {
         return "E";
     }
 
-    @CacheEvict(name = "cache", key = "#id1 + \"-\" + #id2", allEntries = false, beforeInvocation = false)
+    @CacheEvict(name = "cache", key = "#id1 + \"-\" + #id2", allEntries = true, beforeInvocation = false)
     public String doF(String id1, String id2) {
         try {
             TimeUnit.MILLISECONDS.sleep(2000L);
