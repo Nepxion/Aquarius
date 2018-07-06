@@ -46,12 +46,12 @@ public class RedisCacheDelegateImpl implements CacheDelegate {
         Object object = null;
         try {
             object = valueOperations.get(key);
+
+            if (frequentLogPrint) {
+                LOG.info("Before invocation, Cacheable key={}, cache={} in Redis", key, object);
+            }
         } catch (Exception e) {
             LOG.warn("Redis exception occurs while getting data", e);
-        }
-
-        if (frequentLogPrint) {
-            LOG.info("Before invocation, Cacheable key={}, cache={} in Redis", key, object);
         }
 
         if (object != null) {
@@ -62,17 +62,17 @@ public class RedisCacheDelegateImpl implements CacheDelegate {
 
         if (object != null) {
             try {
-                if (expire == -1) {
+                if (expire <= 0) {
                     valueOperations.set(key, object);
                 } else {
                     valueOperations.set(key, object, expire, TimeUnit.MILLISECONDS);
                 }
+
+                if (frequentLogPrint) {
+                    LOG.info("After invocation, Cacheable key={}, cache={} in Redis", key, object);
+                }
             } catch (Exception e) {
                 LOG.warn("Redis exception occurs while setting data", e);
-            }
-
-            if (frequentLogPrint) {
-                LOG.info("After invocation, Cacheable key={}, cache={} in Redis", key, object);
             }
         }
 
@@ -88,17 +88,17 @@ public class RedisCacheDelegateImpl implements CacheDelegate {
         Object object = invocation.proceed();
         if (object != null) {
             try {
-                if (expire == -1) {
+                if (expire <= 0) {
                     valueOperations.set(key, object);
                 } else {
                     valueOperations.set(key, object, expire, TimeUnit.MILLISECONDS);
                 }
+
+                if (frequentLogPrint) {
+                    LOG.info("After invocation, CachePut key={}, cache={} in Redis", key, object);
+                }
             } catch (Exception e) {
                 LOG.warn("Redis exception occurs while setting data", e);
-            }
-
-            if (frequentLogPrint) {
-                LOG.info("After invocation, CachePut key={}, cache={} in Redis", key, object);
             }
         }
 
@@ -107,13 +107,26 @@ public class RedisCacheDelegateImpl implements CacheDelegate {
 
     @Override
     public Object invokeCacheEvict(MethodInvocation invocation, String key, String name, boolean allEntries, boolean beforeInvocation) throws Throwable {
-        if (beforeInvocation) {
-            if (frequentLogPrint) {
-                LOG.info("Before invocation, CacheEvict clear key={} in Redis", key);
-            }
+        String compositeWildcardKey = null;
+        if (allEntries) {
+            // 通配全局Key, 例如：aquarius-cache
+            compositeWildcardKey = KeyUtil.getCompositeWildcardKey(prefix, name);
+        } else {
+            // 精准匹配当前Key, 例如：aquarius-cache-abc
+            compositeWildcardKey = KeyUtil.getCompositeWildcardKey(key);
+        }
 
+        if (beforeInvocation) {
             try {
-                clear(key, name, allEntries);
+                clear(compositeWildcardKey, allEntries);
+
+                if (frequentLogPrint) {
+                    if (allEntries) {
+                        LOG.info("Before invocation, CacheEvict clear all keys with prefix={} in Redis", compositeWildcardKey);
+                    } else {
+                        LOG.info("Before invocation, CacheEvict clear key={} in Redis", compositeWildcardKey);
+                    }
+                }
             } catch (Exception e) {
                 LOG.warn("Redis exception occurs while setting data", e);
             }
@@ -122,12 +135,16 @@ public class RedisCacheDelegateImpl implements CacheDelegate {
         Object object = invocation.proceed();
 
         if (!beforeInvocation) {
-            if (frequentLogPrint) {
-                LOG.info("After invocation, CacheEvict clear key={} in Redis", key);
-            }
-
             try {
-                clear(key, name, allEntries);
+                clear(compositeWildcardKey, allEntries);
+
+                if (frequentLogPrint) {
+                    if (allEntries) {
+                        LOG.info("After invocation, CacheEvict clear all keys with prefix={} in Redis", compositeWildcardKey);
+                    } else {
+                        LOG.info("After invocation, CacheEvict clear key={} in Redis", compositeWildcardKey);
+                    }
+                }
             } catch (Exception e) {
                 LOG.warn("Redis exception occurs while setting data", e);
             }
@@ -136,14 +153,7 @@ public class RedisCacheDelegateImpl implements CacheDelegate {
         return object;
     }
 
-    private void clear(String key, String name, boolean allEntries) {
-        String compositeWildcardKey = null;
-        if (allEntries) {
-            compositeWildcardKey = KeyUtil.getCompositeWildcardKey(prefix, name);
-        } else {
-            compositeWildcardKey = KeyUtil.getCompositeWildcardKey(key);
-        }
-
+    private void clear(String compositeWildcardKey, boolean allEntries) {
         RedisTemplate<String, Object> redisTemplate = redisHandler.getRedisTemplate();
         Set<String> keys = redisTemplate.keys(compositeWildcardKey);
         for (String k : keys) {
