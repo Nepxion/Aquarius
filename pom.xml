@@ -45,7 +45,7 @@
         <commons.collections4.version>4.1</commons.collections4.version>
         <commons.io.version>2.5</commons.io.version>
         <spring.version>4.3.18.RELEASE</spring.version>
-        <redisson.version>3.5.4</redisson.version>
+        <redisson.version>3.7.3</redisson.version>
         <jedis.version>2.9.0</jedis.version>
         <guava.version>25.1-jre</guava.version>
         <spring.data.redis.version>1.8.8.RELEASE</spring.data.redis.version>
