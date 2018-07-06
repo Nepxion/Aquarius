@@ -626,6 +626,8 @@ public class ReadWriteLockApplication {
 # Cache config
 cache.enabled=true
 cache.type=redisCache
+# 全局缓存过期值（可以缺省），单位毫秒（小于等于零，表示永不过期），当注解上没配置该值的时候，以全局值为准
+cache.expire=-1
 # 扫描含有@Cacheable，@CacheEvict，@CachePut等注解的接口或者类所在目录
 cache.scan.packages=com.nepxion.aquarius.example.cache.service
 ```
