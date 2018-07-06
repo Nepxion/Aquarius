@@ -19,7 +19,6 @@ import org.springframework.context.annotation.ComponentScan;
 
 import com.nepxion.aquarius.cache.annotation.EnableCache;
 import com.nepxion.aquarius.example.cache.service.MyService5;
-import com.nepxion.aquarius.example.cache.service.MyService6Impl;
 
 @SpringBootApplication
 @EnableCache
@@ -34,16 +33,22 @@ public class CacheAopApplication {
         // 新增缓存Key为M-N，Value为A到Redis
         myService5.doA("M", "N");
 
+        // 新增缓存Key为P-Q，Value为A到Redis
+        myService5.doA("P", "Q");
+
         // 更新缓存Key为M-N，Value为B到Redis
-        // myService5.doB("M", "N");
+        myService5.doB("M", "N");
 
         // 清除缓存Key为M-N到Redis
         // myService5.doC("M", "N");
 
-        MyService6Impl myService6 = applicationContext.getBean(MyService6Impl.class);
+        // MyService6Impl myService6 = applicationContext.getBean(MyService6Impl.class);
 
         // 新增缓存Key为X-Y，Value为D到Redis
-        myService6.doD("X", "Y");
+        // myService6.doD("X", "Y");
+
+        // 新增缓存Key为P-Q，Value为D到Redis
+        // myService6.doD("P", "Q");
 
         // 更新缓存Key为X-Y，Value为E到Redis
         //myService6.doE("X", "Y");
