@@ -51,7 +51,7 @@ public class RedisCacheDelegateImpl implements CacheDelegate {
                 LOG.info("Before invocation, Cacheable key={}, cache={} in Redis", key, object);
             }
         } catch (Exception e) {
-            LOG.warn("Redis exception occurs while getting data", e);
+            LOG.warn("Redis exception occurs while Cacheable", e);
         }
 
         if (object != null) {
@@ -72,7 +72,7 @@ public class RedisCacheDelegateImpl implements CacheDelegate {
                     LOG.info("After invocation, Cacheable key={}, cache={} in Redis", key, object);
                 }
             } catch (Exception e) {
-                LOG.warn("Redis exception occurs while setting data", e);
+                LOG.warn("Redis exception occurs while Cacheable", e);
             }
         }
 
@@ -98,7 +98,7 @@ public class RedisCacheDelegateImpl implements CacheDelegate {
                     LOG.info("After invocation, CachePut key={}, cache={} in Redis", key, object);
                 }
             } catch (Exception e) {
-                LOG.warn("Redis exception occurs while setting data", e);
+                LOG.warn("Redis exception occurs while CachePut", e);
             }
         }
 
@@ -118,7 +118,7 @@ public class RedisCacheDelegateImpl implements CacheDelegate {
 
         if (beforeInvocation) {
             try {
-                clear(compositeWildcardKey, allEntries);
+                clear(compositeWildcardKey);
 
                 if (frequentLogPrint) {
                     if (allEntries) {
@@ -128,7 +128,7 @@ public class RedisCacheDelegateImpl implements CacheDelegate {
                     }
                 }
             } catch (Exception e) {
-                LOG.warn("Redis exception occurs while setting data", e);
+                LOG.warn("Redis exception occurs while CacheEvict", e);
             }
         }
 
@@ -136,7 +136,7 @@ public class RedisCacheDelegateImpl implements CacheDelegate {
 
         if (!beforeInvocation) {
             try {
-                clear(compositeWildcardKey, allEntries);
+                clear(compositeWildcardKey);
 
                 if (frequentLogPrint) {
                     if (allEntries) {
@@ -146,14 +146,14 @@ public class RedisCacheDelegateImpl implements CacheDelegate {
                     }
                 }
             } catch (Exception e) {
-                LOG.warn("Redis exception occurs while setting data", e);
+                LOG.warn("Redis exception occurs while CacheEvict", e);
             }
         }
 
         return object;
     }
 
-    private void clear(String compositeWildcardKey, boolean allEntries) {
+    private void clear(String compositeWildcardKey) {
         RedisTemplate<String, Object> redisTemplate = redisHandler.getRedisTemplate();
         Set<String> keys = redisTemplate.keys(compositeWildcardKey);
         for (String k : keys) {
