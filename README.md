@@ -7,15 +7,20 @@
 Nepxion Aquarius是一款基于Redis + Zookeeper的分布式应用组件集合，包含分布式锁，缓存，ID生成器，限速限流器。它采用Nepxion Matrix AOP框架进行切面架构，提供注解调用方式，同时也提供API调用方式
 
 ## 简介
-分布式应用组件集合，包含
-- Nepxion Aquarius Lock 分布式锁(支持Redis、Zookeeper、ReentrantLock本地锁)
-- Nepxion Aquarius Cache 分布式缓存(支持Redis)
-- Nepxion Aquarius ID Generator 分布式全局唯一ID(支持Redis)、全局唯一序号生成(支持Zookeeper、Twitter雪花ID算法的支持)，支持单个和批量获取
-- Nepxion Aquarius Limit 分布式限速限流(支持Redis、Guava本地限速限流)
-  提供Start模式，在类头部加注解@EnableXXX，同时结合配置文件xxx.enabled=true/false进行相关Aop功能的关闭和开启
-
-  上述4大组件同时支持SpringBoot和SpringCloud部署，分别参考aquarius-spring-boot-example和aquarius-spring-cloud-example工程，文档只以aquarius-spring-boot-example为例来阐述使用方法
-  支持Swagger，打开[http://localhost:2222/swagger-ui.html](http://localhost:2222/swagger-ui.html)访问
+- 分布式应用组件集合
+  - Nepxion Aquarius Lock 分布式锁(支持Redis、Zookeeper、ReentrantLock本地锁)
+  - Nepxion Aquarius Cache 分布式缓存(支持Redis)
+  - Nepxion Aquarius ID Generator 分布式全局唯一ID(支持Redis)、全局唯一序号生成(支持Zookeeper、Twitter雪花ID算法的支持)，支持单个和批量获取
+  - Nepxion Aquarius Limit 分布式限速限流(支持Redis、Guava本地限速限流)
+- 支持Spring Boot集成
+  - 提供Start模式，在类头部加注解@EnableXXX，同时结合配置文件xxx.enabled=true/false进行相关Aop功能的关闭和开启
+- 支持Spring Cloud集成
+- 支持Swagger集成
+  打开[http://localhost:2222/swagger-ui.html](http://localhost:2222/swagger-ui.html)访问
+- 支持组件扩展适配，再次编程
+  - RedissonAdapter，扩展实现可默认覆盖原生组件
+  - RedisAdapter，扩展实现可默认覆盖原生组件
+  - CuratorAdapter，扩展实现可默认覆盖原生组件
 
 ![Alt text](https://github.com/Nepxion/Docs/blob/master/aquarius-doc/Swagger.jpg)
 
@@ -620,6 +625,7 @@ public class ReadWriteLockApplication {
     - beforeInvocation 缓存清理是在方法调用前还是调用后（只用于CacheEvict）
 - 缓存的Key在config-redis.xml中有个RedisCacheEntity的prefix(前缀)全局配置项目，它和name，key组成一个SPEL语义，即[prefix]_[name]_[key]，该值将作为Redis的Key存储，对应的Redis的Value就是缓存
 - 对于方法返回的值为null的时候，不做任何缓存相关操作；对于方法执行过程中抛出异常后，不做任何缓存相关操作
+- 支持全局过期时间和局部过期时间的配置，当注解上没配置该值的时候，以全局值为准
 
 ### 切换缓存类型
 ```java
