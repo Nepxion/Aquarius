@@ -11,6 +11,4 @@ package com.nepxion.aquarius.common.redis.constant;
 
 public class RedisConstant {
     public static final String CONFIG_FILE = "config-redis.xml";
-
-    public static final String PLUGIN = "redis";
 }

@@ -17,7 +17,10 @@ import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 
 import com.nepxion.aquarius.cache.CacheDelegate;
+import com.nepxion.aquarius.cache.constant.CacheConstant;
 import com.nepxion.aquarius.cache.redis.condition.RedisCacheCondition;
+import com.nepxion.aquarius.cache.redis.condition.RedisCachePluginCondition;
+import com.nepxion.aquarius.cache.redis.condition.RedissonCachePluginCondition;
 import com.nepxion.aquarius.cache.redis.impl.RedisCacheDelegateImpl;
 import com.nepxion.aquarius.cache.redis.impl.RedissonCacheDelegateImpl;
 import com.nepxion.aquarius.common.redis.adapter.RedisAdapter;
@@ -31,8 +34,8 @@ import com.nepxion.aquarius.common.redisson.handler.RedissonHandlerImpl;
 
 @Configuration
 public class RedisCacheConfiguration {
-    @Value("${redis.cache.plugin:" + RedisConstant.PLUGIN + "}")
-    private String redisCachePlugin;
+    @Value("${cache.plugin}")
+    private String cachePlugin;
 
     @Value("${redis.config.path:" + RedisConstant.CONFIG_FILE + "}")
     private String redisConfigPath;
@@ -49,40 +52,33 @@ public class RedisCacheConfiguration {
     @Bean
     @Conditional(RedisCacheCondition.class)
     public CacheDelegate redisCacheDelegate() {
-        if (StringUtils.equals(redisCachePlugin, RedisConstant.PLUGIN)) {
+        if (StringUtils.equals(cachePlugin, CacheConstant.CACHE_PLUGIN_REDIS)) {
             return new RedisCacheDelegateImpl();
-        } else if (StringUtils.equals(redisCachePlugin, RedissonConstant.PLUGIN)) {
+        } else if (StringUtils.equals(cachePlugin, CacheConstant.CACHE_PLUGIN_REDISSON)) {
             return new RedissonCacheDelegateImpl();
         }
 
-        throw new IllegalArgumentException("Invalid plugin type, it must be " + RedisConstant.PLUGIN + " or " + RedissonConstant.PLUGIN);
+        throw new IllegalArgumentException("Invalid plugin type, it must be '" + CacheConstant.CACHE_PLUGIN_REDIS + "' or '" + CacheConstant.CACHE_PLUGIN_REDISSON + "'");
     }
 
     @Bean
-    @Conditional(RedisCacheCondition.class)
+    @Conditional({ RedisCacheCondition.class, RedisCachePluginCondition.class })
     public RedisHandler redisHandler() {
-        if (StringUtils.equals(redisCachePlugin, RedisConstant.PLUGIN)) {
-            if (redisAdapter != null) {
-                return redisAdapter.getRedisHandler();
-            }
-
-            return new RedisHandlerImpl(redisConfigPath);
+        if (redisAdapter != null) {
+            return redisAdapter.getRedisHandler();
         }
 
-        return null;
+        return new RedisHandlerImpl(redisConfigPath);
+
     }
 
     @Bean
-    @Conditional(RedisCacheCondition.class)
+    @Conditional({ RedisCacheCondition.class, RedissonCachePluginCondition.class })
     public RedissonHandler redissonHandler() {
-        if (StringUtils.equals(redisCachePlugin, RedissonConstant.PLUGIN)) {
-            if (redissonAdapter != null) {
-                return redissonAdapter.getRedissonHandler();
-            }
-
-            return new RedissonHandlerImpl(redissonConfigPath);
+        if (redissonAdapter != null) {
+            return redissonAdapter.getRedissonHandler();
         }
 
-        return null;
+        return new RedissonHandlerImpl(redissonConfigPath);
     }
 }

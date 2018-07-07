@@ -14,5 +14,11 @@ public class CacheConstant {
 
     public static final String CACHE_TYPE_REDIS = "redisCache";
 
+    public static final String CACHE_PLUGIN = "cache.plugin";
+
+    public static final String CACHE_PLUGIN_REDIS = "redisPlugin";
+
+    public static final String CACHE_PLUGIN_REDISSON = "redissonPlugin";
+
     public static final String CACHE_SCAN_PACKAGES = "cache.scan.packages";
 }
