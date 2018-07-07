@@ -43,7 +43,7 @@ public class CuratorHandlerImpl implements CuratorHandler {
 
     public CuratorHandlerImpl(String propertyConfigPath, String prefix) {
         try {
-            AquariusProperties properties = createPropertyFileConfig(CuratorConstant.CONFIG_FILE);
+            AquariusProperties properties = createPropertyFileConfig(propertyConfigPath);
             initialize(properties, prefix);
         } catch (Exception e) {
             LOG.error("Initialize Curator failed", e);

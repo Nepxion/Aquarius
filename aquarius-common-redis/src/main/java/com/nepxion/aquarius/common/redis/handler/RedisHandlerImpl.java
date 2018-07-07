@@ -15,8 +15,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.data.redis.core.RedisTemplate;
 
-import com.nepxion.aquarius.common.redis.constant.RedisConstant;
-
 public class RedisHandlerImpl implements RedisHandler {
     private static final Logger LOG = LoggerFactory.getLogger(RedisHandlerImpl.class);
 
@@ -47,7 +45,7 @@ public class RedisHandlerImpl implements RedisHandler {
 
     // 创建ApplicationContext
     public ApplicationContext createApplicationContext(String configPath) {
-        LOG.info("Start to initialize application context with {}...", RedisConstant.CONFIG_FILE);
+        LOG.info("Start to initialize application context with {}...", configPath);
 
         String path = null;
         if (RedisHandlerImpl.class.getClassLoader().getResourceAsStream(configPath) != null) {
