@@ -71,7 +71,12 @@ public class LimitInterceptor extends AbstractInterceptor {
             throw new AquariusException("Annotation [Limit]'s key is null or empty");
         }
 
-        String spelKey = getSpelKey(invocation, key);
+        String spelKey = null;
+        try {
+            spelKey = getSpelKey(invocation, key);
+        } catch (Exception e) {
+            spelKey = key;
+        }
         String compositeKey = KeyUtil.getCompositeKey(prefix, name, spelKey);
         String proxyType = getProxyType(invocation);
         String proxiedClassName = getProxiedClassName(invocation);

@@ -29,9 +29,9 @@ public @interface CacheEvict {
 
     /**
      * 缓存Key
-     * @return String
+     * @return String[]
      */
-    String key() default "";
+    String[] key() default {};
 
     /**
      * 是否全部清除缓存内容

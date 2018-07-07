@@ -10,8 +10,11 @@ package com.nepxion.aquarius.cache.aop;
  */
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.aopalliance.intercept.MethodInvocation;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,37 +50,37 @@ public class CacheInterceptor extends AbstractInterceptor {
         Cacheable cacheableAnnotation = getCacheableAnnotation(invocation);
         if (cacheableAnnotation != null) {
             String name = cacheableAnnotation.name();
-            String key = cacheableAnnotation.key();
+            String[] keys = cacheableAnnotation.key();
             long expire = cacheableAnnotation.expire();
             // 如果局部变量没配置，取全局变量值
             if (expire == -1234567890L) {
                 expire = expiration;
             }
 
-            return invokeCacheable(invocation, name, key, expire);
+            return invokeCacheable(invocation, name, keys, expire);
         }
 
         CachePut cachePutAnnotation = getCachePutAnnotation(invocation);
         if (cachePutAnnotation != null) {
             String name = cachePutAnnotation.name();
-            String key = cachePutAnnotation.key();
+            String[] keys = cachePutAnnotation.key();
             long expire = cachePutAnnotation.expire();
             // 如果局部变量没配置，取全局变量值
             if (expire == -1234567890L) {
                 expire = expiration;
             }
 
-            return invokeCachePut(invocation, name, key, expire);
+            return invokeCachePut(invocation, name, keys, expire);
         }
 
         CacheEvict cacheEvictAnnotation = getCacheEvictAnnotation(invocation);
         if (cacheEvictAnnotation != null) {
             String name = cacheEvictAnnotation.name();
-            String key = cacheEvictAnnotation.key();
+            String[] keys = cacheEvictAnnotation.key();
             boolean allEntries = cacheEvictAnnotation.allEntries();
             boolean beforeInvocation = cacheEvictAnnotation.beforeInvocation();
 
-            return invokeCacheEvict(invocation, name, key, allEntries, beforeInvocation);
+            return invokeCacheEvict(invocation, name, keys, allEntries, beforeInvocation);
         }
 
         return invocation.proceed();
@@ -110,69 +113,111 @@ public class CacheInterceptor extends AbstractInterceptor {
         return null;
     }
 
-    private Object invokeCacheable(MethodInvocation invocation, String name, String key, long expire) throws Throwable {
+    private Object invokeCacheable(MethodInvocation invocation, String name, String[] keys, long expire) throws Throwable {
         if (StringUtils.isEmpty(name)) {
             throw new AquariusException("Annotation [Cacheable]'s name is null or empty");
         }
 
-        if (StringUtils.isEmpty(key)) {
+        if (ArrayUtils.isEmpty(keys)) {
             throw new AquariusException("Annotation [Cacheable]'s key is null or empty");
         }
 
-        String spelKey = getSpelKey(invocation, key);
-        String compositeKey = KeyUtil.getCompositeKey(prefix, name, spelKey);
+        List<String> compositeKeys = new ArrayList<String>(keys.length);
+        for (int i = 0; i < keys.length; i++) {
+            String key = keys[i];
+            if (StringUtils.isEmpty(key)) {
+                throw new AquariusException("Annotation [Cacheable]'s key is null or empty");
+            }
+
+            String spelKey = null;
+            try {
+                spelKey = getSpelKey(invocation, key);
+            } catch (Exception e) {
+                spelKey = key;
+            }
+            String compositeKey = KeyUtil.getCompositeKey(prefix, name, spelKey);
+            compositeKeys.add(compositeKey);
+        }
         String proxyType = getProxyType(invocation);
         String proxiedClassName = getProxiedClassName(invocation);
         String methodName = getMethodName(invocation);
 
         if (frequentLogPrint) {
-            LOG.info("Intercepted for annotation - Cacheable [key={}, expire={}, proxyType={}, proxiedClass={}, method={}]", compositeKey, expire, proxyType, proxiedClassName, methodName);
+            LOG.info("Intercepted for annotation - Cacheable [key={}, expire={}, proxyType={}, proxiedClass={}, method={}]", compositeKeys, expire, proxyType, proxiedClassName, methodName);
         }
 
-        return cacheDelegate.invokeCacheable(invocation, compositeKey, expire);
+        return cacheDelegate.invokeCacheable(invocation, compositeKeys, expire);
     }
 
-    private Object invokeCachePut(MethodInvocation invocation, String name, String key, long expire) throws Throwable {
+    private Object invokeCachePut(MethodInvocation invocation, String name, String[] keys, long expire) throws Throwable {
         if (StringUtils.isEmpty(name)) {
             throw new AquariusException("Annotation [CachePut]'s name is null or empty");
         }
 
-        if (StringUtils.isEmpty(key)) {
+        if (ArrayUtils.isEmpty(keys)) {
             throw new AquariusException("Annotation [CachePut]'s key is null or empty");
         }
 
-        String spelKey = getSpelKey(invocation, key);
-        String compositeKey = KeyUtil.getCompositeKey(prefix, name, spelKey);
+        List<String> compositeKeys = new ArrayList<String>(keys.length);
+        for (int i = 0; i < keys.length; i++) {
+            String key = keys[i];
+            if (StringUtils.isEmpty(key)) {
+                throw new AquariusException("Annotation [CachePut]'s key is null or empty");
+            }
+
+            String spelKey = null;
+            try {
+                spelKey = getSpelKey(invocation, key);
+            } catch (Exception e) {
+                spelKey = key;
+            }
+            String compositeKey = KeyUtil.getCompositeKey(prefix, name, spelKey);
+            compositeKeys.add(compositeKey);
+        }
         String proxyType = getProxyType(invocation);
         String proxiedClassName = getProxiedClassName(invocation);
         String methodName = getMethodName(invocation);
 
         if (frequentLogPrint) {
-            LOG.info("Intercepted for annotation - CachePut [key={}, expire={}, proxyType={}, proxiedClass={}, method={}]", compositeKey, expire, proxyType, proxiedClassName, methodName);
+            LOG.info("Intercepted for annotation - CachePut [key={}, expire={}, proxyType={}, proxiedClass={}, method={}]", compositeKeys, expire, proxyType, proxiedClassName, methodName);
         }
 
-        return cacheDelegate.invokeCachePut(invocation, compositeKey, expire);
+        return cacheDelegate.invokeCachePut(invocation, compositeKeys, expire);
     }
 
-    private Object invokeCacheEvict(MethodInvocation invocation, String name, String key, boolean allEntries, boolean beforeInvocation) throws Throwable {
+    private Object invokeCacheEvict(MethodInvocation invocation, String name, String[] keys, boolean allEntries, boolean beforeInvocation) throws Throwable {
         if (StringUtils.isEmpty(name)) {
             throw new AquariusException("Annotation [CacheEvict]'s name is null or empty");
         }
 
-        if (StringUtils.isEmpty(key)) {
+        if (ArrayUtils.isEmpty(keys)) {
             throw new AquariusException("Annotation [CacheEvict]'s key is null or empty");
         }
 
-        String spelKey = getSpelKey(invocation, key);
-        String compositeKey = KeyUtil.getCompositeKey(prefix, name, spelKey);
+        List<String> compositeKeys = new ArrayList<String>(keys.length);
+        for (int i = 0; i < keys.length; i++) {
+            String key = keys[i];
+            if (StringUtils.isEmpty(key)) {
+                throw new AquariusException("Annotation [CacheEvict]'s key is null or empty");
+            }
+
+            String spelKey = null;
+            try {
+                spelKey = getSpelKey(invocation, key);
+            } catch (Exception e) {
+                spelKey = key;
+            }
+            String compositeKey = KeyUtil.getCompositeKey(prefix, name, spelKey);
+            compositeKeys.add(compositeKey);
+        }
         String proxyType = getProxyType(invocation);
         String proxiedClassName = getProxiedClassName(invocation);
         String methodName = getMethodName(invocation);
 
         if (frequentLogPrint) {
-            LOG.info("Intercepted for annotation - CacheEvict [key={}, allEntries={}, beforeInvocation={}, proxyType={}, proxiedClass={}, method={}]", compositeKey, allEntries, beforeInvocation, proxyType, proxiedClassName, methodName);
+            LOG.info("Intercepted for annotation - CacheEvict [key={}, allEntries={}, beforeInvocation={}, proxyType={}, proxiedClass={}, method={}]", compositeKeys, allEntries, beforeInvocation, proxyType, proxiedClassName, methodName);
         }
 
-        return cacheDelegate.invokeCacheEvict(invocation, compositeKey, name, allEntries, beforeInvocation);
+        return cacheDelegate.invokeCacheEvict(invocation, compositeKeys, name, allEntries, beforeInvocation);
     }
 }

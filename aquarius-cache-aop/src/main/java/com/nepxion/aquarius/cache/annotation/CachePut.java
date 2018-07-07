@@ -29,9 +29,9 @@ public @interface CachePut {
 
     /**
      * 缓存Key
-     * @return String
+     * @return String[]
      */
-    String key() default "";
+    String[] key() default {};
 
     /**
      * 过期时间

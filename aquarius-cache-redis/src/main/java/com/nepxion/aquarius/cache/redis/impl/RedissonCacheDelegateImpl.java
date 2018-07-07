@@ -9,6 +9,8 @@ package com.nepxion.aquarius.cache.redis.impl;
  * @version 1.0
  */
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -63,15 +65,15 @@ public class RedissonCacheDelegateImpl implements CacheDelegate {
     }
 
     @Override
-    public Object invokeCacheable(MethodInvocation invocation, String key, long expire) throws Throwable {
+    public Object invokeCacheable(MethodInvocation invocation, List<String> keys, long expire) throws Throwable {
         // 空值不缓存
         Object object = null;
         try {
             if (cache != null) {
-                object = cache.get(key);
+                object = cache.get(keys.get(0));
 
                 if (frequentLogPrint) {
-                    LOG.info("Before invocation, Cacheable key={}, cache={} in Redis", key, object);
+                    LOG.info("Before invocation, Cacheable key={}, cache={} in Redis", keys, object);
                 }
             }
         } catch (Exception e) {
@@ -87,14 +89,16 @@ public class RedissonCacheDelegateImpl implements CacheDelegate {
         if (object != null) {
             try {
                 if (cache != null) {
-                    if (expire <= 0) {
-                        cache.fastPut(key, object);
-                    } else {
-                        cache.fastPut(key, object, expire, TimeUnit.MILLISECONDS);
+                    for (String key : keys) {
+                        if (expire <= 0) {
+                            cache.fastPut(key, object);
+                        } else {
+                            cache.fastPut(key, object, expire, TimeUnit.MILLISECONDS);
+                        }
                     }
 
                     if (frequentLogPrint) {
-                        LOG.info("After invocation, Cacheable key={}, cache={} in Redis", key, object);
+                        LOG.info("After invocation, Cacheable key={}, cache={} in Redis", keys, object);
                     }
                 }
             } catch (Exception e) {
@@ -106,20 +110,22 @@ public class RedissonCacheDelegateImpl implements CacheDelegate {
     }
 
     @Override
-    public Object invokeCachePut(MethodInvocation invocation, String key, long expire) throws Throwable {
+    public Object invokeCachePut(MethodInvocation invocation, List<String> keys, long expire) throws Throwable {
         // 空值不缓存
         Object object = invocation.proceed();
         if (object != null) {
             try {
                 if (cache != null) {
-                    if (expire <= 0) {
-                        cache.fastPut(key, object);
-                    } else {
-                        cache.fastPut(key, object, expire, TimeUnit.MILLISECONDS);
+                    for (String key : keys) {
+                        if (expire <= 0) {
+                            cache.fastPut(key, object);
+                        } else {
+                            cache.fastPut(key, object, expire, TimeUnit.MILLISECONDS);
+                        }
                     }
 
                     if (frequentLogPrint) {
-                        LOG.info("After invocation, CachePut key={}, cache={} in Redis", key, object);
+                        LOG.info("After invocation, CachePut key={}, cache={} in Redis", keys, object);
                     }
                 }
             } catch (Exception e) {
@@ -131,26 +137,28 @@ public class RedissonCacheDelegateImpl implements CacheDelegate {
     }
 
     @Override
-    public Object invokeCacheEvict(MethodInvocation invocation, String key, String name, boolean allEntries, boolean beforeInvocation) throws Throwable {
-        String compositeWildcardKey = null;
+    public Object invokeCacheEvict(MethodInvocation invocation, List<String> keys, String name, boolean allEntries, boolean beforeInvocation) throws Throwable {
+        List<String> compositeWildcardKeys = null;
         if (allEntries) {
+            compositeWildcardKeys = new ArrayList<String>(1);
             // 通配全局Key, 例如：aquarius-cache
-            compositeWildcardKey = prefix + "_" + name;
+            String compositeWildcardKey = prefix + "_" + name;
+            compositeWildcardKeys.add(compositeWildcardKey);
         } else {
             // 精准匹配当前Key, 例如：aquarius-cache-abc
-            compositeWildcardKey = key;
+            compositeWildcardKeys = keys;
         }
 
         if (beforeInvocation) {
             if (cache != null) {
                 try {
-                    clear(compositeWildcardKey, allEntries);
+                    clear(compositeWildcardKeys, allEntries);
 
                     if (frequentLogPrint) {
                         if (allEntries) {
-                            LOG.info("Before invocation, CacheEvict clear all keys with prefix={} in Redis", compositeWildcardKey);
+                            LOG.info("Before invocation, CacheEvict clear all keys with prefix={} in Redis", compositeWildcardKeys);
                         } else {
-                            LOG.info("Before invocation, CacheEvict clear key={} in Redis", compositeWildcardKey);
+                            LOG.info("Before invocation, CacheEvict clear key={} in Redis", compositeWildcardKeys);
                         }
                     }
                 } catch (Exception e) {
@@ -164,13 +172,13 @@ public class RedissonCacheDelegateImpl implements CacheDelegate {
         if (!beforeInvocation) {
             if (cache != null) {
                 try {
-                    clear(compositeWildcardKey, allEntries);
+                    clear(compositeWildcardKeys, allEntries);
 
                     if (frequentLogPrint) {
                         if (allEntries) {
-                            LOG.info("After invocation, CacheEvict clear all keys with prefix={} in Redis", compositeWildcardKey);
+                            LOG.info("After invocation, CacheEvict clear all keys with prefix={} in Redis", compositeWildcardKeys);
                         } else {
-                            LOG.info("After invocation, CacheEvict clear key={} in Redis", compositeWildcardKey);
+                            LOG.info("After invocation, CacheEvict clear key={} in Redis", compositeWildcardKeys);
                         }
                     }
                 } catch (Exception e) {
@@ -182,16 +190,20 @@ public class RedissonCacheDelegateImpl implements CacheDelegate {
         return object;
     }
 
-    private void clear(String compositeWildcardKey, boolean allEntries) {
+    private void clear(List<String> compositeWildcardKeys, boolean allEntries) {
         Set<String> keys = cache.keySet();
         for (String k : keys) {
             if (allEntries) {
-                if (k.startsWith(compositeWildcardKey)) {
-                    cache.remove(k);
+                for (String compositeWildcardKey : compositeWildcardKeys) {
+                    if (k.startsWith(compositeWildcardKey)) {
+                        cache.remove(k);
+                    }
                 }
             } else {
-                if (StringUtils.equals(k, compositeWildcardKey)) {
-                    cache.remove(k);
+                for (String compositeWildcardKey : compositeWildcardKeys) {
+                    if (StringUtils.equals(k, compositeWildcardKey)) {
+                        cache.remove(k);
+                    }
                 }
             }
         }
