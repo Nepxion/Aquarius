@@ -30,6 +30,7 @@ import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.data.Stat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 
 import com.nepxion.aquarius.common.constant.AquariusConstant;
 import com.nepxion.aquarius.common.curator.constant.CuratorConstant;
@@ -39,20 +40,27 @@ import com.nepxion.aquarius.common.property.AquariusProperties;
 public class CuratorHandlerImpl implements CuratorHandler {
     private static final Logger LOG = LoggerFactory.getLogger(CuratorHandlerImpl.class);
 
+    @Value("${" + AquariusConstant.PREFIX + "}")
+    private String prefix;
+
     private CuratorFramework curator;
 
-    // 创建默认Curator，并初始化根节点
-    public CuratorHandlerImpl(String prefix) {
+    public CuratorHandlerImpl(String propertyConfigPath) {
         try {
-            AquariusProperties config = createPropertyFileConfig(CuratorConstant.CONFIG_FILE);
-            create(config);
-
-            String rootPath = getRootPath(prefix);
-            if (!pathExist(rootPath)) {
-                createPath(rootPath, CreateMode.PERSISTENT);
-            }
+            AquariusProperties properties = createPropertyFileConfig(CuratorConstant.CONFIG_FILE);
+            initialize(properties);
         } catch (Exception e) {
             LOG.error("Initialize Curator failed", e);
+        }
+    }
+
+    // 创建默认Curator，并初始化根节点
+    public void initialize(AquariusProperties config) throws Exception {
+        create(config);
+
+        String rootPath = getRootPath(prefix);
+        if (!pathExist(rootPath)) {
+            createPath(rootPath, CreateMode.PERSISTENT);
         }
     }
 

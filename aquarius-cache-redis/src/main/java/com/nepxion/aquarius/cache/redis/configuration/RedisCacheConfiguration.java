@@ -9,6 +9,7 @@ package com.nepxion.aquarius.cache.redis.configuration;
  * @version 1.0
  */
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
@@ -16,11 +17,15 @@ import org.springframework.context.annotation.Configuration;
 import com.nepxion.aquarius.cache.CacheDelegate;
 import com.nepxion.aquarius.cache.redis.condition.RedisCacheCondition;
 import com.nepxion.aquarius.cache.redis.impl.RedisCacheDelegateImpl;
+import com.nepxion.aquarius.common.redis.constant.RedisConstant;
 import com.nepxion.aquarius.common.redis.handler.RedisHandler;
 import com.nepxion.aquarius.common.redis.handler.RedisHandlerImpl;
 
 @Configuration
 public class RedisCacheConfiguration {
+    @Value("${redis.config.path:" + RedisConstant.CONFIG_FILE + "}")
+    private String redisConfigPath;
+
     @Bean
     @Conditional(RedisCacheCondition.class)
     public CacheDelegate redisCacheDelegate() {
@@ -30,6 +35,6 @@ public class RedisCacheConfiguration {
     @Bean
     @Conditional(RedisCacheCondition.class)
     public RedisHandler redisHandler() {
-        return new RedisHandlerImpl();
+        return new RedisHandlerImpl(redisConfigPath);
     }
 }

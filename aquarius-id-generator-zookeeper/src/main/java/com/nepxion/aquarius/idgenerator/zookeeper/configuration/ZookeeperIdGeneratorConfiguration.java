@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.nepxion.aquarius.common.constant.AquariusConstant;
+import com.nepxion.aquarius.common.curator.constant.CuratorConstant;
 import com.nepxion.aquarius.common.curator.handler.CuratorHandler;
 import com.nepxion.aquarius.common.curator.handler.CuratorHandlerImpl;
 import com.nepxion.aquarius.idgenerator.zookeeper.ZookeeperIdGenerator;
@@ -21,8 +21,8 @@ import com.nepxion.aquarius.idgenerator.zookeeper.impl.ZookeeperIdGeneratorImpl;
 
 @Configuration
 public class ZookeeperIdGeneratorConfiguration {
-    @Value("${" + AquariusConstant.PREFIX + "}")
-    private String prefix;
+    @Value("${curator.config.path:" + CuratorConstant.CONFIG_FILE + "}")
+    private String curatorConfigPath;
 
     @Bean
     public ZookeeperIdGenerator zookeeperIdGenerator() {
@@ -31,6 +31,6 @@ public class ZookeeperIdGeneratorConfiguration {
 
     @Bean
     public CuratorHandler curatorHandler() {
-        return new CuratorHandlerImpl(prefix);
+        return new CuratorHandlerImpl(curatorConfigPath);
     }
 }

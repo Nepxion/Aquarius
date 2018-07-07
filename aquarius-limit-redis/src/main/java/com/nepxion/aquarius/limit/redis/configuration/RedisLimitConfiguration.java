@@ -9,10 +9,12 @@ package com.nepxion.aquarius.limit.redis.configuration;
  * @version 1.0
  */
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 
+import com.nepxion.aquarius.common.redis.constant.RedisConstant;
 import com.nepxion.aquarius.common.redis.handler.RedisHandler;
 import com.nepxion.aquarius.common.redis.handler.RedisHandlerImpl;
 import com.nepxion.aquarius.limit.LimitDelegate;
@@ -23,6 +25,9 @@ import com.nepxion.aquarius.limit.redis.impl.RedisLimitExecutorImpl;
 
 @Configuration
 public class RedisLimitConfiguration {
+    @Value("${redis.config.path:" + RedisConstant.CONFIG_FILE + "}")
+    private String redisConfigPath;
+
     @Bean
     @Conditional(RedisLimitCondition.class)
     public LimitDelegate redisLimitDelegate() {
@@ -38,6 +43,6 @@ public class RedisLimitConfiguration {
     @Bean
     @Conditional(RedisLimitCondition.class)
     public RedisHandler redisHandler() {
-        return new RedisHandlerImpl();
+        return new RedisHandlerImpl(redisConfigPath);
     }
 }

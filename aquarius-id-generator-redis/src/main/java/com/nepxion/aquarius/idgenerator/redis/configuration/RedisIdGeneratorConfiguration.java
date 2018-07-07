@@ -9,9 +9,11 @@ package com.nepxion.aquarius.idgenerator.redis.configuration;
  * @version 1.0
  */
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.nepxion.aquarius.common.redis.constant.RedisConstant;
 import com.nepxion.aquarius.common.redis.handler.RedisHandler;
 import com.nepxion.aquarius.common.redis.handler.RedisHandlerImpl;
 import com.nepxion.aquarius.idgenerator.redis.RedisIdGenerator;
@@ -19,6 +21,9 @@ import com.nepxion.aquarius.idgenerator.redis.impl.RedisIdGeneratorImpl;
 
 @Configuration
 public class RedisIdGeneratorConfiguration {
+    @Value("${redis.config.path:" + RedisConstant.CONFIG_FILE + "}")
+    private String redisConfigPath;
+
     @Bean
     public RedisIdGenerator redisIdGenerator() {
         return new RedisIdGeneratorImpl();
@@ -26,6 +31,6 @@ public class RedisIdGeneratorConfiguration {
 
     @Bean
     public RedisHandler redisHandler() {
-        return new RedisHandlerImpl();
+        return new RedisHandlerImpl(redisConfigPath);
     }
 }

@@ -22,15 +22,27 @@ public class RedisHandlerImpl implements RedisHandler {
 
     private RedisTemplate<String, Object> redisTemplate;
 
-    // 创建默认RedisTemplate
-    public RedisHandlerImpl() {
+    public RedisHandlerImpl(String configPath) {
         try {
-            ApplicationContext applicationContext = createApplicationContext(RedisConstant.CONFIG_FILE);
+            ApplicationContext applicationContext = createApplicationContext(configPath);
 
-            create(applicationContext);
+            initialize(applicationContext);
         } catch (Exception e) {
             LOG.error("Initialize Redis failed", e);
         }
+    }
+
+    public RedisHandlerImpl(ApplicationContext applicationContext) {
+        try {
+            initialize(applicationContext);
+        } catch (Exception e) {
+            LOG.error("Initialize Redis failed", e);
+        }
+    }
+
+    // 创建默认Redis
+    public void initialize(ApplicationContext applicationContext) {
+        create(applicationContext);
     }
 
     // 创建ApplicationContext
