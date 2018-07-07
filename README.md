@@ -9,7 +9,7 @@ Nepxion Aquarius是一款基于Redis + Zookeeper的分布式应用组件集合�
 ## 简介
 - 分布式应用组件集合
   - Nepxion Aquarius Lock 分布式锁(支持Redis、Zookeeper、ReentrantLock本地锁)
-  - Nepxion Aquarius Cache 分布式缓存(支持Redis)
+  - Nepxion Aquarius Cache 分布式缓存(支持Redis，同时多键值缓存)
   - Nepxion Aquarius ID Generator 分布式全局唯一ID(支持Redis)、全局唯一序号生成(支持Zookeeper、Twitter雪花ID算法的支持)，支持单个和批量获取
   - Nepxion Aquarius Limit 分布式限速限流(支持Redis、Guava本地限速限流)
 - 支持Spring Boot集成
@@ -626,6 +626,7 @@ public class ReadWriteLockApplication {
 - 缓存的Key在config-redis.xml中有个RedisCacheEntity的prefix(前缀)全局配置项目，它和name，key组成一个SPEL语义，即[prefix]_[name]_[key]，该值将作为Redis的Key存储，对应的Redis的Value就是缓存
 - 对于方法返回的值为null的时候，不做任何缓存相关操作；对于方法执行过程中抛出异常后，不做任何缓存相关操作
 - 支持全局过期时间和局部过期时间的配置，当注解上没配置该值的时候，以全局值为准
+- 支持多键值缓存
 
 ### 切换缓存类型
 ```java
