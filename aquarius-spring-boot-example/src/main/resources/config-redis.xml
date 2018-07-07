@@ -4,8 +4,8 @@
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
     <bean id="aquariusJedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
         <property name="maxTotal" value="30" /> <!-- 控制一个pool可分配多少个jedis实例 -->
-        <property name="maxIdle" value="10" /> <!-- 最大能够保持idel状态的对象数 -->
-        <property name="minIdle" value="5" /> <!-- 最小能够保持idel状态的对象数 -->
+        <property name="maxIdle" value="10" /> <!-- 最大能够保持idle状态的对象数 -->
+        <property name="minIdle" value="5" /> <!-- 最小能够保持idle状态的对象数 -->
         <property name="maxWaitMillis" value="3000" /> <!-- 表示当borrow一个jedis实例时，最大的等待时间，如果超过等待时间，则直接抛出JedisConnectionException --> 
         <property name="timeBetweenEvictionRunsMillis" value="30000"/> <!-- 多长时间检查一次连接池中空闲的连接 -->
         <property name="minEvictableIdleTimeMillis" value="30000"/> <!-- 空闲连接多长时间后会被收回, 单位是毫秒 -->
