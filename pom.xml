@@ -48,7 +48,7 @@
         <redisson.version>3.7.3</redisson.version>
         <jedis.version>2.9.0</jedis.version>
         <guava.version>25.1-jre</guava.version>
-        <spring.data.redis.version>1.8.8.RELEASE</spring.data.redis.version>
+        <spring.data.redis.version>1.8.13.RELEASE</spring.data.redis.version>
         <curator.version>2.12.0</curator.version>
         <disruptor.version>3.3.7</disruptor.version>
         <log4j.version>2.9.1</log4j.version>
