@@ -9,7 +9,6 @@ package com.nepxion.aquarius.common.curator.handler;
  * @version 1.0
  */
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -31,9 +30,9 @@ import org.apache.zookeeper.data.Stat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.nepxion.aquarius.common.constant.AquariusConstant;
 import com.nepxion.aquarius.common.curator.constant.CuratorConstant;
 import com.nepxion.aquarius.common.curator.exception.CuratorException;
+import com.nepxion.aquarius.common.curator.util.CuratorUtil;
 import com.nepxion.aquarius.common.property.AquariusProperties;
 
 public class CuratorHandlerImpl implements CuratorHandler {
@@ -43,14 +42,22 @@ public class CuratorHandlerImpl implements CuratorHandler {
 
     public CuratorHandlerImpl(String propertyConfigPath, String prefix) {
         try {
-            AquariusProperties properties = createPropertyFileConfig(propertyConfigPath);
+            AquariusProperties properties = CuratorUtil.createPropertyFileConfig(propertyConfigPath);
             initialize(properties, prefix);
         } catch (Exception e) {
             LOG.error("Initialize Curator failed", e);
         }
     }
 
-    // 创建默认Curator，并初始化根节点
+    public CuratorHandlerImpl(AquariusProperties config, String prefix) {
+        try {
+            initialize(config, prefix);
+        } catch (Exception e) {
+            LOG.error("Initialize Curator failed", e);
+        }
+    }
+
+    // 创建Curator，并初始化根节点
     public void initialize(AquariusProperties config, String prefix) throws Exception {
         create(config);
 
@@ -58,18 +65,6 @@ public class CuratorHandlerImpl implements CuratorHandler {
         if (!pathExist(rootPath)) {
             createPath(rootPath, CreateMode.PERSISTENT);
         }
-    }
-
-    // 创建Property格式的配置文件
-    public AquariusProperties createPropertyFileConfig(String propertyConfigPath) throws IOException {
-        LOG.info("Start to read {}...", propertyConfigPath);
-
-        return new AquariusProperties(propertyConfigPath, AquariusConstant.ENCODING_GBK, AquariusConstant.ENCODING_UTF_8);
-    }
-
-    // 创建Property格式的配置文件
-    public AquariusProperties createPropertyConfig(String propertyConfigContent) throws IOException {
-        return new AquariusProperties(propertyConfigContent, AquariusConstant.ENCODING_UTF_8);
     }
 
     // 创建Curator

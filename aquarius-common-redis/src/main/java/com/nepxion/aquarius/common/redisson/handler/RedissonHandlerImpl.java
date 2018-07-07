@@ -9,17 +9,14 @@ package com.nepxion.aquarius.common.redisson.handler;
  * @version 1.0
  */
 
-import java.io.IOException;
-
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.nepxion.aquarius.common.constant.AquariusConstant;
-import com.nepxion.aquarius.common.property.AquariusContent;
 import com.nepxion.aquarius.common.redisson.exception.RedissonException;
+import com.nepxion.aquarius.common.redisson.util.RedissonUtil;
 
 public class RedissonHandlerImpl implements RedissonHandler {
     private static final Logger LOG = LoggerFactory.getLogger(RedissonHandlerImpl.class);
@@ -28,7 +25,7 @@ public class RedissonHandlerImpl implements RedissonHandler {
 
     public RedissonHandlerImpl(String yamlConfigPath) {
         try {
-            Config config = createYamlFileConfig(yamlConfigPath);
+            Config config = RedissonUtil.createYamlFileConfig(yamlConfigPath);
 
             initialize(config);
         } catch (Exception e) {
@@ -36,37 +33,17 @@ public class RedissonHandlerImpl implements RedissonHandler {
         }
     }
 
-    // 创建默认Redisson
+    public RedissonHandlerImpl(Config config) {
+        try {
+            initialize(config);
+        } catch (Exception e) {
+            LOG.error("Initialize Redisson failed", e);
+        }
+    }
+
+    // 创建Redisson
     public void initialize(Config config) throws Exception {
         create(config);
-    }
-
-    // 创建Yaml格式的配置文件
-    public Config createYamlFileConfig(String yamlConfigPath) throws IOException {
-        LOG.info("Start to read {}...", yamlConfigPath);
-
-        AquariusContent content = new AquariusContent(yamlConfigPath, AquariusConstant.ENCODING_UTF_8);
-
-        return createYamlConfig(content.getContent());
-    }
-
-    // 创建Json格式的配置文件
-    public Config createJsonFileConfig(String jsonConfigPath) throws IOException {
-        LOG.info("Start to read {}...", jsonConfigPath);
-
-        AquariusContent content = new AquariusContent(jsonConfigPath, AquariusConstant.ENCODING_UTF_8);
-
-        return createJsonConfig(content.getContent());
-    }
-
-    // 创建Yaml格式的配置文件
-    public Config createYamlConfig(String yamlConfigContent) throws IOException {
-        return Config.fromYAML(yamlConfigContent);
-    }
-
-    // 创建Json格式的配置文件
-    public Config createJsonConfig(String jsonConfigContent) throws IOException {
-        return Config.fromJSON(jsonConfigContent);
     }
 
     // 使用config创建Redisson

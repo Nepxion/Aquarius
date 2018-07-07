@@ -38,7 +38,7 @@ public class RedisHandlerImpl implements RedisHandler {
         }
     }
 
-    // 创建默认Redis
+    // 创建Redis
     public void initialize(ApplicationContext applicationContext) {
         create(applicationContext);
     }
