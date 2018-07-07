@@ -15,6 +15,6 @@
 @title Nepxion Aquarius
 @color 0a
 
-call mvn versions:set -DnewVersion=1.0.24
+call mvn versions:set -DnewVersion=1.0.25
 
 pause
