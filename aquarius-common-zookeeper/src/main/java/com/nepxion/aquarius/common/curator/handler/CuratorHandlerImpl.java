@@ -30,7 +30,6 @@ import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.data.Stat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 
 import com.nepxion.aquarius.common.constant.AquariusConstant;
 import com.nepxion.aquarius.common.curator.constant.CuratorConstant;
@@ -40,22 +39,19 @@ import com.nepxion.aquarius.common.property.AquariusProperties;
 public class CuratorHandlerImpl implements CuratorHandler {
     private static final Logger LOG = LoggerFactory.getLogger(CuratorHandlerImpl.class);
 
-    @Value("${" + AquariusConstant.PREFIX + "}")
-    private String prefix;
-
     private CuratorFramework curator;
 
-    public CuratorHandlerImpl(String propertyConfigPath) {
+    public CuratorHandlerImpl(String propertyConfigPath, String prefix) {
         try {
             AquariusProperties properties = createPropertyFileConfig(CuratorConstant.CONFIG_FILE);
-            initialize(properties);
+            initialize(properties, prefix);
         } catch (Exception e) {
             LOG.error("Initialize Curator failed", e);
         }
     }
 
     // 创建默认Curator，并初始化根节点
-    public void initialize(AquariusProperties config) throws Exception {
+    public void initialize(AquariusProperties config, String prefix) throws Exception {
         create(config);
 
         String rootPath = getRootPath(prefix);

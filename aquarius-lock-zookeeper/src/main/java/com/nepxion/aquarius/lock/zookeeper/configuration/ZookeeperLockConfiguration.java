@@ -10,11 +10,14 @@ package com.nepxion.aquarius.lock.zookeeper.configuration;
  */
 
 import org.apache.curator.framework.recipes.locks.InterProcessMutex;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 
+import com.nepxion.aquarius.common.constant.AquariusConstant;
+import com.nepxion.aquarius.common.curator.adapter.CuratorAdapter;
 import com.nepxion.aquarius.common.curator.constant.CuratorConstant;
 import com.nepxion.aquarius.common.curator.handler.CuratorHandler;
 import com.nepxion.aquarius.common.curator.handler.CuratorHandlerImpl;
@@ -28,6 +31,12 @@ import com.nepxion.aquarius.lock.zookeeper.impl.ZookeeperLockExecutorImpl;
 public class ZookeeperLockConfiguration {
     @Value("${curator.config.path:" + CuratorConstant.CONFIG_FILE + "}")
     private String curatorConfigPath;
+
+    @Value("${" + AquariusConstant.PREFIX + "}")
+    private String prefix;
+
+    @Autowired(required = false)
+    private CuratorAdapter curatorAdapter;
 
     @Bean
     @Conditional(ZookeeperLockCondition.class)
@@ -44,6 +53,10 @@ public class ZookeeperLockConfiguration {
     @Bean
     @Conditional(ZookeeperLockCondition.class)
     public CuratorHandler curatorHandler() {
-        return new CuratorHandlerImpl(curatorConfigPath);
+        if (curatorAdapter != null) {
+            return curatorAdapter.getCuratorHandler(prefix);
+        }
+
+        return new CuratorHandlerImpl(curatorConfigPath, prefix);
     }
 }
