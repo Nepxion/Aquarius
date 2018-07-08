@@ -16,5 +16,7 @@ public class AquariusConstant {
 
     public static final String PREFIX = "prefix";
 
+    public static final String AOP_EXCEPTION_IGNORE = "aop.exception.ignore";
+
     public static final String FREQUENT_LOG_PRINT = "frequent.log.print";
 }
