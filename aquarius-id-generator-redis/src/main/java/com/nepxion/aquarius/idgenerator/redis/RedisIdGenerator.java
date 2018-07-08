@@ -22,11 +22,11 @@ public interface RedisIdGenerator {
      * @param length 长度
      * @return String
      */
-    String nextUniqueId(String name, String key, int step, int length);
+    String nextUniqueId(String name, String key, int step, int length) throws Exception;
 
-    String nextUniqueId(String compositeKey, int step, int length);
+    String nextUniqueId(String compositeKey, int step, int length) throws Exception;
 
-    String[] nextUniqueIds(String name, String key, int step, int length, int count);
+    String[] nextUniqueIds(String name, String key, int step, int length, int count) throws Exception;
 
-    String[] nextUniqueIds(String compositeKey, int step, int length, int count);
+    String[] nextUniqueIds(String compositeKey, int step, int length, int count) throws Exception;
 }

@@ -70,7 +70,7 @@ public class RedisIdGeneratorImpl implements RedisIdGenerator {
     }
 
     @Override
-    public String nextUniqueId(String name, String key, int step, int length) {
+    public String nextUniqueId(String name, String key, int step, int length) throws Exception {
         if (StringUtils.isEmpty(name)) {
             throw new AquariusException("Name is null or empty");
         }
@@ -85,10 +85,12 @@ public class RedisIdGeneratorImpl implements RedisIdGenerator {
     }
 
     @Override
-    public String nextUniqueId(String compositeKey, int step, int length) {
+    public String nextUniqueId(String compositeKey, int step, int length) throws Exception {
         if (StringUtils.isEmpty(compositeKey)) {
             throw new AquariusException("Composite key is null or empty");
         }
+
+        redisHandler.validateInitializedStatus();
 
         List<String> keys = new ArrayList<String>();
         keys.add(compositeKey);
@@ -116,7 +118,7 @@ public class RedisIdGeneratorImpl implements RedisIdGenerator {
     }
 
     @Override
-    public String[] nextUniqueIds(String name, String key, int step, int length, int count) {
+    public String[] nextUniqueIds(String name, String key, int step, int length, int count) throws Exception {
         if (count <= 0 || count > MAX_BATCH_COUNT) {
             throw new AquariusException(String.format("Count can't be greater than %d or less than 0", MAX_BATCH_COUNT));
         }
@@ -130,7 +132,7 @@ public class RedisIdGeneratorImpl implements RedisIdGenerator {
     }
 
     @Override
-    public String[] nextUniqueIds(String compositeKey, int step, int length, int count) {
+    public String[] nextUniqueIds(String compositeKey, int step, int length, int count) throws Exception {
         if (count <= 0 || count > MAX_BATCH_COUNT) {
             throw new AquariusException(String.format("Count can't be greater than %d or less than 0", MAX_BATCH_COUNT));
         }
