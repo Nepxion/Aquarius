@@ -40,7 +40,7 @@ public class RedisLimitExecutorImpl implements LimitExecutor {
     private Boolean frequentLogPrint;
 
     @Override
-    public boolean tryAccess(String name, String key, int limitPeriod, int limitCount) {
+    public boolean tryAccess(String name, String key, int limitPeriod, int limitCount) throws Exception {
         if (StringUtils.isEmpty(name)) {
             throw new AquariusException("Name is null or empty");
         }
@@ -55,10 +55,12 @@ public class RedisLimitExecutorImpl implements LimitExecutor {
     }
 
     @Override
-    public boolean tryAccess(String compositeKey, int limitPeriod, int limitCount) {
+    public boolean tryAccess(String compositeKey, int limitPeriod, int limitCount) throws Exception {
         if (StringUtils.isEmpty(compositeKey)) {
             throw new AquariusException("Composite key is null or empty");
         }
+
+        redisHandler.validateInitializedStatus();
 
         List<String> keys = new ArrayList<String>();
         keys.add(compositeKey);

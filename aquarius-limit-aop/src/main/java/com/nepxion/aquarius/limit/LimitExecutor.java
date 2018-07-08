@@ -18,7 +18,7 @@ public interface LimitExecutor {
      * @param limitCount 最多的访问限制次数
      * @return boolean
      */
-    boolean tryAccess(String name, String key, int limitPeriod, int limitCount);
+    boolean tryAccess(String name, String key, int limitPeriod, int limitCount) throws Exception;
 
-    boolean tryAccess(String compositeKey, int limitPeriod, int limitCount);
+    boolean tryAccess(String compositeKey, int limitPeriod, int limitCount) throws Exception;
 }
