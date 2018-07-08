@@ -48,10 +48,12 @@ public class RedissonCacheDelegateImpl implements CacheDelegate {
     @PostConstruct
     public void initialize() {
         try {
+            redissonHandler.validateStartedStatus();
+
             RedissonClient redission = redissonHandler.getRedisson();
             cache = redission.getMapCache(prefix);
         } catch (Exception e) {
-            LOG.warn("Get MapCache in Redisson failed, maybe Redisson isn't intialized");
+            LOG.warn("Get MapCache in Redisson failed", e);
         }
     }
 

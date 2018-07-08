@@ -47,10 +47,12 @@ public class RedisCacheDelegateImpl implements CacheDelegate {
     @PostConstruct
     public void initialize() {
         try {
+            redisHandler.validateInitializedStatus();
+
             redisTemplate = redisHandler.getRedisTemplate();
             valueOperations = redisTemplate.opsForValue();
         } catch (Exception e) {
-            LOG.warn("Get ValueOperations in Redis failed, maybe RedisTemplate isn't intialized");
+            LOG.warn("Get ValueOperations in Redis failed", e);
         }
     }
 
