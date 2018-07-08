@@ -152,7 +152,7 @@ public class CuratorHandlerImpl implements CuratorHandler {
 
     // 启动ZooKeeper客户端
     @Override
-    public void start() throws Exception {
+    public void start() {
         LOG.info("Start Curator...");
 
         validateClosedStatus();
@@ -184,7 +184,7 @@ public class CuratorHandlerImpl implements CuratorHandler {
 
     // 关闭ZooKeeper客户端连接
     @Override
-    public void close() throws Exception {
+    public void close() {
         LOG.info("Start to close Curator...");
 
         validateStartedStatus();
@@ -206,7 +206,7 @@ public class CuratorHandlerImpl implements CuratorHandler {
 
     // 检查ZooKeeper是否是启动状态
     @Override
-    public void validateStartedStatus() throws Exception {
+    public void validateStartedStatus() {
         if (curator == null) {
             throw new CuratorException("Curator isn't initialized");
         }
@@ -218,7 +218,7 @@ public class CuratorHandlerImpl implements CuratorHandler {
 
     // 检查ZooKeeper是否是关闭状态
     @Override
-    public void validateClosedStatus() throws Exception {
+    public void validateClosedStatus() {
         if (curator == null) {
             throw new CuratorException("Curator isn't initialized");
         }

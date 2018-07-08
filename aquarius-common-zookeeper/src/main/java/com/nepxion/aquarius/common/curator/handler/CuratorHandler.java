@@ -18,7 +18,7 @@ import org.apache.zookeeper.data.Stat;
 
 public interface CuratorHandler {
     // 启动ZooKeeper客户端
-    public void start() throws Exception;
+    public void start();
 
     // 启动ZooKeeper客户端，直到第一次连接成功
     public void startAndBlock() throws Exception;
@@ -27,7 +27,7 @@ public interface CuratorHandler {
     public void startAndBlock(int maxWaitTime, TimeUnit units) throws Exception;
 
     // 关闭ZooKeeper客户端连接
-    public void close() throws Exception;
+    public void close();
 
     // 获取ZooKeeper客户端是否初始化
     public boolean isInitialized();
@@ -36,10 +36,10 @@ public interface CuratorHandler {
     public boolean isStarted();
 
     // 检查ZooKeeper是否是启动状态
-    public void validateStartedStatus() throws Exception;
+    public void validateStartedStatus();
 
     // 检查ZooKeeper是否是关闭状态
-    public void validateClosedStatus() throws Exception;
+    public void validateClosedStatus();
 
     // 获取ZooKeeper客户端
     public CuratorFramework getCurator();
