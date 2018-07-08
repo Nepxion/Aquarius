@@ -34,13 +34,13 @@ import com.nepxion.aquarius.common.redisson.handler.RedissonHandlerImpl;
 
 @Configuration
 public class RedisCacheConfiguration {
-    @Value("${cache.plugin}")
+    @Value("${" + CacheConstant.CACHE_PLUGIN + "}")
     private String cachePlugin;
 
-    @Value("${redis.config.path:" + RedisConstant.CONFIG_FILE + "}")
+    @Value("${redis.config.path:" + RedisConstant.DEFAULT_CONFIG_PATH + "}")
     private String redisConfigPath;
 
-    @Value("${redisson.config.path:" + RedissonConstant.CONFIG_FILE + "}")
+    @Value("${redisson.config.path:" + RedissonConstant.DEFAULT_CONFIG_PATH + "}")
     private String redissonConfigPath;
 
     @Autowired(required = false)

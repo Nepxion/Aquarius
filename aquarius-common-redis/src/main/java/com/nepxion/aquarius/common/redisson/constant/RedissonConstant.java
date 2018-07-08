@@ -10,5 +10,5 @@ package com.nepxion.aquarius.common.redisson.constant;
  */
 
 public class RedissonConstant {
-    public static final String CONFIG_FILE = "config-redisson.yaml";
+    public static final String DEFAULT_CONFIG_PATH = "config-redisson.yaml";
 }

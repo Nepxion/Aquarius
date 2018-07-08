@@ -62,7 +62,7 @@ public class RedisHandlerImpl implements RedisHandler {
     public void create(ApplicationContext applicationContext) {
         LOG.info("Start to initialize Redis...");
 
-        redisTemplate = (RedisTemplate<String, Object>) applicationContext.getBean("aquariusRedisTemplate");
+        redisTemplate = (RedisTemplate<String, Object>) applicationContext.getBean(RedisTemplate.class);
     }
 
     // 获取RedisTemplate

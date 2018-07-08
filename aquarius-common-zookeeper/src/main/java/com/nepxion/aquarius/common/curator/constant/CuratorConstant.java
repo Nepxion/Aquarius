@@ -10,7 +10,7 @@ package com.nepxion.aquarius.common.curator.constant;
  */
 
 public class CuratorConstant {
-    public static final String CONFIG_FILE = "config-curator.properties";
+    public static final String DEFAULT_CONFIG_PATH = "config-curator.properties";
 
     public static final String CONNECT_STRING = "connectString";
     public static final String SESSION_TIMEOUT_MS = "sessionTimeoutMs";

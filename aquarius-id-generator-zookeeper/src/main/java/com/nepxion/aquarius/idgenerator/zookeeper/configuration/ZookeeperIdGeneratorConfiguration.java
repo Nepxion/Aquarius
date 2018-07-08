@@ -24,7 +24,7 @@ import com.nepxion.aquarius.idgenerator.zookeeper.impl.ZookeeperIdGeneratorImpl;
 
 @Configuration
 public class ZookeeperIdGeneratorConfiguration {
-    @Value("${curator.config.path:" + CuratorConstant.CONFIG_FILE + "}")
+    @Value("${curator.config.path:" + CuratorConstant.DEFAULT_CONFIG_PATH + "}")
     private String curatorConfigPath;
 
     @Value("${" + AquariusConstant.PREFIX + "}")
