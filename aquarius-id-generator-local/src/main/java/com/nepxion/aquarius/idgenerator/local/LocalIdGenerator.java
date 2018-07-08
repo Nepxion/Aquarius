@@ -12,7 +12,7 @@ package com.nepxion.aquarius.idgenerator.local;
 public interface LocalIdGenerator {
     String nextUniqueId(long dataCenterId, long machineId);
 
-    String nextUniqueId(String startTimestamp, long dataCenterId, long machineId) throws Exception;
+    String nextUniqueId(String startTimestamp, long dataCenterId, long machineId);
 
     /**
      * 获取全局唯一ID，根据Twitter雪花ID算法。为兼顾到前端失精问题，把返回值long改成String
@@ -27,7 +27,7 @@ public interface LocalIdGenerator {
 
     String[] nextUniqueIds(long dataCenterId, long machineId, int count);
 
-    String[] nextUniqueIds(String startTimestamp, long dataCenterId, long machineId, int count) throws Exception;
+    String[] nextUniqueIds(String startTimestamp, long dataCenterId, long machineId, int count);
 
     String[] nextUniqueIds(long startTimestamp, long dataCenterId, long machineId, int count);
 }

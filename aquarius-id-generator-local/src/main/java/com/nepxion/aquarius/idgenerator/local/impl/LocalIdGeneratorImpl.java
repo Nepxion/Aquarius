@@ -38,7 +38,7 @@ public class LocalIdGeneratorImpl implements LocalIdGenerator {
     }
 
     @Override
-    public String nextUniqueId(String startTimestamp, long dataCenterId, long machineId) throws Exception {
+    public String nextUniqueId(String startTimestamp, long dataCenterId, long machineId) {
         return nextUniqueId(DateUtil.parseDate(startTimestamp, DATE_FORMAT).getTime(), dataCenterId, machineId);
     }
 
@@ -59,7 +59,7 @@ public class LocalIdGeneratorImpl implements LocalIdGenerator {
     }
 
     @Override
-    public String[] nextUniqueIds(String startTimestamp, long dataCenterId, long machineId, int count) throws Exception {
+    public String[] nextUniqueIds(String startTimestamp, long dataCenterId, long machineId, int count) {
         return nextUniqueIds(DateUtil.parseDate(startTimestamp, DATE_FORMAT).getTime(), dataCenterId, machineId, count);
     }
 
