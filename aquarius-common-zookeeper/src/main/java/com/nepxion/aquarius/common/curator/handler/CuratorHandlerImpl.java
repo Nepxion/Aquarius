@@ -208,7 +208,7 @@ public class CuratorHandlerImpl implements CuratorHandler {
     @Override
     public void validateStartedStatus() throws Exception {
         if (curator == null) {
-            throw new CuratorException("Curator is null");
+            throw new CuratorException("Curator isn't initialized");
         }
 
         if (!isStarted()) {
@@ -220,7 +220,7 @@ public class CuratorHandlerImpl implements CuratorHandler {
     @Override
     public void validateClosedStatus() throws Exception {
         if (curator == null) {
-            throw new CuratorException("Curator is null");
+            throw new CuratorException("Curator isn't initialized");
         }
 
         if (isStarted()) {

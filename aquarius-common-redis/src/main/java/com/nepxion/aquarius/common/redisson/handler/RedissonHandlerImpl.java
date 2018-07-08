@@ -77,7 +77,7 @@ public class RedissonHandlerImpl implements RedissonHandler {
     @Override
     public boolean isStarted() {
         if (redisson == null) {
-            throw new RedissonException("Redisson is null");
+            throw new RedissonException("Redisson isn't initialized");
         }
 
         return !redisson.isShutdown() && !redisson.isShuttingDown();
@@ -87,7 +87,7 @@ public class RedissonHandlerImpl implements RedissonHandler {
     @Override
     public void validateStartedStatus() throws Exception {
         if (redisson == null) {
-            throw new RedissonException("Redisson is null");
+            throw new RedissonException("Redisson isn't initialized");
         }
 
         if (!isStarted()) {
@@ -99,7 +99,7 @@ public class RedissonHandlerImpl implements RedissonHandler {
     @Override
     public void validateClosedStatus() throws Exception {
         if (redisson == null) {
-            throw new RedissonException("Redisson is null");
+            throw new RedissonException("Redisson isn't initialized");
         }
 
         if (isStarted()) {
