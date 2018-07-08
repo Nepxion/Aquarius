@@ -15,6 +15,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.data.redis.core.RedisTemplate;
 
+import com.nepxion.aquarius.common.redis.exception.RedisException;
+
 public class RedisHandlerImpl implements RedisHandler {
     private static final Logger LOG = LoggerFactory.getLogger(RedisHandlerImpl.class);
 
@@ -63,6 +65,20 @@ public class RedisHandlerImpl implements RedisHandler {
         LOG.info("Start to initialize Redis...");
 
         redisTemplate = (RedisTemplate<String, Object>) applicationContext.getBean(RedisTemplate.class);
+    }
+
+    // 获取RedisTemplate客户端是否初始化
+    @Override
+    public boolean isInitialized() {
+        return redisTemplate != null;
+    }
+
+    // 检查RedisTemplate是否已经初始化
+    @Override
+    public void validateInitializedStatus() {
+        if (redisTemplate == null) {
+            throw new RedisException("Redis isn't initialized");
+        }
     }
 
     // 获取RedisTemplate

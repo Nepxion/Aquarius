@@ -13,7 +13,7 @@ import org.redisson.api.RedissonClient;
 
 public interface RedissonHandler {
     // 关闭Redisson客户端连接
-    void close() throws Exception;
+    void close();
 
     // 获取Redisson客户端是否初始化
     boolean isInitialized();
@@ -22,10 +22,10 @@ public interface RedissonHandler {
     boolean isStarted();
 
     // 检查Redisson是否是启动状态
-    void validateStartedStatus() throws Exception;
+    void validateStartedStatus();
 
     // 检查Redisson是否是关闭状态
-    void validateClosedStatus() throws Exception;
+    void validateClosedStatus();
 
     // 获取Redisson客户端
     RedissonClient getRedisson();

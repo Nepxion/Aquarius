@@ -42,12 +42,12 @@ public class RedissonHandlerImpl implements RedissonHandler {
     }
 
     // 创建Redisson
-    public void initialize(Config config) throws Exception {
+    public void initialize(Config config) {
         create(config);
     }
 
     // 使用config创建Redisson
-    public void create(Config config) throws Exception {
+    public void create(Config config) {
         LOG.info("Start to initialize Redisson...");
 
         if (redisson != null) {
@@ -59,7 +59,7 @@ public class RedissonHandlerImpl implements RedissonHandler {
 
     // 关闭Redisson客户端连接
     @Override
-    public void close() throws Exception {
+    public void close() {
         LOG.info("Start to close Redisson...");
 
         validateStartedStatus();
@@ -85,7 +85,7 @@ public class RedissonHandlerImpl implements RedissonHandler {
 
     // 检查Redisson是否是启动状态
     @Override
-    public void validateStartedStatus() throws Exception {
+    public void validateStartedStatus() {
         if (redisson == null) {
             throw new RedissonException("Redisson isn't initialized");
         }
@@ -97,7 +97,7 @@ public class RedissonHandlerImpl implements RedissonHandler {
 
     // 检查Redisson是否是关闭状态
     @Override
-    public void validateClosedStatus() throws Exception {
+    public void validateClosedStatus() {
         if (redisson == null) {
             throw new RedissonException("Redisson isn't initialized");
         }
