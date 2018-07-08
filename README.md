@@ -14,6 +14,7 @@ Nepxion Aquarius是一款基于Redis + Zookeeper的分布式应用组件集合�
   - Nepxion Aquarius Limit 分布式限速限流(支持Redis、Guava本地限速限流)
 - 支持Spring Boot集成
   - 提供Start模式，在类头部加注解@EnableXXX，同时结合配置文件xxx.enabled=true/false进行相关Aop功能的关闭和开启
+  - 支持Aop异常的中断业务方法调用和忽略中断两种选择
 - 支持Spring Cloud集成
 - 支持Swagger集成
   打开[http://localhost:2222/swagger-ui.html](http://localhost:2222/swagger-ui.html)访问
@@ -94,17 +95,6 @@ Nepxion Aquarius是一款基于Redis + Zookeeper的分布式应用组件集合�
     https://github.com/redisson/redisson/wiki/2.-%E9%85%8D%E7%BD%AE%E6%96%B9%E6%B3%95
   - 实现对Curator的多种重试机制(例如exponentialBackoffRetry, boundedExponentialBackoffRetry, retryNTimes, retryForever, retryUntilElapsed)，可在配置文件里面切换
 - 锁支持两种调用方式，注解方式和直接调用方式
-
-### 切换锁类型
-aquarius-spring-boot-example\src\main\resources\application.properties，切换lockType即可
-```java
-# Lock config
-lock.enabled=true
-# redisLock, zookeeperLock, localLock
-lock.type=redisLock
-# 扫描含有@Lock，@ReadLock，@WriteLock等注解的接口或者类所在目录
-lock.scan.packages=com.nepxion.aquarius.example.lock
-```
 
 ### 示例
 使用分布式锁示例如下，更多细节见aquarius-spring-boot-example工程下com.nepxion.aquarius.example.lock
@@ -627,19 +617,6 @@ public class ReadWriteLockApplication {
 - 对于方法返回的值为null的时候，不做任何缓存相关操作；对于方法执行过程中抛出异常后，不做任何缓存相关操作
 - 支持全局过期时间和局部过期时间的配置，当注解上没配置该值的时候，以全局值为准
 - 支持多键值缓存
-
-### 切换缓存类型
-```java
-# Cache config
-cache.enabled=true
-cache.type=redisCache
-# redisPlugin, redissonPlugin，Redis缓存有两种实现的插件
-cache.plugin=redisPlugin
-# 全局缓存过期值，单位毫秒（小于等于零，表示永不过期），当注解上没配置该值的时候，以全局值为准，缺省为-1
-cache.expire=-1
-# 扫描含有@Cacheable，@CacheEvict，@CachePut等注解的接口或者类所在目录
-cache.scan.packages=com.nepxion.aquarius.example.cache
-```
 
 ### 示例
 使用分布式缓存示例如下，更多细节见aquarius-spring-boot-example工程下com.nepxion.aquarius.example.cache
@@ -1176,17 +1153,6 @@ public class LocalIdGeneratorApplication {
   - key  资源Key。资源Key的完整路径是prefix + "_" + name + "_" + key，prefix为config.propertie里的namespace值
   - limitPeriod 给定的时间段(单位为秒)
   - limitCount 最多的访问限制次数（注意，如果是Guava方式本地限流，limitCount必须等于1，因为Guava的机制是设置每秒访问次数）
-
-### 切换限流限速器类型
-aquarius-spring-boot-example\src\main\resources\application.properties，切换limitType即可
-```java
-# Limit config
-limit.enabled=true
-# redisLimit, localLimit
-limit.type=redisLimit
-# 扫描含有@Limit等注解的接口或者类所在目录
-limit.scan.packages=com.nepxion.aquarius.example.limit
-```
 
 ### 示例
 使用Limit示例如下，更多细节见aquarius-spring-boot-example工程下com.nepxion.aquarius.example.limit
