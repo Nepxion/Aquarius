@@ -42,7 +42,11 @@ public class IdGeneratorController {
             @RequestParam @ApiParam(value = "资源Key", required = true, defaultValue = "X-Y") String key,
             @RequestParam @ApiParam(value = "递增值", required = true, defaultValue = "1") int step,
             @RequestParam @ApiParam(value = "长度", required = true, defaultValue = "8") int length) {
-        return redisIdGenerator.nextUniqueId(name, key, step, length);
+        try {
+            return redisIdGenerator.nextUniqueId(name, key, step, length);
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e);
+        }
     }
 
     @RequestMapping(path = "/nextUniqueIds", method = RequestMethod.GET)
@@ -53,7 +57,11 @@ public class IdGeneratorController {
             @RequestParam @ApiParam(value = "递增值", required = true, defaultValue = "1") int step,
             @RequestParam @ApiParam(value = "长度", required = true, defaultValue = "8") int length,
             @RequestParam @ApiParam(value = "批量条数", required = true, defaultValue = "10") int count) {
-        return redisIdGenerator.nextUniqueIds(name, key, step, length, count);
+        try {
+            return redisIdGenerator.nextUniqueIds(name, key, step, length, count);
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e);
+        }
     }
 
     @RequestMapping(path = "/nextLocalUniqueId", method = RequestMethod.GET)
@@ -61,7 +69,11 @@ public class IdGeneratorController {
     public String nextLocalUniqueId(
             @RequestParam @ApiParam(value = "数据中心标识ID", required = true, defaultValue = "2") long dataCenterId,
             @RequestParam @ApiParam(value = "机器标识ID", required = true, defaultValue = "3") long machineId) {
-        return localIdGenerator.nextUniqueId(dataCenterId, machineId);
+        try {
+            return localIdGenerator.nextUniqueId(dataCenterId, machineId);
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e);
+        }
     }
 
     @RequestMapping(path = "/nextLocalUniqueIds", method = RequestMethod.GET)
@@ -70,7 +82,11 @@ public class IdGeneratorController {
             @RequestParam @ApiParam(value = "数据中心标识ID", required = true, defaultValue = "2") long dataCenterId,
             @RequestParam @ApiParam(value = "机器标识ID", required = true, defaultValue = "3") long machineId,
             @RequestParam @ApiParam(value = "批量条数", required = true, defaultValue = "10") int count) {
-        return localIdGenerator.nextUniqueIds(dataCenterId, machineId, count);
+        try {
+            return localIdGenerator.nextUniqueIds(dataCenterId, machineId, count);
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e);
+        }
     }
 
     @RequestMapping(path = "/nextSequenceId", method = RequestMethod.GET)

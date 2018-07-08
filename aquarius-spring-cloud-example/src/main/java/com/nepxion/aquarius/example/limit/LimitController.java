@@ -34,6 +34,10 @@ public class LimitController {
             @RequestParam @ApiParam(value = "资源Key", required = true, defaultValue = "X-Y") String key,
             @RequestParam @ApiParam(value = "给定的时间段(单位秒)", required = true, defaultValue = "10") int limitPeriod,
             @RequestParam @ApiParam(value = "最多的访问限制次数", required = true, defaultValue = "5") int limitCount) {
-        return limitExecutor.tryAccess(name, key, limitPeriod, limitCount);
+        try {
+            return limitExecutor.tryAccess(name, key, limitPeriod, limitCount);
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e);
+        }
     }
 }

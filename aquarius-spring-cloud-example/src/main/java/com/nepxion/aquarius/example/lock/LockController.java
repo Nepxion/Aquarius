@@ -59,12 +59,12 @@ public class LockController {
                 LOG.info("doX - lock is got");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException(e);
         } finally {
             try {
                 lockExecutor.unlock(lock);
             } catch (Exception e) {
-                e.printStackTrace();
+                throw new IllegalArgumentException(e);
             }
         }
 
