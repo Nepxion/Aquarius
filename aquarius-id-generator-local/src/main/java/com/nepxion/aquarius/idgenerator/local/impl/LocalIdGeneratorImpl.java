@@ -33,17 +33,17 @@ public class LocalIdGeneratorImpl implements LocalIdGenerator {
     private Boolean frequentLogPrint;
 
     @Override
-    public String nextUniqueId(long dataCenterId, long machineId) {
+    public String nextUniqueId(long dataCenterId, long machineId) throws Exception {
         return nextUniqueId(DEFAULT_START_TIMESTAMP, dataCenterId, machineId);
     }
 
     @Override
-    public String nextUniqueId(String startTimestamp, long dataCenterId, long machineId) {
+    public String nextUniqueId(String startTimestamp, long dataCenterId, long machineId) throws Exception {
         return nextUniqueId(DateUtil.parseDate(startTimestamp, DATE_FORMAT).getTime(), dataCenterId, machineId);
     }
 
     @Override
-    public String nextUniqueId(long startTimestamp, long dataCenterId, long machineId) {
+    public String nextUniqueId(long startTimestamp, long dataCenterId, long machineId) throws Exception {
         String nextUniqueId = getIdGenerator(startTimestamp, dataCenterId, machineId).nextId();
 
         if (frequentLogPrint) {
@@ -54,17 +54,17 @@ public class LocalIdGeneratorImpl implements LocalIdGenerator {
     }
 
     @Override
-    public String[] nextUniqueIds(long dataCenterId, long machineId, int count) {
+    public String[] nextUniqueIds(long dataCenterId, long machineId, int count) throws Exception {
         return nextUniqueIds(DEFAULT_START_TIMESTAMP, dataCenterId, machineId, count);
     }
 
     @Override
-    public String[] nextUniqueIds(String startTimestamp, long dataCenterId, long machineId, int count) {
+    public String[] nextUniqueIds(String startTimestamp, long dataCenterId, long machineId, int count) throws Exception {
         return nextUniqueIds(DateUtil.parseDate(startTimestamp, DATE_FORMAT).getTime(), dataCenterId, machineId, count);
     }
 
     @Override
-    public String[] nextUniqueIds(long startTimestamp, long dataCenterId, long machineId, int count) {
+    public String[] nextUniqueIds(long startTimestamp, long dataCenterId, long machineId, int count) throws Exception {
         String[] nextUniqueIds = getIdGenerator(startTimestamp, dataCenterId, machineId).nextIds(count);
 
         if (frequentLogPrint) {
