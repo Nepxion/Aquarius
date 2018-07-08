@@ -20,5 +20,7 @@ public class CacheConstant {
 
     public static final String CACHE_PLUGIN_REDISSON = "redissonPlugin";
 
+    public static final String CACHE_EXPIRE = "cache.expire";
+
     public static final String CACHE_SCAN_PACKAGES = "cache.scan.packages";
 }

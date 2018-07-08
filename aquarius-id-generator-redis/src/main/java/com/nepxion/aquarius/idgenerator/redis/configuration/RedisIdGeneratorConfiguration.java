@@ -23,7 +23,7 @@ import com.nepxion.aquarius.idgenerator.redis.impl.RedisIdGeneratorImpl;
 
 @Configuration
 public class RedisIdGeneratorConfiguration {
-    @Value("${redis.config.path:" + RedisConstant.DEFAULT_CONFIG_PATH + "}")
+    @Value("${" + RedisConstant.CONFIG_PATH + ":" + RedisConstant.DEFAULT_CONFIG_PATH + "}")
     private String redisConfigPath;
 
     @Autowired(required = false)

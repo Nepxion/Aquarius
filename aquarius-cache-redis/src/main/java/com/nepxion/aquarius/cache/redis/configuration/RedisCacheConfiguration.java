@@ -37,10 +37,10 @@ public class RedisCacheConfiguration {
     @Value("${" + CacheConstant.CACHE_PLUGIN + "}")
     private String cachePlugin;
 
-    @Value("${redis.config.path:" + RedisConstant.DEFAULT_CONFIG_PATH + "}")
+    @Value("${" + RedisConstant.CONFIG_PATH + ":" + RedisConstant.DEFAULT_CONFIG_PATH + "}")
     private String redisConfigPath;
 
-    @Value("${redisson.config.path:" + RedissonConstant.DEFAULT_CONFIG_PATH + "}")
+    @Value("${" + RedissonConstant.CONFIG_PATH + ":" + RedissonConstant.DEFAULT_CONFIG_PATH + "}")
     private String redissonConfigPath;
 
     @Autowired(required = false)

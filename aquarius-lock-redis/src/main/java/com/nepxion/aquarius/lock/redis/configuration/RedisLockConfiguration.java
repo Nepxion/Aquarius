@@ -28,7 +28,7 @@ import com.nepxion.aquarius.lock.redis.impl.RedisLockExecutorImpl;
 
 @Configuration
 public class RedisLockConfiguration {
-    @Value("${redisson.config.path:" + RedissonConstant.DEFAULT_CONFIG_PATH + "}")
+    @Value("${" + RedissonConstant.CONFIG_PATH + ":" + RedissonConstant.DEFAULT_CONFIG_PATH + "}")
     private String redissonConfigPath;
 
     @Autowired(required = false)

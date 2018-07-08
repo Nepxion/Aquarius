@@ -29,7 +29,7 @@ import com.nepxion.aquarius.lock.zookeeper.impl.ZookeeperLockExecutorImpl;
 
 @Configuration
 public class ZookeeperLockConfiguration {
-    @Value("${curator.config.path:" + CuratorConstant.DEFAULT_CONFIG_PATH + "}")
+    @Value("${" + CuratorConstant.CONFIG_PATH + ":" + CuratorConstant.DEFAULT_CONFIG_PATH + "}")
     private String curatorConfigPath;
 
     @Value("${" + AquariusConstant.PREFIX + "}")
