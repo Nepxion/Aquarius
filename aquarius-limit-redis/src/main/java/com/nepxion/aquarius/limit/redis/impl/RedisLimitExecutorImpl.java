@@ -12,6 +12,8 @@ package com.nepxion.aquarius.limit.redis.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +41,30 @@ public class RedisLimitExecutorImpl implements LimitExecutor {
     @Value("${" + AquariusConstant.FREQUENT_LOG_PRINT + "}")
     private Boolean frequentLogPrint;
 
+    private RedisScript<Number> redisScript;
+
+    @PostConstruct
+    public void initialize() {
+        String luaScript = buildLuaScript();
+        redisScript = new DefaultRedisScript<Number>(luaScript, Number.class);
+    }
+
+    private String buildLuaScript() {
+        StringBuilder lua = new StringBuilder();
+        lua.append("local c");
+        lua.append("\nc = redis.call('get',KEYS[1])");
+        lua.append("\nif c and tonumber(c) > tonumber(ARGV[1]) then"); // 调用不超过最大值，则直接返回
+        lua.append("\nreturn c;");
+        lua.append("\nend");
+        lua.append("\nc = redis.call('incr',KEYS[1])"); // 执行计算器自加
+        lua.append("\nif tonumber(c) == 1 then");
+        lua.append("\nredis.call('expire',KEYS[1],ARGV[2])"); // 从第一次调用开始限流，设置对应键值的过期
+        lua.append("\nend");
+        lua.append("\nreturn c;");
+
+        return lua.toString();
+    }
+
     @Override
     public boolean tryAccess(String name, String key, int limitPeriod, int limitCount) throws Exception {
         if (StringUtils.isEmpty(name)) {
@@ -65,9 +91,6 @@ public class RedisLimitExecutorImpl implements LimitExecutor {
         List<String> keys = new ArrayList<String>();
         keys.add(compositeKey);
 
-        String luaScript = buildLuaScript();
-
-        RedisScript<Number> redisScript = new DefaultRedisScript<Number>(luaScript, Number.class);
         RedisTemplate<String, Object> redisTemplate = redisHandler.getRedisTemplate();
         Number count = redisTemplate.execute(redisScript, keys, limitCount, limitPeriod);
 
@@ -76,21 +99,5 @@ public class RedisLimitExecutorImpl implements LimitExecutor {
         }
 
         return count.intValue() <= limitCount;
-    }
-
-    private String buildLuaScript() {
-        StringBuilder lua = new StringBuilder();
-        lua.append("local c");
-        lua.append("\nc = redis.call('get',KEYS[1])");
-        lua.append("\nif c and tonumber(c) > tonumber(ARGV[1]) then"); // 调用不超过最大值，则直接返回
-        lua.append("\nreturn c;");
-        lua.append("\nend");
-        lua.append("\nc = redis.call('incr',KEYS[1])"); // 执行计算器自加
-        lua.append("\nif tonumber(c) == 1 then");
-        lua.append("\nredis.call('expire',KEYS[1],ARGV[2])"); // 从第一次调用开始限流，设置对应键值的过期
-        lua.append("\nend");
-        lua.append("\nreturn c;");
-
-        return lua.toString();
     }
 }
