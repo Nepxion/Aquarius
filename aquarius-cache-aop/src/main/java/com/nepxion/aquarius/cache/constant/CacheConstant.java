@@ -17,8 +17,9 @@ public class CacheConstant {
     public static final String CACHE_PLUGIN = "cache.plugin";
 
     public static final String CACHE_PLUGIN_REDIS = "redisPlugin";
-
     public static final String CACHE_PLUGIN_REDISSON = "redissonPlugin";
+
+    public static final String CACHE_AOP_EXCEPTION_IGNORE = "cache.aop.exception.ignore";
 
     public static final String CACHE_EXPIRE = "cache.expire";
 

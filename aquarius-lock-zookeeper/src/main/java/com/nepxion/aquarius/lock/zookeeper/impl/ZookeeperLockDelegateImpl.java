@@ -16,9 +16,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
-import com.nepxion.aquarius.common.constant.AquariusConstant;
 import com.nepxion.aquarius.lock.LockDelegate;
 import com.nepxion.aquarius.lock.LockExecutor;
+import com.nepxion.aquarius.lock.constant.LockConstant;
 import com.nepxion.aquarius.lock.entity.LockType;
 
 public class ZookeeperLockDelegateImpl implements LockDelegate {
@@ -27,8 +27,8 @@ public class ZookeeperLockDelegateImpl implements LockDelegate {
     @Autowired
     private LockExecutor<InterProcessMutex> lockExecutor;
 
-    @Value("${" + AquariusConstant.AOP_EXCEPTION_IGNORE + ":true}")
-    private Boolean aopExceptionIgnore;
+    @Value("${" + LockConstant.LOCK_AOP_EXCEPTION_IGNORE + ":true}")
+    private Boolean lockAopExceptionIgnore;
 
     @Override
     public Object invoke(MethodInvocation invocation, LockType lockType, String key, long leaseTime, long waitTime, boolean async, boolean fair) throws Throwable {
@@ -39,8 +39,8 @@ public class ZookeeperLockDelegateImpl implements LockDelegate {
                 return invocation.proceed();
             }
         } catch (Exception e) {
-            if (aopExceptionIgnore) {
-                LOG.error("Lock executes failed", e);
+            if (lockAopExceptionIgnore) {
+                LOG.error("Zookeeper exception occurs while Lock", e);
 
                 return invocation.proceed();
             } else {

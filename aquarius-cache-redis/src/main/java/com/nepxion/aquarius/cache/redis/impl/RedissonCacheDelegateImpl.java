@@ -27,12 +27,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 import com.nepxion.aquarius.cache.CacheDelegate;
+import com.nepxion.aquarius.cache.constant.CacheConstant;
 import com.nepxion.aquarius.common.constant.AquariusConstant;
 import com.nepxion.aquarius.common.exception.AquariusException;
 import com.nepxion.aquarius.common.redisson.handler.RedissonHandler;
 
 public class RedissonCacheDelegateImpl implements CacheDelegate {
-    private static final Logger LOG = LoggerFactory.getLogger(RedisCacheDelegateImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(RedissonCacheDelegateImpl.class);
 
     @Autowired
     private RedissonHandler redissonHandler;
@@ -42,6 +43,9 @@ public class RedissonCacheDelegateImpl implements CacheDelegate {
 
     @Value("${" + AquariusConstant.FREQUENT_LOG_PRINT + "}")
     private Boolean frequentLogPrint;
+
+    @Value("${" + CacheConstant.CACHE_AOP_EXCEPTION_IGNORE + ":true}")
+    private Boolean cacheAopExceptionIgnore;
 
     private RMapCache<String, Object> cache;
 
@@ -79,7 +83,11 @@ public class RedissonCacheDelegateImpl implements CacheDelegate {
                 LOG.info("Before invocation, Cacheable key={}, cache={} in Redis", keys, object);
             }
         } catch (Exception e) {
-            LOG.error("Redis exception occurs while Cacheable", e);
+            if (cacheAopExceptionIgnore) {
+                LOG.error("Redis exception occurs while Cacheable", e);
+            } else {
+                throw e;
+            }
         }
 
         if (object != null) {
@@ -104,7 +112,11 @@ public class RedissonCacheDelegateImpl implements CacheDelegate {
                     LOG.info("After invocation, Cacheable key={}, cache={} in Redis", keys, object);
                 }
             } catch (Exception e) {
-                LOG.error("Redis exception occurs while Cacheable", e);
+                if (cacheAopExceptionIgnore) {
+                    LOG.error("Redis exception occurs while Cacheable", e);
+                } else {
+                    throw e;
+                }
             }
         }
 
@@ -131,7 +143,11 @@ public class RedissonCacheDelegateImpl implements CacheDelegate {
                     LOG.info("After invocation, CachePut key={}, cache={} in Redis", keys, object);
                 }
             } catch (Exception e) {
-                LOG.error("Redis exception occurs while CachePut", e);
+                if (cacheAopExceptionIgnore) {
+                    LOG.error("Redis exception occurs while CachePut", e);
+                } else {
+                    throw e;
+                }
             }
         }
 
@@ -165,7 +181,11 @@ public class RedissonCacheDelegateImpl implements CacheDelegate {
                     }
                 }
             } catch (Exception e) {
-                LOG.error("Redis exception occurs while CacheEvict", e);
+                if (cacheAopExceptionIgnore) {
+                    LOG.error("Redis exception occurs while CacheEvict", e);
+                } else {
+                    throw e;
+                }
             }
         }
 
@@ -185,7 +205,11 @@ public class RedissonCacheDelegateImpl implements CacheDelegate {
                     }
                 }
             } catch (Exception e) {
-                LOG.error("Redis exception occurs while CacheEvict", e);
+                if (cacheAopExceptionIgnore) {
+                    LOG.error("Redis exception occurs while CacheEvict", e);
+                } else {
+                    throw e;
+                }
             }
         }
 
