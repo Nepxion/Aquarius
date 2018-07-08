@@ -52,7 +52,7 @@ public class RedisCacheDelegateImpl implements CacheDelegate {
             redisTemplate = redisHandler.getRedisTemplate();
             valueOperations = redisTemplate.opsForValue();
         } catch (Exception e) {
-            LOG.warn("Get ValueOperations in Redis failed", e);
+            LOG.error("Get ValueOperations in Redis failed", e);
         }
     }
 
@@ -69,7 +69,7 @@ public class RedisCacheDelegateImpl implements CacheDelegate {
                 LOG.info("Before invocation, Cacheable key={}, cache={} in Redis", keys, object);
             }
         } catch (Exception e) {
-            LOG.warn("Redis exception occurs while Cacheable", e);
+            LOG.error("Redis exception occurs while Cacheable", e);
         }
 
         if (object != null) {
@@ -94,7 +94,7 @@ public class RedisCacheDelegateImpl implements CacheDelegate {
                     LOG.info("After invocation, Cacheable key={}, cache={} in Redis", keys, object);
                 }
             } catch (Exception e) {
-                LOG.warn("Redis exception occurs while Cacheable", e);
+                LOG.error("Redis exception occurs while Cacheable", e);
             }
         }
 
@@ -121,7 +121,7 @@ public class RedisCacheDelegateImpl implements CacheDelegate {
                     LOG.info("After invocation, CachePut key={}, cache={} in Redis", keys, object);
                 }
             } catch (Exception e) {
-                LOG.warn("Redis exception occurs while CachePut", e);
+                LOG.error("Redis exception occurs while CachePut", e);
             }
         }
 
@@ -159,7 +159,7 @@ public class RedisCacheDelegateImpl implements CacheDelegate {
                     }
                 }
             } catch (Exception e) {
-                LOG.warn("Redis exception occurs while CacheEvict", e);
+                LOG.error("Redis exception occurs while CacheEvict", e);
             }
         }
 
@@ -179,7 +179,7 @@ public class RedisCacheDelegateImpl implements CacheDelegate {
                     }
                 }
             } catch (Exception e) {
-                LOG.warn("Redis exception occurs while CacheEvict", e);
+                LOG.error("Redis exception occurs while CacheEvict", e);
             }
         }
 
