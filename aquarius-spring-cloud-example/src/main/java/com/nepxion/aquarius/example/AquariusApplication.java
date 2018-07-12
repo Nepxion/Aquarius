@@ -28,6 +28,6 @@ import com.nepxion.aquarius.lock.annotation.EnableLock;
 @EnableZookeeperIdGenerator
 public class AquariusApplication {
     public static void main(String[] args) {
-        new SpringApplicationBuilder(AquariusApplication.class).web(true).run(args);
+        new SpringApplicationBuilder(AquariusApplication.class).run(args);
     }
 }
