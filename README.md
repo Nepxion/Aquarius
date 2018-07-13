@@ -28,7 +28,7 @@ Nepxion Aquarius是一款基于Redis + Zookeeper的分布式应用组件集合�
 ## 兼容
 最新版本兼容
 - Spring 4.x.x和Spring Boot 1.x.x
-- Spring 5.x.x和Spring Boot 2.x.x，但需要手工去除Swagger等第三方包引入的低版本Spring依赖包
+- Spring 5.x.x和Spring Boot 2.x.x，但需要手工去除第三方包引入的低版本Spring依赖包
 
 ### 依赖
 ```xml
