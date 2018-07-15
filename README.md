@@ -3,6 +3,7 @@
 [![Maven Central](https://img.shields.io/maven-central/v/com.nepxion/aquarius.svg?label=maven%20central)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.nepxion%22%20AND%20aquarius)
 [![Javadocs](http://www.javadoc.io/badge/com.nepxion/aquarius-lock-aop.svg)](http://www.javadoc.io/doc/com.nepxion/aquarius-lock-aop)
 [![Build Status](https://travis-ci.org/Nepxion/Aquarius.svg?branch=master)](https://travis-ci.org/Nepxion/Aquarius)
+[![Code Beat](http://codebeat.co/badges/e2f50a5d-420f-4c81-ac55-27b0164f4020)](https://codebeat.co/projects/github-com-nepxion-aquarius-master)
 
 Nepxion Aquarius是一款基于Redis + Zookeeper的分布式应用组件集合，包含分布式锁，缓存，ID生成器，限速限流器。它采用Nepxion Matrix AOP框架进行切面架构，提供注解调用方式，同时也提供API调用方式
 
