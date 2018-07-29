@@ -25,15 +25,13 @@ Nepxion Aquarius是一款基于Redis + Zookeeper的分布式应用组件集合�
   打开[http://localhost:2222/swagger-ui.html](http://localhost:2222/swagger-ui.html)访问
 - 支持组件扩展适配，再次编程
   - RedissonAdapter，扩展实现可默认覆盖原生组件
-  - RedisAdapter，扩展实现可默认覆盖原生组件
-  - CuratorAdapter，扩展实现可默认覆盖原生组件
 
 ![Alt text](https://github.com/Nepxion/Docs/blob/master/aquarius-doc/Swagger.jpg)
 
 ## 兼容
-最新版本兼容
-- Spring 4.x.x和Spring Boot 1.x.x
-- Spring 5.x.x和Spring Boot 2.x.x，但需要手工去除第三方包引入的低版本Spring依赖包
+- 1.x.x版本是基于Spring开发的，相对使用较繁琐，
+- 2.x.x版本是基于Spring Boot开发的，相对简单，功能也更加强大
+- 默认支持Spring 4.x.x和Spring Boot 1.x.x，也兼容Spring 5.x.x和Spring Boot 2.x.x，但需要手工去除第三方包引入的低版本Spring依赖包
 
 ### 依赖
 ```xml
@@ -612,7 +610,7 @@ public class ReadWriteLockApplication {
 ```
 
 ## Nepxion Aquarius Cache
-基于原生的RedisTemplate来实现(本采用Redisson的缓存模块，只在付费的Redisson PRO下才支持，故作罢)，构建于Nepxion Matrix AOP framework
+基于Spring Redis来实现，也可以修改源码换成Redisson来实现（在aquarius-cache-starter下的CacheConfiguration中RedisCacheConfiguration换成RedissonCacheConfiguration即可）构建于Nepxion Matrix AOP framework
 
 ### 介绍
 - 缓存注解既可以加在接口上，也可以加在实现类上，也可以加在没有接口只有类的情形下
