@@ -28,8 +28,8 @@ import com.nepxion.aquarius.lock.redis.impl.RedisLockExecutorImpl;
 
 @Configuration
 public class RedisLockConfiguration {
-    @Value("${" + RedissonConstant.CONFIG_PATH + ":" + RedissonConstant.DEFAULT_CONFIG_PATH + "}")
-    private String redissonConfigPath;
+    @Value("${" + RedissonConstant.PATH + ":" + RedissonConstant.DEFAULT_PATH + "}")
+    private String redissonPath;
 
     @Autowired(required = false)
     private RedissonAdapter redissonAdapter;
@@ -53,6 +53,6 @@ public class RedisLockConfiguration {
             return redissonAdapter.getRedissonHandler();
         }
 
-        return new RedissonHandlerImpl(redissonConfigPath);
+        return new RedissonHandlerImpl(redissonPath);
     }
 }

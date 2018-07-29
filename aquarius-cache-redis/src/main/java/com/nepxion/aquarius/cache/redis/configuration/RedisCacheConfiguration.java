@@ -40,8 +40,8 @@ public class RedisCacheConfiguration {
     @Value("${" + RedisConstant.CONFIG_PATH + ":" + RedisConstant.DEFAULT_CONFIG_PATH + "}")
     private String redisConfigPath;
 
-    @Value("${" + RedissonConstant.CONFIG_PATH + ":" + RedissonConstant.DEFAULT_CONFIG_PATH + "}")
-    private String redissonConfigPath;
+    @Value("${" + RedissonConstant.PATH + ":" + RedissonConstant.DEFAULT_PATH + "}")
+    private String redissonPath;
 
     @Autowired(required = false)
     private RedisAdapter redisAdapter;
@@ -79,6 +79,6 @@ public class RedisCacheConfiguration {
             return redissonAdapter.getRedissonHandler();
         }
 
-        return new RedissonHandlerImpl(redissonConfigPath);
+        return new RedissonHandlerImpl(redissonPath);
     }
 }
