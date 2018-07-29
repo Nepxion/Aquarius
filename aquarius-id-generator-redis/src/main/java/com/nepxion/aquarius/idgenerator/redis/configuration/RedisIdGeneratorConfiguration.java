@@ -9,6 +9,7 @@ package com.nepxion.aquarius.idgenerator.redis.configuration;
  * @version 1.0
  */
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -28,6 +29,7 @@ public class RedisIdGeneratorConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean
     public RedisHandler redisHandler() {
         return new RedisHandlerImpl();
     }

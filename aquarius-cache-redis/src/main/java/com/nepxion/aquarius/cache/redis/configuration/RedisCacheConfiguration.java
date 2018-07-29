@@ -9,6 +9,7 @@ package com.nepxion.aquarius.cache.redis.configuration;
  * @version 1.0
  */
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
@@ -32,6 +33,7 @@ public class RedisCacheConfiguration {
 
     @Bean
     @Conditional(RedisCacheCondition.class)
+    @ConditionalOnMissingBean
     public RedisHandler redisHandler() {
         return new RedisHandlerImpl();
     }

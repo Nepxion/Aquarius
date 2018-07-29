@@ -9,6 +9,7 @@ package com.nepxion.aquarius.idgenerator.zookeeper.configuration;
  * @version 1.0
  */
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -25,6 +26,7 @@ public class ZookeeperIdGeneratorConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean
     public CuratorHandler curatorHandler() {
         return new CuratorHandlerImpl();
     }

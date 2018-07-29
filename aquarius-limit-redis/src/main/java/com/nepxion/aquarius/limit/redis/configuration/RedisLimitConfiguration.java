@@ -9,6 +9,7 @@ package com.nepxion.aquarius.limit.redis.configuration;
  * @version 1.0
  */
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
@@ -40,6 +41,7 @@ public class RedisLimitConfiguration {
 
     @Bean
     @Conditional(RedisLimitCondition.class)
+    @ConditionalOnMissingBean
     public RedisHandler redisHandler() {
         return new RedisHandlerImpl();
     }

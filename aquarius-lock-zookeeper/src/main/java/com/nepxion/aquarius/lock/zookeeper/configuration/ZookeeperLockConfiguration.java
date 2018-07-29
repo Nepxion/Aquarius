@@ -10,6 +10,7 @@ package com.nepxion.aquarius.lock.zookeeper.configuration;
  */
 
 import org.apache.curator.framework.recipes.locks.InterProcessMutex;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
@@ -38,6 +39,7 @@ public class ZookeeperLockConfiguration {
 
     @Bean
     @Conditional(ZookeeperLockCondition.class)
+    @ConditionalOnMissingBean
     public CuratorHandler curatorHandler() {
         return new CuratorHandlerImpl();
     }

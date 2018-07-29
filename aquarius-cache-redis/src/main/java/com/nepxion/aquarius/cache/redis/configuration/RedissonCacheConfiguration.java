@@ -11,6 +11,7 @@ package com.nepxion.aquarius.cache.redis.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
@@ -39,6 +40,7 @@ public class RedissonCacheConfiguration {
 
     @Bean
     @Conditional(RedisCacheCondition.class)
+    @ConditionalOnMissingBean
     public RedissonHandler redissonHandler() {
         if (redissonAdapter != null) {
             return redissonAdapter.getRedissonHandler();
