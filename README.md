@@ -33,7 +33,7 @@ Nepxion Aquarius是一款基于Redis + Zookeeper的分布式应用组件集合�
 - 2.x.x版本是基于Spring Boot开发的，相对简单，功能也更加强大
 - 默认支持Spring 4.x.x和Spring Boot 1.x.x，也兼容Spring 5.x.x和Spring Boot 2.x.x，但需要手工去除第三方包引入的低版本Spring依赖包
 
-### 依赖
+## 依赖
 ```xml
 <dependency>
     <groupId>com.nepxion</groupId>
