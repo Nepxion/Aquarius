@@ -86,8 +86,6 @@ public class RedisLimitExecutorImpl implements LimitExecutor {
             throw new AquariusException("Composite key is null or empty");
         }
 
-        redisHandler.validateInitializedStatus();
-
         List<String> keys = new ArrayList<String>();
         keys.add(compositeKey);
 

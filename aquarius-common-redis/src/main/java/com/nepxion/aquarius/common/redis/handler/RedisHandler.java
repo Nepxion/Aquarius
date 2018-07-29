@@ -12,12 +12,6 @@ package com.nepxion.aquarius.common.redis.handler;
 import org.springframework.data.redis.core.RedisTemplate;
 
 public interface RedisHandler {
-    // 获取RedisTemplate客户端是否初始化
-    public boolean isInitialized();
-
-    // 检查RedisTemplate是否已经初始化
-    public void validateInitializedStatus();
-
     // 获取RedisTemplate
     RedisTemplate<String, Object> getRedisTemplate();
 }

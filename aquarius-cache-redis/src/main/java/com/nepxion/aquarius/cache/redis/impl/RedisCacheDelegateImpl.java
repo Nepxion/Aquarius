@@ -51,8 +51,6 @@ public class RedisCacheDelegateImpl implements CacheDelegate {
     @PostConstruct
     public void initialize() {
         try {
-            redisHandler.validateInitializedStatus();
-
             redisTemplate = redisHandler.getRedisTemplate();
             valueOperations = redisTemplate.opsForValue();
         } catch (Exception e) {
@@ -65,8 +63,6 @@ public class RedisCacheDelegateImpl implements CacheDelegate {
         // 空值不缓存
         Object object = null;
         try {
-            redisHandler.validateInitializedStatus();
-
             object = valueOperations.get(keys.get(0));
 
             if (frequentLogPrint) {
@@ -88,8 +84,6 @@ public class RedisCacheDelegateImpl implements CacheDelegate {
 
         if (object != null) {
             try {
-                redisHandler.validateInitializedStatus();
-
                 for (String key : keys) {
                     if (expire <= 0) {
                         valueOperations.set(key, object);
@@ -119,8 +113,6 @@ public class RedisCacheDelegateImpl implements CacheDelegate {
         Object object = invocation.proceed();
         if (object != null) {
             try {
-                redisHandler.validateInitializedStatus();
-
                 for (String key : keys) {
                     if (expire <= 0) {
                         valueOperations.set(key, object);
@@ -163,8 +155,6 @@ public class RedisCacheDelegateImpl implements CacheDelegate {
 
         if (beforeInvocation) {
             try {
-                redisHandler.validateInitializedStatus();
-
                 clear(compositeWildcardKeys);
 
                 if (frequentLogPrint) {
@@ -187,8 +177,6 @@ public class RedisCacheDelegateImpl implements CacheDelegate {
 
         if (!beforeInvocation) {
             try {
-                redisHandler.validateInitializedStatus();
-
                 clear(compositeWildcardKeys);
 
                 if (frequentLogPrint) {

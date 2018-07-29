@@ -42,12 +42,12 @@ public class RedissonHandlerImpl implements RedissonHandler {
     }
 
     // 创建Redisson
-    public void initialize(Config config) {
+    private void initialize(Config config) {
         create(config);
     }
 
     // 使用config创建Redisson
-    public void create(Config config) {
+    private void create(Config config) {
         LOG.info("Start to initialize Redisson...");
 
         if (redisson != null) {

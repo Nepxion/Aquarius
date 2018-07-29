@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 import com.nepxion.aquarius.cache.CacheDelegate;
 import com.nepxion.aquarius.cache.constant.CacheConstant;
@@ -23,8 +24,7 @@ import com.nepxion.aquarius.cache.redis.condition.RedisCachePluginCondition;
 import com.nepxion.aquarius.cache.redis.condition.RedissonCachePluginCondition;
 import com.nepxion.aquarius.cache.redis.impl.RedisCacheDelegateImpl;
 import com.nepxion.aquarius.cache.redis.impl.RedissonCacheDelegateImpl;
-import com.nepxion.aquarius.common.redis.adapter.RedisAdapter;
-import com.nepxion.aquarius.common.redis.constant.RedisConstant;
+import com.nepxion.aquarius.common.redis.configuration.RedisConfiguration;
 import com.nepxion.aquarius.common.redis.handler.RedisHandler;
 import com.nepxion.aquarius.common.redis.handler.RedisHandlerImpl;
 import com.nepxion.aquarius.common.redisson.adapter.RedissonAdapter;
@@ -33,18 +33,13 @@ import com.nepxion.aquarius.common.redisson.handler.RedissonHandler;
 import com.nepxion.aquarius.common.redisson.handler.RedissonHandlerImpl;
 
 @Configuration
+@Import({ RedisConfiguration.class })
 public class RedisCacheConfiguration {
     @Value("${" + CacheConstant.CACHE_PLUGIN + "}")
     private String cachePlugin;
 
-    @Value("${" + RedisConstant.CONFIG_PATH + ":" + RedisConstant.DEFAULT_CONFIG_PATH + "}")
-    private String redisConfigPath;
-
     @Value("${" + RedissonConstant.PATH + ":" + RedissonConstant.DEFAULT_PATH + "}")
     private String redissonPath;
-
-    @Autowired(required = false)
-    private RedisAdapter redisAdapter;
 
     @Autowired(required = false)
     private RedissonAdapter redissonAdapter;
@@ -64,12 +59,7 @@ public class RedisCacheConfiguration {
     @Bean
     @Conditional({ RedisCacheCondition.class, RedisCachePluginCondition.class })
     public RedisHandler redisHandler() {
-        if (redisAdapter != null) {
-            return redisAdapter.getRedisHandler();
-        }
-
-        return new RedisHandlerImpl(redisConfigPath);
-
+        return new RedisHandlerImpl();
     }
 
     @Bean

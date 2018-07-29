@@ -9,77 +9,12 @@ package com.nepxion.aquarius.common.redis.handler;
  * @version 1.0
  */
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 
-import com.nepxion.aquarius.common.redis.exception.RedisException;
-
 public class RedisHandlerImpl implements RedisHandler {
-    private static final Logger LOG = LoggerFactory.getLogger(RedisHandlerImpl.class);
-
+    @Autowired
     private RedisTemplate<String, Object> redisTemplate;
-
-    public RedisHandlerImpl(String configPath) {
-        try {
-            ApplicationContext applicationContext = createApplicationContext(configPath);
-
-            initialize(applicationContext);
-        } catch (Exception e) {
-            LOG.error("Initialize Redis failed", e);
-        }
-    }
-
-    public RedisHandlerImpl(ApplicationContext applicationContext) {
-        try {
-            initialize(applicationContext);
-        } catch (Exception e) {
-            LOG.error("Initialize Redis failed", e);
-        }
-    }
-
-    // 创建Redis
-    public void initialize(ApplicationContext applicationContext) {
-        create(applicationContext);
-    }
-
-    // 创建ApplicationContext
-    public ApplicationContext createApplicationContext(String configPath) {
-        LOG.info("Start to initialize application context with {}...", configPath);
-
-        String path = null;
-        if (RedisHandlerImpl.class.getClassLoader().getResourceAsStream(configPath) != null) {
-            path = "classpath*:" + configPath;
-        } else {
-            path = "file:" + configPath;
-        }
-
-        return new ClassPathXmlApplicationContext(path);
-    }
-
-    // 创建RedisTemplate
-    @SuppressWarnings({ "unchecked" })
-    public void create(ApplicationContext applicationContext) {
-        LOG.info("Start to initialize Redis...");
-
-        redisTemplate = (RedisTemplate<String, Object>) applicationContext.getBean(RedisTemplate.class);
-    }
-
-    // 获取RedisTemplate客户端是否初始化
-    @Override
-    public boolean isInitialized() {
-        return redisTemplate != null;
-    }
-
-    // 检查RedisTemplate是否已经初始化
-    @Override
-    public void validateInitializedStatus() {
-        if (redisTemplate == null) {
-            throw new RedisException("Redis isn't initialized");
-        }
-    }
 
     // 获取RedisTemplate
     @Override

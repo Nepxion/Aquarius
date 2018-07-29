@@ -90,8 +90,6 @@ public class RedisIdGeneratorImpl implements RedisIdGenerator {
             throw new AquariusException("Composite key is null or empty");
         }
 
-        redisHandler.validateInitializedStatus();
-
         List<String> keys = new ArrayList<String>();
         keys.add(compositeKey);
 

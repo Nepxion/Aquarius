@@ -9,26 +9,19 @@ package com.nepxion.aquarius.idgenerator.redis.configuration;
  * @version 1.0
  */
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
-import com.nepxion.aquarius.common.redis.adapter.RedisAdapter;
-import com.nepxion.aquarius.common.redis.constant.RedisConstant;
+import com.nepxion.aquarius.common.redis.configuration.RedisConfiguration;
 import com.nepxion.aquarius.common.redis.handler.RedisHandler;
 import com.nepxion.aquarius.common.redis.handler.RedisHandlerImpl;
 import com.nepxion.aquarius.idgenerator.redis.RedisIdGenerator;
 import com.nepxion.aquarius.idgenerator.redis.impl.RedisIdGeneratorImpl;
 
 @Configuration
+@Import({ RedisConfiguration.class })
 public class RedisIdGeneratorConfiguration {
-    @Value("${" + RedisConstant.CONFIG_PATH + ":" + RedisConstant.DEFAULT_CONFIG_PATH + "}")
-    private String redisConfigPath;
-
-    @Autowired(required = false)
-    private RedisAdapter redisAdapter;
-
     @Bean
     public RedisIdGenerator redisIdGenerator() {
         return new RedisIdGeneratorImpl();
@@ -36,10 +29,6 @@ public class RedisIdGeneratorConfiguration {
 
     @Bean
     public RedisHandler redisHandler() {
-        if (redisAdapter != null) {
-            return redisAdapter.getRedisHandler();
-        }
-
-        return new RedisHandlerImpl(redisConfigPath);
+        return new RedisHandlerImpl();
     }
 }
