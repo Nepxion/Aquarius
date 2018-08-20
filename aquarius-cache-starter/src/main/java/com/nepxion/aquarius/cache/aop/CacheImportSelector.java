@@ -13,6 +13,7 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 
 import com.nepxion.aquarius.cache.annotation.EnableCache;
+import com.nepxion.aquarius.cache.constant.CacheConstant;
 import com.nepxion.matrix.selector.AbstractImportSelector;
 import com.nepxion.matrix.selector.RelaxedPropertyResolver;
 
@@ -20,6 +21,6 @@ import com.nepxion.matrix.selector.RelaxedPropertyResolver;
 public class CacheImportSelector extends AbstractImportSelector<EnableCache> {
     @Override
     protected boolean isEnabled() {
-        return new RelaxedPropertyResolver(getEnvironment()).getProperty("cache.enabled", Boolean.class, Boolean.TRUE);
+        return new RelaxedPropertyResolver(getEnvironment()).getProperty(CacheConstant.CACHE_ENABLED, Boolean.class, Boolean.TRUE);
     }
 }

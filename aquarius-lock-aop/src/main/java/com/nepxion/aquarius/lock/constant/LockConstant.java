@@ -10,6 +10,8 @@ package com.nepxion.aquarius.lock.constant;
  */
 
 public class LockConstant {
+    public static final String LOCK_ENABLED = "lock.enabled";
+
     public static final String LOCK_TYPE = "lock.type";
 
     public static final String LOCK_TYPE_REDIS = "redisLock";

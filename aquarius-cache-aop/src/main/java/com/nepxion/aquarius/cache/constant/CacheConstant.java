@@ -10,6 +10,8 @@ package com.nepxion.aquarius.cache.constant;
  */
 
 public class CacheConstant {
+    public static final String CACHE_ENABLED = "cache.enabled";
+
     public static final String CACHE_TYPE = "cache.type";
 
     public static final String CACHE_TYPE_REDIS = "redisCache";

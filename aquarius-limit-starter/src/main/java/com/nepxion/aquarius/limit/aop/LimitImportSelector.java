@@ -13,6 +13,7 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 
 import com.nepxion.aquarius.limit.annotation.EnableLimit;
+import com.nepxion.aquarius.limit.constant.LimitConstant;
 import com.nepxion.matrix.selector.AbstractImportSelector;
 import com.nepxion.matrix.selector.RelaxedPropertyResolver;
 
@@ -20,6 +21,6 @@ import com.nepxion.matrix.selector.RelaxedPropertyResolver;
 public class LimitImportSelector extends AbstractImportSelector<EnableLimit> {
     @Override
     protected boolean isEnabled() {
-        return new RelaxedPropertyResolver(getEnvironment()).getProperty("limit.enabled", Boolean.class, Boolean.TRUE);
+        return new RelaxedPropertyResolver(getEnvironment()).getProperty(LimitConstant.LIMIT_ENABLED, Boolean.class, Boolean.TRUE);
     }
 }

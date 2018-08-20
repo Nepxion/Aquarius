@@ -13,6 +13,7 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 
 import com.nepxion.aquarius.lock.annotation.EnableLock;
+import com.nepxion.aquarius.lock.constant.LockConstant;
 import com.nepxion.matrix.selector.AbstractImportSelector;
 import com.nepxion.matrix.selector.RelaxedPropertyResolver;
 
@@ -20,6 +21,6 @@ import com.nepxion.matrix.selector.RelaxedPropertyResolver;
 public class LockImportSelector extends AbstractImportSelector<EnableLock> {
     @Override
     protected boolean isEnabled() {
-        return new RelaxedPropertyResolver(getEnvironment()).getProperty("lock.enabled", Boolean.class, Boolean.TRUE);
+        return new RelaxedPropertyResolver(getEnvironment()).getProperty(LockConstant.LOCK_ENABLED, Boolean.class, Boolean.TRUE);
     }
 }

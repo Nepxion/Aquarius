@@ -13,6 +13,7 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 
 import com.nepxion.aquarius.idgenerator.annotation.EnableRedisIdGenerator;
+import com.nepxion.aquarius.idgenerator.constant.IdGeneratorConstant;
 import com.nepxion.matrix.selector.AbstractImportSelector;
 import com.nepxion.matrix.selector.RelaxedPropertyResolver;
 
@@ -20,6 +21,6 @@ import com.nepxion.matrix.selector.RelaxedPropertyResolver;
 public class RedisIdGeneratorImportSelector extends AbstractImportSelector<EnableRedisIdGenerator> {
     @Override
     protected boolean isEnabled() {
-        return new RelaxedPropertyResolver(getEnvironment()).getProperty("idgenerator.enabled", Boolean.class, Boolean.TRUE);
+        return new RelaxedPropertyResolver(getEnvironment()).getProperty(IdGeneratorConstant.IDGENERATOR_ENABLED, Boolean.class, Boolean.TRUE);
     }
 }

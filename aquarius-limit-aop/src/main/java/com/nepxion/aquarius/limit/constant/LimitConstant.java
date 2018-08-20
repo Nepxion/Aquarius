@@ -10,6 +10,8 @@ package com.nepxion.aquarius.limit.constant;
  */
 
 public class LimitConstant {
+    public static final String LIMIT_ENABLED = "limit.enabled";
+
     public static final String LIMIT_TYPE = "limit.type";
 
     public static final String LIMIT_TYPE_REDIS = "redisLimit";
