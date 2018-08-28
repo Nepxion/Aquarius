@@ -1,5 +1,5 @@
 # Nepxion Aquarius
-![CoL](https://tokei.rs/b1/github/Nepxion/Aquarius)
+[![Total lines](https://tokei.rs/b1/github/Nepxion/Aquarius?category=lines)](https://github.com/Nepxion/Aquarius)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?label=license)](https://github.com/Nepxion/Aquarius/blob/master/LICENSE)
 [![Maven Central](https://img.shields.io/maven-central/v/com.nepxion/aquarius.svg?label=maven%20central)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.nepxion%22%20AND%20aquarius)
 [![Javadocs](http://www.javadoc.io/badge/com.nepxion/aquarius-lock-aop.svg)](http://www.javadoc.io/doc/com.nepxion/aquarius-lock-aop)
