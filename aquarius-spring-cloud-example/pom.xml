@@ -19,7 +19,7 @@
     <properties>
         <spring.cloud.version>Edgware.SR4</spring.cloud.version>
         <!-- <spring.cloud.version>Dalston.SR5</spring.cloud.version> -->
-        <aquarius.version>2.0.1</aquarius.version>
+        <aquarius.version>2.0.2</aquarius.version>
         <swagger.version>2.7.0</swagger.version>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
