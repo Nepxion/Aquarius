@@ -6,7 +6,6 @@
 [![Build Status](https://travis-ci.org/Nepxion/Aquarius.svg?branch=master)](https://travis-ci.org/Nepxion/Aquarius)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/ccd6168af5b84d8db525c031d52abfb5)](https://www.codacy.com/project/HaojunRen/Aquarius/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Nepxion/Aquarius&amp;utm_campaign=Badge_Grade_Dashboard)
 
-
 Nepxion Aquarius是一款基于Redis + Zookeeper的分布式应用组件集合，包含分布式锁，缓存，ID生成器，限速限流器。它采用Nepxion Matrix AOP框架进行切面架构，提供注解调用方式，同时也提供API调用方式
 
 ## 请联系我
