@@ -10,7 +10,7 @@ Nepxion Aquarius是一款基于Redis + Zookeeper的分布式应用组件集合�
 
 ## 请联系我
 ![Alt text](https://github.com/Nepxion/Docs/blob/master/zxing-doc/微信-1.jpg)
- 
+
 ## 简介
 - 分布式应用组件集合
   - Nepxion Aquarius Lock 分布式锁(支持Redis、Zookeeper、ReentrantLock本地锁)
