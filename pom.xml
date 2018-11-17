@@ -11,11 +11,6 @@
     <url>http://www.nepxion.com</url>
 
     <modules>
-        <module>aquarius-assembly-all</module>
-        <module>aquarius-assembly-lock</module>
-        <module>aquarius-assembly-cache</module>
-        <module>aquarius-assembly-limit</module>
-        <module>aquarius-assembly-id-generator</module>
         <module>aquarius-common</module>
         <module>aquarius-common-redis</module>
         <module>aquarius-common-zookeeper</module>
