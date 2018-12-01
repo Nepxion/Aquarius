@@ -14,10 +14,7 @@ import java.util.TimerTask;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
-import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
 import com.nepxion.aquarius.example.limit.service.MyService7;
@@ -60,11 +57,12 @@ public class LimitAopApplication {
         }, 0L, 4000L);
     }
 
-    @Bean
+    // 如下方式，只支持Spring Cloud F版以前的版本
+    /*@Bean
     public EmbeddedServletContainerFactory createEmbeddedServletContainerFactory() {
         TomcatEmbeddedServletContainerFactory tomcatFactory = new TomcatEmbeddedServletContainerFactory();
         tomcatFactory.setPort(8085);
 
         return tomcatFactory;
-    }
+    }*/
 }

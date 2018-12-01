@@ -11,10 +11,7 @@ package com.nepxion.aquarius.example.lock.app1;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
-import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
 import com.nepxion.aquarius.example.lock.service.MyService1;
@@ -50,11 +47,12 @@ public class LockAopApplication {
         }
     }
 
-    @Bean
+    // 如下方式，只支持Spring Cloud F版以前的版本
+    /*@Bean
     public EmbeddedServletContainerFactory createEmbeddedServletContainerFactory() {
         TomcatEmbeddedServletContainerFactory tomcatFactory = new TomcatEmbeddedServletContainerFactory();
         tomcatFactory.setPort(8087);
 
         return tomcatFactory;
-    }
+    }*/
 }
