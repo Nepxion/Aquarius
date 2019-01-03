@@ -39,7 +39,7 @@ public class RedisCacheDelegateImpl implements CacheDelegate {
     @Value("${" + AquariusConstant.PREFIX + "}")
     private String prefix;
 
-    @Value("${" + AquariusConstant.FREQUENT_LOG_PRINT + "}")
+    @Value("${" + AquariusConstant.FREQUENT_LOG_PRINT + ":false}")
     private Boolean frequentLogPrint;
 
     @Value("${" + CacheConstant.CACHE_AOP_EXCEPTION_IGNORE + ":true}")

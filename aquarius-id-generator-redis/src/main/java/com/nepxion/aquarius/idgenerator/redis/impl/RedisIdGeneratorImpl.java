@@ -45,7 +45,7 @@ public class RedisIdGeneratorImpl implements RedisIdGenerator {
     @Value("${" + AquariusConstant.PREFIX + "}")
     private String prefix;
 
-    @Value("${" + AquariusConstant.FREQUENT_LOG_PRINT + "}")
+    @Value("${" + AquariusConstant.FREQUENT_LOG_PRINT + ":false}")
     private Boolean frequentLogPrint;
 
     private RedisScript<List<Object>> redisScript;
