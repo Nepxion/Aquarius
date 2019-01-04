@@ -18,7 +18,7 @@
     </parent>
 
     <properties>
-        <aquarius.version>2.0.6</aquarius.version>
+        <aquarius.version>2.0.7</aquarius.version>
         <guava.version>27.0-jre</guava.version>
         <redisson.version>3.7.5</redisson.version>
         <curator.version>2.12.0</curator.version>

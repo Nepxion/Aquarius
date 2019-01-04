@@ -25,7 +25,7 @@ public class AquariusConfiguration {
         System.out.println("╚╝ ╚╩═╗╠══╩╝╚╩╝╚╩══╩══╝");
         System.out.println("      ║║");
         System.out.println("      ╚╝");
-        System.out.println("Nepxion Aquarius  v2.0.6");
+        System.out.println("Nepxion Aquarius  v2.0.7");
         System.out.println("");
     }
 }
