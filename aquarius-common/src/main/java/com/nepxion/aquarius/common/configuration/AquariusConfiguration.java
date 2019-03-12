@@ -16,16 +16,19 @@ import org.springframework.context.annotation.Configuration;
 @ComponentScan(basePackages = { "com.nepxion.aquarius.common.context" })
 public class AquariusConfiguration {
     static {
-        System.out.println("");
-        System.out.println("╔═══╗");
-        System.out.println("║╔═╗║");
-        System.out.println("║║ ║╠══╦╗╔╦══╦═╦╦╗╔╦══╗");
-        System.out.println("║╚═╝║╔╗║║║║╔╗║╔╬╣║║║══╣");
-        System.out.println("║╔═╗║╚╝║╚╝║╔╗║║║║╚╝╠══║");
-        System.out.println("╚╝ ╚╩═╗╠══╩╝╚╩╝╚╩══╩══╝");
-        System.out.println("      ║║");
-        System.out.println("      ╚╝");
-        System.out.println("Nepxion Aquarius  v2.0.7");
-        System.out.println("");
+        String logoShown = System.getProperty("nepxion.logo.shown", "true");
+        if (Boolean.valueOf(logoShown)) {
+            System.out.println("");
+            System.out.println("╔═══╗");
+            System.out.println("║╔═╗║");
+            System.out.println("║║ ║╠══╦╗╔╦══╦═╦╦╗╔╦══╗");
+            System.out.println("║╚═╝║╔╗║║║║╔╗║╔╬╣║║║══╣");
+            System.out.println("║╔═╗║╚╝║╚╝║╔╗║║║║╚╝╠══║");
+            System.out.println("╚╝ ╚╩═╗╠══╩╝╚╩╝╚╩══╩══╝");
+            System.out.println("      ║║");
+            System.out.println("      ╚╝");
+            System.out.println("Nepxion Aquarius  v2.0.8");
+            System.out.println("");
+        }
     }
 }
