@@ -57,6 +57,7 @@ public class WebMvcConfiguration extends WebMvcConfigurerAdapter {
     @Bean
     public Docket createRestApi() {
         return new Docket(DocumentationType.SWAGGER_2)
+                .groupName("aquarius")
                 .apiInfo(apiInfo())
                 .select()
                 .apis(RequestHandlerSelectors.basePackage(basePackage)) // 扫描该包下的所有需要在Swagger中展示的API，@ApiIgnore注解标注的除外
