@@ -35,7 +35,8 @@
     </modules>
 
     <properties>
-        <matrix.version>2.0.5</matrix.version>
+        <matrix.version>2.0.7</matrix.version>
+        <banner.version>1.0.2</banner.version>
         <commons.lang3.version>3.6</commons.lang3.version>
         <commons.collections4.version>4.1</commons.collections4.version>
         <commons.io.version>2.5</commons.io.version>
@@ -51,36 +52,6 @@
 
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>aquarius-assembly-all</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>aquarius-assembly-lock</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>aquarius-assembly-cache</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>aquarius-assembly-limit</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>aquarius-assembly-id-generator</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>aquarius-common</artifactId>
@@ -199,6 +170,12 @@
                 <groupId>${project.groupId}</groupId>
                 <artifactId>matrix-aop-starter</artifactId>
                 <version>${matrix.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>banner</artifactId>
+                <version>${banner.version}</version>
             </dependency>
 
             <dependency>
