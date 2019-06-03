@@ -10,20 +10,15 @@
     <description>Nepxion Aquarius is a list of distribution components based on Redis + Zookeeper with Nepxion Matrix AOP framework</description>
     <url>http://www.nepxion.com</url>
 
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <!-- <version>1.5.18.RELEASE</version> -->
-        <version>2.0.7.RELEASE</version>
-    </parent>
-
     <properties>
         <aquarius.version>2.0.9</aquarius.version>
         <guava.version>27.0-jre</guava.version>
         <redisson.version>3.7.5</redisson.version>
         <curator.version>2.12.0</curator.version>
-        <!-- <spring.cloud.version>Edgware.SR5</spring.cloud.version> -->
+        <!-- <spring.cloud.version>Edgware.SR6</spring.cloud.version> -->
         <spring.cloud.version>Finchley.SR3</spring.cloud.version>
+        <!-- <spring.boot.version>1.5.18.RELEASE</spring.boot.version> -->
+        <spring.boot.version>2.0.7.RELEASE</spring.boot.version>
         <swagger.version>2.7.0</swagger.version>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -32,17 +27,17 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>com.nepxion</groupId>
-                <artifactId>aquarius</artifactId>
-                <version>${aquarius.version}</version>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring.cloud.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
 
             <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-dependencies</artifactId>
-                <version>${spring.cloud.version}</version>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring.boot.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -53,21 +48,25 @@
         <dependency>
             <groupId>com.nepxion</groupId>
             <artifactId>aquarius-lock-starter</artifactId>
+            <version>${aquarius.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.nepxion</groupId>
             <artifactId>aquarius-cache-starter</artifactId>
+            <version>${aquarius.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.nepxion</groupId>
             <artifactId>aquarius-limit-starter</artifactId>
+            <version>${aquarius.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.nepxion</groupId>
             <artifactId>aquarius-id-generator-starter</artifactId>
+            <version>${aquarius.version}</version>
         </dependency>
 
         <dependency>
@@ -95,14 +94,14 @@
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>org.springframework.cloud</groupId>
             <!-- <artifactId>spring-cloud-starter-eureka</artifactId> -->
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
         <dependency>
