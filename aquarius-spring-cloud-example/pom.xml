@@ -16,7 +16,7 @@
         <redisson.version>3.7.5</redisson.version>
         <curator.version>2.12.0</curator.version>
         <!-- <spring.cloud.version>Edgware.SR6</spring.cloud.version> -->
-        <spring.cloud.version>Finchley.SR3</spring.cloud.version>
+        <spring.cloud.version>Finchley.SR4</spring.cloud.version>
         <!-- <spring.boot.version>1.5.18.RELEASE</spring.boot.version> -->
         <spring.boot.version>2.0.7.RELEASE</spring.boot.version>
         <swagger.version>2.7.0</swagger.version>
