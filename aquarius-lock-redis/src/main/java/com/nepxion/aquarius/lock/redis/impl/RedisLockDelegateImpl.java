@@ -45,7 +45,7 @@ public class RedisLockDelegateImpl implements LockDelegate {
             }
         } catch (Exception e) {
             if (lockAopExceptionIgnore) {
-                LOG.error("Redis exception occurs while Lock", e);
+                LOG.error("Redis exception occurs while Lock, but still to proceed the invocation", e);
 
                 return invocation.proceed();
             } else {
@@ -56,9 +56,11 @@ public class RedisLockDelegateImpl implements LockDelegate {
         }
 
         if (lockAopExceptionIgnore) {
+            LOG.error("Acquired redis lock failed, but still to proceed the invocation");
+
             return invocation.proceed();
         } else {
-            throw new AquariusException("Acquired lock failed");
+            throw new AquariusException("Acquired redis lock failed, stop to proceed the invocation");
         }
     }
 }

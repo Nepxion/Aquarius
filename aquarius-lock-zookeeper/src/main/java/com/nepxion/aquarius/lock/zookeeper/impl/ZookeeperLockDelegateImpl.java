@@ -45,7 +45,7 @@ public class ZookeeperLockDelegateImpl implements LockDelegate {
             }
         } catch (Exception e) {
             if (lockAopExceptionIgnore) {
-                LOG.error("Zookeeper exception occurs while Lock", e);
+                LOG.error("Zookeeper exception occurs while Lock, but still to proceed the invocation", e);
 
                 return invocation.proceed();
             } else {
@@ -56,9 +56,11 @@ public class ZookeeperLockDelegateImpl implements LockDelegate {
         }
 
         if (lockAopExceptionIgnore) {
+            LOG.error("Acquired zookeeper lock failed, but still to proceed the invocation");
+
             return invocation.proceed();
         } else {
-            throw new AquariusException("Acquired lock failed");
+            throw new AquariusException("Acquired zookeeper lock failed, stop to proceed the invocation");
         }
     }
 }
