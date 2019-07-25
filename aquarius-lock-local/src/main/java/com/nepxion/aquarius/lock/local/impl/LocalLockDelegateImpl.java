@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
+import com.nepxion.aquarius.common.exception.AquariusException;
 import com.nepxion.aquarius.lock.LockDelegate;
 import com.nepxion.aquarius.lock.LockExecutor;
 import com.nepxion.aquarius.lock.constant.LockConstant;
@@ -55,6 +56,10 @@ public class LocalLockDelegateImpl implements LockDelegate {
             lockExecutor.unlock(lock);
         }
 
-        return invocation.proceed();
+        if (lockAopExceptionIgnore) {
+            return invocation.proceed();
+        } else {
+            throw new AquariusException("Acquired lock failed");
+        }
     }
 }
