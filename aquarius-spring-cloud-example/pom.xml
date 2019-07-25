@@ -11,7 +11,7 @@
     <url>http://www.nepxion.com</url>
 
     <properties>
-        <aquarius.version>2.0.9</aquarius.version>
+        <aquarius.version>2.0.10</aquarius.version>
         <guava.version>27.0-jre</guava.version>
         <redisson.version>3.7.5</redisson.version>
         <curator.version>2.12.0</curator.version>
