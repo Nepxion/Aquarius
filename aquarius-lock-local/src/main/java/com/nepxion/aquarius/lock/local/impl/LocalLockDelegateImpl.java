@@ -37,7 +37,11 @@ public class LocalLockDelegateImpl implements LockDelegate {
         try {
             lock = lockExecutor.tryLock(lockType, key, leaseTime, waitTime, async, fair);
             if (lock != null) {
-                return invocation.proceed();
+                try {
+                    return invocation.proceed();
+                } catch (Exception e) {
+                    throw e;
+                }
             }
         } catch (Exception e) {
             if (lockAopExceptionIgnore) {

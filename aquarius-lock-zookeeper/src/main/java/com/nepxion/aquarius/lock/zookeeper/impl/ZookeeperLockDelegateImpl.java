@@ -36,7 +36,11 @@ public class ZookeeperLockDelegateImpl implements LockDelegate {
         try {
             interProcessMutex = lockExecutor.tryLock(lockType, key, leaseTime, waitTime, async, fair);
             if (interProcessMutex != null) {
-                return invocation.proceed();
+                try {
+                    return invocation.proceed();
+                } catch (Exception e) {
+                    throw e;
+                }
             }
         } catch (Exception e) {
             if (lockAopExceptionIgnore) {
