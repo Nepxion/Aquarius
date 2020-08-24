@@ -6,7 +6,7 @@ Nepxion Aquarius是一款基于Redis + Zookeeper的分布式应用组件集合�
 ## 请联系我
 微信和公众号
 
-![Alt text](http://nepxion.gitee.io/docs/zxing-doc/微信-1.jpg)![Alt text](http://nepxion.gitee.io/docs/zxing-doc/公众号-1.jpg)
+![](http://nepxion.gitee.io/docs/zxing-doc/微信-1.jpg)![](http://nepxion.gitee.io/docs/zxing-doc/公众号-1.jpg)![](http://nepxion.gitee.io/docs/zxing-doc/文档-1.jpg)
 
 ## 简介
 - 分布式应用组件集合
@@ -23,7 +23,7 @@ Nepxion Aquarius是一款基于Redis + Zookeeper的分布式应用组件集合�
 - 支持组件扩展适配，再次编程
   - RedissonAdapter，扩展实现可默认覆盖原生组件
 
-![Alt text](http://nepxion.gitee.io/docs/aquarius-doc/Swagger.jpg)
+![](http://nepxion.gitee.io/docs/aquarius-doc/Swagger.jpg)
 
 ## 兼容
 - 1.x.x版本是基于Spring开发的，相对使用较繁琐，不建议使用
