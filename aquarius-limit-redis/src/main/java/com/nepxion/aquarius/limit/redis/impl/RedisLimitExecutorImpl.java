@@ -92,6 +92,10 @@ public class RedisLimitExecutorImpl implements LimitExecutor {
         RedisTemplate<String, Object> redisTemplate = redisHandler.getRedisTemplate();
         Number count = redisTemplate.execute(redisScript, keys, limitCount, limitPeriod);
 
+        if (count == null) {
+            return false;
+        }
+
         if (frequentLogPrint) {
             LOG.info("Access try count is {} for key={}", count, compositeKey);
         }
