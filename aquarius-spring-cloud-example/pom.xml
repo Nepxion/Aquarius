@@ -12,7 +12,7 @@
 
     <properties>
         <aquarius.version>2.0.13</aquarius.version>
-        <guava.version>27.0-jre</guava.version>
+        <guava.version>29.0-jre</guava.version>
         <redisson.version>3.7.5</redisson.version>
         <curator.version>2.12.0</curator.version>
         <!-- <spring.cloud.version>Edgware.SR6</spring.cloud.version> -->
