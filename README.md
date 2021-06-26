@@ -1,12 +1,9 @@
 # Nepxion Aquarius
 ![Total visits](https://komarev.com/ghpvc/?username=Nepxion&label=total%20visits&color=blue)  [![Total lines](https://tokei.rs/b1/github/Nepxion/Aquarius?category=lines)](https://tokei.rs/b1/github/Nepxion/Aquarius?category=lines)  [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?label=license)](https://github.com/Nepxion/Aquarius/blob/master/LICENSE)  [![Maven Central](https://img.shields.io/maven-central/v/com.nepxion/aquarius.svg?label=maven%20central)](https://search.maven.org/artifact/com.nepxion/aquarius)  [![Javadocs](http://www.javadoc.io/badge/com.nepxion/aquarius-lock-aop.svg)](http://www.javadoc.io/doc/com.nepxion/aquarius-lock-aop)  [![Build Status](https://travis-ci.org/Nepxion/Aquarius.svg?branch=master)](https://travis-ci.org/Nepxion/Aquarius)  [![Codacy Badge](https://api.codacy.com/project/badge/Grade/ccd6168af5b84d8db525c031d52abfb5)](https://www.codacy.com/project/HaojunRen/Aquarius/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Nepxion/Aquarius&amp;utm_campaign=Badge_Grade_Dashboard)  [![Stars](https://img.shields.io/github/stars/Nepxion/Aquarius.svg?label=Stars&tyle=flat&logo=GitHub)](https://github.com/Nepxion/Aquarius/stargazers)  [![Stars](https://gitee.com/Nepxion/Aquarius/badge/star.svg)](https://gitee.com/nepxion/Aquarius/stargazers)
 
+<a href="https://github.com/Nepxion" tppabs="#" target="_blank"><img width="25" height="25" src="http://nepxion.gitee.io/discovery/docs/icon-doc/github.png"></a>&nbsp;  <a href="https://gitee.com/Nepxion" tppabs="#" target="_blank"><img width="25" height="25" src="http://nepxion.gitee.io/discovery/docs/icon-doc/gitee.png"></a>&nbsp;  <a href="https://search.maven.org/search?q=g:com.nepxion" tppabs="#" target="_blank"><img width="25" height="25" src="http://nepxion.gitee.io/discovery/docs/icon-doc/maven.png"></a>&nbsp;  <a href="http://nepxion.gitee.io/discovery/docs/zxing-doc/%E5%BE%AE%E4%BF%A1.jpg" tppabs="#" target="_blank"><img width="25" height="25" src="http://nepxion.gitee.io/discovery/docs/icon-doc/wechat.png"></a>&nbsp;  <a href="http://nepxion.gitee.io/discovery/docs/zxing-doc/%E9%92%89%E9%92%89.jpg" tppabs="#" target="_blank"><img width="25" height="25" src="http://nepxion.gitee.io/discovery/docs/icon-doc/dingding.png"></a>&nbsp;  <a href="http://nepxion.gitee.io/discovery/docs/zxing-doc/%E5%85%AC%E4%BC%97%E5%8F%B7.jpg" tppabs="#" target="_blank"><img width="25" height="25" src="http://nepxion.gitee.io/discovery/docs/icon-doc/gongzhonghao.png"></a>&nbsp;  <a href="mailto:1394997@qq.com" tppabs="#"><img width="25" height="25" src="http://nepxion.gitee.io/discovery/docs/icon-doc/email.png"></a>
+
 Nepxion Aquarius是一款基于Redis + Zookeeper的分布式应用组件集合，包含分布式锁，缓存，ID生成器，限速限流器。它采用Nepxion Matrix AOP框架进行切面架构，提供注解调用方式，也提供API调用方式
-
-## 请联系我
-微信、钉钉、公众号和文档
-
-![](http://nepxion.gitee.io/discovery/docs/zxing-doc/微信-1.jpg)![](http://nepxion.gitee.io/discovery/docs/zxing-doc/钉钉-1.jpg)![](http://nepxion.gitee.io/discovery/docs/zxing-doc/公众号-1.jpg)![](http://nepxion.gitee.io/discovery/docs/zxing-doc/文档-1.jpg)
 
 ## 简介
 - 分布式应用组件集合
@@ -1381,7 +1378,7 @@ public class LimitApplication {
 - 打开Postman，或者浏览器，执行Get操作，参考下面的URL
 - 支持Swagger，打开[http://localhost:2222/swagger-ui.html](http://localhost:2222/swagger-ui.html)访问
 
-```java
+```
 Lock
 # 注解方式
 http://localhost:2222/doC?id1=X&id2=Y
@@ -1408,6 +1405,11 @@ http://localhost:2222/nextSequenceId?name=idgenerater&key=X-Y
 # 直接调用方式(雪花算法)
 http://localhost:2222/nextLocalUniqueId?dataCenterId=2&machineId=3
 ```
+
+## 请联系我
+微信、钉钉、公众号和文档
+
+![](http://nepxion.gitee.io/discovery/docs/zxing-doc/微信-1.jpg)![](http://nepxion.gitee.io/discovery/docs/zxing-doc/钉钉-1.jpg)![](http://nepxion.gitee.io/discovery/docs/zxing-doc/公众号-1.jpg)![](http://nepxion.gitee.io/discovery/docs/zxing-doc/文档-1.jpg)
 
 ## Star走势图
 [![Stargazers over time](https://starchart.cc/Nepxion/Aquarius.svg)](https://starchart.cc/Nepxion/Aquarius)
