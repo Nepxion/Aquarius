@@ -6,7 +6,7 @@
 Nepxion Aquarius是一款基于Redis + Zookeeper的分布式应用组件集合，包含分布式锁，缓存，ID生成器，限速限流器。它采用Nepxion Matrix AOP框架进行切面架构，提供注解调用方式，也提供API调用方式
 
 ## 简介
-- 分布式应用组件集合 
+- 分布式应用组件集合
   - Nepxion Aquarius Lock 分布式锁(支持Redis、Zookeeper、ReentrantLock本地锁)
   - Nepxion Aquarius Cache 分布式缓存(支持Redis，同时多键值缓存)
   - Nepxion Aquarius ID Generator 分布式全局唯一ID(支持Redis)、全局唯一序号生成(支持Zookeeper、Twitter雪花ID算法的支持)，支持单个和批量获取
